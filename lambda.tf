@@ -1295,7 +1295,7 @@ data "aws_iam_policy_document" "graph_table_manage_message_types" {
     ]
 
     resources = [
-      "${data.aws_s3_bucket.artifacts.arn}/${local.artifacts_prefix["lambda"]}/*"
+      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}/${local.artifacts_prefix["lambda"]}/*"
     ]
 
     sid = "GetValidateFnLambda"
