@@ -590,7 +590,7 @@ resource "aws_appsync_function" "ResetPassword" {
 
 #####  subscriptions
 
-data "aws_s3_bucket_object" "request_templates_onStreamNotifications_vtl" {
+/*data "aws_s3_bucket_object" "request_templates_onStreamNotifications_vtl" {
   bucket = local.artifacts_bucket
   key    = "${local.artifacts_prefix["appsync"]}/request-templates/onStreamNotifications.vtl"
 }
@@ -608,7 +608,7 @@ resource "aws_appsync_resolver" "onStreamNotifications" {
 
   request_template  = data.aws_s3_bucket_object.request_templates_onStreamNotifications_vtl.body
   response_template = data.aws_s3_bucket_object.response_templates_onStreamNotifications_vtl.body
-}
+}*/
 
 ####################
 ## Datasources ###
