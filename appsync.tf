@@ -58,8 +58,8 @@ data "aws_s3_bucket_object" "request_template_GetUsersForTenant_vtl" {
   bucket = local.artifacts_bucket
   key    = "${local.artifacts_prefix["appsync"]}/request-templates/GetUsersForTenant.vtl"
 }
-resource "aws_appsync_resolver" "test" {
-  api_id      = aws_appsync_graphql_api.test.id
+resource "aws_appsync_resolver" "GetUsersForTenant" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "GetUsersForTenant"
   type        = "Query"
   data_source = "dynamodb"
