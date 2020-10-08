@@ -1251,7 +1251,6 @@ resource "aws_lambda_event_source_mapping" "graph_table_tenant_stream_handler" {
   event_source_arn = aws_sqs_queue.default_tenant_sqs_queue.arn
 }
 
-/*
 ######################################
 ## graph-table-manage-message-types ##
 ######################################
@@ -1296,7 +1295,7 @@ data "aws_iam_policy_document" "graph_table_manage_message_types" {
     ]
 
     resources = [
-      "${local.artifacts_bucket}/${local.artifacts_prefix["lambda"]}/*"
+      "${data.aws_s3_bucket.artifacts.arn}/${local.artifacts_prefix["lambda"]}/*"
     ]
 
     sid = "GetValidateFnLambda"
@@ -1403,4 +1402,3 @@ module "appsync_message_type_datasource" {
   timeout       = 30
   version       = "3.0.10"
 }
-*/

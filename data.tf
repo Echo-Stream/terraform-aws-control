@@ -43,3 +43,7 @@ data "aws_iam_policy_document" "lambda_assume_role" {
     }
   }
 }
+
+data "aws_s3_bucket" "artifacts" {
+  bucket = local.artifacts_bucket
+}
