@@ -141,9 +141,9 @@ data "aws_s3_bucket_object" "request_template_validate_function_vtl" {
   key    = "${local.artifacts_prefix["appsync"]}/request_templates/ValidateFunction.vtl"
 }
 
-resource "aws_appsync_resolver" "SearchNodes" {
+resource "aws_appsync_resolver" "ValidateFunction" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  field       = "SearchNodes"
+  field       = "ValidateFunction"
   type        = "Query"
   data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
 
@@ -197,6 +197,88 @@ resource "aws_appsync_resolver" "PutHl7MllpOutboundNode" {
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
 }
+
+
+resource "aws_appsync_resolver" "PutExternalNode" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "PutExternalNode"
+  type        = "Mutation"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
+resource "aws_appsync_resolver" "PutTenant" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "PutTenant"
+  type        = "Mutation"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
+resource "aws_appsync_resolver" "DeleteNode" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "PutExternalNode"
+  type        = "Mutation"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
+resource "aws_appsync_resolver" "DeleteApp" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "PutExternalNode"
+  type        = "Mutation"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
+resource "aws_appsync_resolver" "PutExternalApp" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "PutExternalNode"
+  type        = "Mutation"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
+resource "aws_appsync_resolver" "PutExternalNode" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "PutExternalNode"
+  type        = "Mutation"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
+resource "aws_appsync_resolver" "PutExternalNode" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "PutExternalNode"
+  type        = "Mutation"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
+resource "aws_appsync_resolver" "PutExternalNode" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "PutExternalNode"
+  type        = "Mutation"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
 ####################
 ## Datasources ###
 ####################
