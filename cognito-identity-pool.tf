@@ -1,5 +1,5 @@
 resource "aws_cognito_identity_pool" "hl7_ninja" {
-  identity_pool_name               = "${var.environment_prefix}Idp"
+  identity_pool_name               = replace(var.environment_prefix, "/[^aA-zZ]/", "")
   allow_unauthenticated_identities = false
 
   cognito_identity_providers {

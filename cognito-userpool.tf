@@ -74,15 +74,15 @@ resource "aws_cognito_user_pool" "hl7_ninja_apps" {
       schema
     ]
 
-   # prevent_destroy = true
+    # prevent_destroy = true
   }
 
   name = "${var.environment_prefix}-apps"
 
-  # lambda_config {
-  #   pre_authentication   = module.app_cognito_pre_authentication.arn
-  #   pre_token_generation = module.app_cognito_pre_token_generation.arn
-  # }
+  lambda_config {
+    pre_authentication   = module.app_cognito_pre_authentication.arn
+    pre_token_generation = module.app_cognito_pre_token_generation.arn
+  }
 
   password_policy {
     minimum_length                   = 99
@@ -132,18 +132,18 @@ resource "aws_cognito_user_pool" "hl7_ninja_ui" {
   email_verification_subject = "Your verification code"
 
   lifecycle {
-   # prevent_destroy = true
+    # prevent_destroy = true
   }
 
   mfa_configuration = "ON"
   name              = "${var.environment_prefix}-ui"
 
-  # lambda_config {
-  #   pre_sign_up          = module.ui_cognito_pre_signup.arn
-  #   post_confirmation    = module.ui_cognito_post_signup.arn
-  #   pre_authentication   = module.ui_cognito_pre_authentication.arn
-  #   pre_token_generation = module.ui_cognito_pre_token_generation.arn
-  # }
+  lambda_config {
+    pre_sign_up          = module.ui_cognito_pre_signup.arn
+    post_confirmation    = module.ui_cognito_post_signup.arn
+    pre_authentication   = module.ui_cognito_pre_authentication.arn
+    pre_token_generation = module.ui_cognito_pre_token_generation.arn
+  }
 
   password_policy {
     minimum_length                   = 16
