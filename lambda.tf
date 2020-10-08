@@ -1199,7 +1199,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:_db_stream*.fifo"
+      "arn:aws:sqs:*:*:${var.environment_prefix}_db_stream*.fifo"
     ]
 
     sid = "PrerequisitesForQueueTrigger"
