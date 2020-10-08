@@ -62,12 +62,30 @@ resource "aws_appsync_resolver" "GetUsersForTenant" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "GetUsersForTenant"
   type        = "Query"
-  data_source = "${var.environment_prefix}_dynamodb"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_GetUsersForTenant_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
 }
 
+
+###ListKeys
+
+
+data "aws_s3_bucket_object" "request_template_validate_user_vtl" {
+  bucket = local.artifacts_bucket
+  key    = "${local.artifacts_prefix["appsync"]}/request-templates/validate_user.vtl"
+}
+
+resource "aws_appsync_resolver" "ListKeys" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "ListKeys"
+  type        = "Query"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
 ####################
 ## Datasources ##
 ####################
@@ -79,9 +97,9 @@ module "appsync_kms_key_lambda_datasource" {
   description              = "Lambda datasource that manages SQS/KMS resource and IAM policies from a Dynamodb Stream"
   invoke_lambda_policy_arn = module.appsync_kms_key_datasource.invoke_policy_arn
   lambda_function_arn      = module.appsync_kms_key_datasource.arn
-  name                     = "${var.environment_prefix}_kms_key_datasource"
+  name                     = replace("${var.environment_prefix}_kms_key_datasource","-","_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
-  version                  = "3.0.1"
+  version                  = "3.0.2"
 }
 
 module "appsync_edge_lambda_datasource" {
@@ -89,9 +107,9 @@ module "appsync_edge_lambda_datasource" {
   description              = "Appsync lambda datasource for managing edges"
   invoke_lambda_policy_arn = module.appsync_edge_datasource.invoke_policy_arn
   lambda_function_arn      = module.appsync_edge_datasource.arn
-  name                     = "${var.environment_prefix}_edge_datasource"
+  name                     = replace("${var.environment_prefix}_edge_datasource","-","_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
-  version                  = "3.0.1"
+  version                  = "3.0.2"
 }
 
 module "appsync_hl7_ninja_graph_table_datasource" {
@@ -99,9 +117,9 @@ module "appsync_hl7_ninja_graph_table_datasource" {
   description         = "hl7-ninja-graph-table dynamodb datasource"
   dynamodb_table_arn  = module.hl7_ninja_graph_table.arn
   dynamodb_table_name = module.hl7_ninja_graph_table.name
-  name                = "${var.environment_prefix}_dynamodb"
+  name                = replace("${var.environment_prefix}_dynamodb","-","_")
   source              = "QuiNovas/appsync-dynamodb-datasource/aws"
-  version             = "3.0.0"
+  version             = "3.0.2"
 }
 
 resource "aws_appsync_datasource" "none" {
@@ -115,9 +133,9 @@ module "validate_function_lambda_datasource" {
   description              = "Appsync lambda datasource for Validate function"
   invoke_lambda_policy_arn = module.validate_function.invoke_policy_arn
   lambda_function_arn      = module.validate_function.arn
-  name                     = "${var.environment_prefix}_validate_function"
+  name                     = replace("${var.environment_prefix}_validate_function","-","_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
-  version                  = "3.0.1"
+  version                  = "3.0.2"
 }
 
 module "tenant_datasource" {
@@ -125,7 +143,7 @@ module "tenant_datasource" {
   description              = "Appsync lambda datasource for appsync-tenant-datasource function"
   invoke_lambda_policy_arn = module.appsync_tenant_datasource.invoke_policy_arn
   lambda_function_arn      = module.appsync_tenant_datasource.arn
-  name                     = "${var.environment_prefix}_tenant_datasource"
+  name                     = replace("${var.environment_prefix}_tenant_datasource","-","_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
-  version                  = "3.0.1"
+  version                  = "3.0.2"
 }
