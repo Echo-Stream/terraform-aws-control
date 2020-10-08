@@ -141,14 +141,14 @@ data "aws_s3_bucket_object" "request_template_validate_function_vtl" {
   key    = "${local.artifacts_prefix["appsync"]}/request_templates/ValidateFunction.vtl"
 }
 
-resource "aws_appsync_resolver" "ValidateFunction" {
+/*resource "aws_appsync_resolver" "ValidateFunction" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "ValidateFunction"
   type        = "Query"
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_function_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
-}
+}*/
 
 #### mutations
 
@@ -314,14 +314,14 @@ data "aws_s3_bucket_object" "response_templates_pass_result_vtl" {
 }
 
 
-resource "aws_appsync_function" "SearchNodes" {
+/*resource "aws_appsync_function" "SearchNodes" {
   api_id                    = aws_appsync_graphql_api.hl7_ninja.id
   data_source               = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
   name                      = "SearchNodes"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_SearchNodes_vtl.body
   response_mapping_template = data.aws_s3_bucket_object.response_templates_pass_result_vtl.body
-}
+}*/
 
 
 #SearchEdges
@@ -330,14 +330,14 @@ data "aws_s3_bucket_object" "request_templates_SearchEdges_vtl" {
   key    = "${local.artifacts_prefix["appsync"]}/request_templates/SearchEdges.vtl"
 }
 
-resource "aws_appsync_function" "SearchEdges" {
+/*resource "aws_appsync_function" "SearchEdges" {
   api_id                    = aws_appsync_graphql_api.hl7_ninja.id
   data_source               = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
   name                      = "SearchEdges"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_SearchEdges_vtl.body
   response_mapping_template = data.aws_s3_bucket_object.response_templates_pass_result_vtl.body
-}
+}*/
 
 #SearchApps
 data "aws_s3_bucket_object" "request_templates_SearchApps_vtl" {
@@ -345,14 +345,14 @@ data "aws_s3_bucket_object" "request_templates_SearchApps_vtl" {
   key    = "${local.artifacts_prefix["appsync"]}/request_templates/SearchApps.vtl"
 }
 
-resource "aws_appsync_function" "SearchApps" {
+/*resource "aws_appsync_function" "SearchApps" {
   api_id                    = aws_appsync_graphql_api.hl7_ninja.id
   data_source               = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
   name                      = "SearchApps"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_SearchApps_vtl.body
   response_mapping_template = data.aws_s3_bucket_object.response_templates_pass_result_vtl.body
-}
+}*/
 
 
 #GetUser
@@ -361,14 +361,14 @@ data "aws_s3_bucket_object" "request_templates_GetUser_vtl" {
   key    = "${local.artifacts_prefix["appsync"]}/request_templates/GetUser.vtl"
 }
 
-resource "aws_appsync_function" "GetUser" {
+/*resource "aws_appsync_function" "GetUser" {
   api_id                    = aws_appsync_graphql_api.hl7_ninja.id
   data_source               = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
   name                      = "GetUser"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_GetUser_vtl.body
   response_mapping_template = data.aws_s3_bucket_object.response_templates_pass_result_vtl.body
-}
+}*/
 
 #GetUsersForTenant
 
@@ -377,32 +377,50 @@ data "aws_s3_bucket_object" "request_templates_GetUsersForTenant_vtl" {
   key    = "${local.artifacts_prefix["appsync"]}/request_templates/GetUsersForTenant.vtl"
 }
 
-resource "aws_appsync_function" "GetUsersForTenant" {
+/*resource "aws_appsync_function" "GetUsersForTenant" {
   api_id                    = aws_appsync_graphql_api.hl7_ninja.id
   data_source               = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
   name                      = "GetUsersForTenant"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_GetUsersForTenant_vtl.body
   response_mapping_template = data.aws_s3_bucket_object.response_templates_pass_result_vtl.body
-}
+}*/
 
 #ListKeys
 
-data "aws_s3_bucket_object" "request_templates_ListKeys_vtl" {
+data "aws_s3_bucket_object" "request_templates_PutNode_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request_templates/ListKeys.vtl"
+  key    = "${local.artifacts_prefix["appsync"]}/request_templates/PutNode.vtl"
 }
 
-resource "aws_appsync_function" "ListKeys" {
+/*resource "aws_appsync_function" "ListKeys" {
   api_id                    = aws_appsync_graphql_api.hl7_ninja.id
   data_source               = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
   name                      = "ListKeys"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_ListKeys_vtl.body
   response_mapping_template = data.aws_s3_bucket_object.response_templates_pass_result_vtl.body
+}*/
+
+###### Mutation functions
+
+### PutNode
+
+data "aws_s3_bucket_object" "request_templates_ListKeys_vtl" {
+  bucket = local.artifacts_bucket
+  key    = "${local.artifacts_prefix["appsync"]}/request_templates/ListKeys.vtl"
 }
 
- # Mutation functions
+/*resource "aws_appsync_function" "ListKeys" {
+  api_id                    = aws_appsync_graphql_api.hl7_ninja.id
+  data_source               = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  name                      = "ListKeys"
+
+  request_mapping_template  = data.aws_s3_bucket_object.request_templates_ListKeys_vtl.body
+  response_mapping_template = data.aws_s3_bucket_object.response_templates_pass_result_vtl.body
+}*/
+
+
 
 ####################
 ## Datasources ###
