@@ -156,6 +156,7 @@ resource "aws_appsync_resolver" "PutKmsKey" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "PutKmsKey"
   type        = "Mutation"
+  data_source = module.appsync_kms_key_lambda_datasource.datasource_name
 
 
   request_template  = "{}"
@@ -167,6 +168,7 @@ resource "aws_appsync_resolver" "PutEdge" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "PutEdge"
   type        = "Mutation"
+  data_source = module.appsync_edge_lambda_datasource.datasource_name
 
 
   request_template  = "{}"
