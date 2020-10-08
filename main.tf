@@ -78,7 +78,7 @@ module "log_bucket_us_west_1" {
 }
 
 module "log_bucket_us_west_2" {
-  name_prefix = "hl7-ninja-${var.environment_prefix}-us-west-2"
+  name_prefix = "${var.environment_prefix}-us-west-2"
   source      = "QuiNovas/log-bucket/aws"
   version     = "3.0.1"
 
