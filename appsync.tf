@@ -406,17 +406,17 @@ resource "aws_appsync_function" "ListKeys" {
 
 ### PutNode
 
-data "aws_s3_bucket_object" "request_templates_ListKeys_vtl" {
+data "aws_s3_bucket_object" "request_templates_PutNode_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request_templates/ListKeys.vtl"
+  key    = "${local.artifacts_prefix["appsync"]}/request_templates/PutNode.vtl"
 }
 
 resource "aws_appsync_function" "ListKeys" {
   api_id                    = aws_appsync_graphql_api.hl7_ninja.id
   data_source               = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
-  name                      = "ListKeys"
+  name                      = "PutNode"
 
-  request_mapping_template  = data.aws_s3_bucket_object.request_templates_ListKeys_vtl.body
+  request_mapping_template  = data.aws_s3_bucket_object.request_templates_PutNode_vtl.body
   response_mapping_template = data.aws_s3_bucket_object.response_templates_pass_result_vtl.body
 }
 
