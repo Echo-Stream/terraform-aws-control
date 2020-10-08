@@ -43,3 +43,64 @@ resource "aws_s3_bucket_public_access_block" "audit_records" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+############################
+## Large Messages Buckets ##
+############################
+
+
+## US-EAST-1
+module "large_messages_bucket_us_east_1" {
+  name        = "${var.environment_prefix}-large-messages-us-east-1"
+  kms_key_arn = aws_kms_key.kms_us_east_1.arn
+  log_bucket  = module.log_bucket_us_east_1.id
+  tags        = local.tags
+
+  providers = {
+    aws = aws.us-east-1
+  }
+
+  source = "./large-messages-buckets"
+}
+
+## US-EAST-2
+module "large_messages_bucket_us_east_2" {
+  name        = "${var.environment_prefix}-large-messages-us-east-2"
+  kms_key_arn = aws_kms_key.kms_us_east_2.arn
+  log_bucket  = module.log_bucket_us_east_2.id
+  tags        = local.tags
+
+  providers = {
+    aws = aws.us-east-2
+  }
+
+  source = "./large-messages-buckets"
+}
+
+## US-WEST-1
+module "large_messages_bucket_us_west_1" {
+  name        = "${var.environment_prefix}-large-messages-us-west-1"
+  kms_key_arn = aws_kms_key.kms_us_west_1.arn
+  log_bucket  = module.log_bucket_us_west_1.id
+  tags        = local.tags
+
+  providers = {
+    aws = aws.us-west-1
+  }
+
+  source = "./large-messages-buckets"
+}
+
+## US-WEST-2
+module "large_messages_bucket_us_west_2" {
+  name        = "${var.environment_prefix}-large-messages-us-east-2"
+  kms_key_arn = aws_kms_key.kms_us_west_2.arn
+  log_bucket  = module.log_bucket_us_west_2.id
+  tags        = local.tags
+
+  providers = {
+    aws = aws.us-west-2
+  }
+
+  source = "./large-messages-buckets"
+}

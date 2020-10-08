@@ -7,7 +7,7 @@ variable "hl7_ninja_version" {
 }
 
 variable "environment_prefix" {
-  description = "Environment Prefix for naming resources, a Unique name that could differentiate whole environment"
+  description = "Environment Prefix for naming resources, a Unique name that could differentiate whole environment. Lower case only, No periods"
 }
 
 variable "domain_name" {
