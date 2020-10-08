@@ -10,6 +10,7 @@ locals {
   artifacts_prefix = {
     lambda  = "${var.hl7_ninja_version}/lambda"
     appsync = "${var.hl7_ninja_version}/appsync"
+    frontend = "${var.hl7_ninja_version}/frontend"
   }
 
   lambda_functions_keys = {
