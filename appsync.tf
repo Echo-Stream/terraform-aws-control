@@ -221,7 +221,7 @@ resource "aws_appsync_resolver" "PutTenant" {
 
 resource "aws_appsync_resolver" "DeleteNode" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  field       = "PutExternalNode"
+  field       = "DeleteNode"
   type        = "Mutation"
   data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
 
@@ -231,7 +231,7 @@ resource "aws_appsync_resolver" "DeleteNode" {
 
 resource "aws_appsync_resolver" "DeleteApp" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  field       = "PutExternalNode"
+  field       = "DeleteApp"
   type        = "Mutation"
   data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
 
@@ -241,7 +241,7 @@ resource "aws_appsync_resolver" "DeleteApp" {
 
 resource "aws_appsync_resolver" "PutExternalApp" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  field       = "PutExternalNode"
+  field       = "PutExternalApp"
   type        = "Mutation"
   data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
 
@@ -249,9 +249,9 @@ resource "aws_appsync_resolver" "PutExternalApp" {
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
 }
 
-resource "aws_appsync_resolver" "PutExternalNode" {
+resource "aws_appsync_resolver" "PutManagedApp" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  field       = "PutExternalNode"
+  field       = "PutManagedApp"
   type        = "Mutation"
   data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
 
@@ -259,9 +259,9 @@ resource "aws_appsync_resolver" "PutExternalNode" {
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
 }
 
-resource "aws_appsync_resolver" "PutExternalNode" {
+resource "aws_appsync_resolver" "AddUserToTenant" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  field       = "PutExternalNode"
+  field       = "AddUserToTenant"
   type        = "Mutation"
   data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
 
@@ -269,9 +269,9 @@ resource "aws_appsync_resolver" "PutExternalNode" {
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
 }
 
-resource "aws_appsync_resolver" "PutExternalNode" {
+resource "aws_appsync_resolver" "ResetAppPassword" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  field       = "PutExternalNode"
+  field       = "ResetAppPassword"
   type        = "Mutation"
   data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
 
