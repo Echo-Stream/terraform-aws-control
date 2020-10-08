@@ -821,7 +821,7 @@ data "aws_iam_policy_document" "graph_table_manage_apps" {
 
 resource "aws_iam_role" "manage_apps_ssm_service_role" {
   description        = "Enable AWS Systems Manager service core functionality"
-  name               = "manage-apps-ssm-role"
+  name               = "${var.environment_prefix}-manage-apps-ssm-role"
   assume_role_policy = data.aws_iam_policy_document.manage_apps_ssm_service_role.json
   tags               = local.tags
 }
@@ -1251,7 +1251,7 @@ resource "aws_lambda_event_source_mapping" "graph_table_tenant_stream_handler" {
   event_source_arn = aws_sqs_queue.default_tenant_sqs_queue.arn
 }
 
-
+/*
 ######################################
 ## graph-table-manage-message-types ##
 ######################################
@@ -1403,3 +1403,4 @@ module "appsync_message_type_datasource" {
   timeout       = 30
   version       = "3.0.10"
 }
+*/
