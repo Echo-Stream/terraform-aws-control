@@ -136,7 +136,7 @@ resource "aws_appsync_resolver" "SearchNodes" {
 
 ##### ValidateFunction
 
-data "aws_s3_bucket_object" "request_template_validate_function_vtl" {
+/*data "aws_s3_bucket_object" "request_template_validate_function_vtl" {
   bucket = local.artifacts_bucket
   key    = "${local.artifacts_prefix["appsync"]}/request_templates/ValidateFunction.vtl"
 }
@@ -148,8 +148,7 @@ resource "aws_appsync_resolver" "ValidateFunction" {
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_function_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
-}
-
+}*/
 
 #### mutations
 
