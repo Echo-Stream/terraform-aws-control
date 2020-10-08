@@ -572,9 +572,9 @@ resource "aws_appsync_function" "GetApp" {
 
 #  ResetPassword
 
-data "aws_s3_bucket_object" "request_templates_ResetPassword_vtl" {
+data "aws_s3_bucket_object" "request_templates_ResetAppPassword_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/ResetPassword.vtl"
+  key    = "${local.artifacts_prefix["appsync"]}/request-templates/ResetAppPassword.vtl"
 }
 
 resource "aws_appsync_function" "ResetPassword" {
@@ -582,7 +582,7 @@ resource "aws_appsync_function" "ResetPassword" {
   data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
   name        = "ResetPassword"
 
-  request_mapping_template  = data.aws_s3_bucket_object.request_templates_ResetPassword_vtl.body
+  request_mapping_template  = data.aws_s3_bucket_object.request_templates_ResetAppPassword_vtl.body
   response_mapping_template = data.aws_s3_bucket_object.response_templates_pass_result_vtl.body
 }
 ####################
