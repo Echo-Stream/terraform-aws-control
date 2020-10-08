@@ -198,7 +198,7 @@ resource "aws_appsync_resolver" "PutHl7MllpOutboundNode" {
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
 }
 ####################
-## Datasources ##
+## Datasources ###
 ####################
 
 
