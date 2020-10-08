@@ -17,3 +17,7 @@ variable "domain_name" {
 variable "ses_email_address" {
   description = "Preferred Email Address that SES uses for communication with tenants"
 }
+
+variable "region" {
+  description = "AWS Region for the environment"
+}
