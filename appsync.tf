@@ -49,6 +49,8 @@ resource "aws_iam_role_policy_attachment" "hl7_ninja_appsync" {
 ## Resolvers ##
 ####################
 
+#Queries
+
 data "aws_s3_bucket_object" "response_template_default_vtl" {
   bucket = local.artifacts_bucket
   key    = "${local.artifacts_prefix["appsync"]}/response-templates/default.vtl"
@@ -81,6 +83,115 @@ resource "aws_appsync_resolver" "ListKeys" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "ListKeys"
   type        = "Query"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
+#### GetUser
+
+resource "aws_appsync_resolver" "GetUser" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "GetUser"
+  type        = "Query"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
+#### SearchApps
+
+resource "aws_appsync_resolver" "SearchApps" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "SearchApps"
+  type        = "Query"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+ ### SearchEdges 
+resource "aws_appsync_resolver" "SearchEdges" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "SearchEdges"
+  type        = "Query"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
+### SearchNodes 
+resource "aws_appsync_resolver" "SearchNodes" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "SearchNodes"
+  type        = "Query"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
+##### ValidateFunction
+
+data "aws_s3_bucket_object" "request_template_validate_function_vtl" {
+  bucket = local.artifacts_bucket
+  key    = "${local.artifacts_prefix["appsync"]}/request_templates/ValidateFunction.vtl"
+}
+
+resource "aws_appsync_resolver" "SearchNodes" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "SearchNodes"
+  type        = "Query"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_function_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
+
+#### mutations
+
+resource "aws_appsync_resolver" "PutKmsKey" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "PutKmsKey"
+  type        = "Mutation"
+
+
+  request_template  = "{}"
+  response_template = "{}"
+}
+
+
+resource "aws_appsync_resolver" "PutEdge" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "PutEdge"
+  type        = "Mutation"
+
+
+  request_template  = "{}"
+  response_template = "{}"
+}
+
+
+resource "aws_appsync_resolver" "PutHl7MllpInboundNode" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "PutHl7MllpInboundNode"
+  type        = "Mutation"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+
+  request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
+
+
+resource "aws_appsync_resolver" "PutHl7MllpOutboundNode" {
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "PutHl7MllpOutboundNode"
+  type        = "Mutation"
   data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
