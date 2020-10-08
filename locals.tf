@@ -8,8 +8,8 @@ locals {
   lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn
 
   artifacts_prefix = {
-    lambda  = "${var.hl7_ninja_version}/lambda"
-    appsync = "${var.hl7_ninja_version}/appsync"
+    lambda   = "${var.hl7_ninja_version}/lambda"
+    appsync  = "${var.hl7_ninja_version}/appsync"
     frontend = "${var.hl7_ninja_version}/frontend"
   }
 
