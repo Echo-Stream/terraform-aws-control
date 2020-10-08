@@ -1,10 +1,10 @@
-resource "aws_s3_bucket" "hl7_ninja_audit_records" {
+resource "aws_s3_bucket" "audit_records" {
   acl    = "private"
   bucket = "${var.environment_prefix}-audit-records"
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 
   lifecycle_rule {
     id      = "archive"
@@ -36,8 +36,8 @@ resource "aws_s3_bucket" "hl7_ninja_audit_records" {
 }
 
 ## Block public access (bucket settings)
-resource "aws_s3_bucket_public_access_block" "hl7_ninja_audit_records" {
-  bucket                  = aws_s3_bucket.hl7_ninja_audit_records.id
+resource "aws_s3_bucket_public_access_block" "audit_records" {
+  bucket                  = aws_s3_bucket.audit_records.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true

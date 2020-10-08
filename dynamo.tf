@@ -1,4 +1,4 @@
-module "hl7_ninja_graph_table" {
+module "graph_table" {
   attribute = [
     {
       name = "pk"

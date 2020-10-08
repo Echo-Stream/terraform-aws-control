@@ -45,9 +45,9 @@ resource "aws_iam_role_policy_attachment" "hl7_ninja_appsync" {
   role       = aws_iam_role.hl7_ninja_appsync.name
 }
 
-####################
+###############
 ## Resolvers ##
-####################
+###############
 
 #Queries
 
@@ -64,7 +64,7 @@ resource "aws_appsync_resolver" "GetUsersForTenant" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "GetUsersForTenant"
   type        = "Query"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_GetUsersForTenant_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -83,7 +83,7 @@ resource "aws_appsync_resolver" "ListKeys" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "ListKeys"
   type        = "Query"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -95,7 +95,7 @@ resource "aws_appsync_resolver" "GetUser" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "GetUser"
   type        = "Query"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -107,7 +107,7 @@ resource "aws_appsync_resolver" "SearchApps" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "SearchApps"
   type        = "Query"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -117,7 +117,7 @@ resource "aws_appsync_resolver" "SearchEdges" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "SearchEdges"
   type        = "Query"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -128,7 +128,7 @@ resource "aws_appsync_resolver" "SearchNodes" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "SearchNodes"
   type        = "Query"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -181,7 +181,7 @@ resource "aws_appsync_resolver" "PutHl7MllpInboundNode" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "PutHl7MllpInboundNode"
   type        = "Mutation"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -193,7 +193,7 @@ resource "aws_appsync_resolver" "PutHl7MllpOutboundNode" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "PutHl7MllpOutboundNode"
   type        = "Mutation"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -204,7 +204,7 @@ resource "aws_appsync_resolver" "PutExternalNode" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "PutExternalNode"
   type        = "Mutation"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -214,7 +214,7 @@ resource "aws_appsync_resolver" "PutTenant" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "PutTenant"
   type        = "Mutation"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -224,7 +224,7 @@ resource "aws_appsync_resolver" "DeleteNode" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "DeleteNode"
   type        = "Mutation"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -234,7 +234,7 @@ resource "aws_appsync_resolver" "DeleteApp" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "DeleteApp"
   type        = "Mutation"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -244,7 +244,7 @@ resource "aws_appsync_resolver" "PutExternalApp" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "PutExternalApp"
   type        = "Mutation"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -254,7 +254,7 @@ resource "aws_appsync_resolver" "PutManagedApp" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "PutManagedApp"
   type        = "Mutation"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -264,7 +264,7 @@ resource "aws_appsync_resolver" "AddUserToTenant" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "AddUserToTenant"
   type        = "Mutation"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -274,7 +274,7 @@ resource "aws_appsync_resolver" "ResetAppPassword" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "ResetAppPassword"
   type        = "Mutation"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_user_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -291,7 +291,7 @@ resource "aws_appsync_resolver" "DeleteEdge" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
   field       = "DeleteEdge"
   type        = "Mutation"
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_templates_DeleteEdge_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
@@ -317,7 +317,7 @@ data "aws_s3_bucket_object" "response_templates_pass_result_vtl" {
 
 resource "aws_appsync_function" "SearchNodes" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "SearchNodes"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_SearchNodes_vtl.body
@@ -333,7 +333,7 @@ data "aws_s3_bucket_object" "request_templates_SearchEdges_vtl" {
 
 resource "aws_appsync_function" "SearchEdges" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "SearchEdges"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_SearchEdges_vtl.body
@@ -348,7 +348,7 @@ data "aws_s3_bucket_object" "request_templates_SearchApps_vtl" {
 
 resource "aws_appsync_function" "SearchApps" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "SearchApps"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_SearchApps_vtl.body
@@ -364,7 +364,7 @@ data "aws_s3_bucket_object" "request_templates_GetUser_vtl" {
 
 resource "aws_appsync_function" "GetUser" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "GetUser"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_GetUser_vtl.body
@@ -380,7 +380,7 @@ data "aws_s3_bucket_object" "request_templates_GetUsersForTenant_vtl" {
 
 resource "aws_appsync_function" "GetUsersForTenant" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "GetUsersForTenant"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_GetUsersForTenant_vtl.body
@@ -396,7 +396,7 @@ data "aws_s3_bucket_object" "request_templates_ListKeys_vtl" {
 
 resource "aws_appsync_function" "ListKeys" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "ListKeys"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_ListKeys_vtl.body
@@ -414,7 +414,7 @@ data "aws_s3_bucket_object" "request_templates_PutNode_vtl" {
 
 resource "aws_appsync_function" "PutNode" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "PutNode"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_PutNode_vtl.body
@@ -430,7 +430,7 @@ data "aws_s3_bucket_object" "request_templates_PutTenant_vtl" {
 
 resource "aws_appsync_function" "PutTenant" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "PutTenant"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_PutTenant_vtl.body
@@ -446,7 +446,7 @@ data "aws_s3_bucket_object" "request_templates_PutApp_vtl" {
 
 resource "aws_appsync_function" "PutApp" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "PutApp"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_PutApp_vtl.body
@@ -467,7 +467,7 @@ data "aws_s3_bucket_object" "response_templates_error_on_result_vtl" {
 
 resource "aws_appsync_function" "GetSourceEdges" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "GetSourceEdges"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_GetSourceEdges_vtl.body
@@ -484,7 +484,7 @@ data "aws_s3_bucket_object" "request_templates_GetTargetEdges_vtl" {
 
 resource "aws_appsync_function" "GetTargetEdges" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "GetTargetEdges"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_GetTargetEdges_vtl.body
@@ -499,7 +499,7 @@ data "aws_s3_bucket_object" "request_templates_DeleteNode_vtl" {
 
 resource "aws_appsync_function" "DeleteNode" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "DeleteNode"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_DeleteNode_vtl.body
@@ -515,7 +515,7 @@ data "aws_s3_bucket_object" "request_templates_GetAppNodes_vtl" {
 
 resource "aws_appsync_function" "GetAppNodes" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "GetAppNodes"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_GetAppNodes_vtl.body
@@ -530,7 +530,7 @@ data "aws_s3_bucket_object" "request_templates_DeleteApp_vtl" {
 
 resource "aws_appsync_function" "DeleteApp" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "DeleteApp"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_DeleteApp_vtl.body
@@ -546,7 +546,7 @@ data "aws_s3_bucket_object" "request_templates_AddUserToTenantvtl" {
 
 resource "aws_appsync_function" "AddUserToTenant" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "AddUserToTenant"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_AddUserToTenantvtl.body
@@ -563,7 +563,7 @@ data "aws_s3_bucket_object" "request_templates_GetApp_vtl" {
 
 resource "aws_appsync_function" "GetApp" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "GetApp"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_GetApp_vtl.body
@@ -580,7 +580,7 @@ data "aws_s3_bucket_object" "request_templates_ResetAppPassword_vtl" {
 
 resource "aws_appsync_function" "ResetPassword" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
-  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
+  data_source = module.appsync_graph_table_datasource.datasource_name
   name        = "ResetPassword"
 
   request_mapping_template  = data.aws_s3_bucket_object.request_templates_ResetAppPassword_vtl.body
@@ -636,11 +636,11 @@ module "appsync_edge_lambda_datasource" {
   version                  = "3.0.2"
 }
 
-module "appsync_hl7_ninja_graph_table_datasource" {
+module "appsync_graph_table_datasource" {
   api_id              = aws_appsync_graphql_api.hl7_ninja.id
   description         = "hl7-ninja-graph-table dynamodb datasource"
-  dynamodb_table_arn  = module.hl7_ninja_graph_table.arn
-  dynamodb_table_name = module.hl7_ninja_graph_table.name
+  dynamodb_table_arn  = module.graph_table.arn
+  dynamodb_table_name = module.graph_table.name
   name                = replace("${var.environment_prefix}_dynamodb", "-", "_")
   source              = "QuiNovas/appsync-dynamodb-datasource/aws"
   version             = "3.0.2"

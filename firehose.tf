@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "process_audit_record_firehose" {
     ]
 
     resources = [
-      "${aws_s3_bucket.hl7_ninja_audit_records.arn}/*",
+      "${aws_s3_bucket.audit_records.arn}/*",
     ]
 
     sid = "AllowIntermediateBucketAccess"
@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "process_audit_record_firehose" {
     ]
 
     resources = [
-      aws_s3_bucket.hl7_ninja_audit_records.arn,
+      aws_s3_bucket.audit_records.arn,
     ]
 
     sid = "AllowBucketOperations"
@@ -82,7 +82,7 @@ resource "aws_kinesis_firehose_delivery_stream" "process_audit_record_firehose" 
   name        = "${var.environment_prefix}-process-audit-record"
 
   extended_s3_configuration {
-    bucket_arn      = aws_s3_bucket.hl7_ninja_audit_records.arn
+    bucket_arn      = aws_s3_bucket.audit_records.arn
     buffer_interval = 300
     buffer_size     = 5
 

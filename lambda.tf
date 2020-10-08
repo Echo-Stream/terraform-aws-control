@@ -8,8 +8,8 @@ data "aws_iam_policy_document" "additional_ddb_policy" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
-      "${module.hl7_ninja_graph_table.arn}/index/*"
+      module.graph_table.arn,
+      "${module.graph_table.arn}/index/*"
     ]
 
     sid = "TableAccess"
@@ -38,7 +38,7 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
+      module.graph_table.arn,
     ]
 
     sid = "TableAccess"
@@ -85,7 +85,7 @@ module "graph_table_dynamodb_trigger" {
 
   environment_variables = {
     TYPE_HANDLERS                = file("${path.module}/files/type-handlers-map.json")
-    DYNAMODB_TABLE               = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE               = module.graph_table.name
     DEFAULT_TENANT_SQS_QUEUE_URL = aws_sqs_queue.default_tenant_sqs_queue.id
   }
 
@@ -121,7 +121,7 @@ data "aws_iam_policy_document" "graph_table_manage_users" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
+      module.graph_table.arn,
     ]
 
     sid = "TableAccess"
@@ -169,7 +169,7 @@ module "graph_table_manage_users" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    DYNAMODB_TABLE    = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE    = module.graph_table.name
     EMAIL_FROM        = "support@hl7.ninja"
     EMAIL_CC          = ""
     EMAIL_REPLY_TO    = "support@hl7.ninja"
@@ -213,7 +213,7 @@ data "aws_iam_policy_document" "graph_table_put_app_policies" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
+      module.graph_table.arn,
     ]
 
     sid = "TableAccess"
@@ -302,7 +302,7 @@ module "graph_table_put_app_policies" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    DYNAMODB_TABLE = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE = module.graph_table.name
   }
 
   handler     = "function.handler"
@@ -336,7 +336,7 @@ data "aws_iam_policy_document" "graph_table_manage_queues" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
+      module.graph_table.arn,
     ]
 
     sid = "TableAccess"
@@ -383,7 +383,7 @@ module "graph_table_manage_queues" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    DYNAMODB_TABLE = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE = module.graph_table.name
   }
 
   handler     = "function.handler"
@@ -509,8 +509,8 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     ]
 
     resources = [
-      "${module.hl7_ninja_graph_table.arn}/*",
-      module.hl7_ninja_graph_table.arn,
+      "${module.graph_table.arn}/*",
+      module.graph_table.arn,
     ]
 
     sid = "TableAccess"
@@ -566,7 +566,7 @@ data "aws_iam_policy_document" "app_cognito_pre_authentication" {
     ]
 
     resources = [
-      "${module.hl7_ninja_graph_table.arn}/*",
+      "${module.graph_table.arn}/*",
     ]
 
     sid = "TableAccess"
@@ -584,7 +584,7 @@ module "app_cognito_pre_authentication" {
   description = "Lambda function that gets triggered when cognito user to be authenticated"
 
   environment_variables = {
-    DYNAMODB_TABLE = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE = module.graph_table.name
     INDEX_NAME     = "gsi0"
   }
 
@@ -619,7 +619,7 @@ data "aws_iam_policy_document" "app_cognito_pre_token_generation" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
+      module.graph_table.arn,
     ]
 
     sid = "TableAccess"
@@ -637,7 +637,7 @@ module "app_cognito_pre_token_generation" {
   description = "Lambda function that customize the claims in the identity token"
 
   environment_variables = {
-    DYNAMODB_TABLE = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE = module.graph_table.name
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -672,7 +672,7 @@ data "aws_iam_policy_document" "appsync_edge_datasource" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
+      module.graph_table.arn,
     ]
 
     sid = "TableAccess"
@@ -716,7 +716,7 @@ module "appsync_edge_datasource" {
   description = "Appsync datasource for managing edges"
 
   environment_variables = {
-    DYNAMODB_TABLE = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE = module.graph_table.name
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -752,7 +752,7 @@ data "aws_iam_policy_document" "graph_table_manage_apps" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
+      module.graph_table.arn,
     ]
 
     sid = "TableAccess"
@@ -857,7 +857,7 @@ module "graph_table_manage_apps" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    DYNAMODB_TABLE       = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE       = module.graph_table.name
     APP_USER_POOL_ID     = aws_cognito_user_pool.hl7_ninja_apps.id
     APP_IDENTITY_POOL_ID = aws_cognito_identity_pool.hl7_ninja.id
     SSM_EXPIRATION       = ""
@@ -899,7 +899,7 @@ data "aws_iam_policy_document" "ui_cognito_post_signup" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
+      module.graph_table.arn,
     ]
 
     sid = "TableAccess"
@@ -917,7 +917,7 @@ module "ui_cognito_post_signup" {
   description = "Set attributes on UI user and validate invitation token post signup "
 
   environment_variables = {
-    DYNAMODB_TABLE = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE = module.graph_table.name
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -953,7 +953,7 @@ data "aws_iam_policy_document" "ui_cognito_pre_authentication" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
+      module.graph_table.arn,
     ]
 
     sid = "TableAccess"
@@ -971,7 +971,7 @@ module "ui_cognito_pre_authentication" {
   description = "Check status and tenant membership pre authentication for UI users"
 
   environment_variables = {
-    DYNAMODB_TABLE = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE = module.graph_table.name
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1005,7 +1005,7 @@ data "aws_iam_policy_document" "ui_cognito_pre_signup" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
+      module.graph_table.arn,
     ]
 
     sid = "TableAccess"
@@ -1023,7 +1023,7 @@ module "ui_cognito_pre_signup" {
   description = "Validate invitation for new UI user "
 
   environment_variables = {
-    DYNAMODB_TABLE = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE = module.graph_table.name
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1058,8 +1058,8 @@ data "aws_iam_policy_document" "ui_cognito_pre_token_generation" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
-      "${module.hl7_ninja_graph_table.arn}/index/*",
+      module.graph_table.arn,
+      "${module.graph_table.arn}/index/*",
     ]
 
     sid = "TableAccess"
@@ -1077,7 +1077,7 @@ module "ui_cognito_pre_token_generation" {
   description = "Add tenant claim to UI user"
 
   environment_variables = {
-    DYNAMODB_TABLE = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE = module.graph_table.name
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1171,7 +1171,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
+      module.graph_table.arn,
     ]
 
     sid = "TableAccess"
@@ -1219,7 +1219,7 @@ module "graph_table_tenant_stream_handler" {
 
   environment_variables = {
     TYPE_HANDLERS  = file("${path.module}/files/type-handlers-map.json")
-    DYNAMODB_TABLE = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE = module.graph_table.name
   }
 
   handler     = "function.handler"
@@ -1282,8 +1282,8 @@ data "aws_iam_policy_document" "graph_table_manage_message_types" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
-      "${module.hl7_ninja_graph_table.arn}/index/*"
+      module.graph_table.arn,
+      "${module.graph_table.arn}/index/*"
     ]
 
     sid = "TableAccess"
@@ -1319,7 +1319,7 @@ module "graph_table_manage_message_types" {
   description = "No Description"
 
   environment_variables = {
-    DYNAMODB_TABLE             = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE             = module.graph_table.name
     ENVIRONMENT                = "hl7-ninja"
     LAMBDA_ROLE_ARN            = aws_iam_role.graph_table_manage_message_types_child_lambdas.arn
     FUNCTIONS_BUCKET           = local.artifacts_bucket
@@ -1361,8 +1361,8 @@ data "aws_iam_policy_document" "appsync_message_type_datasource" {
     ]
 
     resources = [
-      module.hl7_ninja_graph_table.arn,
-      "${module.hl7_ninja_graph_table.arn}/index/*"
+      module.graph_table.arn,
+      "${module.graph_table.arn}/index/*"
     ]
 
     sid = "TableAccess"
@@ -1380,7 +1380,7 @@ module "appsync_message_type_datasource" {
   description = "No Description"
 
   environment_variables = {
-    DYNAMODB_TABLE = module.hl7_ninja_graph_table.name
+    DYNAMODB_TABLE = module.graph_table.name
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn

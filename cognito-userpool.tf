@@ -74,7 +74,7 @@ resource "aws_cognito_user_pool" "hl7_ninja_apps" {
       schema
     ]
 
-    prevent_destroy = true
+   # prevent_destroy = true
   }
 
   name = "${var.environment_prefix}-apps"
@@ -132,7 +132,7 @@ resource "aws_cognito_user_pool" "hl7_ninja_ui" {
   email_verification_subject = "Your verification code"
 
   lifecycle {
-    prevent_destroy = true
+   # prevent_destroy = true
   }
 
   mfa_configuration = "ON"
