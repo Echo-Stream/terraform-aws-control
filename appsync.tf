@@ -45,7 +45,34 @@ resource "aws_iam_role_policy_attachment" "hl7_ninja_appsync" {
   role       = aws_iam_role.hl7_ninja_appsync.name
 }
 
-/*
+####################
+## Resolvers ##
+####################
+
+data "aws_s3_bucket_object" "response_template_default_vtl" {
+  bucket = local.artifacts_bucket
+  key    = "${local.artifacts_prefix["appsync"]}/response-templates/default.vtl"
+}
+
+data "aws_s3_bucket_object" "request_template_GetUsersForTenant_vtl" {
+  bucket = local.artifacts_bucket
+  key    = "${local.artifacts_prefix["appsync"]}/request-templates/GetUsersForTenant.vtl"
+}
+resource "aws_appsync_resolver" "test" {
+  api_id      = aws_appsync_graphql_api.test.id
+  field       = "GetUsersForTenant"
+  type        = "Query"
+  data_source = "dynamodb"
+
+  request_template  = data.aws_s3_bucket_object.request_template_GetUsersForTenant_vtl.body
+  response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
+}
+
+####################
+## Datasources ##
+####################
+
+
 ## Datasources ##
 module "appsync_kms_key_lambda_datasource" {
   api_id                   = aws_appsync_graphql_api.hl7_ninja.id
@@ -102,4 +129,3 @@ module "tenant_datasource" {
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
   version                  = "3.0.1"
 }
-*/
