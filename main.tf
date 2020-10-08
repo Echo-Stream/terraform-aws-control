@@ -1,7 +1,7 @@
 # Default us-east-1 aws provider
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
-  region              = "us-east-1"
+  region              = var.region
   version             = "3.6.0"
 }
 
