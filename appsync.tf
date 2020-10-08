@@ -142,9 +142,10 @@ data "aws_s3_bucket_object" "request_template_validate_function_vtl" {
 }
 
 resource "aws_appsync_resolver" "ValidateFunction" {
-  api_id = aws_appsync_graphql_api.hl7_ninja.id
-  field  = "ValidateFunction"
-  type   = "Query"
+  api_id      = aws_appsync_graphql_api.hl7_ninja.id
+  field       = "ValidateFunction"
+  type        = "Query"
+  data_source = module.appsync_hl7_ninja_graph_table_datasource.datasource_name
 
   request_template  = data.aws_s3_bucket_object.request_template_validate_function_vtl.body
   response_template = data.aws_s3_bucket_object.response_template_default_vtl.body
