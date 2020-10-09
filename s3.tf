@@ -93,7 +93,7 @@ module "large_messages_bucket_us_west_1" {
 
 ## US-WEST-2
 module "large_messages_bucket_us_west_2" {
-  name        = "${var.environment_prefix}-large-messages-us-east-2"
+  name        = "${var.environment_prefix}-large-messages-us-west-2"
   kms_key_arn = aws_kms_key.kms_us_west_2.arn
   log_bucket  = module.log_bucket_us_west_2.id
   tags        = local.tags
