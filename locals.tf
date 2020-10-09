@@ -8,9 +8,14 @@ locals {
   lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn
 
   artifacts = {
-    lambda   = "${var.hl7_ninja_version}/lambda"
-    appsync  = "${var.hl7_ninja_version}/appsync"
-    frontend = "${var.hl7_ninja_version}/frontend"
+    lambda                 = "${var.hl7_ninja_version}/lambda"
+    appsync                = "${var.hl7_ninja_version}/appsync"
+    frontend               = "${var.hl7_ninja_version}/frontend"
+    hl7_mllp_inbound_node  = "672550935748.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-inbound-node"
+    hl7_mllp_outbound_node = "672550935748.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-outbound-node"
+
+
+
   }
 
   lambda_functions_keys = {
