@@ -863,8 +863,8 @@ module "graph_table_manage_apps" {
     SSM_EXPIRATION       = ""
     SSM_SERVICE_ROLE     = aws_iam_role.manage_apps_ssm_service_role.arn
     APP_CLOUD_INIT_TOPIC = aws_sns_topic.hl7_app_cloud_init.name
-    INBOUNDER_ECR_URL    = "${local.artifacts[hl7_mllp_inbound_node]}:${var.hl7_ninja_version}"
-    OUTBOUNDER_ECR_URL   = "${local.artifacts[hl7_mllp_outbound_node]}:${var.hl7_ninja_version}"
+    INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.hl7_ninja_version}"
+    OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.hl7_ninja_version}"
   }
 
 
