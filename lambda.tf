@@ -539,8 +539,10 @@ module "appsync_tenant_datasource" {
   description     = "Lambda function that creates/removes tenants and their AWS resources"
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
-
-    ENVIRONMENT = var.environment_prefix
+    DYNAMODB_TABLE          = module.graph_table.name
+    ENVIRONMENT             = var.environment_prefix
+    LOG_LEVEL               = "INFO"
+    STREAM_HANDLER_FUNCTION = module.graph_table_tenant_stream_handler.arn
   }
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
@@ -1754,6 +1756,244 @@ module "appsync_sub_field_datasource" {
   runtime       = "python3.8"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["appsync_sub_field_datasource"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.10"
+}
+
+###############################
+## graph-table-manage-nodes ##
+###############################
+data "aws_iam_policy_document" "graph_table_manage_nodes" {
+  statement {
+    actions = [
+      "dynamodb:GetItem",
+    ]
+
+    resources = [
+      module.graph_table.arn,
+    ]
+
+    sid = "TableAccess"
+  }
+
+  statement {
+    actions = [
+      "lambda:CreateFunction",
+      "lambda:DeleteFunction",
+      "lambda:TagFunction",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "LambdaAccess"
+  }
+}
+
+resource "aws_iam_policy" "graph_table_manage_nodes" {
+  description = "IAM permissions required for graph-table-manage-nodes"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-graph-table-manage-nodes"
+  policy      = data.aws_iam_policy_document.graph_table_manage_nodes.json
+}
+
+module "graph_table_manage_nodes" {
+  description     = "Lambda function that handles nodes in the Dynamodb Stream"
+  dead_letter_arn = local.lambda_dead_letter_arn
+
+  environment_variables = {
+    LOG_LEVEL                      = "INFO"
+    DYNAMODB_TABLE                 = module.graph_table.name
+    ARTIFACTS_BUCKET_PREFIX        = ""
+    INTERNAL_FUNCTION_ROLE         = ""
+    ROUTER_NODE_ARTIFACT           = ""
+    TRANS_NODE_ARTIFACT            = ""
+    X_TENANT_SENDING_NODE_ARTIFACT = ""
+  }
+
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  layers      = [aws_lambda_layer_version.ninja_tools.arn]
+  memory_size = 128
+  name        = "${var.environment_prefix}-graph-table-manage-nodes"
+
+  policy_arns = [
+    aws_iam_policy.graph_table_manage_nodes.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["graph_table_manage_nodes"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.10"
+}
+
+###############################
+## graph-table-manage-tenants ##
+###############################
+data "aws_iam_policy_document" "graph_table_manage_tenants" {
+  statement {
+    actions = [
+      "appsync:GetGraphqlApi",
+      "appsync:GraphQL",
+    ]
+
+    resources = [
+      "arn:aws:appsync:${local.current_region}:${var.allowed_account_id}:apis/${aws_appsync_graphql_api.hl7_ninja.id}",
+      "arn:aws:appsync:${local.current_region}:${var.allowed_account_id}:apis/${aws_appsync_graphql_api.hl7_ninja.id}/types/mutation/fields/*",
+    ]
+
+    sid = "AppSync"
+  }
+
+  statement {
+    actions = [
+      "sqs:DeleteQueue",
+      "sqs:GetQueueAttributes",
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "Sqs"
+  }
+  statement {
+    actions = [
+      "lambda:DeleteEventSourceMapping",
+      "lambda:GetEventSourceMapping",
+      "lambda:ListEventSourceMappings",
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "LambdaAccess"
+  }
+  statement {
+    actions = [
+      "dynamodb:BatchWriteItem",
+      "dynamodb:Query",
+      "dynamodb:GetItem",
+      "dynamodb:DeleteItem",
+    ]
+
+    resources = [
+      module.graph_table.arn,
+      "${module.graph_table.arn}/index/*",
+    ]
+
+    sid = "TableAccess"
+  }
+
+  statement {
+    actions = [
+      "kms:ScheduleKeyDeletion",
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "KMS"
+  }
+}
+
+resource "aws_iam_policy" "graph_table_manage_tenants" {
+  description = "IAM permissions required for graph-table-manage-tenants"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-graph-table-manage-tenants"
+  policy      = data.aws_iam_policy_document.graph_table_manage_tenants.json
+}
+
+module "graph_table_manage_tenants" {
+  description     = "Lambda function that creates/removes tenants and their AWS resources"
+  dead_letter_arn = local.lambda_dead_letter_arn
+
+  environment_variables = {
+    LOG_LEVEL             = "INFO"
+    DYNAMODB_TABLE        = module.graph_table.name
+    TENANT_STREAM_HANDLER = module.graph_table_tenant_stream_handler.arn
+  }
+
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  layers      = [aws_lambda_layer_version.ninja_tools.arn]
+  memory_size = 128
+  name        = "${var.environment_prefix}-graph-table-manage-tenants"
+
+  policy_arns = [
+    aws_iam_policy.graph_table_manage_tenants.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["graph_table_manage_tenants"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.10"
+}
+
+##############################################
+## appsync-large-message-storage-datasource ##
+##############################################
+
+data "aws_iam_policy_document" "appsync_large_message_storage_datasource" {
+  statement {
+    actions = [
+      "dynamodb:GetItem",
+    ]
+
+    resources = [
+      module.graph_table.arn,
+    ]
+
+    sid = "TableAccess"
+  }
+}
+
+resource "aws_iam_policy" "appsync_large_message_storage_datasource" {
+  description = "IAM permissions required for appsync-large-message-storage-datasource"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-appsync-large-message-storage-datasource"
+  policy      = data.aws_iam_policy_document.appsync_large_message_storage_datasource.json
+}
+
+module "appsync_large_message_storage_datasource" {
+  description     = "Lambda function that handles nodes in the Dynamodb Stream"
+  dead_letter_arn = local.lambda_dead_letter_arn
+
+  environment_variables = {
+    LOG_LEVEL         = "INFO"
+    DYNAMODB_TABLE    = module.graph_table.name
+    ENVIRONMENT       = var.environment_prefix
+    ACCESS_KEY_ID     = ""
+    SECRET_ACCESS_KEY = ""
+  }
+
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  layers      = [aws_lambda_layer_version.ninja_tools.arn]
+  memory_size = 128
+  name        = "${var.environment_prefix}-appsync-large-message-storage-datasource"
+
+  policy_arns = [
+    aws_iam_policy.appsync_large_message_storage_datasource.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["appsync_large_message_storage_datasource"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
