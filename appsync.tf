@@ -45,12 +45,21 @@ resource "aws_iam_role_policy_attachment" "hl7_ninja_appsync" {
   role       = aws_iam_role.hl7_ninja_appsync.name
 }
 
-/*
+
 ###############
 ## Resolvers ##
 ###############
 
 #Queries
+
+# resource "aws_appsync_resolver" "GetUsersForTenant" {
+#   api_id      = aws_appsync_graphql_api.hl7_ninja.id
+#   field       = "GetUsersForTenant"
+#   type        = "Query"
+#   data_source = module.appsync_graph_table_datasource.datasource_name
+# }
+
+/*
 
 data "aws_s3_bucket_object" "response_template_default_vtl" {
   bucket = local.artifacts_bucket
@@ -670,6 +679,16 @@ module "tenant_datasource" {
   invoke_lambda_policy_arn = module.appsync_tenant_datasource.invoke_policy_arn
   lambda_function_arn      = module.appsync_tenant_datasource.arn
   name                     = replace("${var.environment_prefix}_tenant_datasource", "-", "_")
+  source                   = "QuiNovas/appsync-lambda-datasource/aws"
+  version                  = "3.0.2"
+}
+
+module "app_datasource" {
+  api_id                   = aws_appsync_graphql_api.hl7_ninja.id
+  description              = "Appsync lambda datasource for appsync-app-datasource function"
+  invoke_lambda_policy_arn = module.appsync_app_datasource.invoke_policy_arn
+  lambda_function_arn      = module.appsync_app_datasource.arn
+  name                     = replace("${var.environment_prefix}_app_datasource", "-", "_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
   version                  = "3.0.2"
 }
