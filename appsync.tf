@@ -49,8 +49,9 @@ resource "aws_iam_role_policy_attachment" "hl7_ninja_appsync" {
 ###############
 ## Resolvers ##
 ###############
+#Queries
 
-module "get_message_type" {
+module "GetMessageType" {
   api_id          = aws_appsync_graphql_api.hl7_ninja.id
   field           = "GetMessageType"
   type            = "Query"
@@ -58,7 +59,22 @@ module "get_message_type" {
   source          = "./resolver"
 }
 
-#Queries
+module "GetUsersForTenant" {
+  api_id          = aws_appsync_graphql_api.hl7_ninja.id
+  field           = "GetUsersForTenant"
+  type            = "Query"
+  datasource_name = module.tenant_datasource.datasource_name
+  source          = "./resolver"
+}
+
+module "GetUser" {
+  api_id          = aws_appsync_graphql_api.hl7_ninja.id
+  field           = "GetUser"
+  type            = "Query"
+  datasource_name = module.tenant_datasource.datasource_name
+  source          = "./resolver"
+}
+
 
 # resource "aws_appsync_resolver" "GetUsersForTenant" {
 #   api_id      = aws_appsync_graphql_api.hl7_ninja.id
