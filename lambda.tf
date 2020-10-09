@@ -1462,9 +1462,9 @@ data "aws_iam_policy_document" "deployment_handler" {
 }
 
 resource "aws_iam_policy" "deployment_handler" {
-  description = "IAM permissions required for deployment-handlerce lambda"
+  description = "IAM permissions required for deployment-handler lambda"
   path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-deployment-handlerce"
+  name        = "${var.environment_prefix}-deployment-handler"
   policy      = data.aws_iam_policy_document.deployment_handler.json
 }
 
@@ -1494,4 +1494,18 @@ module "deployment_handler" {
   tags          = local.tags
   timeout       = 30
   version       = "3.0.10"
+}
+
+resource "aws_lambda_permission" "deployment_handler" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = module.deployment_handler.name
+  principal     = "sns.amazonaws.com"
+  source_arn    = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:hl7-ninja-artifacts-${local.current_region}"
+}
+
+resource "aws_sns_topic_subscription" "deployment_handler" {
+  topic_arn = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:hl7-ninja-artifacts-${local.current_region}"
+  protocol  = "lambda"
+  endpoint  = module.deployment_handler.arn
 }
