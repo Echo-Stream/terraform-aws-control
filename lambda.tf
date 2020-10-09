@@ -1170,7 +1170,6 @@ module "validate_function" {
   description     = "Validates a python function that is passed in by running it and returning the results"
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
-
     ENVIRONMENT = var.environment_prefix
   }
   handler       = "function.handler"
@@ -1460,7 +1459,7 @@ data "aws_iam_policy_document" "deployment_handler" {
     sid = "RegionalArtifactsSNSTopicSubscription"
   }
 
-    statement {
+  statement {
     actions = [
       "s3:GetObject*",
     ]

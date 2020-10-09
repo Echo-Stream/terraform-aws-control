@@ -9,7 +9,7 @@ locals {
   artifacts_bucket     = "hl7-ninja-artifacts-${local.current_region}"
   artifacts_account_id = "672550935748"
   artifacts = {
-    lambda                 = "${var.hl7_ninja_version}/lambda"
+    lambda                 = "${var.hl7_ninja_version}/lambda/control"
     appsync                = "${var.hl7_ninja_version}/appsync"
     frontend               = "${var.hl7_ninja_version}/frontend"
     hl7_mllp_inbound_node  = "${local.artifacts_account_id}.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-inbound-node"
