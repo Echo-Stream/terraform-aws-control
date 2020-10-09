@@ -39,6 +39,9 @@ locals {
     graph_table_manage_message_types  = "${local.artifacts["lambda"]}/graph-table-manage-message-types.zip"
     appsync_message_type_datasource   = "${local.artifacts["lambda"]}/appsync-message-type-datasource.zip"
     deployment_handler                = "${local.artifacts["lambda"]}/deployment-handler.zip"
+    appsync_app_datasource            = "${local.artifacts["lambda"]}/appsync-app-datasource.zip"
+    appsync_node_datasource           = "${local.artifacts["lambda"]}/appsync-node-datasource.zip"
+    appsync_sub_field_datasource      = "${local.artifacts["lambda"]}/appsync-sub-field-datasource.zip"
   }
 
   current_region = data.aws_region.current.name

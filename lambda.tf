@@ -443,8 +443,11 @@ module "appsync_kms_key_datasource" {
   description     = "Lambda function that manages SQS/KMS resource and IAM policies from a Dynamodb Stream"
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
-
+   
+    DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT = var.environment_prefix
+    LOG_LEVEL = "INFO"
+
   }
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
@@ -697,6 +700,7 @@ data "aws_iam_policy_document" "appsync_edge_datasource" {
       "sqs:CreateQueue",
       "sqs:GetQueueUrl",
       "sqs:TagQueue",
+      "sqs:DeleteQueue",
     ]
 
     resources = [
@@ -732,6 +736,8 @@ module "appsync_edge_datasource" {
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.environment_prefix
+    LOG_LEVEL      = "INFO"
+    MESSAGE_RETENTION_DAYS = 10
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1378,6 +1384,7 @@ module "graph_table_manage_message_types" {
 data "aws_iam_policy_document" "appsync_message_type_datasource" {
   statement {
     actions = [
+      "dynamodb:PutItem"
       "dynamodb:DescribeTable",
       "dynamodb:GetItem",
       "dynamodb:Query",
@@ -1407,6 +1414,7 @@ module "appsync_message_type_datasource" {
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.environment_prefix
+    LOG_LEVEL     = "INFO"
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1519,4 +1527,236 @@ resource "aws_sns_topic_subscription" "deployment_handler" {
   topic_arn = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:hl7-ninja-artifacts-${local.current_region}"
   protocol  = "lambda"
   endpoint  = module.deployment_handler.arn
+}
+
+
+###############################
+##  appsync-app-datasource  ##
+###############################
+data "aws_iam_policy_document" "appsync_app_datasource" {
+  statement {
+    actions = [
+      "dynamodb:DescribeTable",
+      "dynamodb:PutItem",
+      "dynamodb:GetItem",
+      "dynamodb:DeleteItem"
+    ]
+
+    resources = [
+      module.graph_table.arn,
+    ]
+
+    sid = "TableAccess"
+  }
+
+  statement {
+    actions = [
+     "ssm:CreateActivation"
+     "ssm:DeleteActivation"
+     "ssm:DescribeActivations"
+     "ssm:ListActivations"
+     "ssm:DescribeInstanceInformation"
+     "ssm:ListTagsForResource"
+     "ssm:DeregisterManagedInstance"
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "SSM"
+  }
+
+  statement {
+    actions = [
+     "sns:Publish"
+    ]
+
+    resources = [
+      "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:hl7-ninja-artifacts-${local.current_region}"
+    ]
+
+    sid = "SNS"
+  }
+
+    statement {
+    actions = [
+      "cognito:AdminCreateUser",
+      "cognito:AdminConfirmSignup",
+      "cognito:AdminDeleteUser",
+      "cognito:AdminGetUser",
+      "cognito:AdminResetUserPassword"
+    ]
+
+    resources = [
+      aws_cognito_user_pool.hl7_ninja_apps.arn
+    ]
+
+    sid = "AppCognitoPoolAccess"
+  }
+    statement {
+    actions = [
+      "iam:CreateRole",
+    ]
+
+    resources = ["*"]
+
+    sid = "IAMPermissions"
+  }
+}
+
+resource "aws_iam_policy" "appsync_app_datasource" {
+  description = "IAM permissions required for appsync_app_datasource lambda"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-appsync-app-datasource"
+  policy      = data.aws_iam_policy_document.appsync_app_datasource.json
+}
+
+module "appsync_app_datasource" {
+  description = "Appsync datasource for managing app"
+
+  environment_variables = {
+       DYNAMODB_TABLE = module.graph_table.name
+       LOG_LEVEL = "INFO"
+       ENVIRONMENT = var.environment_prefix
+       APP_USER_POOL_ID = aws_cognito_user_pool.hl7_ninja_apps.id
+       APP_IDENTITY_POOL_ID = aws_cognito_identity_pool.hl7_ninja.id
+       SSM_SERVICE_ROLE     = aws_iam_role.manage_apps_ssm_service_role.arn
+       APP_CLOUD_INIT_TOPIC = aws_sns_topic.hl7_app_cloud_init.name
+       INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.hl7_ninja_version}"
+       OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.hl7_ninja_version}"
+  }
+
+  dead_letter_arn = local.lambda_dead_letter_arn
+  handler         = "function.handler"
+  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  memory_size     = 128
+  name            = "${var.environment_prefix}-appsync-app-datasource"
+
+  policy_arns = [
+    aws_iam_policy.appsync_app_datasource.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["appsync_app_datasource"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.10"
+}
+
+#######################################
+##  appsync-node-datasource  ##
+#######################################
+data "aws_iam_policy_document" "appsync_node_datasource" {
+  statement {
+    actions = [
+      "dynamodb:PutItem"
+      "dynamodb:DescribeTable",
+      "dynamodb:GetItem",
+      "dynamodb:Query",
+      "dynamodb:DeleteItem"
+
+    ]
+
+    resources = [
+      module.graph_table.arn,
+      "${module.graph_table.arn}/index/*"
+    ]
+
+    sid = "TableAccess"
+  }
+}
+
+resource "aws_iam_policy" "appsync_node_datasource" {
+  description = "IAM permissions required for appsync-node-datasource lambda"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-appsync-node-datasource"
+  policy      = data.aws_iam_policy_document.appsync_node_datasource.json
+}
+
+module "appsync_node_datasource" {
+  description = "No Description"
+
+  environment_variables = {
+    DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
+    LOG_LEVEL     = "INFO"
+  }
+
+  dead_letter_arn = local.lambda_dead_letter_arn
+  handler         = "function.handler"
+  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  memory_size     = 128
+  name            = "${var.environment_prefix}-appsync-node-datasource"
+
+  policy_arns = [
+    aws_iam_policy.appsync_node_datasource.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["appsync_node_datasource"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.10"
+}
+
+#######################################
+##  appsync-sub-field-datasource  ##
+#######################################
+data "aws_iam_policy_document" "appsync_sub_field_datasource" {
+  statement {
+    actions = [
+      "dynamodb:GetItem",
+      "dynamodb:Query",
+    ]
+
+    resources = [
+      module.graph_table.arn,
+      "${module.graph_table.arn}/index/*"
+    ]
+
+    sid = "TableAccess"
+  }
+}
+
+resource "aws_iam_policy" "appsync_sub_field_datasource" {
+  description = "IAM permissions required for appsync-sub-field-datasource lambda"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-appsync-sub-field-datasource"
+  policy      = data.aws_iam_policy_document.appsync_sub_field_datasource.json
+}
+
+module "appsync_sub_field_datasource" {
+  description = "Resolves child Appsync fields"
+
+  environment_variables = {
+    DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
+    LOG_LEVEL     = "INFO"
+  }
+
+  dead_letter_arn = local.lambda_dead_letter_arn
+  handler         = "function.handler"
+  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  memory_size     = 128
+  name            = "${var.environment_prefix}-appsync-sub-field-datasource"
+
+  policy_arns = [
+    aws_iam_policy.appsync_sub_field_datasource.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["appsync_sub_field_datasource"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.10"
 }
