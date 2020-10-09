@@ -53,6 +53,8 @@ resource "aws_iam_role_policy_attachment" "hl7_ninja_appsync" {
 
 ## We are using custom module, as aws_appsync_resolver TF resource is behind.
 ## TF resource doesn't support optional templates yet.
+
+/*
 module "GetMessageType" {
   api_id          = aws_appsync_graphql_api.hl7_ninja.id
   field           = "GetMessageType"
@@ -76,7 +78,7 @@ module "GetUser" {
   datasource_name = module.tenant_datasource.datasource_name
   source          = "./resolver"
 }
-
+*/
 
 # resource "aws_appsync_resolver" "GetUsersForTenant" {
 #   api_id      = aws_appsync_graphql_api.hl7_ninja.id
