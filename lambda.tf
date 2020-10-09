@@ -1459,6 +1459,18 @@ data "aws_iam_policy_document" "deployment_handler" {
 
     sid = "RegionalArtifactsSNSTopicSubscription"
   }
+
+    statement {
+    actions = [
+      "s3:GetObject*",
+    ]
+
+    resources = [
+      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}/${local.artifacts["lambda"]}/*"
+    ]
+
+    sid = "GetArtifacts"
+  }
 }
 
 resource "aws_iam_policy" "deployment_handler" {
