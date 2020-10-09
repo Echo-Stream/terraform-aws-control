@@ -54,30 +54,46 @@ resource "aws_iam_role_policy_attachment" "hl7_ninja_appsync" {
 ## We are using custom module, as aws_appsync_resolver TF resource is behind.
 ## TF resource doesn't support optional templates yet.
 
+resource "null_resource" "GetMessageType" {
+  depends_on = [null_resource.install_aws_cli]
 
-module "GetMessageType" {
-  api_id          = aws_appsync_graphql_api.hl7_ninja.id
-  field           = "GetMessageType"
-  type            = "Query"
-  datasource_name = module.message_type_datasource.datasource_name
-  source          = "./resolver"
+  provisioner "local-exec" {
+    command = "aws appsync create-resolver --api-id ${aws_appsync_graphql_api.hl7_ninja.id} --type-name Query --field-name GetMessageType --data-source-name ${module.message_type_datasource.datasource_name}"
+  }
 }
 
-module "GetUsersForTenant" {
-  api_id          = aws_appsync_graphql_api.hl7_ninja.id
-  field           = "GetUsersForTenant"
-  type            = "Query"
-  datasource_name = module.tenant_datasource.datasource_name
-  source          = "./resolver"
+resource "null_resource" "GetUsersForTenant" {
+  depends_on = [null_resource.install_aws_cli]
+
+  provisioner "local-exec" {
+    command = "aws appsync create-resolver --api-id ${aws_appsync_graphql_api.hl7_ninja.id} --type-name Query --field-name GetUsersForTenant --data-source-name ${module.tenant_datasource.datasource_name}"
+  }
 }
 
-module "GetUser" {
-  api_id          = aws_appsync_graphql_api.hl7_ninja.id
-  field           = "GetUser"
-  type            = "Query"
-  datasource_name = module.tenant_datasource.datasource_name
-  source          = "./resolver"
-}
+
+# module "GetMessageType" {
+#   api_id          = aws_appsync_graphql_api.hl7_ninja.id
+#   field           = "GetMessageType"
+#   type            = "Query"
+#   datasource_name = module.message_type_datasource.datasource_name
+#   source          = "./resolver"
+# }
+
+# module "GetUsersForTenant" {
+#   api_id          = aws_appsync_graphql_api.hl7_ninja.id
+#   field           = "GetUsersForTenant"
+#   type            = "Query"
+#   datasource_name = module.tenant_datasource.datasource_name
+#   source          = "./resolver"
+# }
+
+# module "GetUser" {
+#   api_id          = aws_appsync_graphql_api.hl7_ninja.id
+#   field           = "GetUser"
+#   type            = "Query"
+#   datasource_name = module.tenant_datasource.datasource_name
+#   source          = "./resolver"
+# }
 
 
 # resource "aws_appsync_resolver" "GetUsersForTenant" {
