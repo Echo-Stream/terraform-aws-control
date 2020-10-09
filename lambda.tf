@@ -87,6 +87,7 @@ module "graph_table_dynamodb_trigger" {
     TYPE_HANDLERS                = file("${path.module}/files/type-handlers-map.json")
     DYNAMODB_TABLE               = module.graph_table.name
     DEFAULT_TENANT_SQS_QUEUE_URL = aws_sqs_queue.default_tenant_sqs_queue.id
+    ENVIRONMENT                  = var.environment_prefix
   }
 
   handler     = "function.handler"
@@ -174,6 +175,7 @@ module "graph_table_manage_users" {
     EMAIL_CC          = ""
     EMAIL_REPLY_TO    = "support@hl7.ninja"
     EMAIL_RETURN_PATH = ""
+    ENVIRONMENT       = var.environment_prefix
     #USER_REMOVED_TEMPLATE  = aws_ses_template.remove_user.id
     #NEW_USER_TEMPLATE      = aws_ses_template.invite_user.id
     #EXISTING_USER_TEMPLATE = aws_ses_template.notify_user.id
@@ -303,6 +305,7 @@ module "graph_table_put_app_policies" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
   }
 
   handler     = "function.handler"
@@ -384,6 +387,7 @@ module "graph_table_manage_queues" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
   }
 
   handler     = "function.handler"
@@ -438,10 +442,14 @@ resource "aws_iam_policy" "appsync_kms_key_datasource" {
 module "appsync_kms_key_datasource" {
   description     = "Lambda function that manages SQS/KMS resource and IAM policies from a Dynamodb Stream"
   dead_letter_arn = local.lambda_dead_letter_arn
-  handler         = "function.handler"
-  kms_key_arn     = local.lambda_env_vars_kms_key_arn
-  memory_size     = 128
-  name            = "${var.environment_prefix}-appsync-kms-key-datasource"
+  environment_variables = {
+
+    ENVIRONMENT = var.environment_prefix
+  }
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  memory_size = 128
+  name        = "${var.environment_prefix}-appsync-kms-key-datasource"
 
   policy_arns = [
     aws_iam_policy.appsync_kms_key_datasource.arn,
@@ -527,11 +535,15 @@ resource "aws_iam_policy" "appsync_tenant_datasource" {
 module "appsync_tenant_datasource" {
   description     = "Lambda function that creates/removes tenants and their AWS resources"
   dead_letter_arn = local.lambda_dead_letter_arn
-  handler         = "function.handler"
-  kms_key_arn     = local.lambda_env_vars_kms_key_arn
-  memory_size     = 128
-  name            = "${var.environment_prefix}-appsync-tenant-datasource"
-  layers          = [aws_lambda_layer_version.ninja_tools.arn]
+  environment_variables = {
+
+    ENVIRONMENT = var.environment_prefix
+  }
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  memory_size = 128
+  name        = "${var.environment_prefix}-appsync-tenant-datasource"
+  layers      = [aws_lambda_layer_version.ninja_tools.arn]
 
   policy_arns = [
     aws_iam_policy.appsync_tenant_datasource.arn,
@@ -585,6 +597,7 @@ module "app_cognito_pre_authentication" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
     INDEX_NAME     = "gsi0"
   }
 
@@ -638,6 +651,7 @@ module "app_cognito_pre_token_generation" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -717,6 +731,7 @@ module "appsync_edge_datasource" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -863,6 +878,7 @@ module "graph_table_manage_apps" {
     SSM_EXPIRATION       = ""
     SSM_SERVICE_ROLE     = aws_iam_role.manage_apps_ssm_service_role.arn
     APP_CLOUD_INIT_TOPIC = aws_sns_topic.hl7_app_cloud_init.name
+    ENVIRONMENT          = var.environment_prefix
     # INBOUNDER_ECR_URL    = module.hl7_mllp_inbound_node.repository_url
     # OUTBOUNDER_ECR_URL   = module.hl7_mllp_outbound_node.repository_url
   }
@@ -918,6 +934,7 @@ module "ui_cognito_post_signup" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -972,6 +989,7 @@ module "ui_cognito_pre_authentication" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1024,6 +1042,7 @@ module "ui_cognito_pre_signup" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1078,6 +1097,7 @@ module "ui_cognito_pre_token_generation" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1108,6 +1128,7 @@ module "process_audit_record" {
 
   environment_variables = {
     APP_CLIENT_ID   = aws_cognito_user_pool_client.hl7_ninja_apps_userpool_client.id
+    ENVIRONMENT     = var.environment_prefix
     ID_TOKEN_KEY    = <<-EOT
                         {
                           "kty": "oct",
@@ -1148,17 +1169,21 @@ resource "random_string" "for_jwk" {
 module "validate_function" {
   description     = "Validates a python function that is passed in by running it and returning the results"
   dead_letter_arn = local.lambda_dead_letter_arn
-  handler         = "function.handler"
-  kms_key_arn     = local.lambda_env_vars_kms_key_arn
-  memory_size     = 128
-  name            = "${var.environment_prefix}-validate-function"
-  runtime         = "python3.8"
-  s3_bucket       = local.artifacts_bucket
-  s3_object_key   = local.lambda_functions_keys["validate_function"]
-  source          = "QuiNovas/lambda/aws"
-  tags            = local.tags
-  timeout         = 30
-  version         = "3.0.10"
+  environment_variables = {
+
+    ENVIRONMENT = var.environment_prefix
+  }
+  handler       = "function.handler"
+  kms_key_arn   = local.lambda_env_vars_kms_key_arn
+  memory_size   = 128
+  name          = "${var.environment_prefix}-validate-function"
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["validate_function"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.10"
 }
 
 #######################################
@@ -1220,6 +1245,7 @@ module "graph_table_tenant_stream_handler" {
   environment_variables = {
     TYPE_HANDLERS  = file("${path.module}/files/type-handlers-map.json")
     DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
   }
 
   handler     = "function.handler"
@@ -1320,7 +1346,7 @@ module "graph_table_manage_message_types" {
 
   environment_variables = {
     DYNAMODB_TABLE             = module.graph_table.name
-    ENVIRONMENT                = "hl7-ninja"
+    ENVIRONMENT                = var.environment_prefix
     LAMBDA_ROLE_ARN            = aws_iam_role.graph_table_manage_message_types_child_lambdas.arn
     FUNCTIONS_BUCKET           = local.artifacts_bucket
     VALIDATION_FUNCTION_S3_KEY = local.lambda_functions_keys["validate_function"]
@@ -1381,6 +1407,7 @@ module "appsync_message_type_datasource" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
