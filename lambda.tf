@@ -443,10 +443,10 @@ module "appsync_kms_key_datasource" {
   description     = "Lambda function that manages SQS/KMS resource and IAM policies from a Dynamodb Stream"
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
-   
+
     DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT = var.environment_prefix
-    LOG_LEVEL = "INFO"
+    ENVIRONMENT    = var.environment_prefix
+    LOG_LEVEL      = "INFO"
 
   }
   handler     = "function.handler"
@@ -734,9 +734,9 @@ module "appsync_edge_datasource" {
   description = "Appsync datasource for managing edges"
 
   environment_variables = {
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
-    LOG_LEVEL      = "INFO"
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.environment_prefix
+    LOG_LEVEL              = "INFO"
     MESSAGE_RETENTION_DAYS = 10
   }
 
@@ -1384,12 +1384,11 @@ module "graph_table_manage_message_types" {
 data "aws_iam_policy_document" "appsync_message_type_datasource" {
   statement {
     actions = [
-      "dynamodb:PutItem"
+      "dynamodb:PutItem",
       "dynamodb:DescribeTable",
       "dynamodb:GetItem",
       "dynamodb:Query",
-      "dynamodb:DeleteItem"
-
+      "dynamodb:DeleteItem",
     ]
 
     resources = [
@@ -1414,7 +1413,7 @@ module "appsync_message_type_datasource" {
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.environment_prefix
-    LOG_LEVEL     = "INFO"
+    LOG_LEVEL      = "INFO"
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1551,13 +1550,13 @@ data "aws_iam_policy_document" "appsync_app_datasource" {
 
   statement {
     actions = [
-     "ssm:CreateActivation"
-     "ssm:DeleteActivation"
-     "ssm:DescribeActivations"
-     "ssm:ListActivations"
-     "ssm:DescribeInstanceInformation"
-     "ssm:ListTagsForResource"
-     "ssm:DeregisterManagedInstance"
+      "ssm:CreateActivation",
+      "ssm:DeleteActivation",
+      "ssm:DescribeActivations",
+      "ssm:ListActivations",
+      "ssm:DescribeInstanceInformation",
+      "ssm:ListTagsForResource",
+      "ssm:DeregisterManagedInstance",
     ]
 
     resources = [
@@ -1569,7 +1568,7 @@ data "aws_iam_policy_document" "appsync_app_datasource" {
 
   statement {
     actions = [
-     "sns:Publish"
+      "sns:Publish"
     ]
 
     resources = [
@@ -1579,7 +1578,7 @@ data "aws_iam_policy_document" "appsync_app_datasource" {
     sid = "SNS"
   }
 
-    statement {
+  statement {
     actions = [
       "cognito:AdminCreateUser",
       "cognito:AdminConfirmSignup",
@@ -1594,7 +1593,7 @@ data "aws_iam_policy_document" "appsync_app_datasource" {
 
     sid = "AppCognitoPoolAccess"
   }
-    statement {
+  statement {
     actions = [
       "iam:CreateRole",
     ]
@@ -1616,15 +1615,15 @@ module "appsync_app_datasource" {
   description = "Appsync datasource for managing app"
 
   environment_variables = {
-       DYNAMODB_TABLE = module.graph_table.name
-       LOG_LEVEL = "INFO"
-       ENVIRONMENT = var.environment_prefix
-       APP_USER_POOL_ID = aws_cognito_user_pool.hl7_ninja_apps.id
-       APP_IDENTITY_POOL_ID = aws_cognito_identity_pool.hl7_ninja.id
-       SSM_SERVICE_ROLE     = aws_iam_role.manage_apps_ssm_service_role.arn
-       APP_CLOUD_INIT_TOPIC = aws_sns_topic.hl7_app_cloud_init.name
-       INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.hl7_ninja_version}"
-       OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.hl7_ninja_version}"
+    DYNAMODB_TABLE       = module.graph_table.name
+    LOG_LEVEL            = "INFO"
+    ENVIRONMENT          = var.environment_prefix
+    APP_USER_POOL_ID     = aws_cognito_user_pool.hl7_ninja_apps.id
+    APP_IDENTITY_POOL_ID = aws_cognito_identity_pool.hl7_ninja.id
+    SSM_SERVICE_ROLE     = aws_iam_role.manage_apps_ssm_service_role.arn
+    APP_CLOUD_INIT_TOPIC = aws_sns_topic.hl7_app_cloud_init.name
+    INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.hl7_ninja_version}"
+    OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.hl7_ninja_version}"
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1653,11 +1652,11 @@ module "appsync_app_datasource" {
 data "aws_iam_policy_document" "appsync_node_datasource" {
   statement {
     actions = [
-      "dynamodb:PutItem"
+      "dynamodb:PutItem",
       "dynamodb:DescribeTable",
       "dynamodb:GetItem",
       "dynamodb:Query",
-      "dynamodb:DeleteItem"
+      "dynamodb:DeleteItem",
 
     ]
 
@@ -1683,7 +1682,7 @@ module "appsync_node_datasource" {
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.environment_prefix
-    LOG_LEVEL     = "INFO"
+    LOG_LEVEL      = "INFO"
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1738,7 +1737,7 @@ module "appsync_sub_field_datasource" {
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.environment_prefix
-    LOG_LEVEL     = "INFO"
+    LOG_LEVEL      = "INFO"
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
