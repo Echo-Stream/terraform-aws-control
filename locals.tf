@@ -3,16 +3,17 @@ locals {
 
   log_bucket = module.log_bucket.id
 
-  artifacts_bucket            = "hl7-ninja-artifacts-${local.current_region}"
   lambda_dead_letter_arn      = aws_sns_topic.lambda_dead_letter.arn
   lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn
 
+  artifacts_bucket     = "hl7-ninja-artifacts-${local.current_region}"
+  artifacts_account_id = "672550935748"
   artifacts = {
     lambda                 = "${var.hl7_ninja_version}/lambda"
     appsync                = "${var.hl7_ninja_version}/appsync"
     frontend               = "${var.hl7_ninja_version}/frontend"
-    hl7_mllp_inbound_node  = "672550935748.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-inbound-node"
-    hl7_mllp_outbound_node = "672550935748.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-outbound-node"
+    hl7_mllp_inbound_node  = "${local.artifacts_account_id}.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-inbound-node"
+    hl7_mllp_outbound_node = "${local.artifacts_account_id}.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-outbound-node"
   }
 
   lambda_functions_keys = {
@@ -37,6 +38,7 @@ locals {
     graph_table_manage_tenants        = "${local.artifacts["lambda"]}/graph-table-manage-tenants.zip"
     graph_table_manage_message_types  = "${local.artifacts["lambda"]}/graph-table-manage-message-types.zip"
     appsync_message_type_datasource   = "${local.artifacts["lambda"]}/appsync-message-type-datasource.zip"
+    deployment_handler                = "${local.artifacts["lambda"]}/deployment-handler.zip"
   }
 
   current_region = data.aws_region.current.name

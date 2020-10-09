@@ -1429,3 +1429,69 @@ module "appsync_message_type_datasource" {
   timeout       = 30
   version       = "3.0.10"
 }
+
+##########################
+##  Deployment handler  ##
+##########################
+data "aws_iam_policy_document" "deployment_handler" {
+  statement {
+    actions = [
+      "lambda:PublishLayerVersion",
+      "lambda:PublishVersion",
+      "lambda:UpdateFunctionCode",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "LambdaDeployAccess"
+  }
+
+  statement {
+    actions = [
+      "sns:Subscribe"
+    ]
+
+    resources = [
+      "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:hl7-ninja-artifacts-${local.current_region}"
+    ]
+
+    sid = "RegionalArtifactsSNSTopicSubscription"
+  }
+}
+
+resource "aws_iam_policy" "deployment_handler" {
+  description = "IAM permissions required for deployment-handlerce lambda"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-deployment-handlerce"
+  policy      = data.aws_iam_policy_document.deployment_handler.json
+}
+
+module "deployment_handler" {
+  description = "Does appropriate deployments by getting invoked by Objects created on Artifacts bucket"
+
+  environment_variables = {
+    HL7_NINJA_VERSION = var.hl7_ninja_version
+    ENVIRONMENT       = var.environment_prefix
+    ARTIFACTS_BUCKET  = local.artifacts_bucket
+  }
+
+  dead_letter_arn = local.lambda_dead_letter_arn
+  handler         = "function.handler"
+  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  memory_size     = 128
+  name            = "${var.environment_prefix}-deployment-handler"
+
+  policy_arns = [
+    aws_iam_policy.deployment_handler.arn,
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["deployment_handler"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.10"
+}
