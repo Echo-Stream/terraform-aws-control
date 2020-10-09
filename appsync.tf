@@ -4,7 +4,7 @@
 
 data "aws_s3_bucket_object" "graphql_schema" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/schema.graphql"
+  key    = "${local.artifacts["appsync"]}/schema.graphql"
 }
 
 resource "aws_appsync_graphql_api" "hl7_ninja" {
@@ -53,12 +53,12 @@ resource "aws_iam_role_policy_attachment" "hl7_ninja_appsync" {
 
 data "aws_s3_bucket_object" "response_template_default_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/response-templates/default.vtl"
+  key    = "${local.artifacts["appsync"]}/response-templates/default.vtl"
 }
 
 data "aws_s3_bucket_object" "request_template_GetUsersForTenant_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/GetUsersForTenant.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/GetUsersForTenant.vtl"
 }
 resource "aws_appsync_resolver" "GetUsersForTenant" {
   api_id      = aws_appsync_graphql_api.hl7_ninja.id
@@ -76,7 +76,7 @@ resource "aws_appsync_resolver" "GetUsersForTenant" {
 
 data "aws_s3_bucket_object" "request_template_validate_user_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/validate_user.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/validate_user.vtl"
 }
 
 resource "aws_appsync_resolver" "ListKeys" {
@@ -138,7 +138,7 @@ resource "aws_appsync_resolver" "SearchNodes" {
 
 data "aws_s3_bucket_object" "request_template_validate_function_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/ValidateFunction.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/ValidateFunction.vtl"
 }
 
 resource "aws_appsync_resolver" "ValidateFunction" {
@@ -284,7 +284,7 @@ resource "aws_appsync_resolver" "ResetAppPassword" {
 
 data "aws_s3_bucket_object" "request_templates_DeleteEdge_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/DeleteEdge.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/DeleteEdge.vtl"
 }
 
 resource "aws_appsync_resolver" "DeleteEdge" {
@@ -306,12 +306,12 @@ resource "aws_appsync_resolver" "DeleteEdge" {
 
 data "aws_s3_bucket_object" "request_templates_SearchNodes_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/SearchNodes.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/SearchNodes.vtl"
 }
 
 data "aws_s3_bucket_object" "response_templates_pass_result_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/response-templates/pass_result.vtl"
+  key    = "${local.artifacts["appsync"]}/response-templates/pass_result.vtl"
 }
 
 
@@ -328,7 +328,7 @@ resource "aws_appsync_function" "SearchNodes" {
 #SearchEdges
 data "aws_s3_bucket_object" "request_templates_SearchEdges_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/SearchEdges.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/SearchEdges.vtl"
 }
 
 resource "aws_appsync_function" "SearchEdges" {
@@ -343,7 +343,7 @@ resource "aws_appsync_function" "SearchEdges" {
 #SearchApps
 data "aws_s3_bucket_object" "request_templates_SearchApps_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/SearchApps.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/SearchApps.vtl"
 }
 
 resource "aws_appsync_function" "SearchApps" {
@@ -359,7 +359,7 @@ resource "aws_appsync_function" "SearchApps" {
 #GetUser
 data "aws_s3_bucket_object" "request_templates_GetUser_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/GetUser.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/GetUser.vtl"
 }
 
 resource "aws_appsync_function" "GetUser" {
@@ -375,7 +375,7 @@ resource "aws_appsync_function" "GetUser" {
 
 data "aws_s3_bucket_object" "request_templates_GetUsersForTenant_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/GetUsersForTenant.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/GetUsersForTenant.vtl"
 }
 
 resource "aws_appsync_function" "GetUsersForTenant" {
@@ -391,7 +391,7 @@ resource "aws_appsync_function" "GetUsersForTenant" {
 
 data "aws_s3_bucket_object" "request_templates_ListKeys_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/ListKeys.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/ListKeys.vtl"
 }
 
 resource "aws_appsync_function" "ListKeys" {
@@ -409,7 +409,7 @@ resource "aws_appsync_function" "ListKeys" {
 
 data "aws_s3_bucket_object" "request_templates_PutNode_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/PutNode.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/PutNode.vtl"
 }
 
 resource "aws_appsync_function" "PutNode" {
@@ -425,7 +425,7 @@ resource "aws_appsync_function" "PutNode" {
 
 data "aws_s3_bucket_object" "request_templates_PutTenant_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/PutTenant.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/PutTenant.vtl"
 }
 
 resource "aws_appsync_function" "PutTenant" {
@@ -441,7 +441,7 @@ resource "aws_appsync_function" "PutTenant" {
 
 data "aws_s3_bucket_object" "request_templates_PutApp_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/PutApp.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/PutApp.vtl"
 }
 
 resource "aws_appsync_function" "PutApp" {
@@ -457,12 +457,12 @@ resource "aws_appsync_function" "PutApp" {
 
 data "aws_s3_bucket_object" "request_templates_GetSourceEdges_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/GetSourceEdges.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/GetSourceEdges.vtl"
 }
 
 data "aws_s3_bucket_object" "response_templates_error_on_result_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/response-templates/error_on_result.vtl"
+  key    = "${local.artifacts["appsync"]}/response-templates/error_on_result.vtl"
 }
 
 resource "aws_appsync_function" "GetSourceEdges" {
@@ -479,7 +479,7 @@ resource "aws_appsync_function" "GetSourceEdges" {
 
 data "aws_s3_bucket_object" "request_templates_GetTargetEdges_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/GetTargetEdges.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/GetTargetEdges.vtl"
 }
 
 resource "aws_appsync_function" "GetTargetEdges" {
@@ -494,7 +494,7 @@ resource "aws_appsync_function" "GetTargetEdges" {
 # DeleteNode
 data "aws_s3_bucket_object" "request_templates_DeleteNode_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/DeleteNode.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/DeleteNode.vtl"
 }
 
 resource "aws_appsync_function" "DeleteNode" {
@@ -510,7 +510,7 @@ resource "aws_appsync_function" "DeleteNode" {
 
 data "aws_s3_bucket_object" "request_templates_GetAppNodes_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/GetAppNodes.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/GetAppNodes.vtl"
 }
 
 resource "aws_appsync_function" "GetAppNodes" {
@@ -525,7 +525,7 @@ resource "aws_appsync_function" "GetAppNodes" {
 ## DeleteApp
 data "aws_s3_bucket_object" "request_templates_DeleteApp_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/DeleteApp.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/DeleteApp.vtl"
 }
 
 resource "aws_appsync_function" "DeleteApp" {
@@ -541,7 +541,7 @@ resource "aws_appsync_function" "DeleteApp" {
 #  AddUserToTenant
 data "aws_s3_bucket_object" "request_templates_AddUserToTenantvtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/AddUserToTenant.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/AddUserToTenant.vtl"
 }
 
 resource "aws_appsync_function" "AddUserToTenant" {
@@ -558,7 +558,7 @@ resource "aws_appsync_function" "AddUserToTenant" {
 
 data "aws_s3_bucket_object" "request_templates_GetApp_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/GetApp.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/GetApp.vtl"
 }
 
 resource "aws_appsync_function" "GetApp" {
@@ -575,7 +575,7 @@ resource "aws_appsync_function" "GetApp" {
 
 data "aws_s3_bucket_object" "request_templates_ResetAppPassword_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/ResetAppPassword.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/ResetAppPassword.vtl"
 }
 
 resource "aws_appsync_function" "ResetPassword" {
@@ -592,12 +592,12 @@ resource "aws_appsync_function" "ResetPassword" {
 
 /*data "aws_s3_bucket_object" "request_templates_onStreamNotifications_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/request-templates/onStreamNotifications.vtl"
+  key    = "${local.artifacts["appsync"]}/request-templates/onStreamNotifications.vtl"
 }
 
 data "aws_s3_bucket_object" "response_templates_onStreamNotifications_vtl" {
   bucket = local.artifacts_bucket
-  key    = "${local.artifacts_prefix["appsync"]}/response-templates/onStreamNotifications.vtl"
+  key    = "${local.artifacts["appsync"]}/response-templates/onStreamNotifications.vtl"
 }
 
 resource "aws_appsync_resolver" "onStreamNotifications" {
