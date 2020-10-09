@@ -13,9 +13,6 @@ locals {
     frontend               = "${var.hl7_ninja_version}/frontend"
     hl7_mllp_inbound_node  = "672550935748.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-inbound-node"
     hl7_mllp_outbound_node = "672550935748.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-outbound-node"
-
-
-
   }
 
   lambda_functions_keys = {
