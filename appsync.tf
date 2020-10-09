@@ -45,6 +45,7 @@ resource "aws_iam_role_policy_attachment" "hl7_ninja_appsync" {
   role       = aws_iam_role.hl7_ninja_appsync.name
 }
 
+/*
 ###############
 ## Resolvers ##
 ###############
@@ -608,7 +609,8 @@ resource "aws_appsync_resolver" "onStreamNotifications" {
 
   request_template  = data.aws_s3_bucket_object.request_templates_onStreamNotifications_vtl.body
   response_template = data.aws_s3_bucket_object.response_templates_onStreamNotifications_vtl.body
-}*/
+}
+*/
 
 ####################
 ## Datasources ###
