@@ -1972,7 +1972,7 @@ resource "aws_iam_policy" "appsync_large_message_storage_datasource" {
 }
 
 module "appsync_large_message_storage_datasource" {
-  description     = "Lambda function that handles nodes in the Dynamodb Stream"
+  description     = "Returns presigned post/get for large message storage "
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
