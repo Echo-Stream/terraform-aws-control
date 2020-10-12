@@ -96,3 +96,13 @@ module "large_message_storage_datasource" {
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
   version                  = "3.0.3"
 }
+
+module "node_datasource" {
+  api_id                   = aws_appsync_graphql_api.hl7_ninja.id
+  description              = "Appsync lambda datasource for appsync-node-datasource function"
+  invoke_lambda_policy_arn = module.appsync_node_datasource.invoke_policy_arn
+  lambda_function_arn      = module.appsync_node_datasource.arn
+  name                     = replace("${var.environment_prefix}_node_datasource", "-", "_")
+  source                   = "QuiNovas/appsync-lambda-datasource/aws"
+  version                  = "3.0.3"
+}
