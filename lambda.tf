@@ -1,3 +1,10 @@
+## Internal Fn IAM assume role
+resource "aws_iam_role" "internal_function_role" {
+  name               = "${var.environment_prefix}-internal-fn-role"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  tags               = local.tags
+}
+
 ## additional-ddb-policy ##
 data "aws_iam_policy_document" "additional_ddb_policy" {
   statement {
@@ -30,7 +37,7 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
   statement {
     actions = [
       "dynamodb:DescribeTable",
-      "dynamodb:GetItem",
+      #"dynamodb:GetItem",
       "dynamodb:DescribeStream",
       "dynamodb:GetRecords",
       "dynamodb:GetShardIterator",
@@ -46,26 +53,13 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
 
   statement {
     actions = [
-      "appsync:GraphQL",
-      "appsync:GetGraphqlApi"
-    ]
-
-    resources = [
-      aws_appsync_graphql_api.hl7_ninja.arn,
-      "${aws_appsync_graphql_api.hl7_ninja.arn}/types/mutation/fields/StreamNotifications"
-    ]
-
-    sid = "AppsyncMutationQueryAccess"
-  }
-
-  statement {
-    actions = [
       "sqs:SendMessage",
       "sqs:SendMessageBatch",
+      "sqs:GetQueueUrl",
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:_db-stream_*.fifo"
+      "arn:aws:sqs:*:*:*_db-stream_*.fifo"
     ]
 
     sid = "DeliverMessageToQueues"
@@ -84,7 +78,8 @@ module "graph_table_dynamodb_trigger" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    TYPE_HANDLERS                = file("${path.module}/files/type-handlers-map.json")
+    #TYPE_HANDLERS                = file("${path.module}/files/type-handlers-map.json")
+    GRAPH_TYPE_HANDLERS          = ""
     DYNAMODB_TABLE               = module.graph_table.name
     DEFAULT_TENANT_SQS_QUEUE_URL = aws_sqs_queue.default_tenant_sqs_queue.id
     ENVIRONMENT                  = var.environment_prefix
@@ -1343,22 +1338,15 @@ resource "aws_iam_policy" "graph_table_manage_message_types" {
   policy      = data.aws_iam_policy_document.graph_table_manage_message_types.json
 }
 
-resource "aws_iam_role" "graph_table_manage_message_types_child_lambdas" {
-  name               = "${var.environment_prefix}-graph-tbl-msg-types-child-lambdas"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
-  tags               = local.tags
-}
-
 module "graph_table_manage_message_types" {
   description = "No Description"
 
   environment_variables = {
     DYNAMODB_TABLE             = module.graph_table.name
     ENVIRONMENT                = var.environment_prefix
-    LAMBDA_ROLE_ARN            = aws_iam_role.graph_table_manage_message_types_child_lambdas.arn
+    LAMBDA_ROLE_ARN            = aws_iam_role.internal_function_role.arn
     FUNCTIONS_BUCKET           = local.artifacts_bucket
     VALIDATION_FUNCTION_S3_KEY = local.lambda_functions_keys["validate_function"]
-
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1792,6 +1780,18 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
 
     sid = "LambdaAccess"
   }
+
+  statement {
+    actions = [
+      "s3:GetObject*",
+    ]
+
+    resources = [
+      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}/${local.artifacts["lambda"]}/*"
+    ]
+
+    sid = "GetArtifacts"
+  }
 }
 
 resource "aws_iam_policy" "graph_table_manage_nodes" {
@@ -1809,10 +1809,9 @@ module "graph_table_manage_nodes" {
     LOG_LEVEL                      = "INFO"
     DYNAMODB_TABLE                 = module.graph_table.name
     ENVIRONMENT                    = var.environment_prefix
-    ARTIFACTS_BUCKET_PREFIX        = ""
-    INTERNAL_FUNCTION_ROLE         = ""
-    ROUTER_NODE_ARTIFACT           = ""
-    TRANS_NODE_ARTIFACT            = ""
+    ARTIFACTS_BUCKET_PREFIX        = local.artifacts_bucket_prefix
+    ROUTER_NODE_ARTIFACT           = local.lambda_functions_keys["router_node"]
+    TRANS_NODE_ARTIFACT            = local.lambda_functions_keys["trans_node"]
     X_TENANT_SENDING_NODE_ARTIFACT = ""
   }
 

@@ -6,10 +6,12 @@ locals {
   lambda_dead_letter_arn      = aws_sns_topic.lambda_dead_letter.arn
   lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn
 
-  artifacts_bucket     = "hl7-ninja-artifacts-${local.current_region}"
-  artifacts_account_id = "672550935748"
+  artifacts_bucket        = "hl7-ninja-artifacts-${local.current_region}"
+  artifacts_bucket_prefix = "hl7-ninja-artifacts"
+  artifacts_account_id    = "672550935748"
   artifacts = {
     lambda                 = "${var.hl7_ninja_version}/lambda/control"
+    tenant_lambda          = "${var.hl7_ninja_version}/lambda/tenant"
     appsync                = "${var.hl7_ninja_version}/appsync"
     frontend               = "${var.hl7_ninja_version}/frontend"
     hl7_mllp_inbound_node  = "${local.artifacts_account_id}.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-inbound-node"
@@ -45,7 +47,8 @@ locals {
     graph_table_manage_nodes                 = "${local.artifacts["lambda"]}/graph-table-manage-nodes.zip"
     appsync_large_message_storage_datasource = "${local.artifacts["lambda"]}/appsync-large-message-storage-datasource.zip"
     appsync_validate_function_datasource     = "${local.artifacts["lambda"]}/appsync-validate-function-datasource.zip"
-
+    router_node                              = "${local.artifacts["tenant_lambda"]}/router-node.zip"
+    trans_node                               = "${local.artifacts["tenant_lambda"]}/trans-node.zip"
   }
 
   current_region = data.aws_region.current.name
