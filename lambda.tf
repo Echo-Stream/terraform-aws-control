@@ -1480,7 +1480,7 @@ data "aws_iam_policy_document" "deployment_handler" {
     ]
 
     resources = [
-      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}/${local.artifacts["lambda"]}/*"
+      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}/*"
     ]
 
     sid = "GetArtifacts"
