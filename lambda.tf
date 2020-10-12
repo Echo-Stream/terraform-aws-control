@@ -1830,7 +1830,7 @@ module "graph_table_manage_nodes" {
     ARTIFACTS_BUCKET_PREFIX        = local.artifacts_bucket_prefix
     ROUTER_NODE_ARTIFACT           = local.lambda_functions_keys["router_node"]
     TRANS_NODE_ARTIFACT            = local.lambda_functions_keys["trans_node"]
-    X_TENANT_SENDING_NODE_ARTIFACT = ""
+    X_TENANT_SENDING_NODE_ARTIFACT = local.lambda_functions_keys["trans_node"]
   }
 
   handler     = "function.handler"
