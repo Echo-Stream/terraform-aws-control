@@ -36,4 +36,13 @@ resource "null_resource" "all_resolvers" {
   provisioner "local-exec" {
     command = "./ ${data.template_file.resolver_sh.rendered}"
   }
+  triggers = {
+    api_id                       = aws_appsync_graphql_api.hl7_ninja.id
+    message_type_datasource      = module.message_type_datasource.name
+    tenant_datasource            = module.tenant_datasource.name
+    node_datasource              = module.node_datasource.name
+    edge_datasource              = module.appsync_edge_lambda_datasource.name
+    app_datasource               = module.app_datasource.name
+    validate_function_datasource = module.validate_function_lambda_datasource.name
+  }
 }
