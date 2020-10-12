@@ -8,5 +8,6 @@ EOH
 
   triggers = {
     api_id = aws_appsync_graphql_api.hl7_ninja.id
+    message_type_datasource = module.message_type_datasource.datasource_name
   }
 }
