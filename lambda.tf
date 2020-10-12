@@ -59,7 +59,7 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:*_db-stream_*.fifo"
+      "arn:aws:sqs:*:*:_db-stream_*.fifo"
     ]
 
     sid = "DeliverMessageToQueues"
@@ -490,7 +490,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     ]
 
     resources = [
-      "arn:aws:sqs:::*db_stream*"
+      "arn:aws:sqs:::db_stream*"
     ]
 
     sid = "SQSPermissions"
@@ -1230,7 +1230,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:*_db_stream*.fifo"
+      "arn:aws:sqs:*:*:*db_stream*.fifo"
     ]
 
     sid = "PrerequisitesForQueueTrigger"
