@@ -37,11 +37,11 @@ resource "aws_appsync_datasource" "none" {
   type   = "NONE"
 }
 
-module "validate_function_lambda_datasource" {
+module "validate_function_datasource" {
   api_id                   = aws_appsync_graphql_api.hl7_ninja.id
   description              = "Appsync lambda datasource for Validate function"
-  invoke_lambda_policy_arn = module.validate_function.invoke_policy_arn
-  lambda_function_arn      = module.validate_function.arn
+  invoke_lambda_policy_arn = module.appsync_validate_function_datasource.invoke_policy_arn
+  lambda_function_arn      = module.appsync_validate_function_datasource.arn
   name                     = replace("${var.environment_prefix}_validate_function", "-", "_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
   version                  = "3.0.3"

@@ -493,7 +493,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     ]
 
     resources = [
-      "arn:aws:sqs:::db_stream*"
+      "arn:aws:sqs:::*db_stream*"
     ]
 
     sid = "SQSPermissions"
@@ -517,6 +517,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     actions = [
       "dynamodb:Query",
       "dynamodb:GetItem",
+      "dynamodb:PutItem",
     ]
 
     resources = [
@@ -1648,9 +1649,9 @@ module "appsync_app_datasource" {
   version       = "3.0.10"
 }
 
-#######################################
+###############################
 ##  appsync-node-datasource  ##
-#######################################
+###############################
 data "aws_iam_policy_document" "appsync_node_datasource" {
   statement {
     actions = [
@@ -1707,9 +1708,9 @@ module "appsync_node_datasource" {
   version       = "3.0.10"
 }
 
-#######################################
+####################################
 ##  appsync-sub-field-datasource  ##
-#######################################
+####################################
 data "aws_iam_policy_document" "appsync_sub_field_datasource" {
   statement {
     actions = [
@@ -1996,6 +1997,63 @@ module "appsync_large_message_storage_datasource" {
   runtime       = "python3.8"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["appsync_large_message_storage_datasource"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.10"
+}
+
+############################################
+##  appsync-validate-function-datasource ##
+############################################
+
+data "aws_iam_policy_document" "appsync_validate_function_datasource" {
+  statement {
+    actions = [
+      "dynamodb:GetItem",
+    ]
+
+    resources = [
+      module.graph_table.arn,
+    ]
+
+    sid = "TableAccess"
+  }
+}
+
+resource "aws_iam_policy" "appsync_validate_function_datasource" {
+  description = "IAM permissions required for appsync-validate-function-datasource"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-appsync-validate-function-datasource"
+  policy      = data.aws_iam_policy_document.appsync_validate_function_datasource.json
+}
+
+module "appsync_validate_function_datasource" {
+  description     = "Takes in code from user and passes it to the underlying validation function "
+  dead_letter_arn = local.lambda_dead_letter_arn
+
+  environment_variables = {
+    LOG_LEVEL         = "INFO"
+    DYNAMODB_TABLE    = module.graph_table.name
+    ENVIRONMENT       = var.environment_prefix
+    ACCESS_KEY_ID     = ""
+    SECRET_ACCESS_KEY = ""
+  }
+
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  layers      = [aws_lambda_layer_version.ninja_tools.arn]
+  memory_size = 128
+  name        = "${var.environment_prefix}-appsync-validate-function-datasource"
+
+  policy_arns = [
+    aws_iam_policy.appsync_validate_function_datasource.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["appsync_validate_function_datasource"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
