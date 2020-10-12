@@ -7,8 +7,8 @@ data "template_file" "resolver_sh" {
   template = file("${path.module}/scripts/resolvers.sh.tpl")
   vars = {
     api_id             = aws_appsync_graphql_api.hl7_ninja.id
-    tenant_datasource  = module.tenant_datasource.datasource_name
-    message_datasource = module.message_type_datasource.datasource_name
+    tenant_datasource  = module.tenant_datasource.name
+    message_datasource = module.message_type_datasource.name
   }
 }
 

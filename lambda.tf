@@ -1807,6 +1807,7 @@ module "graph_table_manage_nodes" {
   environment_variables = {
     LOG_LEVEL                      = "INFO"
     DYNAMODB_TABLE                 = module.graph_table.name
+    ENVIRONMENT                    = var.environment_prefix
     ARTIFACTS_BUCKET_PREFIX        = ""
     INTERNAL_FUNCTION_ROLE         = ""
     ROUTER_NODE_ARTIFACT           = ""
@@ -1920,6 +1921,7 @@ module "graph_table_manage_tenants" {
   environment_variables = {
     LOG_LEVEL             = "INFO"
     DYNAMODB_TABLE        = module.graph_table.name
+    ENVIRONMENT           = var.environment_prefix
     TENANT_STREAM_HANDLER = module.graph_table_tenant_stream_handler.arn
   }
 
