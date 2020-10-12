@@ -2003,11 +2003,11 @@ module "appsync_large_message_storage_datasource" {
   version       = "3.0.10"
 }
 
-##############################################
+############################################
 ##  appsync-validate-function-datasource ##
-##############################################
+############################################
 
-data "aws_iam_policy_document" "aappsync_validate_function_datasource" {
+data "aws_iam_policy_document" "appsync_validate_function_datasource" {
   statement {
     actions = [
       "dynamodb:GetItem",
@@ -2021,14 +2021,14 @@ data "aws_iam_policy_document" "aappsync_validate_function_datasource" {
   }
 }
 
-resource "aws_iam_policy" "aappsync_validate_function_datasource" {
+resource "aws_iam_policy" "appsync_validate_function_datasource" {
   description = "IAM permissions required for appsync-validate-function-datasource"
   path        = "/${var.environment_prefix}-lambda/"
   name        = "${var.environment_prefix}-appsync-validate-function-datasource"
-  policy      = data.aws_iam_policy_document.aappsync_validate_function_datasource.json
+  policy      = data.aws_iam_policy_document.appsync_validate_function_datasource.json
 }
 
-module "aappsync_validate_function_datasource" {
+module "appsync_validate_function_datasource" {
   description     = "Takes in code from user and passes it to the underlying validation function "
   dead_letter_arn = local.lambda_dead_letter_arn
 
@@ -2047,7 +2047,7 @@ module "aappsync_validate_function_datasource" {
   name        = "${var.environment_prefix}-appsync-validate-function-datasource"
 
   policy_arns = [
-    aws_iam_policy.aappsync_validate_function_datasource.arn,
+    aws_iam_policy.appsync_validate_function_datasource.arn,
     aws_iam_policy.additional_ddb_policy.arn
   ]
 
