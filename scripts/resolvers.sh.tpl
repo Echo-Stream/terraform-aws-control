@@ -17,3 +17,6 @@ aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name Li
 aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name ListMessageTypes --data-source-name ${message_type_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name ValidateFunction --data-source-name ${validate_function_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutDicomTcpInboundNode --data-source-name ${node_datasource}
+
