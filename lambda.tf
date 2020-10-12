@@ -1450,6 +1450,18 @@ data "aws_iam_policy_document" "deployment_handler" {
 
   statement {
     actions = [
+      "appsync:StartSchemaCreation"
+    ]
+
+    resources = [
+      aws_appsync_graphql_api.hl7_ninja.arn,
+    ]
+
+    sid = "UpdateSchema"
+  }
+
+  statement {
+    actions = [
       "sns:Subscribe"
     ]
 
