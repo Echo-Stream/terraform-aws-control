@@ -165,15 +165,15 @@ module "graph_table_manage_users" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    DYNAMODB_TABLE    = module.graph_table.name
-    EMAIL_FROM        = "support@hl7.ninja"
-    EMAIL_CC          = ""
-    EMAIL_REPLY_TO    = "support@hl7.ninja"
-    EMAIL_RETURN_PATH = ""
-    ENVIRONMENT       = var.environment_prefix
-    #USER_REMOVED_TEMPLATE  = aws_ses_template.remove_user.id
-    #NEW_USER_TEMPLATE      = aws_ses_template.invite_user.id
-    #EXISTING_USER_TEMPLATE = aws_ses_template.notify_user.id
+    DYNAMODB_TABLE         = module.graph_table.name
+    EMAIL_FROM             = "support@hl7.ninja"
+    EMAIL_CC               = ""
+    EMAIL_REPLY_TO         = "support@hl7.ninja"
+    EMAIL_RETURN_PATH      = ""
+    ENVIRONMENT            = var.environment_prefix
+    USER_REMOVED_TEMPLATE  = aws_ses_template.remove_user.id
+    NEW_USER_TEMPLATE      = aws_ses_template.invite_user.id
+    EXISTING_USER_TEMPLATE = aws_ses_template.notify_user.id
   }
 
   handler     = "function.handler"
@@ -216,40 +216,40 @@ data "aws_iam_policy_document" "graph_table_put_app_policies" {
     sid = "TableAccess"
   }
 
-  statement {
-    actions = [
-      "appsync:GraphQL",
-      "appsync:GetGraphqlApi"
-    ]
+  # statement {
+  #   actions = [
+  #     "appsync:GraphQL",
+  #     "appsync:GetGraphqlApi"
+  #   ]
 
-    resources = [
-      aws_appsync_graphql_api.hl7_ninja.arn,
-      "${aws_appsync_graphql_api.hl7_ninja.arn}/types/mutation/fields/StreamNotifications"
-    ]
+  #   resources = [
+  #     aws_appsync_graphql_api.hl7_ninja.arn,
+  #     "${aws_appsync_graphql_api.hl7_ninja.arn}/types/mutation/fields/StreamNotifications"
+  #   ]
 
-    sid = "AppsyncFieldAndAPIAccess"
-  }
+  #   sid = "AppsyncFieldAndAPIAccess"
+  # }
 
-  statement {
-    actions = [
-      "iam:CreateRole",
-      "iam:DeleteRole",
-      "iam:DeleteRolePolicy",
-      "iam:GetRole",
-      "iam:GetRolePolicy",
-      "iam:ListRolePolicies",
-      "iam:ListRoleTags",
-      "iam:ListRoles",
-      "iam:PassRole",
-      "iam:PutRolePolicy",
-      "iam:TagRole",
-      "iam:UntagRole"
-    ]
+  # statement {
+  #   actions = [
+  #     "iam:CreateRole",
+  #     "iam:DeleteRole",
+  #     "iam:DeleteRolePolicy",
+  #     "iam:GetRole",
+  #     "iam:GetRolePolicy",
+  #     "iam:ListRolePolicies",
+  #     "iam:ListRoleTags",
+  #     "iam:ListRoles",
+  #     "iam:PassRole",
+  #     "iam:PutRolePolicy",
+  #     "iam:TagRole",
+  #     "iam:UntagRole"
+  #   ]
 
-    resources = ["*"]
+  #   resources = ["*"]
 
-    sid = "IAMPermissions"
-  }
+  #   sid = "IAMPermissions"
+  # }
 
   statement {
     actions = [
@@ -299,8 +299,10 @@ module "graph_table_put_app_policies" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
+    DYNAMODB_TABLE   = module.graph_table.name
+    ENVIRONMENT      = var.environment_prefix
+    MANAGED_APP_ROLE = aws_iam_role.authenticated.arn
+    USER_POOL_ID     = aws_cognito_user_pool.hl7_ninja_apps.id
   }
 
   handler     = "function.handler"
@@ -913,13 +915,16 @@ module "graph_table_manage_apps" {
 data "aws_iam_policy_document" "ui_cognito_post_signup" {
   statement {
     actions = [
+      "dynamodb:DescribeTable",
       "dynamodb:UpdateItem",
       "dynamodb:GetItem",
+      "dynamodb:Query",
       "dynamodb:PutItem",
     ]
 
     resources = [
       module.graph_table.arn,
+      "${module.graph_table.arn}/*",
     ]
 
     sid = "TableAccess"
@@ -968,7 +973,6 @@ data "aws_iam_policy_document" "ui_cognito_pre_authentication" {
   statement {
     actions = [
       "dynamodb:DescribeTable",
-      "dynamodb:Query",
       "dynamodb:GetItem"
 
     ]
@@ -1023,11 +1027,12 @@ data "aws_iam_policy_document" "ui_cognito_pre_signup" {
   statement {
     actions = [
       "dynamodb:DescribeTable",
-      "dynamodb:GetItem"
+      "dynamodb:Query"
     ]
 
     resources = [
       module.graph_table.arn,
+      "${module.graph_table.arn}/index/*",
     ]
 
     sid = "TableAccess"
@@ -1077,12 +1082,10 @@ data "aws_iam_policy_document" "ui_cognito_pre_token_generation" {
     actions = [
       "dynamodb:DescribeTable",
       "dynamodb:GetItem",
-      "dynamodb:QueryItem",
     ]
 
     resources = [
       module.graph_table.arn,
-      "${module.graph_table.arn}/index/*",
     ]
 
     sid = "TableAccess"
@@ -1227,7 +1230,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:${var.environment_prefix}_db_stream*.fifo"
+      "arn:aws:sqs:*:*:*_db_stream*.fifo"
     ]
 
     sid = "PrerequisitesForQueueTrigger"
