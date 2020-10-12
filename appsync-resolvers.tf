@@ -1,12 +1,13 @@
 # We are using custom local exec resolvers,
 # as aws_appsync_resolver TF resource is behind.
 # TF resource doesn't support optional templates yet.
+# https://github.com/terraform-providers/terraform-provider-aws/issues/15593
 
 data "template_file" "resolver_sh" {
   template = file("${path.module}/scripts/resolvers.sh.tpl")
   vars = {
-    api_id                  = aws_appsync_graphql_api.hl7_ninja.id
-    tenant_datasource       = module.tenant_datasource.datasource_name
+    api_id             = aws_appsync_graphql_api.hl7_ninja.id
+    tenant_datasource  = module.tenant_datasource.datasource_name
     message_datasource = module.message_type_datasource.datasource_name
   }
 }
