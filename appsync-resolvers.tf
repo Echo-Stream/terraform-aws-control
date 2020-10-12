@@ -14,7 +14,7 @@ data "template_file" "resolver_sh" {
     app_datasource               = module.app_datasource.name
     kms_key_datasource           = module.appsync_kms_key_lambda_datasource.name
     message_type_datasource      = module.message_type_datasource.name
-    validate_function_datasource = module.validate_function_lambda_datasource.name
+    validate_function_datasource = module.validate_function_datasource.name
 
   }
 }
@@ -29,7 +29,7 @@ resource "null_resource" "all_resolvers" {
     module.node_datasource,
     module.appsync_edge_lambda_datasource,
     module.appsync_kms_key_lambda_datasource,
-    module.validate_function_lambda_datasource,
+    module.validate_function_datasource,
 
   ]
 
@@ -43,6 +43,6 @@ resource "null_resource" "all_resolvers" {
     node_datasource              = module.node_datasource.name
     edge_datasource              = module.appsync_edge_lambda_datasource.name
     app_datasource               = module.app_datasource.name
-    validate_function_datasource = module.validate_function_lambda_datasource.name
+    validate_function_datasource = module.validate_function_datasource.name
   }
 }

@@ -13,6 +13,6 @@ EOH
     node_datasource              = module.node_datasource.name
     edge_datasource              = module.appsync_edge_lambda_datasource.name
     app_datasource               = module.app_datasource.name
-    validate_function_datasource = module.validate_function_lambda_datasource.name
+    validate_function_datasource = module.validate_function_datasource.name
   }
 }
