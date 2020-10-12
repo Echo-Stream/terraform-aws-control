@@ -1450,7 +1450,9 @@ data "aws_iam_policy_document" "deployment_handler" {
 
   statement {
     actions = [
-      "appsync:StartSchemaCreation"
+      "appsync:StartSchemaCreation",
+      "appsync:GetSchemaCreationStatus",
+      "appsync:*GraphqlApi",
     ]
 
     resources = [
@@ -1499,6 +1501,7 @@ module "deployment_handler" {
     HL7_NINJA_VERSION = var.hl7_ninja_version
     ENVIRONMENT       = var.environment_prefix
     ARTIFACTS_BUCKET  = local.artifacts_bucket
+    API_ID            = aws_appsync_graphql_api.hl7_ninja.id
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
