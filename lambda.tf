@@ -914,11 +914,8 @@ module "graph_table_manage_apps" {
 data "aws_iam_policy_document" "ui_cognito_post_signup" {
   statement {
     actions = [
-      "dynamodb:DescribeTable",
       "dynamodb:UpdateItem",
-      "dynamodb:GetItem",
       "dynamodb:Query",
-      "dynamodb:PutItem",
     ]
 
     resources = [
