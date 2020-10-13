@@ -504,8 +504,18 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     ]
 
     resources = [
-      module.graph_table_tenant_stream_handler.arn
+      "*"
     ]
+
+    condition {
+      test = "StringEquals"
+
+      values = [
+        module.graph_table_tenant_stream_handler.arn
+      ]
+
+      variable = "lambda:FunctionArn"
+    }
 
     sid = "LambdaEventSourceMappings"
   }
@@ -1225,7 +1235,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:*db_stream*.fifo"
+      "arn:aws:sqs:*:*:*db-stream*.fifo"
     ]
 
     sid = "PrerequisitesForQueueTrigger"
