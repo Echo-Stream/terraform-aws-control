@@ -1236,22 +1236,11 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:*db-stream*.fifo"
-    ]
-
-    sid = "PrerequisitesForQueueTrigger"
-  }
-
-  statement {
-    actions = [
-      "sqs:ReceiveMessage"
-    ]
-
-    resources = [
+      "arn:aws:sqs:*:*:*db-stream*.fifo",
       aws_sqs_queue.default_tenant_sqs_queue.arn
     ]
 
-    sid = "DefaultTenantQueueEventSourceMapping"
+    sid = "PrerequisitesForQueueTrigger"
   }
 }
 
