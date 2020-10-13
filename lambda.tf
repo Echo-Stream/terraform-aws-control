@@ -473,6 +473,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     actions = [
       "kms:CreateKey",
       "kms:TagKey",
+      "kms:TagResource",
     ]
 
     resources = ["*"]
