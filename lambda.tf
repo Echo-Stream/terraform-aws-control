@@ -1022,15 +1022,12 @@ module "ui_cognito_pre_authentication" {
 data "aws_iam_policy_document" "ui_cognito_pre_signup" {
   statement {
     actions = [
-      "dynamodb:DescribeTable",
-      "dynamodb:Query",
-      "dynamodb:GetItem",
+      "dynamodb:UpdateItem",
       "dynamodb:PutItem"
     ]
 
     resources = [
       module.graph_table.arn,
-      "${module.graph_table.arn}/index/*",
     ]
 
     sid = "TableAccess"
