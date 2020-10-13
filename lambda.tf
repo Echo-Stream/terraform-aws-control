@@ -1985,9 +1985,11 @@ data "aws_iam_policy_document" "presign_large_messages" {
   statement {
     actions = [
       "s3:GetObject*",
+      "s3:ListBucket*",
     ]
 
     resources = [
+      "${module.large_messages_bucket_us_east_1.arn}/*",
       module.large_messages_bucket_us_east_1.arn,
     ]
 
