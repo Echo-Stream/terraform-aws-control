@@ -55,3 +55,11 @@ output "ui_user_pool_endpoint" {
 output "ui_user_pool_client_id" {
   value = aws_cognito_user_pool_client.hl7_ninja_ui_userpool_client.id
 }
+
+output "identity_pool_id" {
+  value = aws_cognito_identity_pool.hl7_ninja.id
+}
+
+output "identity_pool_arn" {
+  value = aws_cognito_identity_pool.hl7_ninja.arn
+}
