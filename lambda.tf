@@ -1995,6 +1995,18 @@ data "aws_iam_policy_document" "presign_large_messages" {
 
     sid = "LargeMessagesStorageAccess"
   }
+
+    statement {
+    actions = [
+      "kms:decrypt",
+    ]
+
+    resources = [
+     aws_kms_key.kms_us_east_1.arn
+    ]
+
+    sid = "KMSDecrypt"
+  }
 }
 
 
