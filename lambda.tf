@@ -1354,7 +1354,6 @@ module "graph_table_manage_message_types" {
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
-  layers          = [aws_lambda_layer_version.ninja_tools.arn]
   memory_size     = 128
   name            = "${var.environment_prefix}-graph-table-manage-message-types"
 
