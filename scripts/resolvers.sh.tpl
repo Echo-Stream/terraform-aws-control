@@ -102,6 +102,8 @@ aws appsync create-resolver --api-id ${api_id} --type-name ExternalNode --field-
 
 aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name tenant --data-source-name ${sub_field_datasource}
 
+aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name tenant --data-source-name ${sub_field_datasource}
+
 aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name receiveEdges --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name app --data-source-name ${sub_field_datasource}

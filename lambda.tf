@@ -714,7 +714,7 @@ data "aws_iam_policy_document" "appsync_edge_datasource" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:_db-stream_*"
+      "*"
     ]
 
     sid = "SQS"
