@@ -87,7 +87,7 @@ module "graph_table_dynamodb_trigger" {
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
-  layers      = [aws_lambda_layer_version.ninja_tools.arn]
+
   memory_size = 128
   name        = "${var.environment_prefix}-graph-table-dynamodb-trigger"
 
@@ -178,7 +178,7 @@ module "graph_table_manage_users" {
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
-  layers      = [aws_lambda_layer_version.ninja_tools.arn]
+
   memory_size = 128
   name        = "${var.environment_prefix}-graph-table-manage-users"
 
@@ -307,7 +307,7 @@ module "graph_table_put_app_policies" {
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
-  layers      = [aws_lambda_layer_version.ninja_tools.arn]
+
   memory_size = 128
   name        = "${var.environment_prefix}-graph-table-put-app-policies"
 
@@ -389,7 +389,7 @@ module "graph_table_manage_queues" {
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
-  layers      = [aws_lambda_layer_version.ninja_tools.arn]
+
   memory_size = 128
   name        = "${var.environment_prefix}-graph-table-manage-queues"
 
@@ -546,7 +546,6 @@ module "appsync_tenant_datasource" {
   kms_key_arn = local.lambda_env_vars_kms_key_arn
   memory_size = 128
   name        = "${var.environment_prefix}-appsync-tenant-datasource"
-  layers      = [aws_lambda_layer_version.ninja_tools.arn]
 
   policy_arns = [
     aws_iam_policy.appsync_tenant_datasource.arn,
@@ -562,14 +561,14 @@ module "appsync_tenant_datasource" {
   version       = "3.0.10"
 }
 
-################################
-##     ninja_tools_layer      ##
-################################
-resource "aws_lambda_layer_version" "ninja_tools" {
-  s3_bucket  = local.artifacts_bucket
-  s3_key     = local.lambda_functions_keys["ninja_tools_layer"]
-  layer_name = "ninja-tools-layer"
-}
+# ################################
+# ##     ninja_tools_layer      ##
+# ################################
+# resource "aws_lambda_layer_version" "ninja_tools" {
+#   s3_bucket  = local.artifacts_bucket
+#   s3_key     = local.lambda_functions_keys["ninja_tools_layer"]
+#   layer_name = "ninja-tools-layer"
+# }
 
 ######################################
 ##  app-cognito-pre-authentication  ##
@@ -892,7 +891,7 @@ module "graph_table_manage_apps" {
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
-  layers      = [aws_lambda_layer_version.ninja_tools.arn]
+
   memory_size = 128
   name        = "${var.environment_prefix}-graph-table-manage-apps"
 
@@ -1256,7 +1255,7 @@ module "graph_table_tenant_stream_handler" {
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
-  layers      = [aws_lambda_layer_version.ninja_tools.arn]
+
   memory_size = 128
   name        = "${var.environment_prefix}-graph-table-tenant-stream-handler"
 
@@ -1835,7 +1834,7 @@ module "graph_table_manage_nodes" {
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
-  layers      = [aws_lambda_layer_version.ninja_tools.arn]
+
   memory_size = 128
   name        = "${var.environment_prefix}-graph-table-manage-nodes"
 
@@ -1945,7 +1944,7 @@ module "graph_table_manage_tenants" {
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
-  layers      = [aws_lambda_layer_version.ninja_tools.arn]
+
   memory_size = 128
   name        = "${var.environment_prefix}-graph-table-manage-tenants"
 
@@ -2002,7 +2001,7 @@ module "appsync_large_message_storage_datasource" {
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
-  layers      = [aws_lambda_layer_version.ninja_tools.arn]
+
   memory_size = 128
   name        = "${var.environment_prefix}-appsync-large-message-storage-datasource"
 
@@ -2059,7 +2058,7 @@ module "appsync_validate_function_datasource" {
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
-  layers      = [aws_lambda_layer_version.ninja_tools.arn]
+
   memory_size = 128
   name        = "${var.environment_prefix}-appsync-validate-function-datasource"
 
