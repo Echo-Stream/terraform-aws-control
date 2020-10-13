@@ -135,7 +135,7 @@ resource "aws_cognito_user_pool" "hl7_ninja_ui" {
     # prevent_destroy = true
   }
 
-  mfa_configuration = "ON"
+  #mfa_configuration = "ON"
   name              = "${var.environment_prefix}-ui"
 
   lambda_config {
