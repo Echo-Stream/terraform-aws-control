@@ -167,13 +167,14 @@ resource "aws_cognito_user_pool" "hl7_ninja_ui" {
     "email",
   ]
 
-  software_token_mfa_configuration {
-    enabled = true
-  }
+  # software_token_mfa_configuration {
+  #   enabled = true
+  # }
 
   verification_message_template {
     default_email_option = "CONFIRM_WITH_LINK"
   }
+  
   tags = local.tags
 }
 
