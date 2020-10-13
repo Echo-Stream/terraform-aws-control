@@ -1241,6 +1241,18 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
 
     sid = "PrerequisitesForQueueTrigger"
   }
+
+    statement {
+    actions = [
+      "sqs:ReceiveMessage"
+    ]
+
+    resources = [
+      aws_sqs_queue.default_tenant_sqs_queue.arn
+    ]
+
+    sid = "DefaultTenantQueueEventSourceMapping"
+  }
 }
 
 resource "aws_iam_policy" "graph_table_tenant_stream_handler" {
@@ -1774,9 +1786,9 @@ module "appsync_sub_field_datasource" {
   version       = "3.0.10"
 }
 
-###############################
+##############################
 ## graph-table-manage-nodes ##
-###############################
+##############################
 data "aws_iam_policy_document" "graph_table_manage_nodes" {
   statement {
     actions = [
