@@ -33,6 +33,7 @@ resource "null_resource" "all_resolvers" {
     module.validate_function_datasource,
     module.sub_field_datasource,
     module.large_message_storage_datasource
+    module.subscription_datasource
 
   ]
 
