@@ -112,7 +112,7 @@ aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-nam
 
 aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name sendEdges --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name SendMessageType --data-source-name ${sub_field_datasource}
+aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name sendMessageType --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name receiveEdges --data-source-name ${sub_field_datasource}
 
@@ -146,7 +146,7 @@ aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --
 
 aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name receiveMessageType --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name SendMessageType --data-source-name ${sub_field_datasource}
+aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name sendMessageType --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource}
 

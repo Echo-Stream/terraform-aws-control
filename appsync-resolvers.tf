@@ -20,7 +20,6 @@ data "template_file" "resolver_sh" {
   }
 }
 
-
 resource "null_resource" "all_resolvers" {
   depends_on = [
     null_resource.install_aws_cli,
@@ -32,9 +31,8 @@ resource "null_resource" "all_resolvers" {
     module.appsync_kms_key_lambda_datasource,
     module.validate_function_datasource,
     module.sub_field_datasource,
-    module.large_message_storage_datasource
+    module.large_message_storage_datasource,
     module.subscription_datasource
-
   ]
 
   provisioner "local-exec" {
