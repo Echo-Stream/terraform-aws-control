@@ -2074,3 +2074,58 @@ module "appsync_validate_function_datasource" {
   timeout       = 30
   version       = "3.0.10"
 }
+
+######################################
+##  appsync-subscription-datasource ##
+######################################
+
+data "aws_iam_policy_document" "appsync_subscription_datasource" {
+  statement {
+    actions = [
+      "dynamodb:GetItem",
+    ]
+
+    resources = [
+      module.graph_table.arn,
+    ]
+
+    sid = "TableAccess"
+  }
+}
+
+resource "aws_iam_policy" "appsync_subscription_datasource" {
+  description = "IAM permissions required for appsync-subscription-datasource"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-appsync-subscription-datasource"
+  policy      = data.aws_iam_policy_document.appsync_subscription_datasource.json
+}
+
+module "appsync_subscription_datasource" {
+  description     = "Authenticates subscribers"
+  dead_letter_arn = local.lambda_dead_letter_arn
+
+  environment_variables = {
+    LOG_LEVEL      = "INFO"
+    DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
+  }
+
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+
+  memory_size = 128
+  name        = "${var.environment_prefix}-appsync-subscription-datasource"
+
+  policy_arns = [
+    aws_iam_policy.appsync_subscription_datasource.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["appsync_subscription_datasource"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.10"
+}

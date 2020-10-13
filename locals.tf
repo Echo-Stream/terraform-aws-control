@@ -47,8 +47,10 @@ locals {
     graph_table_manage_nodes                 = "${local.artifacts["lambda"]}/graph-table-manage-nodes.zip"
     appsync_large_message_storage_datasource = "${local.artifacts["lambda"]}/appsync-large-message-storage-datasource.zip"
     appsync_validate_function_datasource     = "${local.artifacts["lambda"]}/appsync-validate-function-datasource.zip"
-    router_node                              = "${local.artifacts["tenant_lambda"]}/router-node.zip"
-    trans_node                               = "${local.artifacts["tenant_lambda"]}/trans-node.zip"
+    appsync_subscription_datasource          = "${local.artifacts["lambda"]}/appsync-subscription-datasource.zip"
+
+    router_node = "${local.artifacts["tenant_lambda"]}/router-node.zip"
+    trans_node  = "${local.artifacts["tenant_lambda"]}/trans-node.zip"
   }
 
   current_region = data.aws_region.current.name
