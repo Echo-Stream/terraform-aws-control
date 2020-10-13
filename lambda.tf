@@ -1972,6 +1972,39 @@ module "graph_table_manage_tenants" {
 ## appsync-large-message-storage-datasource ##
 ##############################################
 
+resource "aws_iam_user" "presign_large_messages" {
+  name = "${var.environment_prefix}-presign-large-messages"
+  path = "/lambda/"
+
+  tags = merge(local.tags, {
+    lambda = "${var.environment_prefix}-appsync-large-message-storage-datasource"
+  })
+}
+
+data "aws_iam_policy_document" "presign_large_messages" {
+  statement {
+    actions = [
+      "s3:GetObject*",
+    ]
+
+    resources = [
+      module.large_messages_bucket_us_east_1.arn,
+    ]
+
+    sid = "LargeMessagesStorageAccess"
+  }
+}
+
+
+resource "aws_iam_user_policy" "presign_large_messages" {
+  user   = aws_iam_user.presign_large_messages.name
+  policy = data.aws_iam_policy_document.presign_large_messages.json
+}
+
+resource "aws_iam_access_key" "presign_large_messages" {
+  user = aws_iam_user.presign_large_messages.name
+}
+
 data "aws_iam_policy_document" "appsync_large_message_storage_datasource" {
   statement {
     actions = [
@@ -2001,8 +2034,8 @@ module "appsync_large_message_storage_datasource" {
     LOG_LEVEL         = "INFO"
     DYNAMODB_TABLE    = module.graph_table.name
     ENVIRONMENT       = var.environment_prefix
-    ACCESS_KEY_ID     = ""
-    SECRET_ACCESS_KEY = ""
+    ACCESS_KEY_ID     = aws_iam_access_key.presign_large_messages.id
+    SECRET_ACCESS_KEY = aws_iam_access_key.presign_large_messages.secret
   }
 
   handler     = "function.handler"
