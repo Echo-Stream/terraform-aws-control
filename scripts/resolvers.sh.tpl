@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name GetMessageType --data-source-name ${message_datasource}
+aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name GetMessageType --data-source-name ${message_type_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name GetUsersForTenant --data-source-name ${tenant_datasource}
 
@@ -157,5 +157,18 @@ aws appsync create-resolver --api-id ${api_id} --type-name ExternalApp --field-n
 aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name GetLargeMessageStorage --data-source-name ${large_message_storage_datasource}
 
 
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name AppNotification --data-source-name ${app_datasource}
 
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name NodeNotification --data-source-name ${node_datasource}
 
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name EdgeNotification --data-source-name ${edge_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name MessageTypeNotification --data-source-name ${message_type_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name appUpdated --data-source-name ${subscription_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name nodeUpdated --data-source-name ${subscription_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name edgeUpdated --data-source-name ${subscription_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name messageTypeUpdated --data-source-name ${subscription_datasource}

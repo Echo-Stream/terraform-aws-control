@@ -136,7 +136,7 @@ resource "aws_cognito_user_pool" "hl7_ninja_ui" {
   }
 
   #mfa_configuration = "ON"
-  name              = "${var.environment_prefix}-ui"
+  name = "${var.environment_prefix}-ui"
 
   lambda_config {
     pre_sign_up          = module.ui_cognito_pre_signup.arn
