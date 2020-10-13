@@ -1026,7 +1026,9 @@ data "aws_iam_policy_document" "ui_cognito_pre_signup" {
   statement {
     actions = [
       "dynamodb:DescribeTable",
-      "dynamodb:Query"
+      "dynamodb:Query",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem"
     ]
 
     resources = [
