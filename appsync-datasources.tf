@@ -106,3 +106,14 @@ module "node_datasource" {
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
   version                  = "3.0.3"
 }
+
+
+module "subscription_datasource" {
+  api_id                   = aws_appsync_graphql_api.hl7_ninja.id
+  description              = "Appsync lambda datasource for appsync-subscription-datasource function"
+  invoke_lambda_policy_arn = module.appsync_subscription_datasource.invoke_policy_arn
+  lambda_function_arn      = module.appsync_subscription_datasource.arn
+  name                     = replace("${var.environment_prefix}_subscription_datasource", "-", "_")
+  source                   = "QuiNovas/appsync-lambda-datasource/aws"
+  version                  = "3.0.3"
+}
