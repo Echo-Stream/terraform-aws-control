@@ -1997,7 +1997,6 @@ data "aws_iam_policy_document" "presign_large_messages" {
   statement {
     actions = [
       "s3:GetObject*",
-      "s3:ListBucket*",
     ]
 
     resources = [
@@ -2012,7 +2011,7 @@ data "aws_iam_policy_document" "presign_large_messages" {
 
   statement {
     actions = [
-      "kms:decrypt",
+      "kms:Decrypt",
     ]
 
     resources = [
