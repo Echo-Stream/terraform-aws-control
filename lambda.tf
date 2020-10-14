@@ -1411,9 +1411,11 @@ module "appsync_message_type_datasource" {
   description = "No Description"
 
   environment_variables = {
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
-    LOG_LEVEL      = "INFO"
+    DYNAMODB_TABLE  = module.graph_table.name
+    ENVIRONMENT     = var.environment_prefix
+    LOG_LEVEL       = "INFO"
+    ARTIFACT_BUCKET = local.artifacts_bucket
+    APP_VERSION     = var.hl7_ninja_version
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
