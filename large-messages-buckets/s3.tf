@@ -39,99 +39,100 @@ resource "aws_s3_bucket" "large_messages" {
   }
 }
 
-# data "aws_iam_policy_document" "large_messages" {
-#   statement {
-#     actions = [
-#       "s3:*",
-#     ]
+data "aws_iam_policy_document" "large_messages" {
+  statement {
+    actions = [
+      "s3:*",
+    ]
 
-#     condition {
-#       test = "Bool"
-#       values = [
-#         "false",
-#       ]
-#       variable = "aws:SecureTransport"
-#     }
+    condition {
+      test = "Bool"
+      values = [
+        "false",
+      ]
+      variable = "aws:SecureTransport"
+    }
 
-#     effect = "Deny"
+    effect = "Deny"
 
-#     principals {
-#       identifiers = [
-#         "*",
-#       ]
-#       type = "AWS"
-#     }
+    principals {
+      identifiers = [
+        "*",
+      ]
+      type = "AWS"
+    }
 
-#     resources = [
-#       aws_s3_bucket.large_messages.arn,
-#       "${aws_s3_bucket.large_messages.arn}/*",
-#     ]
-#     sid = "DenyUnsecuredTransport"
-#   }
+    resources = [
+      aws_s3_bucket.large_messages.arn,
+      "${aws_s3_bucket.large_messages.arn}/*",
+    ]
+    sid = "DenyUnsecuredTransport"
+  }
 
-#   statement {
-#     actions = [
-#       "s3:PutObject*"
-#     ]
+  statement {
+    actions = [
+      "s3:PutObject*",
+    ]
 
-#     principals {
-#       identifiers = [
-#         "*",
-#       ]
-#       type = "AWS"
-#     }
+    condition {
+      test = "StringEquals"
+      values = [
+        "AES256",
+      ]
+      variable = "s3:x-amz-server-side-encryption"
+    }
 
-#     condition {
-#       test = "StringNotEquals"
+    effect = "Deny"
 
-#       values = [
-#         "aws:kms"
-#       ]
+    principals {
+      identifiers = [
+        "*",
+      ]
+      type = "AWS"
+    }
 
-#       variable = "s3:x-amz-server-side-encryption"
-#     }
+    resources = [
+      "${aws_s3_bucket.large_messages.arn}/*",
+    ]
+    sid = "DenySSEWithAES"
+  }
 
-#     resources = [
-#       "${aws_s3_bucket.large_messages.arn}/*",
-#     ]
+  statement {
+    actions = [
+      "s3:PutObject*"
+    ]
 
-#     sid = "DenyIncorrectEncryptionHeader"
-#   }
+    principals {
+      identifiers = [
+        "*",
+      ]
+      type = "AWS"
+    }
+	
+	effect = "Deny"
+	
+    condition {
+      test = "StringNotLikeIfExists"
 
-#     statement {
-#     actions = [
-#       "s3:PutObject*"
-#     ]
+      values = [
+        var.kms_key_arn
+      ]
 
-#     principals {
-#       identifiers = [
-#         "*",
-#       ]
-#       type = "AWS"
-#     }
+      variable = "s3:x-amz-server-side-encryption-aws-kms-key-id"
+    }
 
-#     condition {
-#       test = "Null"
+    resources = [
+      "${aws_s3_bucket.large_messages.arn}/*",
+    ]
 
-#       values = [
-#         "true"
-#       ]
+    sid = "RequiresEnvironmentKMSKeyEncryption"
+  }
+}
 
-#       variable = "s3:x-amz-server-side-encryption"
-#     }
-
-#     resources = [
-#       "${aws_s3_bucket.large_messages.arn}/*",
-#     ]
-
-#     sid = "DenyUnEncryptedObjectUploads"
-#   }
-# }
-
-# resource "aws_s3_bucket_policy" "large_messages" {
-#   bucket = aws_s3_bucket.large_messages.id
-#   policy = data.aws_iam_policy_document.large_messages.json
-# }
+resource "aws_s3_bucket_policy" "large_messages" {
+  bucket = aws_s3_bucket.large_messages.id
+  policy = data.aws_iam_policy_document.large_messages.json
+}
 
 ## Block public access (bucket settings)
 resource "aws_s3_bucket_public_access_block" "large_messages" {
