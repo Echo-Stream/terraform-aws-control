@@ -133,6 +133,9 @@ resource "aws_cognito_user_pool" "hl7_ninja_ui" {
 
   lifecycle {
     # prevent_destroy = true
+    ignore_changes = [
+      schema
+    ]
   }
 
   #mfa_configuration = "ON"

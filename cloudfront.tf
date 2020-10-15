@@ -34,7 +34,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   logging_config {
-    bucket          = local.log_bucket
+    bucket          = data.aws_s3_bucket.log_bucket.bucket_domain_name
     include_cookies = false
     prefix          = "cloudfront/${var.environment_prefix}-webapp/"
   }

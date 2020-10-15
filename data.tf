@@ -1,5 +1,9 @@
 data "aws_region" "current" {}
 
+data "aws_s3_bucket" "log_bucket" {
+  bucket = local.log_bucket
+}
+
 data "aws_iam_policy_document" "appsync_assume_role" {
   statement {
     actions = [
