@@ -93,7 +93,6 @@ resource "aws_lambda_function" "edge_config" {
   ]
 
   description      = "Returns an environment specific config for reactjs application"
-  provider         = aws.us-east-1
   filename         = "edge-config.zip"
   function_name    = "${var.environment_prefix}-edge-config"
   handler          = "function.lambda_handler"
@@ -102,6 +101,7 @@ resource "aws_lambda_function" "edge_config" {
   runtime          = "python3.8"
   source_code_hash = data.archive_file.edge_config.output_base64sha256
   tags             = local.tags
+  provider         = aws.us-east-1
 }
 
 resource "aws_lambda_permission" "edge_config" {
