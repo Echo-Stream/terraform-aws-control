@@ -1,10 +1,10 @@
-import json
 '''
 Dynamically send an environment specific config
 for reactjs webapp on /config/config.json
 '''
 
-## Test to release new version
+import json
+
 def lambda_handler(event, context):
 	content = {
 				'endpoint': '${graphql_endpoint}',
