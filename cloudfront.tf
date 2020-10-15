@@ -33,6 +33,31 @@ resource "aws_cloudfront_distribution" "webapp" {
     max_ttl                = 86400
   }
 
+  ordered_cache_behavior {
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    path_pattern     = "/config/config.json"
+    target_origin_id = "${var.environment_prefix}-webapp"
+
+    forwarded_values {
+      query_string = false
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+
+    lambda_function_association {
+      event_type = "origin-request"
+      lambda_arn = aws_lambda_function.edge_config.qualified_arn
+    }
+  }
+
   logging_config {
     bucket          = data.aws_s3_bucket.log_bucket.bucket_domain_name
     include_cookies = false
