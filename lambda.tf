@@ -1085,7 +1085,7 @@ resource "aws_lambda_permission" "ui_cognito_pre_signup" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.ui_cognito_pre_signup.function_name
   principal     = "cognito-idp.amazonaws.com"
-  source_arn    = aws_cognito_user_pool.hl7_ninja_ui.arn
+  source_arn    = module.ui_cognito_pre_signup.name
 }
 
 #######################################
