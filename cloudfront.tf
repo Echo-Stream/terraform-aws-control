@@ -131,7 +131,3 @@ resource "aws_lambda_permission" "edge_config" {
   principal     = "edgelambda.amazonaws.com"
   statement_id  = "AllowExecutionFromCloudFront"
 }
-
-output "edge_lambda_version" {
-  value = aws_lambda_function.edge_config.version
-}
