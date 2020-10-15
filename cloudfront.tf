@@ -56,7 +56,7 @@ resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
 
 ## Origin Request Lambda, listening on path /config/config.json
 
-data "template_file" "edge_config_py" {
+data "template_file" "edge_config" {
   template = file("${path.module}/scripts/edge-config.py.tpl")
   vars = {
     graphql_endpoint = aws_appsync_graphql_api.hl7_ninja.uris["GRAPHQL"]
@@ -66,9 +66,19 @@ data "template_file" "edge_config_py" {
   }
 }
 
-resource "local_file" "edge_config_py" {
-  content  = data.template_file.edge_config_py.rendered
-  filename = "${path.module}/function.py"
+# resource "local_file" "edge_config_py" {
+#   content  = data.template_file.edge_config_py.rendered
+#   filename = "${path.module}/function.py"
+# }
+
+data "archive_file" "edge_config" {
+  type        = "zip"
+  output_path = "${path.module}/edge-config.zip"
+
+  source {
+    content  = data.template_file.edge_config.rendered
+    filename = "function.py"
+  }
 }
 
 resource "aws_iam_role" "edge_config" {
@@ -78,8 +88,11 @@ resource "aws_iam_role" "edge_config" {
 }
 
 resource "aws_lambda_function" "edge_config" {
+  depends_on = [
+    data.archive_file.edge_config
+  ]
   provider      = aws.us-east-1
-  filename      = local_file.edge_config_py.filename
+  filename      = "edge-config.zip"
   function_name = "${var.environment_prefix}-edge-config"
   handler       = "function.lambda_handler"
   publish       = true
