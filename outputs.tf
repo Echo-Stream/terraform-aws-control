@@ -66,9 +66,9 @@ output "identity_pool_arn" {
 
 ## Cloudfront
 output "cloudfront_oai_id" {
-  value=aws_cloudfront_origin_access_identity.origin_access_identity.id
+  value = aws_cloudfront_origin_access_identity.origin_access_identity.id
 }
 
 output "cloudfront_oai_iam_arn" {
-  value=aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn
+  value = aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn
 }

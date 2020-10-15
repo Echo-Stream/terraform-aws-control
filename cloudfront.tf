@@ -1,7 +1,7 @@
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name = "${local.artifacts_bucket}.s3.amazonaws.com"
-    origin_id   = "${local.environment_prefix}-webapp"
+    origin_id   = "${var.environment_prefix}-webapp"
     origin_path = "/${var.hl7_ninja_version}/reactjs"
 
     s3_origin_config {
@@ -11,13 +11,13 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = "${local.environment_prefix} HL7 Ninja ReactJS Webapp"
+  comment             = "${var.environment_prefix} HL7 Ninja ReactJS Webapp"
   default_root_object = "index.html"
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "${local.environment_prefix}-webapp"
+    target_origin_id = "${var.environment_prefix}-webapp"
 
     forwarded_values {
       query_string = false
@@ -36,7 +36,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   logging_config {
     bucket          = local.log_bucket
     include_cookies = false
-    prefix          = "cloudfront/${local.environment_prefix}-webapp/"
+    prefix          = "cloudfront/${var.environment_prefix}-webapp/"
   }
 
   restrictions {
@@ -51,5 +51,5 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
-  comment = "${local.environment_prefix} HL7 Ninja ReactJS Webapp"
+  comment = "${var.environment_prefix} HL7 Ninja ReactJS Webapp"
 }
