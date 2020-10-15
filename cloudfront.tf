@@ -80,7 +80,7 @@ resource "aws_lambda_function" "edge_config" {
   publish          = true
   role             = aws_iam_role.edge_config.arn
   runtime          = "python3.8"
-  source_code_hash = filebase64sha256(data.template_file.edge_config_py.rendered)
+  #source_code_hash = filebase64sha256(data.template_file.edge_config_py.rendered)
   tags             = local.tags
 }
 
