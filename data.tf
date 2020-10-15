@@ -47,3 +47,18 @@ data "aws_iam_policy_document" "lambda_assume_role" {
     }
   }
 }
+
+data "aws_iam_policy_document" "edge_lambda_assume_role" {
+  statement {
+    actions = [
+      "sts:AssumeRole",
+    ]
+    principals {
+      identifiers = [
+        "lambda.amazonaws.com",
+        "edgelambda.amazonaws.com",
+      ]
+      type = "Service"
+    }
+  }
+}

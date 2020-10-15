@@ -53,3 +53,41 @@ resource "aws_cloudfront_distribution" "webapp" {
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
   comment = "${var.environment_prefix} HL7 Ninja ReactJS Webapp"
 }
+
+## Origin Request Lambda, listening on path /config/config.json
+
+data "template_file" "edge_config_py" {
+  template = file("${path.module}/scripts/edge-config.py.tpl")
+  vars = {
+    graphql_endpoint = aws_appsync_graphql_api.hl7_ninja.uris["GRAPHQL"]
+    client_id        = aws_cognito_user_pool_client.hl7_ninja_ui_userpool_client.id
+    region           = local.current_region
+    user_pool_id     = aws_cognito_user_pool.hl7_ninja_ui.id
+  }
+}
+
+resource "aws_iam_role" "edge_config" {
+  assume_role_policy = data.aws_iam_policy_document.edge_lambda_assume_role.json
+  name               = "${var.environment_prefix}-edge-config"
+  tags               = local.tags
+}
+
+resource "aws_lambda_function" "edge_config" {
+  provider         = aws.us-east-1
+  filename         = data.template_file.edge_config_py.rendered
+  function_name    = "${var.environment_prefix}-edge-config"
+  handler          = "function.handler"
+  publish          = true
+  role             = aws_iam_role.edge_config.arn
+  runtime          = "python3.8"
+  source_code_hash = filebase64sha256(data.template_file.edge_config_py.rendered)
+  tags             = local.tags
+}
+
+resource "aws_lambda_permission" "edge_config" {
+  provider      = aws.us-east-1
+  action        = "lambda:GetFunction"
+  function_name = aws_lambda_function.edge_config.function_name
+  principal     = "edgelambda.amazonaws.com"
+  statement_id  = "AllowExecutionFromCloudFront"
+}
