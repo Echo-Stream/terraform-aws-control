@@ -212,6 +212,6 @@ resource "aws_cognito_user_pool_client" "hl7_ninja_ui_userpool_client" {
 ## Amazon Cognito domain, Will be a Custom Domain in Future
 
 resource "aws_cognito_user_pool_domain" "hl7_ninja_amazon_cognito_doman" {
-  domain       = "hl7-ninja"
+  domain       = var.environment_prefix
   user_pool_id = aws_cognito_user_pool.hl7_ninja_ui.id
 }
