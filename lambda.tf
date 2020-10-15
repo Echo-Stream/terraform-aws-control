@@ -1080,6 +1080,14 @@ module "ui_cognito_pre_signup" {
   version       = "3.0.10"
 }
 
+resource "aws_lambda_permission" "ui_cognito_pre_signup" {
+  statement_id  = "AllowExecutionFromCognito"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.ui_cognito_pre_signup.function_name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.hl7_ninja_ui.arn
+}
+
 #######################################
 ##  ui-cognito-pre-token-generation  ##
 #######################################
