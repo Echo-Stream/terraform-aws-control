@@ -159,14 +159,14 @@ resource "aws_cognito_user_pool" "hl7_ninja_ui" {
 
   schema {
     attribute_data_type = "String"
-    mutable             = true
-    name                = "first_name"
+    name                = "given_name"
+    required            = true
   }
 
   schema {
     attribute_data_type = "String"
-    mutable             = true
-    name                = "last_name"
+    name                = "family_name"
+    required            = true
   }
 
   sms_authentication_message = "Your authentication code is {####}. "
