@@ -66,11 +66,6 @@ data "template_file" "edge_config" {
   }
 }
 
-# resource "local_file" "edge_config_py" {
-#   content  = data.template_file.edge_config_py.rendered
-#   filename = "${path.module}/function.py"
-# }
-
 data "archive_file" "edge_config" {
   type        = "zip"
   output_path = "${path.module}/edge-config.zip"
@@ -110,4 +105,8 @@ resource "aws_lambda_permission" "edge_config" {
   function_name = aws_lambda_function.edge_config.function_name
   principal     = "edgelambda.amazonaws.com"
   statement_id  = "AllowExecutionFromCloudFront"
+}
+
+output "edge_lambda_version" {
+  value = aws_lambda_function.edge_config.version
 }
