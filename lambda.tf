@@ -1083,9 +1083,9 @@ module "ui_cognito_pre_signup" {
 resource "aws_lambda_permission" "ui_cognito_pre_signup" {
   statement_id  = "AllowExecutionFromCognito"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.ui_cognito_pre_signup.function_name
+  function_name = module.ui_cognito_pre_signup.name
   principal     = "cognito-idp.amazonaws.com"
-  source_arn    = module.ui_cognito_pre_signup.name
+  source_arn    = aws_cognito_user_pool.hl7_ninja_ui.arn
 }
 
 #######################################
@@ -1139,6 +1139,14 @@ module "ui_cognito_pre_token_generation" {
   tags          = local.tags
   timeout       = 30
   version       = "3.0.10"
+}
+
+resource "aws_lambda_permission" "ui_cognito_pre_token_generation" {
+  statement_id  = "AllowExecutionFromCognito"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ui_cognito_pre_token_generation.name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.hl7_ninja_ui.arn
 }
 
 ###########################
