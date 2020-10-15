@@ -91,6 +91,8 @@ resource "aws_lambda_function" "edge_config" {
   depends_on = [
     data.archive_file.edge_config
   ]
+
+  description   = "Returns an environment specific config for reactjs application"
   provider      = aws.us-east-1
   filename      = "edge-config.zip"
   function_name = "${var.environment_prefix}-edge-config"
