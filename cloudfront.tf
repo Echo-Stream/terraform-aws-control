@@ -1,4 +1,4 @@
-resource "aws_cloudfront_distribution" "s3_distribution" {
+resource "aws_cloudfront_distribution" "webapp" {
   origin {
     domain_name = "${local.artifacts_bucket}.s3.amazonaws.com"
     origin_id   = "${var.environment_prefix}-webapp"
