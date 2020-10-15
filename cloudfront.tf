@@ -66,6 +66,11 @@ data "template_file" "edge_config_py" {
   }
 }
 
+resource "local_file" "edge_config_py" {
+  content  = data.template_file.edge_config_py.rendered
+  filename = "${path.module}/function.py"
+}
+
 resource "aws_iam_role" "edge_config" {
   assume_role_policy = data.aws_iam_policy_document.edge_lambda_assume_role.json
   name               = "${var.environment_prefix}-edge-config"
@@ -73,15 +78,15 @@ resource "aws_iam_role" "edge_config" {
 }
 
 resource "aws_lambda_function" "edge_config" {
-  provider         = aws.us-east-1
-  filename         = data.template_file.edge_config_py.rendered
-  function_name    = "${var.environment_prefix}-edge-config"
-  handler          = "function.handler"
-  publish          = true
-  role             = aws_iam_role.edge_config.arn
-  runtime          = "python3.8"
+  provider      = aws.us-east-1
+  filename      = local_file.edge_config_py.filename
+  function_name = "${var.environment_prefix}-edge-config"
+  handler       = "function.lambda_handler"
+  publish       = true
+  role          = aws_iam_role.edge_config.arn
+  runtime       = "python3.8"
   #source_code_hash = filebase64sha256(data.template_file.edge_config_py.rendered)
-  tags             = local.tags
+  tags = local.tags
 }
 
 resource "aws_lambda_permission" "edge_config" {
