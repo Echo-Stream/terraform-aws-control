@@ -634,6 +634,14 @@ module "app_cognito_pre_authentication" {
   version       = "3.0.10"
 }
 
+resource "aws_lambda_permission" "app_cognito_pre_authentication" {
+  statement_id  = "AllowExecutionFromCognito"
+  action        = "lambda:InvokeFunction"
+  function_name = module.app_cognito_pre_authentication.name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.hl7_ninja_apps.arn
+}
+
 ########################################
 ##  app-cognito-pre-token-generation  ##
 ########################################
@@ -685,6 +693,14 @@ module "app_cognito_pre_token_generation" {
   tags          = local.tags
   timeout       = 30
   version       = "3.0.10"
+}
+
+resource "aws_lambda_permission" "app_cognito_pre_token_generation" {
+  statement_id  = "AllowExecutionFromCognito"
+  action        = "lambda:InvokeFunction"
+  function_name = module.app_cognito_pre_token_generation.name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.hl7_ninja_apps.arn
 }
 
 ###############################
@@ -973,6 +989,14 @@ module "ui_cognito_post_signup" {
   version       = "3.0.10"
 }
 
+resource "aws_lambda_permission" "ui_cognito_post_signup" {
+  statement_id  = "AllowExecutionFromCognito"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ui_cognito_post_signup.name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.hl7_ninja_ui.arn
+}
+
 #####################################
 ##  ui-cognito-pre-authentication  ##
 #####################################
@@ -1025,6 +1049,14 @@ module "ui_cognito_pre_authentication" {
   tags          = local.tags
   timeout       = 30
   version       = "3.0.10"
+}
+
+resource "aws_lambda_permission" "ui_cognito_pre_authentication" {
+  statement_id  = "AllowExecutionFromCognito"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ui_cognito_pre_authentication.name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.hl7_ninja_ui.arn
 }
 
 #############################
