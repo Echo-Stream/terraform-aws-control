@@ -63,3 +63,12 @@ output "identity_pool_id" {
 output "identity_pool_arn" {
   value = aws_cognito_identity_pool.hl7_ninja.arn
 }
+
+## Cloudfront
+output "cloudfront_oai_id" {
+  value=aws_cloudfront_origin_access_identity.origin_access_identity.id
+}
+
+output "cloudfront_oai_iam_arn" {
+  value=aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn
+}
