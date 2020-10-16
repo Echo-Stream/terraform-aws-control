@@ -1541,6 +1541,18 @@ data "aws_iam_policy_document" "deployment_handler" {
 
     sid = "GetArtifacts"
   }
+
+  statement {
+    actions = [
+      "cloudfront:CreateInvalidation"
+    ]
+
+    resources = [
+      aws_cloudfront_distribution.webapp.arn
+    ]
+
+    sid = "InvalidateWebappObjects"
+  }
 }
 
 resource "aws_iam_policy" "deployment_handler" {
@@ -1554,10 +1566,11 @@ module "deployment_handler" {
   description = "Does appropriate deployments by getting invoked by Objects created on Artifacts bucket"
 
   environment_variables = {
-    HL7_NINJA_VERSION = var.hl7_ninja_version
-    ENVIRONMENT       = var.environment_prefix
-    ARTIFACTS_BUCKET  = local.artifacts_bucket
-    API_ID            = aws_appsync_graphql_api.hl7_ninja.id
+    HL7_NINJA_VERSION          = var.hl7_ninja_version
+    ENVIRONMENT                = var.environment_prefix
+    ARTIFACTS_BUCKET           = local.artifacts_bucket
+    API_ID                     = aws_appsync_graphql_api.hl7_ninja.id
+    CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.webapp.id
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
