@@ -74,7 +74,7 @@ resource "aws_iam_policy" "graph_table_dynamodb_trigger" {
 }
 
 module "graph_table_dynamodb_trigger" {
-  description     = "Lambda function that routes Dynamodb Stream events to the correct Lambda Functions"
+  description     = "Routes Dynamodb Stream events to the correct Lambda Functions"
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
@@ -161,7 +161,7 @@ resource "aws_iam_policy" "graph_table_manage_users" {
 }
 
 module "graph_table_manage_users" {
-  description     = "Lambda function that creates/removes users (In Dynamodb Table) and sends SES emails from a Dynamodb Stream"
+  description     = "Creates/removes users (In Dynamodb Table) and sends SES emails from a Dynamodb Stream"
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
@@ -295,7 +295,7 @@ resource "aws_iam_policy" "graph_table_put_app_policies" {
 }
 
 module "graph_table_put_app_policies" {
-  description     = "Lambda function that manages SQS/KMS resource and IAM policies from a Dynamodb Stream"
+  description     = "Manages SQS/KMS resource and IAM policies from a Dynamodb Stream"
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
@@ -379,7 +379,7 @@ resource "aws_iam_policy" "graph_table_manage_queues" {
 }
 
 module "graph_table_manage_queues" {
-  description     = "Lambda function that creates/removes apps from Dynamodb Stream"
+  description     = "Creates/removes apps from Dynamodb Stream"
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
@@ -437,7 +437,7 @@ resource "aws_iam_policy" "appsync_kms_key_datasource" {
 }
 
 module "appsync_kms_key_datasource" {
-  description     = "Lambda function that manages SQS/KMS resource and IAM policies from a Dynamodb Stream"
+  description     = "Manages SQS/KMS resource and IAM policies from a Dynamodb Stream"
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
 
@@ -545,7 +545,7 @@ resource "aws_iam_policy" "appsync_tenant_datasource" {
 }
 
 module "appsync_tenant_datasource" {
-  description     = "Lambda function that creates/removes tenants and their AWS resources"
+  description     = "Creates/removes tenants and their AWS resources"
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
     DYNAMODB_TABLE          = module.graph_table.name
@@ -606,7 +606,7 @@ resource "aws_iam_policy" "app_cognito_pre_authentication" {
 }
 
 module "app_cognito_pre_authentication" {
-  description = "Lambda function that gets triggered when cognito user to be authenticated"
+  description = "Function that gets triggered when cognito user to be authenticated"
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
@@ -668,7 +668,7 @@ resource "aws_iam_policy" "app_cognito_pre_token_generation" {
 }
 
 module "app_cognito_pre_token_generation" {
-  description = "Lambda function that customize the claims in the identity token"
+  description = "Customizes the claims in the identity token"
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
@@ -900,7 +900,7 @@ resource "aws_iam_policy" "graph_table_manage_apps" {
 }
 
 module "graph_table_manage_apps" {
-  description     = "Lambda function that creates/removes apps from Dynamodb Stream"
+  description     = "Creates/removes apps from Dynamodb Stream"
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
@@ -1563,7 +1563,7 @@ resource "aws_iam_policy" "deployment_handler" {
 }
 
 module "deployment_handler" {
-  description = "Does appropriate deployments by getting invoked by Objects created on Artifacts bucket"
+  description = "Does appropriate deployments by getting notified from Artifacts bucket"
 
   environment_variables = {
     HL7_NINJA_VERSION          = var.hl7_ninja_version
@@ -1889,7 +1889,7 @@ resource "aws_iam_policy" "graph_table_manage_nodes" {
 }
 
 module "graph_table_manage_nodes" {
-  description     = "Lambda function that handles nodes in the Dynamodb Stream"
+  description     = "Handles nodes in the Dynamodb Stream"
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
@@ -2002,7 +2002,7 @@ resource "aws_iam_policy" "graph_table_manage_tenants" {
 }
 
 module "graph_table_manage_tenants" {
-  description     = "Lambda function that creates/removes tenants and their AWS resources"
+  description     = "Creates/removes tenants and their AWS resources"
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
