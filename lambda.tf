@@ -1456,7 +1456,7 @@ resource "aws_iam_policy" "appsync_message_type_datasource" {
 }
 
 module "appsync_message_type_datasource" {
-  description = "No Description"
+  description = "AppSync datasource lambda function that handles putting of MessageTypes"
 
   environment_variables = {
     DYNAMODB_TABLE  = module.graph_table.name
@@ -1755,7 +1755,7 @@ resource "aws_iam_policy" "appsync_node_datasource" {
 }
 
 module "appsync_node_datasource" {
-  description = "No Description"
+  description = "Datasource for managing nodes"
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
