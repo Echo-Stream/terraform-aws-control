@@ -1463,6 +1463,18 @@ data "aws_iam_policy_document" "graph_table_manage_message_types" {
 
     sid = "GetValidateFnLambda"
   }
+
+  statement {
+    actions = [
+      "iam:PassRole",
+    ]
+
+    resources = [
+      aws_iam_role.internal_function_role.arn
+    ]
+
+    sid = "InternalFunctionRoleIAM"
+  }
 }
 
 resource "aws_iam_policy" "graph_table_manage_message_types" {
