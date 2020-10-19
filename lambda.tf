@@ -1733,7 +1733,7 @@ module "appsync_app_datasource" {
     OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.hl7_ninja_version}"
     APP_CLIENT_ID        = aws_cognito_user_pool_client.hl7_ninja_apps_userpool_client.id
     COGNITO_ROLE_ARN     = aws_iam_role.authenticated.arn
-    APPSYNC_ENDPOINT     = aws_cognito_identity_pool.hl7_ninja.id
+    APPSYNC_ENDPOINT     = aws_appsync_graphql_api.hl7_ninja.uris["GRAPHQL"]
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
