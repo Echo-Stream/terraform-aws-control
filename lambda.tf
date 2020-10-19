@@ -5,6 +5,32 @@ resource "aws_iam_role" "internal_function_role" {
   tags               = local.tags
 }
 
+/*
+data "aws_iam_policy_document" "internal_function_role" {
+  statement {
+    actions = [
+      "s3:ListBucket",
+      "s3:GetObject",
+      "dynamodb:Query"
+    ]
+
+    resources = [
+      module.graph_table.arn,
+      "${module.graph_table.arn}/index/*"
+    ]
+
+    sid = "TableAccess"
+  }
+}
+
+resource "aws_iam_policy" "internal_function_role" {
+  description = "IAM permissions to read graph-table-dynamodb-trigger"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-additional-ddb-policy"
+  policy      = data.aws_iam_policy_document.additional_ddb_policy.json
+}
+*/
+
 ## additional-ddb-policy ##
 data "aws_iam_policy_document" "additional_ddb_policy" {
   statement {
@@ -1613,14 +1639,15 @@ resource "aws_sns_topic_subscription" "deployment_handler" {
 data "aws_iam_policy_document" "appsync_app_datasource" {
   statement {
     actions = [
-      "dynamodb:DescribeTable",
       "dynamodb:PutItem",
       "dynamodb:GetItem",
-      "dynamodb:DeleteItem"
+      "dynamodb:DeleteItem",
+      "dynamodb:Query"
     ]
 
     resources = [
       module.graph_table.arn,
+      "${module.graph_table.arn}/index/*",
     ]
 
     sid = "TableAccess"
@@ -1635,6 +1662,7 @@ data "aws_iam_policy_document" "appsync_app_datasource" {
       "ssm:DescribeInstanceInformation",
       "ssm:ListTagsForResource",
       "ssm:DeregisterManagedInstance",
+      "ssm:AddTagsToResource"
     ]
 
     resources = [
@@ -1650,7 +1678,7 @@ data "aws_iam_policy_document" "appsync_app_datasource" {
     ]
 
     resources = [
-      "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:hl7-ninja-artifacts-${local.current_region}"
+      aws_sns_topic.hl7_app_cloud_init.arn
     ]
 
     sid = "SNS"
@@ -1674,6 +1702,7 @@ data "aws_iam_policy_document" "appsync_app_datasource" {
   statement {
     actions = [
       "iam:CreateRole",
+      "iam:PassRole",
     ]
 
     resources = ["*"]
@@ -1698,10 +1727,13 @@ module "appsync_app_datasource" {
     ENVIRONMENT          = var.environment_prefix
     APP_USER_POOL_ID     = aws_cognito_user_pool.hl7_ninja_apps.id
     APP_IDENTITY_POOL_ID = aws_cognito_identity_pool.hl7_ninja.id
-    SSM_SERVICE_ROLE     = aws_iam_role.manage_apps_ssm_service_role.arn
+    SSM_SERVICE_ROLE     = aws_iam_role.manage_apps_ssm_service_role.name
     APP_CLOUD_INIT_TOPIC = aws_sns_topic.hl7_app_cloud_init.name
     INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.hl7_ninja_version}"
     OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.hl7_ninja_version}"
+    APP_CLIENT_ID        = aws_cognito_user_pool_client.hl7_ninja_apps_userpool_client.id
+    COGNITO_ROLE_ARN     = aws_iam_role.authenticated.arn
+    APPSYNC_ENDPOINT     = aws_cognito_identity_pool.hl7_ninja.id
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
