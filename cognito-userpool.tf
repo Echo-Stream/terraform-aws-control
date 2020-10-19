@@ -85,10 +85,10 @@ resource "aws_cognito_user_pool" "hl7_ninja_apps" {
   }
 
   password_policy {
-    minimum_length                   = 99
+    minimum_length                   = 16
     require_lowercase                = true
     require_numbers                  = true
-    require_symbols                  = true
+    require_symbols                  = false
     require_uppercase                = true
     temporary_password_validity_days = 90
   }
