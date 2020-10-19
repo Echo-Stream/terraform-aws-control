@@ -90,6 +90,21 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
 
     sid = "DeliverMessageToQueues"
   }
+
+  statement {
+    actions = [
+      "dynamodb:DescribeStream",
+      "dynamodb:GetRecords",
+      "dynamodb:GetShardIterator",
+      "dynamodb:ListStreams",
+    ]
+
+    resources = [
+      module.graph_table.stream_arn,
+    ]
+
+    sid = "AllowReadingFromStreams"
+  }
 }
 
 resource "aws_iam_policy" "graph_table_dynamodb_trigger" {
