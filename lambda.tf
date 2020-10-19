@@ -574,7 +574,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     sid = "GetMessageTypesArtifacts"
   }
 
-    statement {
+  statement {
     actions = [
       "s3:ListBucket",
     ]
