@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+#
 aws appsync create-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name tenant --data-source-name ${sub_field_datasource}
