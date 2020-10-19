@@ -1322,7 +1322,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
 
     resources = [
       aws_appsync_graphql_api.hl7_ninja.arn,
-      "${aws_appsync_graphql_api.hl7_ninja.arn}/types/mutation/fields/StreamNotifications"
+      "${aws_appsync_graphql_api.hl7_ninja.arn}/types/mutation/*"
     ]
 
     sid = "AppsyncMutationQueryAccess"
@@ -1371,8 +1371,10 @@ module "graph_table_tenant_stream_handler" {
     aws_iam_policy.graph_table_tenant_stream_handler.arn,
     aws_iam_policy.additional_ddb_policy.arn,
     module.graph_table_manage_apps.invoke_policy_arn,
-    module.graph_table_manage_queues.invoke_policy_arn,
+    module.graph_table_manage_nodes.invoke_policy_arn,
+    module.graph_table_manage_message_types.invoke_policy_arn,
     module.graph_table_manage_users.invoke_policy_arn,
+    module.graph_table_manage_tenants.invoke_policy_arn,
     module.graph_table_put_app_policies.invoke_policy_arn
   ]
 
