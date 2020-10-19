@@ -1976,6 +1976,7 @@ module "graph_table_manage_nodes" {
     TRANS_NODE_ARTIFACT            = local.lambda_functions_keys["trans_node"]
     X_TENANT_SENDING_NODE_ARTIFACT = local.lambda_functions_keys["trans_node"]
     LAMBDA_ROLE_ARN                = aws_iam_role.internal_function_role.arn
+    MANAGED_APP_ROLE               = aws_iam_role.authenticated.arn
   }
 
   handler     = "function.handler"
