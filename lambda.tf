@@ -80,7 +80,6 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
   statement {
     actions = [
       "sqs:SendMessage",
-      "sqs:SendMessageBatch",
       "sqs:GetQueueUrl",
     ]
 
@@ -120,7 +119,7 @@ module "graph_table_dynamodb_trigger" {
 
   environment_variables = {
     #TYPE_HANDLERS                = file("${path.module}/files/type-handlers-map.json")
-    GRAPH_TYPE_HANDLERS          = ""
+    #GRAPH_TYPE_HANDLERS          = ""
     DYNAMODB_TABLE               = module.graph_table.name
     DEFAULT_TENANT_SQS_QUEUE_URL = aws_sqs_queue.default_tenant_sqs_queue.id
     ENVIRONMENT                  = var.environment_prefix
