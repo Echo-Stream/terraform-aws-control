@@ -5,31 +5,11 @@ resource "aws_iam_role" "internal_function_role" {
   tags               = local.tags
 }
 
-/*
-data "aws_iam_policy_document" "internal_function_role" {
-  statement {
-    actions = [
-      "s3:ListBucket",
-      "s3:GetObject",
-      "dynamodb:Query"
-    ]
-
-    resources = [
-      module.graph_table.arn,
-      "${module.graph_table.arn}/index/*"
-    ]
-
-    sid = "TableAccess"
-  }
+resource "aws_iam_policy_attachment" "internal_function_role" {
+  name       = "${var.environment_prefix}-internal-fn-role"
+  roles      = [aws_iam_role.internal_function_role.name]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
-
-resource "aws_iam_policy" "internal_function_role" {
-  description = "IAM permissions to read graph-table-dynamodb-trigger"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-additional-ddb-policy"
-  policy      = data.aws_iam_policy_document.additional_ddb_policy.json
-}
-*/
 
 ## additional-ddb-policy ##
 data "aws_iam_policy_document" "additional_ddb_policy" {
