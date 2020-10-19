@@ -84,7 +84,7 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:_db-stream_*"
+      "arn:aws:sqs:*:*:*_db-stream_*"
     ]
 
     sid = "DeliverMessageToQueues"
@@ -538,7 +538,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:_db-stream_*"
+      "arn:aws:sqs:*:*:*_db-stream_*"
     ]
 
     sid = "SQSPermissions"
