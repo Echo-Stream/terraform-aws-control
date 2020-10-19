@@ -574,7 +574,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     sid = "GetMessageTypesArtifacts"
   }
 
-    statement {
+  statement {
     actions = [
       "s3:ListBucket",
     ]
@@ -1712,11 +1712,11 @@ data "aws_iam_policy_document" "appsync_app_datasource" {
 
   statement {
     actions = [
-      "cognito:AdminCreateUser",
-      "cognito:AdminConfirmSignup",
-      "cognito:AdminDeleteUser",
-      "cognito:AdminGetUser",
-      "cognito:AdminResetUserPassword"
+      "cognito-idp:AdminCreateUser",
+      "cognito-idp:AdminConfirmSignup",
+      "cognito-idp:AdminDeleteUser",
+      "cognito-idp:AdminGetUser",
+      "cognito-idp:AdminSetUserPassword"
     ]
 
     resources = [
