@@ -14,6 +14,7 @@ locals {
     tenant_lambda          = "${var.hl7_ninja_version}/lambda/tenant"
     appsync                = "${var.hl7_ninja_version}/appsync"
     frontend               = "${var.hl7_ninja_version}/frontend"
+    message_types          = "${var.hl7_ninja_version}/message-types"
     hl7_mllp_inbound_node  = "${local.artifacts_account_id}.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-inbound-node"
     hl7_mllp_outbound_node = "${local.artifacts_account_id}.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-outbound-node"
   }

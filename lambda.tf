@@ -589,7 +589,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     ]
 
     resources = [
-      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}/${var.hl7_ninja_version}/message-types/*"
+      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}/${local.artifacts["message_types"]}/*"
     ]
 
     sid = "GetMessageTypesArtifacts"
