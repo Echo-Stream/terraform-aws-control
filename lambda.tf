@@ -1995,6 +1995,7 @@ module "graph_table_manage_nodes" {
     ROUTER_NODE_ARTIFACT           = local.lambda_functions_keys["router_node"]
     TRANS_NODE_ARTIFACT            = local.lambda_functions_keys["trans_node"]
     X_TENANT_SENDING_NODE_ARTIFACT = local.lambda_functions_keys["trans_node"]
+    LAMBDA_ROLE_ARN                = aws_iam_role.internal_function_role.arn
   }
 
   handler     = "function.handler"
