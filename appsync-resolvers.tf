@@ -40,6 +40,7 @@ resource "null_resource" "all_resolvers" {
   }
   triggers = {
     api_id                           = aws_appsync_graphql_api.hl7_ninja.id
+    template                         = data.template_file.resolver_sh.rendered
     message_type_datasource          = module.message_type_datasource.name
     tenant_datasource                = module.tenant_datasource.name
     node_datasource                  = module.node_datasource.name
