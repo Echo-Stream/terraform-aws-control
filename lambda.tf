@@ -131,6 +131,13 @@ module "graph_table_dynamodb_trigger" {
   version       = "3.0.10"
 }
 
+resource "aws_lambda_event_source_mapping" "graph_table_dynamodb_trigger" {
+  batch_size        = "1"
+  event_source_arn  = module.graph_table.stream_arn
+  function_name     = module.graph_table_dynamodb_trigger.name
+  starting_position = "LATEST"
+}
+
 ###############################
 ## graph-table-manage-users ##
 ###############################
