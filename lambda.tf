@@ -1949,7 +1949,7 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
     ]
 
     resources = [
-      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}/${local.artifacts["lambda"]}/*"
+      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}/${local.artifacts["tenant_lambda"]}/*"
     ]
 
     sid = "GetArtifacts"
