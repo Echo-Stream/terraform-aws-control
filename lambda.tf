@@ -561,6 +561,30 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
 
     sid = "TableAccess"
   }
+
+  statement {
+    actions = [
+      "s3:GetObject*",
+    ]
+
+    resources = [
+      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}/message-types/*"
+    ]
+
+    sid = "GetMessageTypesArtifacts"
+  }
+
+    statement {
+    actions = [
+      "s3:ListBucket",
+    ]
+
+    resources = [
+      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}"
+    ]
+
+    sid = "ListArtifactsS3"
+  }
 }
 
 resource "aws_iam_policy" "appsync_tenant_datasource" {
@@ -577,6 +601,8 @@ module "appsync_tenant_datasource" {
     DYNAMODB_TABLE          = module.graph_table.name
     ENVIRONMENT             = var.environment_prefix
     LOG_LEVEL               = "INFO"
+    ARTIFACTS_BUCKET        = local.artifacts_bucket
+    APP_VERSION             = var.hl7_ninja_version
     STREAM_HANDLER_FUNCTION = module.graph_table_tenant_stream_handler.arn
   }
   handler     = "function.handler"
