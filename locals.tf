@@ -5,6 +5,7 @@ locals {
 
   lambda_dead_letter_arn      = aws_sns_topic.lambda_dead_letter.arn
   lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn
+  domain                      = "${var.environment_prefix}.${var.domain_name}"
 
   artifacts_bucket        = "hl7-ninja-artifacts-${local.current_region}"
   artifacts_bucket_prefix = "hl7-ninja-artifacts"

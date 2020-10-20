@@ -1,6 +1,6 @@
 resource "aws_cloudfront_distribution" "webapp" {
   aliases = [
-    "${var.environment_prefix}.${var.domain_name}"
+    local.domain
   ]
 
   origin {
