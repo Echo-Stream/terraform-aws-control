@@ -1,4 +1,4 @@
-# Default us-east-1 aws provider
+# AWS Provider for user-provided region
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = var.region
