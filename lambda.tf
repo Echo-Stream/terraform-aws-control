@@ -42,23 +42,6 @@ resource "aws_iam_policy" "additional_ddb_policy" {
 data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
   statement {
     actions = [
-      "dynamodb:DescribeTable",
-      #"dynamodb:GetItem",
-      "dynamodb:DescribeStream",
-      "dynamodb:GetRecords",
-      "dynamodb:GetShardIterator",
-      "dynamodb:ListStreams",
-    ]
-
-    resources = [
-      module.graph_table.arn,
-    ]
-
-    sid = "TableAccess"
-  }
-
-  statement {
-    actions = [
       "sqs:SendMessage",
       "sqs:GetQueueUrl",
     ]
