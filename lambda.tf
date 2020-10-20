@@ -42,23 +42,6 @@ resource "aws_iam_policy" "additional_ddb_policy" {
 data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
   statement {
     actions = [
-      "dynamodb:DescribeTable",
-      #"dynamodb:GetItem",
-      "dynamodb:DescribeStream",
-      "dynamodb:GetRecords",
-      "dynamodb:GetShardIterator",
-      "dynamodb:ListStreams",
-    ]
-
-    resources = [
-      module.graph_table.arn,
-    ]
-
-    sid = "TableAccess"
-  }
-
-  statement {
-    actions = [
       "sqs:SendMessage",
       "sqs:GetQueueUrl",
     ]
@@ -320,7 +303,7 @@ data "aws_iam_policy_document" "graph_table_put_app_policies" {
 
     resources = [aws_cognito_user_pool.hl7_ninja_apps.arn]
 
-    sid = "AdminGetUser"
+    sid       = "AdminGetUser"
   }
 }
 
@@ -2009,9 +1992,9 @@ module "graph_table_manage_nodes" {
   version       = "3.0.10"
 }
 
-###############################
+################################
 ## graph-table-manage-tenants ##
-###############################
+################################
 data "aws_iam_policy_document" "graph_table_manage_tenants" {
   statement {
     actions = [
