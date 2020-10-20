@@ -18,7 +18,7 @@ aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode 
 
 aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name app --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Edge --field-name kmsKey --data-source-name ${sub_field_datasource}
+aws appsync create-resolver --api-id ${api_id} --type-name Edge --field-name kmsKey --data-source-name ${kms_key_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Edge --field-name tenant --data-source-name ${sub_field_datasource}
 
@@ -138,6 +138,8 @@ aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name Va
 
 aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name GetLargeMessageStorage --data-source-name ${large_message_storage_datasource}
 
+aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name GetTenantUser --data-source-name ${tenant_datasource}
+
 aws appsync create-resolver --api-id ${api_id} --type-name RouterNode --field-name tenant --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name RouterNode --field-name sendEdges --data-source-name ${sub_field_datasource}
@@ -163,6 +165,8 @@ aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-nam
 aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name receiveEdges --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name receiveMessageType --data-source-name ${sub_field_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name tenant --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name User --field-name tenant --data-source-name ${sub_field_datasource}
 
