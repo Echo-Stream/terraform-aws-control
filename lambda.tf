@@ -312,6 +312,16 @@ data "aws_iam_policy_document" "graph_table_put_app_policies" {
 
     sid = "SQSPermissions"
   }
+
+  statement {
+    actions = [
+      "cognito-idp:AdminGetUser",
+    ]
+
+    resources = [aws_cognito_user_pool.hl7_ninja_apps.arn]
+    
+    sid       = "AdminGetUser"
+  }
 }
 
 resource "aws_iam_policy" "graph_table_put_app_policies" {
