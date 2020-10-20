@@ -21,3 +21,7 @@ variable "ses_email_address" {
 variable "region" {
   description = "AWS Region for the environment"
 }
+
+variable "acm_arn" {
+  description = "ACM certificate arn for the domain being used for environment"
+}

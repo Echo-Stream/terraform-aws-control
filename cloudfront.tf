@@ -1,4 +1,8 @@
 resource "aws_cloudfront_distribution" "webapp" {
+  aliases = [
+    "${var.environment_prefix}.${var.domain_name}"
+  ]
+
   origin {
     domain_name = "${local.artifacts_bucket}.s3.amazonaws.com"
     origin_id   = "${var.environment_prefix}-webapp"
@@ -71,7 +75,9 @@ resource "aws_cloudfront_distribution" "webapp" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    #cloudfront_default_certificate = true
+    acm_certificate_arn = var.acm_arn
+    ssl_support_method  = "sni-only"
   }
 }
 
