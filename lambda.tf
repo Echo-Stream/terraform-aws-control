@@ -319,8 +319,8 @@ data "aws_iam_policy_document" "graph_table_put_app_policies" {
     ]
 
     resources = [aws_cognito_user_pool.hl7_ninja_apps.arn]
-    
-    sid       = "AdminGetUser"
+
+    sid = "AdminGetUser"
   }
 }
 
