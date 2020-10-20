@@ -319,7 +319,7 @@ data "aws_iam_policy_document" "graph_table_put_app_policies" {
     ]
 
     resources = [aws_cognito_user_pool.hl7_ninja_apps.arn]
-    
+
     sid       = "AdminGetUser"
   }
 }
@@ -2009,9 +2009,9 @@ module "graph_table_manage_nodes" {
   version       = "3.0.10"
 }
 
-###############################
+################################
 ## graph-table-manage-tenants ##
-###############################
+################################
 data "aws_iam_policy_document" "graph_table_manage_tenants" {
   statement {
     actions = [
