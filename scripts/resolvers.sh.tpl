@@ -18,7 +18,7 @@ aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode 
 
 aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name app --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Edge --field-name kmsKey --data-source-name ${kms_key_datasource}
+aws appsync create-resolver --api-id ${api_id} --type-name Edge --field-name kmsKey --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Edge --field-name tenant --data-source-name ${sub_field_datasource}
 
