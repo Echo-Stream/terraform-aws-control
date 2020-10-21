@@ -1,5 +1,5 @@
 data "aws_route53_zone" "domain" {
-  name = local.domain
+  name = var.domain_name
 }
 
 resource "aws_route53_record" "webapp_cloudfront" {
@@ -9,7 +9,7 @@ resource "aws_route53_record" "webapp_cloudfront" {
     zone_id                = aws_cloudfront_distribution.webapp.hosted_zone_id
   }
 
-  name    = local.domain
+  name    = var.domain_name
   type    = "A"
   zone_id = data.aws_route53_zone.domain.zone_id
 }
