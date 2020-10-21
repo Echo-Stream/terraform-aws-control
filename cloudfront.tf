@@ -131,7 +131,7 @@ resource "aws_lambda_function" "edge_config" {
   ]
 
   description      = "Edge Lambda that returns an environment specific config for reactjs application"
-  filename         = "edge-config.zip"
+  filename         = "${path.module}/edge-config.zip"
   function_name    = "${var.environment_prefix}-edge-config"
   handler          = "function.lambda_handler"
   publish          = true
