@@ -18,6 +18,12 @@ variable "domain_name" {
   type        = string
 }
 
+variable "domain_zone_id" {
+  description = "Domain Zone id(which is created in pre-control TF), which may be used for Cognito custom auth, SES domain Identity and Cloudfront custom domain"
+  type        = string
+}
+
+
 variable "ses_email_address" {
   description = "Preferred Email Address that SES uses for communication with tenants"
   type        = string
