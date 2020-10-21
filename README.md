@@ -14,8 +14,8 @@ Terraform Module for HL7 Ninja Control Resources
 |------|-------------|------|---------|:--------:|
 | allowed\_account\_id | The Account Id which hosts the environment | `string` | n/a | yes |
 | hl7\_ninja\_version | `Major.Minor` Version to fetch artifacts from right location | `string` | n/a | yes |
-| environment_prefix | Environment Prefix for naming resources, a Unique name that could differentiate whole environment. `lower case` only, `No periods` | `string` | n/a | yes |
-| domain_name | Domain (which is created in pre-control TF), which may be used for Cognito custom auth, SES domain Identity and Cloudfront custom domain | `string` | n/a | yes |
+| environment_prefix | Environment Prefix for naming resources, a Unique name that could differentiate whole environment. lower case only, No periods, No Special Char except -. Length less than 15 char | `string` | n/a | yes |
+| domain_name |Environment Sub Domain (output from pre-control TF), used for Cloudfront custom domain, may be used for SES domain Identity and Cognito custom domain | `string` | n/a | yes |
 | ses_email_address | Preferred Email Address that SES uses for communication with tenants | `string` | n/a | yes |
 | region | AWS Region for the environment | `string` | n/a | yes |
-| acm_arn | ACM certificate arn for the domain being used for environment | `string` | n/a | yes |
+| acm_arn | ACM certificate arn (output from pre-control TF) of the environment sub domain | `string` | n/a | yes |
