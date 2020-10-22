@@ -2,14 +2,12 @@
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = var.region
-  version             = "3.10.0"
 }
 
 # us-east-1 (Aliased) aws provider
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "us-east-1"
-  version             = "3.10.0"
   alias               = "us-east-1"
 }
 
@@ -17,7 +15,6 @@ provider "aws" {
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "us-east-2"
-  version             = "3.10.0"
   alias               = "us-east-2"
 }
 
@@ -25,7 +22,6 @@ provider "aws" {
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "us-west-1"
-  version             = "3.10.0"
   alias               = "us-west-1"
 }
 
@@ -33,7 +29,6 @@ provider "aws" {
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "us-west-2"
-  version             = "3.10.0"
   alias               = "us-west-2"
 }
 
