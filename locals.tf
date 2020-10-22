@@ -50,6 +50,7 @@ locals {
     appsync_large_message_storage_datasource = "${local.artifacts["lambda"]}/appsync-large-message-storage-datasource.zip"
     appsync_validate_function_datasource     = "${local.artifacts["lambda"]}/appsync-validate-function-datasource.zip"
     appsync_subscription_datasource          = "${local.artifacts["lambda"]}/appsync-subscription-datasource.zip"
+    graph_table_manage_edges                 = "${local.artifacts["lambda"]}/graph-table-manage-edges.zip"
 
     router_node = "${local.artifacts["tenant_lambda"]}/router-node.zip"
     trans_node  = "${local.artifacts["tenant_lambda"]}/trans-node.zip"

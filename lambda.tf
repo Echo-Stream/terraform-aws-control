@@ -1370,7 +1370,8 @@ module "graph_table_tenant_stream_handler" {
     module.graph_table_manage_message_types.invoke_policy_arn,
     module.graph_table_manage_users.invoke_policy_arn,
     module.graph_table_manage_tenants.invoke_policy_arn,
-    module.graph_table_put_app_policies.invoke_policy_arn
+    module.graph_table_put_app_policies.invoke_policy_arn,
+    module.graph_table_manage_edges.invoke_policy_arn
   ]
 
   runtime       = "python3.8"
@@ -2321,4 +2322,99 @@ module "appsync_subscription_datasource" {
   tags          = local.tags
   timeout       = 30
   version       = "3.0.10"
+}
+
+###############################
+## graph-table-manage-edgesr ##
+###############################
+data "aws_iam_policy_document" "graph_table_manage_edges" {
+  statement {
+    actions = [
+      "sqs:DeleteQueue",
+      "sqs:GetQueueAttributes",
+    ]
+
+    resources = [
+      "arn:aws:sqs:*:*:*_db-stream_*"
+    ]
+
+    sid = "DeleteQueue"
+  }
+
+  statement {
+    actions = [
+      "dynamodb:GetItem",
+    ]
+    resources = [
+      module.graph_table.arn,
+    ]
+
+    sid = "ReadTable"
+  }
+
+  statement {
+    actions = [
+      "lambda:CreateEventSourceMapping",
+      "lambda:GetEventSourceMapping",
+      "lambda:ListEventSourceMappings",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    condition {
+      test = "StringEquals"
+
+      values = [
+        module.graph_table_tenant_stream_handler.arn
+      ]
+
+      variable = "lambda:FunctionArn"
+    }
+
+    sid = "LambdaEventSourceMappings"
+  }
+}
+
+resource "aws_iam_policy" "graph_table_manage_edges" {
+  description = "IAM permissions required for graph-table-manage-edgesr"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-graph-table-manage-edgesr"
+  policy      = data.aws_iam_policy_document.graph_table_manage_edges.json
+}
+
+module "graph_table_manage_edges" {
+  description     = "Manage edges in db stream"
+  dead_letter_arn = local.lambda_dead_letter_arn
+
+  environment_variables = {
+    DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
+  }
+
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+
+  memory_size = 128
+  name        = "${var.environment_prefix}-graph-table-manage-edges"
+
+  policy_arns = [
+    aws_iam_policy.graph_table_manage_edges.arn,
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["graph_table_manage_edges"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.10"
+}
+
+resource "aws_lambda_event_source_mapping" "graph_table_manage_edges" {
+  batch_size        = "1"
+  event_source_arn  = module.graph_table.stream_arn
+  function_name     = module.graph_table_manage_edges.name
+  starting_position = "LATEST"
 }
