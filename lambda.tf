@@ -1328,7 +1328,8 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     actions = [
       "sqs:ReceiveMessage",
       "sqs:DeleteMessage",
-      "sqs:GetQueueAttributes"
+      "sqs:GetQueueAttributes",
+      "sqs:GetQueueUrl",
     ]
 
     resources = [
