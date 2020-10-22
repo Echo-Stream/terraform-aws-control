@@ -3,10 +3,11 @@ Terraform Module for HL7 Ninja Control Resources
 
 ### Important Note 
 - Apps userpool MFA is OFF, Password policy length set to 16 instead of maximum
-- Resolvers using shell deployment
+- Resolvers are deployed by shell
 - Verifying an email address provided to SES service is manual. User needs to verify a link that is sent by AWS SES to the provided email.
 - DKIM is not enabled.
 - Domain name and ACM certificate covering that domain Inputs are needed. This resources can be created by Pre control TF or hand made.
+- Cognito is not supported in `US-WEST-1` region
 
 ### Inputs
 
