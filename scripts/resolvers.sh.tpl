@@ -193,3 +193,5 @@ aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --
 aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name receiveMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name receiveMessageType --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name app --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name app --data-source-name ${sub_field_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteTenant --data-source-name ${tenant_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteTenant --data-source-name ${tenant_datasource}
