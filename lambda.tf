@@ -545,6 +545,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     actions = [
       "dynamodb:Query",
       "dynamodb:GetItem",
+      "dynamodb:UpdateItem",
       "dynamodb:PutItem",
     ]
 
