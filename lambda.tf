@@ -2412,10 +2412,3 @@ module "graph_table_manage_edges" {
   timeout       = 30
   version       = "3.0.10"
 }
-
-resource "aws_lambda_event_source_mapping" "graph_table_manage_edges" {
-  batch_size        = "1"
-  event_source_arn  = module.graph_table.stream_arn
-  function_name     = module.graph_table_manage_edges.name
-  starting_position = "LATEST"
-}
