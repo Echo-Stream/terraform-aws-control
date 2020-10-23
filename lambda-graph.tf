@@ -617,7 +617,8 @@ module "graph_table_tenant_stream_handler" {
     module.graph_table_manage_users.invoke_policy_arn,
     module.graph_table_manage_tenants.invoke_policy_arn,
     module.graph_table_put_app_policies.invoke_policy_arn,
-    module.graph_table_manage_edges.invoke_policy_arn
+    module.graph_table_manage_edges.invoke_policy_arn,
+    module.graph_table_manage_kms_keys.invoke_policy_arn
   ]
 
   runtime       = "python3.8"
@@ -1015,6 +1016,56 @@ module "graph_table_manage_edges" {
   runtime       = "python3.8"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["graph_table_manage_edges"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 300
+  version       = "3.0.10"
+}
+
+#################################
+## graph-table-manage-kms-keys ##
+#################################
+data "aws_iam_policy_document" "graph_table_manage_kms_keys" {
+  statement {
+    actions = [
+      "kms:ScheduleKeyDeletion",
+    ]
+    resources = [
+      "*"
+    ]
+
+    sid = "KMSDeletion"
+  }
+}
+
+resource "aws_iam_policy" "graph_table_manage_kms_keys" {
+  description = "IAM permissions required for graph-table-manage-kms-keys"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-graph-table-manage-kms-keys"
+  policy      = data.aws_iam_policy_document.graph_table_manage_kms_keys.json
+}
+
+module "graph_table_manage_kms_keys" {
+  description     = "Manage kms keys on dynamodb stream"
+  dead_letter_arn = local.lambda_dead_letter_arn
+
+  environment_variables = {
+    DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.environment_prefix
+  }
+
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  memory_size = 1536
+  name        = "${var.environment_prefix}-graph-table-manage-kms-keys"
+
+  policy_arns = [
+    aws_iam_policy.graph_table_manage_kms_keys.arn,
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["graph_table_manage_kms_keys"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
