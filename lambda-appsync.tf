@@ -1056,6 +1056,7 @@ module "appsync_app_datasource" {
     APP_CLIENT_ID        = aws_cognito_user_pool_client.hl7_ninja_apps_userpool_client.id
     COGNITO_ROLE_ARN     = aws_iam_role.authenticated.arn
     APPSYNC_ENDPOINT     = aws_appsync_graphql_api.hl7_ninja.uris["GRAPHQL"]
+    AUDIT_FIREHOSE       = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
