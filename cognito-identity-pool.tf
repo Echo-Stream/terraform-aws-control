@@ -70,6 +70,18 @@ data "aws_iam_policy_document" "authenticated_id_pool_policy" {
     ]
     resources = ["*"]
   }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "firehose:PutRecord*"
+    ]
+
+    resources = [aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.arn]
+
+    sid = "WriteToFirehose"
+  }
 }
 
 # Unauthenticated Role

@@ -693,10 +693,10 @@ data "aws_iam_policy_document" "graph_table_manage_message_types" {
     ]
 
     resources = [
-      aws_iam_role.internal_function_role.arn
+      aws_iam_role.tenant_function_role.arn
     ]
 
-    sid = "InternalFunctionRoleIAM"
+    sid = "TenantFunctionRoleIAM"
   }
 }
 
@@ -713,7 +713,7 @@ module "graph_table_manage_message_types" {
   environment_variables = {
     DYNAMODB_TABLE             = module.graph_table.name
     ENVIRONMENT                = var.environment_prefix
-    LAMBDA_ROLE_ARN            = aws_iam_role.internal_function_role.arn
+    LAMBDA_ROLE_ARN            = aws_iam_role.tenant_function_role.arn
     FUNCTIONS_BUCKET           = local.artifacts_bucket
     VALIDATION_FUNCTION_S3_KEY = local.lambda_functions_keys["validate_function"]
   }
@@ -799,7 +799,7 @@ module "graph_table_manage_nodes" {
     ROUTER_NODE_ARTIFACT           = local.lambda_functions_keys["router_node"]
     TRANS_NODE_ARTIFACT            = local.lambda_functions_keys["trans_node"]
     X_TENANT_SENDING_NODE_ARTIFACT = local.lambda_functions_keys["trans_node"]
-    LAMBDA_ROLE_ARN                = aws_iam_role.internal_function_role.arn
+    LAMBDA_ROLE_ARN                = aws_iam_role.tenant_function_role.arn
     MANAGED_APP_ROLE               = aws_iam_role.authenticated.arn
   }
 

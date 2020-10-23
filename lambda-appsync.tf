@@ -1,14 +1,38 @@
 ## Internal Fn IAM assume role
-resource "aws_iam_role" "internal_function_role" {
-  name               = "${var.environment_prefix}-internal-fn-role"
+resource "aws_iam_role" "tenant_function_role" {
+  name               = "${var.environment_prefix}-tenant-functions"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
   tags               = local.tags
 }
 
-resource "aws_iam_policy_attachment" "internal_function_role" {
-  name       = "${var.environment_prefix}-internal-fn-role"
-  roles      = [aws_iam_role.internal_function_role.name]
+resource "aws_iam_role_policy_attachment" "tenant_function_logging" {
+  role       = aws_iam_role.tenant_function_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+data "aws_iam_policy_document" "tenant_function_role" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "firehose:PutRecord*"
+    ]
+
+    resources = [aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.arn]
+
+    sid = "WriteToFirehose"
+  }
+}
+
+resource "aws_iam_policy" "tenant_function" {
+  description = "IAM permissions required for tenant functions"
+  path        = "/${var.environment_prefix}-lambda/"
+  policy      = data.aws_iam_policy_document.tenant_function_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "tenant_function_role" {
+  role       = aws_iam_role.tenant_function_role.name
+  policy_arn = aws_iam_policy.tenant_function.arn
 }
 
 ## additional-ddb-policy ##
