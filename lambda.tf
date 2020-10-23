@@ -435,11 +435,7 @@ data "aws_iam_policy_document" "appsync_kms_key_datasource" {
   statement {
     actions = [
       "kms:CreateKey",
-      "kms:CreateAlias",
-      "kms:DeleteAlias",
       "kms:DescribeKey",
-      "kms:ListAliases",
-      "kms:ListGrants",
       "kms:TagResource"
     ]
 
