@@ -118,7 +118,7 @@ aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name ResetAppPassword --data-source-name ${app_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name ResetAppPassword --data-source-name ${app_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name GetMessageType --data-source-name ${message_type_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Query --field-name GetMessageType --data-source-name ${message_type_datasource}
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteTenant --data-source-name ${tenant_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteTenant --data-source-name ${tenant_datasource}aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name GetMessageType --data-source-name ${message_type_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Query --field-name GetMessageType --data-source-name ${message_type_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name GetUsersForTenant --data-source-name ${tenant_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Query --field-name GetUsersForTenant --data-source-name ${tenant_datasource}
 
@@ -158,6 +158,8 @@ aws appsync create-resolver --api-id ${api_id} --type-name Subscription --field-
 
 aws appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name messageTypeUpdated --data-source-name ${subscription_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name messageTypeUpdated --data-source-name ${subscription_datasource}
 
+aws appsync create-resolver --api-id ${api_id} --type-name Tenant --field-name defaultKmsKey --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Tenant --field-name defaultKmsKey --data-source-name ${sub_field_datasource}
+
 aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name sendEdges --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name TransNode --field-name sendEdges --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name sendMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name TransNode --field-name sendMessageType --data-source-name ${sub_field_datasource}
@@ -193,5 +195,3 @@ aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --
 aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name receiveMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name receiveMessageType --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name app --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name app --data-source-name ${sub_field_datasource}
-
-aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteTenant --data-source-name ${tenant_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteTenant --data-source-name ${tenant_datasource}
