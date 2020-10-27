@@ -227,6 +227,7 @@ module "appsync_tenant_datasource" {
     ARTIFACTS_BUCKET        = local.artifacts_bucket
     APP_VERSION             = var.hl7_ninja_version
     STREAM_HANDLER_FUNCTION = module.graph_table_tenant_stream_handler.arn
+    DEAD_LETTER_QUEUE       = aws_sqs_queue.stream_dead_letter_queue.arn
   }
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
@@ -1240,7 +1241,7 @@ data "aws_iam_policy_document" "presign_large_messages" {
     sid = "EncryptDecryptEnvKMSKeys"
   }
 
-    statement {
+  statement {
     actions = [
       "kms:GenerateDataKey",
     ]
