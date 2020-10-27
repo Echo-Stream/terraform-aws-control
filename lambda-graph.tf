@@ -822,6 +822,8 @@ module "graph_table_manage_nodes" {
     LAMBDA_ROLE_ARN                = aws_iam_role.tenant_function_role.arn
     MANAGED_APP_ROLE               = aws_iam_role.authenticated.arn
     INTERNAL_APPSYNC_ROLES         = local.internal_appsync_role_names
+    ID_TOKEN_KEY                   = local.id_token_key
+    AUDIT_FIREHOSE                 = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
   }
 
   handler     = "function.handler"

@@ -83,6 +83,16 @@ locals {
 
   current_region = data.aws_region.current.name
 
+  id_token_key = <<-EOT
+                    {
+                      "kty": "oct",
+                      "kid": "${random_uuid.for_jwk.result}"
+                      "use": "sig",
+                      "alg": "HS256",
+                      "k": "${base64encode(random_string.for_jwk.result)}"
+                    }
+                  EOT
+
 
   tags = {
     Terraform   = "true"

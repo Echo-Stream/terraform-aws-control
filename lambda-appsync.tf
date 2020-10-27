@@ -719,15 +719,7 @@ module "process_audit_record" {
   environment_variables = {
     APP_CLIENT_ID   = aws_cognito_user_pool_client.hl7_ninja_apps_userpool_client.id
     ENVIRONMENT     = var.environment_prefix
-    ID_TOKEN_KEY    = <<-EOT
-                        {
-                          "kty": "oct",
-                          "kid": "${random_uuid.for_jwk.result}"
-                          "use": "sig",
-                          "alg": "HS256",
-                          "k": "${base64encode(random_string.for_jwk.result)}"
-                        }
-                      EOT
+    ID_TOKEN_KEY    = local.id_token_key
     USERPOOL_ID     = aws_cognito_user_pool.hl7_ninja_apps.id
     USERPOOL_REGION = local.current_region
   }
