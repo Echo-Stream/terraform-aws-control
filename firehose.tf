@@ -1,3 +1,31 @@
+###########################
+#  process-audit-record  ##
+###########################
+module "process_audit_record" {
+  description = "Processes a message audit record as it passes through the firehose"
+
+  environment_variables = {
+    APP_CLIENT_ID   = aws_cognito_user_pool_client.hl7_ninja_apps_userpool_client.id
+    ENVIRONMENT     = var.environment_prefix
+    ID_TOKEN_KEY    = local.id_token_key
+    USERPOOL_ID     = aws_cognito_user_pool.hl7_ninja_apps.id
+    USERPOOL_REGION = local.current_region
+  }
+
+  dead_letter_arn = local.lambda_dead_letter_arn
+  handler         = "function.handler"
+  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  memory_size     = 1536
+  name            = "${var.environment_prefix}-process-audit-record"
+  runtime         = "python3.8"
+  s3_bucket       = local.artifacts_bucket
+  s3_object_key   = local.lambda_functions_keys["process_audit_record"]
+  source          = "QuiNovas/lambda/aws"
+  tags            = local.tags
+  timeout         = 30
+  version         = "3.0.10"
+}
+
 resource "aws_cloudwatch_log_group" "process_audit_record_firehose" {
   name              = "/aws/kinesisfirehose/${var.environment_prefix}-process-audit-record-firehose"
   retention_in_days = 7

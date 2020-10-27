@@ -1,3 +1,10 @@
+resource "random_uuid" "for_jwk" {}
+
+resource "random_string" "for_jwk" {
+  length  = 64
+  special = true
+}
+
 locals {
   aws_cli_command = "~/bin/aws"
 
