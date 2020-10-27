@@ -1211,6 +1211,7 @@ data "aws_iam_policy_document" "presign_large_messages" {
   statement {
     actions = [
       "s3:GetObject*",
+      "s3:PutObject*",
     ]
 
     resources = [
@@ -1226,6 +1227,7 @@ data "aws_iam_policy_document" "presign_large_messages" {
   statement {
     actions = [
       "kms:Decrypt",
+      "kms:Encrypt",
     ]
 
     resources = [
@@ -1235,7 +1237,19 @@ data "aws_iam_policy_document" "presign_large_messages" {
       aws_kms_key.kms_us_west_2.arn
     ]
 
-    sid = "DecryptEnvKMSKeys"
+    sid = "EncryptDecryptEnvKMSKeys"
+  }
+
+    statement {
+    actions = [
+      "kms:GenerateDataKey",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "GenerateDataKeys"
   }
 }
 
