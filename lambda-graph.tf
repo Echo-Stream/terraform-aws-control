@@ -48,6 +48,7 @@ module "graph_table_dynamodb_trigger" {
     DYNAMODB_TABLE               = module.graph_table.name
     DEFAULT_TENANT_SQS_QUEUE_URL = aws_sqs_queue.default_tenant_sqs_queue.id
     ENVIRONMENT                  = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES       = ""
   }
 
   handler     = "function.handler"
@@ -146,6 +147,7 @@ module "graph_table_manage_users" {
     USER_REMOVED_TEMPLATE  = aws_ses_template.remove_user.id
     NEW_USER_TEMPLATE      = aws_ses_template.invite_user.id
     EXISTING_USER_TEMPLATE = aws_ses_template.notify_user.id
+    INTERNAL_APPSYNC_ROLES = ""
   }
 
   handler     = "function.handler"
@@ -281,10 +283,11 @@ module "graph_table_put_app_policies" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    DYNAMODB_TABLE   = module.graph_table.name
-    ENVIRONMENT      = var.environment_prefix
-    MANAGED_APP_ROLE = aws_iam_role.authenticated.arn
-    USER_POOL_ID     = aws_cognito_user_pool.hl7_ninja_apps.id
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.environment_prefix
+    MANAGED_APP_ROLE       = aws_iam_role.authenticated.arn
+    USER_POOL_ID           = aws_cognito_user_pool.hl7_ninja_apps.id
+    INTERNAL_APPSYNC_ROLES = ""
   }
 
   handler     = "function.handler"
@@ -365,8 +368,9 @@ module "graph_table_manage_queues" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES = ""
   }
 
   handler     = "function.handler"
@@ -507,15 +511,16 @@ module "graph_table_manage_apps" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    DYNAMODB_TABLE       = module.graph_table.name
-    APP_USER_POOL_ID     = aws_cognito_user_pool.hl7_ninja_apps.id
-    APP_IDENTITY_POOL_ID = aws_cognito_identity_pool.hl7_ninja.id
-    SSM_EXPIRATION       = ""
-    SSM_SERVICE_ROLE     = aws_iam_role.manage_apps_ssm_service_role.arn
-    APP_CLOUD_INIT_TOPIC = aws_sns_topic.hl7_app_cloud_init.name
-    ENVIRONMENT          = var.environment_prefix
-    INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.hl7_ninja_version}"
-    OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.hl7_ninja_version}"
+    DYNAMODB_TABLE         = module.graph_table.name
+    APP_USER_POOL_ID       = aws_cognito_user_pool.hl7_ninja_apps.id
+    APP_IDENTITY_POOL_ID   = aws_cognito_identity_pool.hl7_ninja.id
+    SSM_EXPIRATION         = ""
+    SSM_SERVICE_ROLE       = aws_iam_role.manage_apps_ssm_service_role.arn
+    APP_CLOUD_INIT_TOPIC   = aws_sns_topic.hl7_app_cloud_init.name
+    ENVIRONMENT            = var.environment_prefix
+    INBOUNDER_ECR_URL      = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.hl7_ninja_version}"
+    OUTBOUNDER_ECR_URL     = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.hl7_ninja_version}"
+    INTERNAL_APPSYNC_ROLES = ""
   }
 
 
@@ -597,9 +602,10 @@ module "graph_table_tenant_stream_handler" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    TYPE_HANDLERS  = file("${path.module}/files/type-handlers-map.json")
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
+    TYPE_HANDLERS          = file("${path.module}/files/type-handlers-map.json")
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES = ""
   }
 
   handler     = "function.handler"
@@ -716,6 +722,7 @@ module "graph_table_manage_message_types" {
     LAMBDA_ROLE_ARN            = aws_iam_role.tenant_function_role.arn
     FUNCTIONS_BUCKET           = local.artifacts_bucket
     VALIDATION_FUNCTION_S3_KEY = local.lambda_functions_keys["validate_function"]
+    INTERNAL_APPSYNC_ROLES     = ""
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -779,6 +786,7 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
 
     sid = "GetArtifacts"
   }
+
   statement {
     actions = [
       "iam:PassRole",
@@ -813,6 +821,7 @@ module "graph_table_manage_nodes" {
     X_TENANT_SENDING_NODE_ARTIFACT = local.lambda_functions_keys["trans_node"]
     LAMBDA_ROLE_ARN                = aws_iam_role.tenant_function_role.arn
     MANAGED_APP_ROLE               = aws_iam_role.authenticated.arn
+    INTERNAL_APPSYNC_ROLES         = ""
   }
 
   handler     = "function.handler"
@@ -919,10 +928,11 @@ module "graph_table_manage_tenants" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    LOG_LEVEL             = "INFO"
-    DYNAMODB_TABLE        = module.graph_table.name
-    ENVIRONMENT           = var.environment_prefix
-    TENANT_STREAM_HANDLER = module.graph_table_tenant_stream_handler.arn
+    LOG_LEVEL              = "INFO"
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.environment_prefix
+    TENANT_STREAM_HANDLER  = module.graph_table_tenant_stream_handler.arn
+    INTERNAL_APPSYNC_ROLES = ""
   }
 
   handler     = "function.handler"
@@ -1011,8 +1021,9 @@ module "graph_table_manage_edges" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES = ""
   }
 
   handler     = "function.handler"
@@ -1062,8 +1073,9 @@ module "graph_table_manage_kms_keys" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES = ""
   }
 
   handler     = "function.handler"
