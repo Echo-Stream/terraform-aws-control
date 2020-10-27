@@ -57,7 +57,31 @@ locals {
     trans_node  = "${local.artifacts["tenant_lambda"]}/trans-node.zip"
   }
 
+  internal_appsync_role_names = [
+    "${var.environment_prefix}-appsync-edge-datasource",
+    "${var.environment_prefix}-appsync-message-type-datasource",
+    "${var.environment_prefix}-appsync-tenant-datasource",
+    "${var.environment_prefix}-appsync-kms-key-datasource",
+    "${var.environment_prefix}-appsync-app-datasource",
+    "${var.environment_prefix}-appsync-node-datasource",
+    "${var.environment_prefix}-appsync-sub-field-datasource",
+    "${var.environment_prefix}-appsync-large-message-storage-datasource",
+    "${var.environment_prefix}-appsync-validate-function-datasource",
+    "${var.environment_prefix}-appsync-subscription-datasource",
+    "${var.environment_prefix}-graph-table-dynamodb-trigger",
+    "${var.environment_prefix}-graph-table-manage-apps",
+    "${var.environment_prefix}-graph-table-manage-queues",
+    "${var.environment_prefix}-graph-table-manage-users",
+    "${var.environment_prefix}-graph-table-put-app-policies",
+    "${var.environment_prefix}-graph-table-tenant-stream-handler",
+    "${var.environment_prefix}-graph-table-manage-tenants",
+    "${var.environment_prefix}-graph-table-manage-message-types",
+    "${var.environment_prefix}-graph-table-manage-nodes",
+    "${var.environment_prefix}-graph-table-manage-edges",
+    "${var.environment_prefix}-graph-table-manage-kms-keys",
+  ]
   current_region = data.aws_region.current.name
+
 
   tags = {
     Terraform   = "true"

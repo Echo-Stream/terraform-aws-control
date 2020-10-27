@@ -48,7 +48,7 @@ module "graph_table_dynamodb_trigger" {
     DYNAMODB_TABLE               = module.graph_table.name
     DEFAULT_TENANT_SQS_QUEUE_URL = aws_sqs_queue.default_tenant_sqs_queue.id
     ENVIRONMENT                  = var.environment_prefix
-    INTERNAL_APPSYNC_ROLES       = ""
+    INTERNAL_APPSYNC_ROLES       = local.internal_appsync_role_names
   }
 
   handler     = "function.handler"
@@ -147,7 +147,7 @@ module "graph_table_manage_users" {
     USER_REMOVED_TEMPLATE  = aws_ses_template.remove_user.id
     NEW_USER_TEMPLATE      = aws_ses_template.invite_user.id
     EXISTING_USER_TEMPLATE = aws_ses_template.notify_user.id
-    INTERNAL_APPSYNC_ROLES = ""
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
 
   handler     = "function.handler"
@@ -287,7 +287,7 @@ module "graph_table_put_app_policies" {
     ENVIRONMENT            = var.environment_prefix
     MANAGED_APP_ROLE       = aws_iam_role.authenticated.arn
     USER_POOL_ID           = aws_cognito_user_pool.hl7_ninja_apps.id
-    INTERNAL_APPSYNC_ROLES = ""
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
 
   handler     = "function.handler"
@@ -370,7 +370,7 @@ module "graph_table_manage_queues" {
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
     ENVIRONMENT            = var.environment_prefix
-    INTERNAL_APPSYNC_ROLES = ""
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
 
   handler     = "function.handler"
@@ -520,7 +520,7 @@ module "graph_table_manage_apps" {
     ENVIRONMENT            = var.environment_prefix
     INBOUNDER_ECR_URL      = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.hl7_ninja_version}"
     OUTBOUNDER_ECR_URL     = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.hl7_ninja_version}"
-    INTERNAL_APPSYNC_ROLES = ""
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
 
 
@@ -605,7 +605,7 @@ module "graph_table_tenant_stream_handler" {
     TYPE_HANDLERS          = file("${path.module}/files/type-handlers-map.json")
     DYNAMODB_TABLE         = module.graph_table.name
     ENVIRONMENT            = var.environment_prefix
-    INTERNAL_APPSYNC_ROLES = ""
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
 
   handler     = "function.handler"
@@ -722,7 +722,7 @@ module "graph_table_manage_message_types" {
     LAMBDA_ROLE_ARN            = aws_iam_role.tenant_function_role.arn
     FUNCTIONS_BUCKET           = local.artifacts_bucket
     VALIDATION_FUNCTION_S3_KEY = local.lambda_functions_keys["validate_function"]
-    INTERNAL_APPSYNC_ROLES     = ""
+    INTERNAL_APPSYNC_ROLES     = local.internal_appsync_role_names
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -821,7 +821,7 @@ module "graph_table_manage_nodes" {
     X_TENANT_SENDING_NODE_ARTIFACT = local.lambda_functions_keys["trans_node"]
     LAMBDA_ROLE_ARN                = aws_iam_role.tenant_function_role.arn
     MANAGED_APP_ROLE               = aws_iam_role.authenticated.arn
-    INTERNAL_APPSYNC_ROLES         = ""
+    INTERNAL_APPSYNC_ROLES         = local.internal_appsync_role_names
   }
 
   handler     = "function.handler"
@@ -932,7 +932,7 @@ module "graph_table_manage_tenants" {
     DYNAMODB_TABLE         = module.graph_table.name
     ENVIRONMENT            = var.environment_prefix
     TENANT_STREAM_HANDLER  = module.graph_table_tenant_stream_handler.arn
-    INTERNAL_APPSYNC_ROLES = ""
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
 
   handler     = "function.handler"
@@ -1023,7 +1023,7 @@ module "graph_table_manage_edges" {
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
     ENVIRONMENT            = var.environment_prefix
-    INTERNAL_APPSYNC_ROLES = ""
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
 
   handler     = "function.handler"
@@ -1075,7 +1075,7 @@ module "graph_table_manage_kms_keys" {
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
     ENVIRONMENT            = var.environment_prefix
-    INTERNAL_APPSYNC_ROLES = ""
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
 
   handler     = "function.handler"
