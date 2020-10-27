@@ -758,6 +758,7 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
       "lambda:CreateFunction",
       "lambda:DeleteFunction",
       "lambda:TagFunction",
+      "lambda:GetLayerVersion",
     ]
 
     resources = [
@@ -777,6 +778,17 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
     ]
 
     sid = "GetArtifacts"
+  }
+  statement {
+    actions = [
+      "iam:PassRole",
+    ]
+
+    resources = [
+      aws_iam_role.tenant_function_role.arn
+    ]
+
+    sid = "TenantFunctionRoleIAM"
   }
 }
 
