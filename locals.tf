@@ -57,7 +57,7 @@ locals {
     trans_node  = "${local.artifacts["tenant_lambda"]}/trans-node.zip"
   }
 
-  internal_appsync_role_names = [
+  internal_appsync_role_names = jsonencode([
     "${var.environment_prefix}-appsync-edge-datasource",
     "${var.environment_prefix}-appsync-message-type-datasource",
     "${var.environment_prefix}-appsync-tenant-datasource",
@@ -79,7 +79,8 @@ locals {
     "${var.environment_prefix}-graph-table-manage-nodes",
     "${var.environment_prefix}-graph-table-manage-edges",
     "${var.environment_prefix}-graph-table-manage-kms-keys",
-  ]
+  ])
+
   current_region = data.aws_region.current.name
 
 
