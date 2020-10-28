@@ -28,6 +28,10 @@ resource "aws_appsync_graphql_api" "hl7_ninja" {
     }
   }
 
+  additional_authentication_provider {
+    authentication_type = "AWS_IAM"
+  }
+
   schema = data.aws_s3_bucket_object.graphql_schema.body
 
   name = "${var.environment_prefix}-api"
