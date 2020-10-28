@@ -968,7 +968,7 @@ data "aws_iam_policy_document" "graph_table_manage_edges" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:*_db-stream_*"
+      "*"
     ]
 
     sid = "DeleteQueue"
@@ -996,16 +996,6 @@ data "aws_iam_policy_document" "graph_table_manage_edges" {
     resources = [
       "*"
     ]
-
-    condition {
-      test = "StringEquals"
-
-      values = [
-        module.graph_table_tenant_stream_handler.arn
-      ]
-
-      variable = "lambda:FunctionArn"
-    }
 
     sid = "LambdaEventSourceMappings"
   }
