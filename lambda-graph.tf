@@ -859,21 +859,11 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
 
   statement {
     actions = [
-      "sqs:DeleteQueue",
-      "sqs:GetQueueAttributes",
-    ]
-
-    resources = [
-      "*",
-    ]
-
-    sid = "Sqs"
-  }
-  statement {
-    actions = [
       "lambda:DeleteEventSourceMapping",
       "lambda:GetEventSourceMapping",
+      "lambda:GetFunctionConfiguration",
       "lambda:ListEventSourceMappings",
+      "lambda:UpdateFunctionConfiguration",
     ]
 
     resources = [
@@ -888,6 +878,7 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
       "dynamodb:Query",
       "dynamodb:GetItem",
       "dynamodb:DeleteItem",
+      "dynamodb:UpdateItem",
     ]
 
     resources = [
@@ -909,6 +900,19 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
 
     sid = "KMS"
   }
+
+  statement {
+    actions = [
+      "cognito-idp:AdminUserGlobalSignOut",
+      "cognito-idp:ListUsers",
+    ]
+
+    resources = [
+      aws_cognito_user_pool.hl7_ninja_ui.arn
+    ]
+
+    sid = "Cognito"
+  }
 }
 
 resource "aws_iam_policy" "graph_table_manage_tenants" {
@@ -923,11 +927,13 @@ module "graph_table_manage_tenants" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    LOG_LEVEL              = "INFO"
-    DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
-    TENANT_STREAM_HANDLER  = module.graph_table_tenant_stream_handler.arn
-    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
+    LOG_LEVEL                 = "INFO"
+    DYNAMODB_TABLE            = module.graph_table.name
+    ENVIRONMENT               = var.environment_prefix
+    TENANT_STREAM_HANDLER     = module.graph_table_tenant_stream_handler.arn
+    INTERNAL_APPSYNC_ROLES    = local.internal_appsync_role_names
+    UI_USER_POOL_ID           = aws_cognito_user_pool.hl7_ninja_ui.id
+    DYNAMODB_TRIGGER_FUNCTION = module.graph_table_dynamodb_trigger.arn
   }
 
   handler     = "function.handler"
