@@ -177,7 +177,6 @@ module "graph_table_manage_users" {
 data "aws_iam_policy_document" "graph_table_put_app_policies" {
   statement {
     actions = [
-      "dynamodb:DescribeTable",
       "dynamodb:GetItem",
       "dynamodb:PutItem",
       "dynamodb:Query",
@@ -228,14 +227,9 @@ data "aws_iam_policy_document" "graph_table_put_app_policies" {
   statement {
     actions = [
       "kms:CreateGrant",
-      "kms:DeleteAlias",
       "kms:DescribeKey",
-      "kms:GetKeyPolicy",
-      "kms:ListAlias",
       "kms:ListGrants",
-      "kms:ListKeyPolicies",
       "kms:ListResourceGrants",
-      "kms:PutKeyPolicy",
       "kms:RevokeGrant",
       "kms:RetireGrant",
     ]
@@ -250,9 +244,7 @@ data "aws_iam_policy_document" "graph_table_put_app_policies" {
       "sqs:GetQueueAttributes",
       "sqs:GetQueueUrl",
       "sqs:ListQueues",
-      "sqs:RemovePermission",
       "sqs:SetQueueAttributes",
-      "sqs:AddPermission",
     ]
 
     resources = ["*"]
@@ -286,6 +278,7 @@ module "graph_table_put_app_policies" {
     DYNAMODB_TABLE         = module.graph_table.name
     ENVIRONMENT            = var.environment_prefix
     MANAGED_APP_ROLE       = aws_iam_role.authenticated.arn
+    NODE_FUNCTION_ROLE     = aws_iam_role.tenant_function_role.arn
     USER_POOL_ID           = aws_cognito_user_pool.hl7_ninja_apps.id
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
