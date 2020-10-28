@@ -988,8 +988,10 @@ data "aws_iam_policy_document" "graph_table_manage_edges" {
     actions = [
       "lambda:CreateEventSourceMapping",
       "lambda:GetEventSourceMapping",
+      "lambda:GetFunctionConfiguration",
       "lambda:ListEventSourceMappings",
       "lambda:DeleteEventSourceMapping",
+      "lambda:UpdateFunctionConfiguration",
     ]
 
     resources = [
