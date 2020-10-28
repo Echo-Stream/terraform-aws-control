@@ -27,12 +27,12 @@ data "aws_iam_policy_document" "tenant_function_role" {
     effect = "Allow"
 
     actions = [
-      "sqs:ReceiveMessages",
-      "sqs:DeleteMessages",
-      "sqs:GetQueueProperties"
+      "sqs:ReceiveMessage*",
+      "sqs:DeleteMessage*",
+      "sqs:GetQueueAttributes"
     ]
 
-    resources = ["arn:aws:sqs:*:*:_edge_*", ]
+    resources = ["arn:aws:sqs:*:*:_edge_*.fifo"]
 
     sid = "EdgeQueuesAccess"
   }
