@@ -22,6 +22,20 @@ data "aws_iam_policy_document" "tenant_function_role" {
 
     sid = "WriteToFirehose"
   }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sqs:ReceiveMessages",
+      "sqs:DeleteMessages",
+      "sqs:GetQueueProperties"
+    ]
+
+    resources = ["arn:aws:sqs:*:*:_edge_*", ]
+
+    sid = "EdgeQueuesAccess"
+  }
 }
 
 resource "aws_iam_policy" "tenant_function" {
