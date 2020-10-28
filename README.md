@@ -1,5 +1,5 @@
 ## Control Terraform
-Terraform Module for HL7 Ninja Control Resources
+Terraform Module for Echo Stream Control Resources
 
 ### Important Note
 - Domain name and ACM certificate covering the domain Inputs are needed. This resources are created by Pre control TF.

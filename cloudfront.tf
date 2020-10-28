@@ -15,7 +15,7 @@ resource "aws_cloudfront_distribution" "webapp" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = "${var.environment_prefix} HL7 Ninja ReactJS Webapp"
+  comment             = "${var.environment_prefix} Echo Stream ReactJS Webapp"
   default_root_object = "index.html"
 
   default_cache_behavior {
@@ -82,7 +82,7 @@ resource "aws_cloudfront_distribution" "webapp" {
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
-  comment = "${var.environment_prefix} HL7 Ninja ReactJS Webapp"
+  comment = "${var.environment_prefix} Echo Stream ReactJS Webapp"
 }
 
 resource "aws_route53_record" "webapp_cloudfront" {
