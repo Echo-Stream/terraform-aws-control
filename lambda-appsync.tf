@@ -815,6 +815,8 @@ data "aws_iam_policy_document" "deployment_handler" {
       "lambda:PublishLayerVersion",
       "lambda:PublishVersion",
       "lambda:UpdateFunctionCode",
+      "lambda:ListFunctions",
+      "lambda:GetFunction",
     ]
 
     resources = [
@@ -1469,11 +1471,11 @@ module "purge_tenants" {
   description     = "purge the remnants of tenants"
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
-    DYNAMODB_TABLE          = module.graph_table.name
-    ENVIRONMENT             = var.environment_prefix
-    LOG_LEVEL               = "INFO"
-    UI_USER_POOL_ID         = aws_cognito_user_pool.hl7_ninja_ui.id
-    DB_STREAM_HANDLER     = module.graph_table_tenant_stream_handler.name
+    DYNAMODB_TABLE    = module.graph_table.name
+    ENVIRONMENT       = var.environment_prefix
+    LOG_LEVEL         = "INFO"
+    UI_USER_POOL_ID   = aws_cognito_user_pool.hl7_ninja_ui.id
+    DB_STREAM_HANDLER = module.graph_table_tenant_stream_handler.name
   }
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
