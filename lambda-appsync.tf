@@ -1479,7 +1479,7 @@ module "purge_tenants" {
   }
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
-  memory_size = 1536
+  memory_size = 128
   name        = "${var.environment_prefix}-purge-tenants"
 
   policy_arns = [
@@ -1498,14 +1498,14 @@ module "purge_tenants" {
 
 
 resource "aws_cloudwatch_event_rule" "purge_tenants" {
-  name                = "purge-tenants"
+  name                = "${var.environment_prefix}-purge-tenants"
   description         = "Fires every hour"
   schedule_expression = "cron(0 * * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "purge_tenants" {
   rule      = aws_cloudwatch_event_rule.purge_tenants.name
-  target_id = "purge-tenants"
+  target_id = "${var.environment_prefix}-purge-tenants"
   arn       = module.purge_tenants.arn
 }
 
