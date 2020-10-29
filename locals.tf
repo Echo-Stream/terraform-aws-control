@@ -103,7 +103,7 @@ locals {
 
   tags = {
     terraform   = "true"
-    app         = "hl7-ninja"
+    app         = "echostream"
     environment = var.environment_prefix
   }
 }
