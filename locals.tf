@@ -14,15 +14,15 @@ locals {
   lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn
   domain                      = "${var.environment_prefix}.${var.domain_name}"
 
-  artifacts_bucket        = "hl7-ninja-artifacts-${local.current_region}"
-  artifacts_bucket_prefix = "hl7-ninja-artifacts"
+  artifacts_bucket        = "echostream-artifacts-${local.current_region}"
+  artifacts_bucket_prefix = "echostream-artifacts"
   artifacts_account_id    = "672550935748"
   artifacts = {
-    lambda                 = "${var.hl7_ninja_version}/lambda/control"
-    tenant_lambda          = "${var.hl7_ninja_version}/lambda/tenant"
-    appsync                = "${var.hl7_ninja_version}/appsync"
-    frontend               = "${var.hl7_ninja_version}/frontend"
-    message_types          = "${var.hl7_ninja_version}/message-types"
+    lambda                 = "${var.echostream_version}/lambda/control"
+    tenant_lambda          = "${var.echostream_version}/lambda/tenant"
+    appsync                = "${var.echostream_version}/appsync"
+    frontend               = "${var.echostream_version}/frontend"
+    message_types          = "${var.echostream_version}/message-types"
     hl7_mllp_inbound_node  = "${local.artifacts_account_id}.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-inbound-node"
     hl7_mllp_outbound_node = "${local.artifacts_account_id}.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-outbound-node"
   }
@@ -38,7 +38,6 @@ locals {
     graph_table_manage_queues                = "${local.artifacts["lambda"]}/graph-table-manage-queues.zip"
     graph_table_manage_users                 = "${local.artifacts["lambda"]}/graph-table-manage-users.zip"
     graph_table_put_app_policies             = "${local.artifacts["lambda"]}/graph-table-put-app-policies.zip"
-    ninja_tools_layer                        = "${local.artifacts["lambda"]}/ninja-tools-layer.zip"
     ui_cognito_post_signup                   = "${local.artifacts["lambda"]}/ui-cognito-post-signup.zip"
     ui_cognito_pre_authentication            = "${local.artifacts["lambda"]}/ui-cognito-pre-authentication.zip"
     ui_cognito_pre_signup                    = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"

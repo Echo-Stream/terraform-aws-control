@@ -118,8 +118,8 @@ data "aws_iam_policy_document" "graph_table_manage_users" {
     ]
 
     resources = [
-      aws_appsync_graphql_api.hl7_ninja.arn,
-      "${aws_appsync_graphql_api.hl7_ninja.arn}/types/mutation/fields/StreamNotifications"
+      aws_appsync_graphql_api.echostream.arn,
+      "${aws_appsync_graphql_api.echostream.arn}/types/mutation/fields/StreamNotifications"
     ]
 
     sid = "AppsyncMutationQueryAccess"
@@ -139,9 +139,9 @@ module "graph_table_manage_users" {
 
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
-    EMAIL_FROM             = "support@hl7.ninja"
+    EMAIL_FROM             = var.ses_email_address
     EMAIL_CC               = ""
-    EMAIL_REPLY_TO         = "support@hl7.ninja"
+    EMAIL_REPLY_TO         = var.ses_email_address
     EMAIL_RETURN_PATH      = ""
     ENVIRONMENT            = var.environment_prefix
     USER_REMOVED_TEMPLATE  = aws_ses_template.remove_user.id
@@ -196,8 +196,8 @@ data "aws_iam_policy_document" "graph_table_put_app_policies" {
   #   ]
 
   #   resources = [
-  #     aws_appsync_graphql_api.hl7_ninja.arn,
-  #     "${aws_appsync_graphql_api.hl7_ninja.arn}/types/mutation/fields/StreamNotifications"
+  #     aws_appsync_graphql_api.echostream.arn,
+  #     "${aws_appsync_graphql_api.echostream.arn}/types/mutation/fields/StreamNotifications"
   #   ]
 
   #   sid = "AppsyncFieldAndAPIAccess"
@@ -257,7 +257,7 @@ data "aws_iam_policy_document" "graph_table_put_app_policies" {
       "cognito-idp:AdminGetUser",
     ]
 
-    resources = [aws_cognito_user_pool.hl7_ninja_apps.arn]
+    resources = [aws_cognito_user_pool.echostream_apps.arn]
 
     sid = "AdminGetUser"
   }
@@ -279,7 +279,7 @@ module "graph_table_put_app_policies" {
     ENVIRONMENT            = var.environment_prefix
     MANAGED_APP_ROLE       = aws_iam_role.authenticated.arn
     NODE_FUNCTION_ROLE     = aws_iam_role.tenant_function_role.arn
-    USER_POOL_ID           = aws_cognito_user_pool.hl7_ninja_apps.id
+    USER_POOL_ID           = aws_cognito_user_pool.echostream_apps.id
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
 
@@ -327,8 +327,8 @@ data "aws_iam_policy_document" "graph_table_manage_queues" {
     ]
 
     resources = [
-      aws_appsync_graphql_api.hl7_ninja.arn,
-      "${aws_appsync_graphql_api.hl7_ninja.arn}/types/mutation/fields/StreamNotifications"
+      aws_appsync_graphql_api.echostream.arn,
+      "${aws_appsync_graphql_api.echostream.arn}/types/mutation/fields/StreamNotifications"
     ]
 
     sid = "AppsyncFieldAndAPIAccess"
@@ -445,7 +445,7 @@ data "aws_iam_policy_document" "graph_table_manage_apps" {
     ]
 
     resources = [
-      aws_cognito_user_pool.hl7_ninja_apps.arn
+      aws_cognito_user_pool.echostream_apps.arn
     ]
 
     sid = "AppCognitoPoolAccess"
@@ -458,8 +458,8 @@ data "aws_iam_policy_document" "graph_table_manage_apps" {
     ]
 
     resources = [
-      aws_appsync_graphql_api.hl7_ninja.arn,
-      "${aws_appsync_graphql_api.hl7_ninja.arn}/types/mutation/fields/StreamNotifications"
+      aws_appsync_graphql_api.echostream.arn,
+      "${aws_appsync_graphql_api.echostream.arn}/types/mutation/fields/StreamNotifications"
     ]
 
     sid = "AppsyncMutationQueryAccess"
@@ -505,14 +505,14 @@ module "graph_table_manage_apps" {
 
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
-    APP_USER_POOL_ID       = aws_cognito_user_pool.hl7_ninja_apps.id
-    APP_IDENTITY_POOL_ID   = aws_cognito_identity_pool.hl7_ninja.id
+    APP_USER_POOL_ID       = aws_cognito_user_pool.echostream_apps.id
+    APP_IDENTITY_POOL_ID   = aws_cognito_identity_pool.echostream.id
     SSM_EXPIRATION         = ""
     SSM_SERVICE_ROLE       = aws_iam_role.manage_apps_ssm_service_role.arn
     APP_CLOUD_INIT_TOPIC   = aws_sns_topic.hl7_app_cloud_init.name
     ENVIRONMENT            = var.environment_prefix
-    INBOUNDER_ECR_URL      = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.hl7_ninja_version}"
-    OUTBOUNDER_ECR_URL     = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.hl7_ninja_version}"
+    INBOUNDER_ECR_URL      = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.echostream_version}"
+    OUTBOUNDER_ECR_URL     = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.echostream_version}"
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
 
@@ -559,8 +559,8 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
 
     resources = [
-      aws_appsync_graphql_api.hl7_ninja.arn,
-      "${aws_appsync_graphql_api.hl7_ninja.arn}/types/mutation/*"
+      aws_appsync_graphql_api.echostream.arn,
+      "${aws_appsync_graphql_api.echostream.arn}/types/mutation/*"
     ]
 
     sid = "AppsyncMutationQueryAccess"
@@ -591,7 +591,7 @@ resource "aws_iam_policy" "graph_table_tenant_stream_handler" {
 }
 
 module "graph_table_tenant_stream_handler" {
-  description     = "Delegates calls to handling lambda functions in HL7-Ninja Dynamodb Stream"
+  description     = "Delegates calls to handling lambda functions in EchoStream Dynamodb Stream"
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
@@ -680,7 +680,7 @@ data "aws_iam_policy_document" "graph_table_manage_message_types" {
     ]
 
     resources = [
-      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}/${local.artifacts["lambda"]}/*"
+      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${local.artifacts["lambda"]}/*"
     ]
 
     sid = "GetValidateFnLambda"
@@ -774,7 +774,7 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
     ]
 
     resources = [
-      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}/${local.artifacts["tenant_lambda"]}/*"
+      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${local.artifacts["tenant_lambda"]}/*"
     ]
 
     sid = "GetArtifacts"
@@ -850,8 +850,8 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
     ]
 
     resources = [
-      "arn:aws:appsync:${local.current_region}:${var.allowed_account_id}:apis/${aws_appsync_graphql_api.hl7_ninja.id}",
-      "arn:aws:appsync:${local.current_region}:${var.allowed_account_id}:apis/${aws_appsync_graphql_api.hl7_ninja.id}/types/mutation/fields/*",
+      "arn:aws:appsync:${local.current_region}:${var.allowed_account_id}:apis/${aws_appsync_graphql_api.echostream.id}",
+      "arn:aws:appsync:${local.current_region}:${var.allowed_account_id}:apis/${aws_appsync_graphql_api.echostream.id}/types/mutation/fields/*",
     ]
 
     sid = "AppSync"
@@ -908,7 +908,7 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
     ]
 
     resources = [
-      aws_cognito_user_pool.hl7_ninja_ui.arn
+      aws_cognito_user_pool.echostream_ui.arn
     ]
 
     sid = "Cognito"
@@ -932,7 +932,7 @@ module "graph_table_manage_tenants" {
     ENVIRONMENT               = var.environment_prefix
     TENANT_STREAM_HANDLER     = module.graph_table_tenant_stream_handler.arn
     INTERNAL_APPSYNC_ROLES    = local.internal_appsync_role_names
-    UI_USER_POOL_ID           = aws_cognito_user_pool.hl7_ninja_ui.id
+    UI_USER_POOL_ID           = aws_cognito_user_pool.echostream_ui.id
     DYNAMODB_TRIGGER_FUNCTION = module.graph_table_dynamodb_trigger.arn
   }
 

@@ -3,6 +3,7 @@ resource "aws_sqs_queue" "default_tenant_sqs_queue" {
   content_based_deduplication = "true"
   fifo_queue                  = true
   tags                        = local.tags
+  visibility_timeout_seconds  = 300
 }
 
 resource "aws_sqs_queue" "stream_dead_letter_queue" {

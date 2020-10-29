@@ -6,7 +6,7 @@ resource "aws_cloudfront_distribution" "webapp" {
   origin {
     domain_name = "${local.artifacts_bucket}.s3.amazonaws.com"
     origin_id   = "${var.environment_prefix}-webapp"
-    origin_path = "/${var.hl7_ninja_version}/reactjs"
+    origin_path = "/${var.echostream_version}/reactjs"
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path
@@ -102,10 +102,10 @@ resource "aws_route53_record" "webapp_cloudfront" {
 data "template_file" "edge_config" {
   template = file("${path.module}/scripts/edge-config.py.tpl")
   vars = {
-    graphql_endpoint = aws_appsync_graphql_api.hl7_ninja.uris["GRAPHQL"]
-    client_id        = aws_cognito_user_pool_client.hl7_ninja_ui_userpool_client.id
+    graphql_endpoint = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
+    client_id        = aws_cognito_user_pool_client.echostream_ui_userpool_client.id
     region           = local.current_region
-    user_pool_id     = aws_cognito_user_pool.hl7_ninja_ui.id
+    user_pool_id     = aws_cognito_user_pool.echostream_ui.id
   }
 }
 

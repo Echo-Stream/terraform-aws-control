@@ -1,10 +1,10 @@
-resource "aws_cognito_identity_pool" "hl7_ninja" {
+resource "aws_cognito_identity_pool" "echostream" {
   identity_pool_name               = replace(var.environment_prefix, "/[^aA-zZ]/", "")
   allow_unauthenticated_identities = false
 
   cognito_identity_providers {
-    client_id               = aws_cognito_user_pool_client.hl7_ninja_apps_userpool_client.id
-    provider_name           = aws_cognito_user_pool.hl7_ninja_apps.endpoint
+    client_id               = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
+    provider_name           = aws_cognito_user_pool.echostream_apps.endpoint
     server_side_token_check = false
   }
 
@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "authenticated_id_pool_assume_role" {
       test = "StringEquals"
 
       values = [
-        aws_cognito_identity_pool.hl7_ninja.id
+        aws_cognito_identity_pool.echostream.id
       ]
 
       variable = "cognito-identity.amazonaws.com:aud"
@@ -107,7 +107,7 @@ data "aws_iam_policy_document" "unauthenticated_id_pool_assume_role" {
       test = "StringEquals"
 
       values = [
-        aws_cognito_identity_pool.hl7_ninja.id
+        aws_cognito_identity_pool.echostream.id
       ]
 
       variable = "cognito-identity.amazonaws.com:aud"
@@ -146,8 +146,8 @@ resource "aws_iam_role_policy" "unauthenticated" {
 }
 
 # Provides an AWS Cognito Identity Pool Roles Attachment
-resource "aws_cognito_identity_pool_roles_attachment" "hl7_ninja" {
-  identity_pool_id = aws_cognito_identity_pool.hl7_ninja.id
+resource "aws_cognito_identity_pool_roles_attachment" "echostream" {
+  identity_pool_id = aws_cognito_identity_pool.echostream.id
 
   roles = {
     "authenticated"   = aws_iam_role.authenticated.arn

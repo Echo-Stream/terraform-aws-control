@@ -7,7 +7,7 @@ EOH
   }
 
   triggers = {
-    api_id                           = aws_appsync_graphql_api.hl7_ninja.id
+    api_id                           = aws_appsync_graphql_api.echostream.id
     message_type_datasource          = module.message_type_datasource.name
     tenant_datasource                = module.tenant_datasource.name
     node_datasource                  = module.node_datasource.name
