@@ -879,7 +879,7 @@ module "deployment_handler" {
   description = "Does appropriate deployments by getting notified from Artifacts bucket"
 
   environment_variables = {
-    echostream_VERSION         = var.echostream_version
+    ECHOSTREAM_VERSION         = var.echostream_version
     ENVIRONMENT                = var.environment_prefix
     ARTIFACTS_BUCKET           = local.artifacts_bucket
     API_ID                     = aws_appsync_graphql_api.echostream.id
