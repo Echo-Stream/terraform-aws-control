@@ -1502,7 +1502,7 @@ resource "aws_cloudwatch_event_rule" "purge_tenants" {
 }
 
 resource "aws_cloudwatch_event_target" "purge_tenants" {
-  rule      = aws_cloudwatch_event_rule.every_one_minute.name
+  rule      = aws_cloudwatch_event_rule.purge_tenants.name
   target_id = "purge-tenants"
   arn       = module.purge_tenants.arn
 }
