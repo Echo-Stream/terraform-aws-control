@@ -217,8 +217,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     ]
 
     resources = [
-      "arn:aws:s3:::echostream-artifacts-${local.current_region}",
-      "arn:aws:s3:::echostream-artifacts-${local.current_region}/*"
+      "arn:aws:s3:::echostream-artifacts-${local.current_region}"
     ]
 
     sid = "ListArtifactsS3"
