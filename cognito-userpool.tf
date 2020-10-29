@@ -1,4 +1,4 @@
-resource "random_string" "hl7_ninja_ui_external_id" {
+resource "random_string" "echostream_ui_external_id" {
   length  = 36
   lower   = true
   number  = true
@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "cognito_sms_assume_role" {
       test = "StringEquals"
 
       values = [
-        random_string.hl7_ninja_ui_external_id.result,
+        random_string.echostream_ui_external_id.result,
       ]
 
       variable = "sts:ExternalId"
@@ -55,7 +55,7 @@ resource "aws_iam_role_policy" "cognito_sms" {
   role   = aws_iam_role.cognito_sms.id
 }
 
-resource "aws_cognito_user_pool" "hl7_ninja_apps" {
+resource "aws_cognito_user_pool" "echostream_apps" {
   admin_create_user_config {
     allow_admin_create_user_only = true
 
@@ -96,7 +96,7 @@ resource "aws_cognito_user_pool" "hl7_ninja_apps" {
   tags = local.tags
 }
 
-resource "aws_cognito_user_pool_client" "hl7_ninja_apps_userpool_client" {
+resource "aws_cognito_user_pool_client" "echostream_apps_userpool_client" {
   name                   = "${var.environment_prefix}-apps"
   refresh_token_validity = 30
 
@@ -104,7 +104,7 @@ resource "aws_cognito_user_pool_client" "hl7_ninja_apps_userpool_client" {
     "COGNITO",
   ]
 
-  user_pool_id = aws_cognito_user_pool.hl7_ninja_apps.id
+  user_pool_id = aws_cognito_user_pool.echostream_apps.id
 
   explicit_auth_flows = [
     "ALLOW_REFRESH_TOKEN_AUTH",
@@ -112,8 +112,8 @@ resource "aws_cognito_user_pool_client" "hl7_ninja_apps_userpool_client" {
   ]
 }
 
-### hl7-ninja-ui cognito pool
-resource "aws_cognito_user_pool" "hl7_ninja_ui" {
+### echostream-ui cognito pool
+resource "aws_cognito_user_pool" "echostream_ui" {
   admin_create_user_config {
     allow_admin_create_user_only = false
 
@@ -172,7 +172,7 @@ resource "aws_cognito_user_pool" "hl7_ninja_ui" {
   sms_authentication_message = "Your authentication code is {####}. "
 
   sms_configuration {
-    external_id    = random_string.hl7_ninja_ui_external_id.result
+    external_id    = random_string.echostream_ui_external_id.result
     sns_caller_arn = aws_iam_role.cognito_sms.arn
   }
 
@@ -193,7 +193,7 @@ resource "aws_cognito_user_pool" "hl7_ninja_ui" {
   tags = local.tags
 }
 
-resource "aws_cognito_user_pool_client" "hl7_ninja_ui_userpool_client" {
+resource "aws_cognito_user_pool_client" "echostream_ui_userpool_client" {
   name                   = "${var.environment_prefix}-reactjs"
   refresh_token_validity = 30
 
@@ -201,7 +201,7 @@ resource "aws_cognito_user_pool_client" "hl7_ninja_ui_userpool_client" {
     "COGNITO",
   ]
 
-  user_pool_id = aws_cognito_user_pool.hl7_ninja_ui.id
+  user_pool_id = aws_cognito_user_pool.echostream_ui.id
 
   explicit_auth_flows = [
     "ALLOW_REFRESH_TOKEN_AUTH",
@@ -211,7 +211,7 @@ resource "aws_cognito_user_pool_client" "hl7_ninja_ui_userpool_client" {
 
 ## Amazon Cognito domain, Will be a Custom Domain in Future
 
-resource "aws_cognito_user_pool_domain" "hl7_ninja_amazon_cognito_domain" {
+resource "aws_cognito_user_pool_domain" "echostream_amazon_cognito_domain" {
   domain       = var.environment_prefix
-  user_pool_id = aws_cognito_user_pool.hl7_ninja_ui.id
+  user_pool_id = aws_cognito_user_pool.echostream_ui.id
 }

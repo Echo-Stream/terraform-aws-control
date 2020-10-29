@@ -7,24 +7,24 @@ data "aws_s3_bucket_object" "graphql_schema" {
   key    = "${local.artifacts["appsync"]}/schema.graphql"
 }
 
-resource "aws_appsync_graphql_api" "hl7_ninja" {
+resource "aws_appsync_graphql_api" "echostream" {
   authentication_type = "AMAZON_COGNITO_USER_POOLS"
 
   log_config {
-    cloudwatch_logs_role_arn = aws_iam_role.hl7_ninja_appsync.arn
+    cloudwatch_logs_role_arn = aws_iam_role.echostream_appsync.arn
     field_log_level          = "ERROR"
   }
 
   user_pool_config {
     default_action = "ALLOW"
-    user_pool_id   = aws_cognito_user_pool.hl7_ninja_apps.id
+    user_pool_id   = aws_cognito_user_pool.echostream_apps.id
   }
 
   additional_authentication_provider {
     authentication_type = "AMAZON_COGNITO_USER_POOLS"
 
     user_pool_config {
-      user_pool_id = aws_cognito_user_pool.hl7_ninja_ui.id
+      user_pool_id = aws_cognito_user_pool.echostream_ui.id
     }
   }
 
@@ -38,13 +38,13 @@ resource "aws_appsync_graphql_api" "hl7_ninja" {
   tags = local.tags
 }
 
-resource "aws_iam_role" "hl7_ninja_appsync" {
+resource "aws_iam_role" "echostream_appsync" {
   name               = "${var.environment_prefix}-appsync"
   assume_role_policy = data.aws_iam_policy_document.appsync_assume_role.json
   tags               = local.tags
 }
 
-resource "aws_iam_role_policy_attachment" "hl7_ninja_appsync" {
+resource "aws_iam_role_policy_attachment" "echostream_appsync" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs"
-  role       = aws_iam_role.hl7_ninja_appsync.name
+  role       = aws_iam_role.echostream_appsync.name
 }

@@ -5,10 +5,10 @@ module "process_audit_record" {
   description = "Processes a message audit record as it passes through the firehose"
 
   environment_variables = {
-    APP_CLIENT_ID   = aws_cognito_user_pool_client.hl7_ninja_apps_userpool_client.id
+    APP_CLIENT_ID   = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
     ENVIRONMENT     = var.environment_prefix
     ID_TOKEN_KEY    = local.id_token_key
-    USERPOOL_ID     = aws_cognito_user_pool.hl7_ninja_apps.id
+    USERPOOL_ID     = aws_cognito_user_pool.echostream_apps.id
     USERPOOL_REGION = local.current_region
   }
 

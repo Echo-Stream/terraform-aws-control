@@ -205,7 +205,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     ]
 
     resources = [
-      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}/${local.artifacts["message_types"]}/*"
+      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${local.artifacts["message_types"]}/*"
     ]
 
     sid = "GetMessageTypesArtifacts"
@@ -217,7 +217,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     ]
 
     resources = [
-      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}"
+      "arn:aws:s3:::echostream-artifacts-${local.current_region}"
     ]
 
     sid = "ListArtifactsS3"
@@ -239,7 +239,7 @@ module "appsync_tenant_datasource" {
     ENVIRONMENT             = var.environment_prefix
     LOG_LEVEL               = "INFO"
     ARTIFACTS_BUCKET        = local.artifacts_bucket
-    APP_VERSION             = var.hl7_ninja_version
+    APP_VERSION             = var.echostream_version
     STREAM_HANDLER_FUNCTION = module.graph_table_tenant_stream_handler.arn
     DEAD_LETTER_QUEUE       = aws_sqs_queue.stream_dead_letter_queue.arn
   }
@@ -261,15 +261,6 @@ module "appsync_tenant_datasource" {
   timeout       = 30
   version       = "3.0.10"
 }
-
-# ################################
-# ##     ninja_tools_layer      ##
-# ################################
-# resource "aws_lambda_layer_version" "ninja_tools" {
-#   s3_bucket  = local.artifacts_bucket
-#   s3_key     = local.lambda_functions_keys["ninja_tools_layer"]
-#   layer_name = "ninja-tools-layer"
-# }
 
 ######################################
 ##  app-cognito-pre-authentication  ##
@@ -329,7 +320,7 @@ resource "aws_lambda_permission" "app_cognito_pre_authentication" {
   action        = "lambda:InvokeFunction"
   function_name = module.app_cognito_pre_authentication.name
   principal     = "cognito-idp.amazonaws.com"
-  source_arn    = aws_cognito_user_pool.hl7_ninja_apps.arn
+  source_arn    = aws_cognito_user_pool.echostream_apps.arn
 }
 
 ########################################
@@ -390,7 +381,7 @@ resource "aws_lambda_permission" "app_cognito_pre_token_generation" {
   action        = "lambda:InvokeFunction"
   function_name = module.app_cognito_pre_token_generation.name
   principal     = "cognito-idp.amazonaws.com"
-  source_arn    = aws_cognito_user_pool.hl7_ninja_apps.arn
+  source_arn    = aws_cognito_user_pool.echostream_apps.arn
 }
 
 ###############################
@@ -537,7 +528,7 @@ resource "aws_lambda_permission" "ui_cognito_post_signup" {
   action        = "lambda:InvokeFunction"
   function_name = module.ui_cognito_post_signup.name
   principal     = "cognito-idp.amazonaws.com"
-  source_arn    = aws_cognito_user_pool.hl7_ninja_ui.arn
+  source_arn    = aws_cognito_user_pool.echostream_ui.arn
 }
 
 #####################################
@@ -599,7 +590,7 @@ resource "aws_lambda_permission" "ui_cognito_pre_authentication" {
   action        = "lambda:InvokeFunction"
   function_name = module.ui_cognito_pre_authentication.name
   principal     = "cognito-idp.amazonaws.com"
-  source_arn    = aws_cognito_user_pool.hl7_ninja_ui.arn
+  source_arn    = aws_cognito_user_pool.echostream_ui.arn
 }
 
 #############################
@@ -660,7 +651,7 @@ resource "aws_lambda_permission" "ui_cognito_pre_signup" {
   action        = "lambda:InvokeFunction"
   function_name = module.ui_cognito_pre_signup.name
   principal     = "cognito-idp.amazonaws.com"
-  source_arn    = aws_cognito_user_pool.hl7_ninja_ui.arn
+  source_arn    = aws_cognito_user_pool.echostream_ui.arn
 }
 
 #######################################
@@ -721,7 +712,7 @@ resource "aws_lambda_permission" "ui_cognito_pre_token_generation" {
   action        = "lambda:InvokeFunction"
   function_name = module.ui_cognito_pre_token_generation.name
   principal     = "cognito-idp.amazonaws.com"
-  source_arn    = aws_cognito_user_pool.hl7_ninja_ui.arn
+  source_arn    = aws_cognito_user_pool.echostream_ui.arn
 }
 
 #########################
@@ -783,7 +774,7 @@ module "appsync_message_type_datasource" {
     ENVIRONMENT     = var.environment_prefix
     LOG_LEVEL       = "INFO"
     ARTIFACT_BUCKET = local.artifacts_bucket
-    APP_VERSION     = var.hl7_ninja_version
+    APP_VERSION     = var.echostream_version
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -846,7 +837,7 @@ data "aws_iam_policy_document" "deployment_handler" {
     ]
 
     resources = [
-      "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:hl7-ninja-artifacts-${local.current_region}"
+      "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}"
     ]
 
     sid = "RegionalArtifactsSNSTopicSubscription"
@@ -858,7 +849,7 @@ data "aws_iam_policy_document" "deployment_handler" {
     ]
 
     resources = [
-      "arn:aws:s3:::hl7-ninja-artifacts-${local.current_region}/*"
+      "arn:aws:s3:::echostream-artifacts-${local.current_region}/*"
     ]
 
     sid = "GetArtifacts"
@@ -888,10 +879,10 @@ module "deployment_handler" {
   description = "Does appropriate deployments by getting notified from Artifacts bucket"
 
   environment_variables = {
-    HL7_NINJA_VERSION          = var.hl7_ninja_version
+    echostream_VERSION         = var.echostream_version
     ENVIRONMENT                = var.environment_prefix
     ARTIFACTS_BUCKET           = local.artifacts_bucket
-    API_ID                     = aws_appsync_graphql_api.hl7_ninja.id
+    API_ID                     = aws_appsync_graphql_api.echostream.id
     CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.webapp.id
   }
 
@@ -919,11 +910,11 @@ resource "aws_lambda_permission" "deployment_handler" {
   action        = "lambda:InvokeFunction"
   function_name = module.deployment_handler.name
   principal     = "sns.amazonaws.com"
-  source_arn    = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:hl7-ninja-artifacts-${local.current_region}"
+  source_arn    = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}"
 }
 
 resource "aws_sns_topic_subscription" "deployment_handler" {
-  topic_arn = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:hl7-ninja-artifacts-${local.current_region}"
+  topic_arn = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}"
   protocol  = "lambda"
   endpoint  = module.deployment_handler.arn
 }
@@ -990,7 +981,7 @@ data "aws_iam_policy_document" "appsync_app_datasource" {
     ]
 
     resources = [
-      aws_cognito_user_pool.hl7_ninja_apps.arn
+      aws_cognito_user_pool.echostream_apps.arn
     ]
 
     sid = "AppCognitoPoolAccess"
@@ -1021,15 +1012,15 @@ module "appsync_app_datasource" {
     DYNAMODB_TABLE       = module.graph_table.name
     LOG_LEVEL            = "INFO"
     ENVIRONMENT          = var.environment_prefix
-    APP_USER_POOL_ID     = aws_cognito_user_pool.hl7_ninja_apps.id
-    APP_IDENTITY_POOL_ID = aws_cognito_identity_pool.hl7_ninja.id
+    APP_USER_POOL_ID     = aws_cognito_user_pool.echostream_apps.id
+    APP_IDENTITY_POOL_ID = aws_cognito_identity_pool.echostream.id
     SSM_SERVICE_ROLE     = aws_iam_role.manage_apps_ssm_service_role.name
     APP_CLOUD_INIT_TOPIC = aws_sns_topic.hl7_app_cloud_init.name
-    INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.hl7_ninja_version}"
-    OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.hl7_ninja_version}"
-    APP_CLIENT_ID        = aws_cognito_user_pool_client.hl7_ninja_apps_userpool_client.id
+    INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.echostream_version}"
+    OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.echostream_version}"
+    APP_CLIENT_ID        = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
     COGNITO_ROLE_ARN     = aws_iam_role.authenticated.arn
-    APPSYNC_ENDPOINT     = aws_appsync_graphql_api.hl7_ninja.uris["GRAPHQL"]
+    APPSYNC_ENDPOINT     = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
     AUDIT_FIREHOSE       = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
   }
 
@@ -1474,7 +1465,7 @@ module "purge_tenants" {
     DYNAMODB_TABLE    = module.graph_table.name
     ENVIRONMENT       = var.environment_prefix
     LOG_LEVEL         = "INFO"
-    UI_USER_POOL_ID   = aws_cognito_user_pool.hl7_ninja_ui.id
+    UI_USER_POOL_ID   = aws_cognito_user_pool.echostream_ui.id
     DB_STREAM_HANDLER = module.graph_table_tenant_stream_handler.name
   }
   handler     = "function.handler"

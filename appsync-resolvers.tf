@@ -6,7 +6,7 @@
 data "template_file" "resolver_sh" {
   template = file("${path.module}/scripts/resolvers.sh.tpl")
   vars = {
-    api_id                           = aws_appsync_graphql_api.hl7_ninja.id
+    api_id                           = aws_appsync_graphql_api.echostream.id
     tenant_datasource                = module.tenant_datasource.name
     node_datasource                  = module.node_datasource.name
     edge_datasource                  = module.appsync_edge_lambda_datasource.name
@@ -39,7 +39,7 @@ resource "null_resource" "all_resolvers" {
     command = "./ ${data.template_file.resolver_sh.rendered}"
   }
   triggers = {
-    api_id                           = aws_appsync_graphql_api.hl7_ninja.id
+    api_id                           = aws_appsync_graphql_api.echostream.id
     template                         = data.template_file.resolver_sh.rendered
     message_type_datasource          = module.message_type_datasource.name
     tenant_datasource                = module.tenant_datasource.name

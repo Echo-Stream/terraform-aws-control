@@ -2,7 +2,7 @@
 ### Datasources ###
 ###################
 module "appsync_kms_key_lambda_datasource" {
-  api_id                   = aws_appsync_graphql_api.hl7_ninja.id
+  api_id                   = aws_appsync_graphql_api.echostream.id
   description              = "Lambda datasource that manages SQS/KMS resource and IAM policies from a Dynamodb Stream"
   invoke_lambda_policy_arn = module.appsync_kms_key_datasource.invoke_policy_arn
   lambda_function_arn      = module.appsync_kms_key_datasource.arn
@@ -12,7 +12,7 @@ module "appsync_kms_key_lambda_datasource" {
 }
 
 module "appsync_edge_lambda_datasource" {
-  api_id                   = aws_appsync_graphql_api.hl7_ninja.id
+  api_id                   = aws_appsync_graphql_api.echostream.id
   description              = "Appsync lambda datasource for managing edges"
   invoke_lambda_policy_arn = module.appsync_edge_datasource.invoke_policy_arn
   lambda_function_arn      = module.appsync_edge_datasource.arn
@@ -22,8 +22,8 @@ module "appsync_edge_lambda_datasource" {
 }
 
 module "appsync_graph_table_datasource" {
-  api_id              = aws_appsync_graphql_api.hl7_ninja.id
-  description         = "hl7-ninja-graph-table dynamodb datasource"
+  api_id              = aws_appsync_graphql_api.echostream.id
+  description         = "graph-table dynamodb datasource"
   dynamodb_table_arn  = module.graph_table.arn
   dynamodb_table_name = module.graph_table.name
   name                = replace("${var.environment_prefix}_dynamodb", "-", "_")
@@ -32,13 +32,13 @@ module "appsync_graph_table_datasource" {
 }
 
 resource "aws_appsync_datasource" "none" {
-  api_id = aws_appsync_graphql_api.hl7_ninja.id
+  api_id = aws_appsync_graphql_api.echostream.id
   name   = "none"
   type   = "NONE"
 }
 
 module "validate_function_datasource" {
-  api_id                   = aws_appsync_graphql_api.hl7_ninja.id
+  api_id                   = aws_appsync_graphql_api.echostream.id
   description              = "Appsync lambda datasource for Validate function"
   invoke_lambda_policy_arn = module.appsync_validate_function_datasource.invoke_policy_arn
   lambda_function_arn      = module.appsync_validate_function_datasource.arn
@@ -48,7 +48,7 @@ module "validate_function_datasource" {
 }
 
 module "tenant_datasource" {
-  api_id                   = aws_appsync_graphql_api.hl7_ninja.id
+  api_id                   = aws_appsync_graphql_api.echostream.id
   description              = "Appsync lambda datasource for appsync-tenant-datasource function"
   invoke_lambda_policy_arn = module.appsync_tenant_datasource.invoke_policy_arn
   lambda_function_arn      = module.appsync_tenant_datasource.arn
@@ -58,7 +58,7 @@ module "tenant_datasource" {
 }
 
 module "app_datasource" {
-  api_id                   = aws_appsync_graphql_api.hl7_ninja.id
+  api_id                   = aws_appsync_graphql_api.echostream.id
   description              = "Appsync lambda datasource for appsync-app-datasource function"
   invoke_lambda_policy_arn = module.appsync_app_datasource.invoke_policy_arn
   lambda_function_arn      = module.appsync_app_datasource.arn
@@ -68,7 +68,7 @@ module "app_datasource" {
 }
 
 module "message_type_datasource" {
-  api_id                   = aws_appsync_graphql_api.hl7_ninja.id
+  api_id                   = aws_appsync_graphql_api.echostream.id
   description              = "Appsync lambda datasource for appsync-app-datasource function"
   invoke_lambda_policy_arn = module.appsync_message_type_datasource.invoke_policy_arn
   lambda_function_arn      = module.appsync_message_type_datasource.arn
@@ -78,7 +78,7 @@ module "message_type_datasource" {
 }
 
 module "sub_field_datasource" {
-  api_id                   = aws_appsync_graphql_api.hl7_ninja.id
+  api_id                   = aws_appsync_graphql_api.echostream.id
   description              = "Appsync lambda datasource for appsync-sub-field-datasource function"
   invoke_lambda_policy_arn = module.appsync_sub_field_datasource.invoke_policy_arn
   lambda_function_arn      = module.appsync_sub_field_datasource.arn
@@ -88,7 +88,7 @@ module "sub_field_datasource" {
 }
 
 module "large_message_storage_datasource" {
-  api_id                   = aws_appsync_graphql_api.hl7_ninja.id
+  api_id                   = aws_appsync_graphql_api.echostream.id
   description              = "Appsync lambda datasource for appsync-large-message-storage-datasource function"
   invoke_lambda_policy_arn = module.appsync_large_message_storage_datasource.invoke_policy_arn
   lambda_function_arn      = module.appsync_large_message_storage_datasource.arn
@@ -98,7 +98,7 @@ module "large_message_storage_datasource" {
 }
 
 module "node_datasource" {
-  api_id                   = aws_appsync_graphql_api.hl7_ninja.id
+  api_id                   = aws_appsync_graphql_api.echostream.id
   description              = "Appsync lambda datasource for appsync-node-datasource function"
   invoke_lambda_policy_arn = module.appsync_node_datasource.invoke_policy_arn
   lambda_function_arn      = module.appsync_node_datasource.arn
@@ -109,7 +109,7 @@ module "node_datasource" {
 
 
 module "subscription_datasource" {
-  api_id                   = aws_appsync_graphql_api.hl7_ninja.id
+  api_id                   = aws_appsync_graphql_api.echostream.id
   description              = "Appsync lambda datasource for appsync-subscription-datasource function"
   invoke_lambda_policy_arn = module.appsync_subscription_datasource.invoke_policy_arn
   lambda_function_arn      = module.appsync_subscription_datasource.arn
