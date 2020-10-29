@@ -3,7 +3,7 @@ variable "allowed_account_id" {
   type        = string
 }
 
-variable "hl7_ninja_version" {
+variable "echostream_version" {
   description = "Major.Minor Version to fetch artifacts from right location"
   type        = string
 }
