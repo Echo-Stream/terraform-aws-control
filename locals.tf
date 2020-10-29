@@ -37,7 +37,7 @@ locals {
     graph_table_manage_apps                  = "${local.artifacts["lambda"]}/graph-table-manage-apps.zip"
     graph_table_manage_queues                = "${local.artifacts["lambda"]}/graph-table-manage-queues.zip"
     graph_table_manage_users                 = "${local.artifacts["lambda"]}/graph-table-manage-users.zip"
-    graph_table_put_app_policies             = "${local.artifacts["lambda"]}/graph-table-put-app-policies.zip"
+    graph_table_manage_resource_policies             = "${local.artifacts["lambda"]}/graph-table-manage-resource-policies.zip"
     ui_cognito_post_signup                   = "${local.artifacts["lambda"]}/ui-cognito-post-signup.zip"
     ui_cognito_pre_authentication            = "${local.artifacts["lambda"]}/ui-cognito-pre-authentication.zip"
     ui_cognito_pre_signup                    = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
@@ -79,7 +79,7 @@ locals {
     "${var.environment_prefix}-graph-table-manage-apps",
     "${var.environment_prefix}-graph-table-manage-queues",
     "${var.environment_prefix}-graph-table-manage-users",
-    "${var.environment_prefix}-graph-table-put-app-policies",
+    "${var.environment_prefix}-graph-table-manage-resource-policies",
     "${var.environment_prefix}-graph-table-tenant-stream-handler",
     "${var.environment_prefix}-graph-table-manage-tenants",
     "${var.environment_prefix}-graph-table-manage-message-types",

@@ -172,9 +172,9 @@ module "graph_table_manage_users" {
 
 
 ##################################
-## graph-table-put-app-policies ##
+## graph-table-manage-resource-policies ##
 ##################################
-data "aws_iam_policy_document" "graph_table_put_app_policies" {
+data "aws_iam_policy_document" "graph_table_manage_resource_policies" {
   statement {
     actions = [
       "dynamodb:GetItem",
@@ -263,14 +263,14 @@ data "aws_iam_policy_document" "graph_table_put_app_policies" {
   }
 }
 
-resource "aws_iam_policy" "graph_table_put_app_policies" {
-  description = "IAM permissions required for graph-table-put-app-policies lambda"
+resource "aws_iam_policy" "graph_table_manage_resource_policies" {
+  description = "IAM permissions required for graph-table-manage-resource-policies lambda"
   path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-graph-table-put-app-policies"
-  policy      = data.aws_iam_policy_document.graph_table_put_app_policies.json
+  name        = "${var.environment_prefix}-graph-table-manage-resource-policies"
+  policy      = data.aws_iam_policy_document.graph_table_manage_resource_policies.json
 }
 
-module "graph_table_put_app_policies" {
+module "graph_table_manage_resource_policies" {
   description     = "Manages SQS/KMS resource and IAM policies from a Dynamodb Stream"
   dead_letter_arn = local.lambda_dead_letter_arn
 
@@ -287,16 +287,16 @@ module "graph_table_put_app_policies" {
   kms_key_arn = local.lambda_env_vars_kms_key_arn
 
   memory_size = 1536
-  name        = "${var.environment_prefix}-graph-table-put-app-policies"
+  name        = "${var.environment_prefix}-graph-table-manage-resource-policies"
 
   policy_arns = [
-    aws_iam_policy.graph_table_put_app_policies.arn,
+    aws_iam_policy.graph_table_manage_resource_policies.arn,
     aws_iam_policy.additional_ddb_policy.arn
   ]
 
   runtime       = "python3.8"
   s3_bucket     = local.artifacts_bucket
-  s3_object_key = local.lambda_functions_keys["graph_table_put_app_policies"]
+  s3_object_key = local.lambda_functions_keys["graph_table_manage_resource_policies"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
@@ -615,7 +615,7 @@ module "graph_table_tenant_stream_handler" {
     module.graph_table_manage_message_types.invoke_policy_arn,
     module.graph_table_manage_users.invoke_policy_arn,
     module.graph_table_manage_tenants.invoke_policy_arn,
-    module.graph_table_put_app_policies.invoke_policy_arn,
+    module.graph_table_manage_resource_policies.invoke_policy_arn,
     module.graph_table_manage_edges.invoke_policy_arn,
     module.graph_table_manage_kms_keys.invoke_policy_arn
   ]
