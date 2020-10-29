@@ -38,3 +38,8 @@ variable "acm_arn" {
   description = "ACM certificate arn for the domain being used for environment"
   type        = string
 }
+
+variable "hl7_ninja_version" {
+  description = "ACM certificate arn for the domain being used for environment"
+  type        = string
+}
