@@ -59,6 +59,7 @@ locals {
     appsync_subscription_datasource          = "${local.artifacts["lambda"]}/appsync-subscription-datasource.zip"
     graph_table_manage_edges                 = "${local.artifacts["lambda"]}/graph-table-manage-edges.zip"
     graph_table_manage_kms_keys              = "${local.artifacts["lambda"]}/graph-table-manage-kms-keys.zip"
+    purge_tenants                            = "${local.artifacts["lambda"]}/purge-tenants.zip"
 
     router_node = "${local.artifacts["tenant_lambda"]}/router-node.zip"
     trans_node  = "${local.artifacts["tenant_lambda"]}/trans-node.zip"

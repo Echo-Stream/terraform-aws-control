@@ -1400,3 +1400,117 @@ module "appsync_subscription_datasource" {
   version       = "3.0.10"
 }
 
+
+##################################
+##  purge-tenants   ##############
+##################################
+data "aws_iam_policy_document" "purge_tenants" {
+  statement {
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:CreateLogGroup",
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "AllowWritingErrorEvents"
+  }
+
+  statement {
+    actions = [
+      "dynamodb:BatchWriteItem",
+      "dynamodb:Query",
+      "dynamodb:DeleteItem"
+    ]
+
+    resources = [
+      module.graph_table.arn,
+      "${module.graph_table.arn}/index/*"
+    ]
+
+    sid = "TableAccess"
+  }
+
+  statement {
+    actions = [
+      "lambda:DeleteEventSourceMapping",
+      "lambda:ListEventSourceMappings",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    condition {
+      test = "StringEquals"
+
+      values = [
+        module.graph_table_tenant_stream_handler.arn
+      ]
+
+      variable = "lambda:FunctionArn"
+    }
+
+    sid = "LambdaEventSourceMappings"
+  }
+}
+
+resource "aws_iam_policy" "purge_tenants" {
+  description = "IAM permissions required for purge-tenants lambda"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-purge-tenants"
+  policy      = data.aws_iam_policy_document.purge_tenants.json
+}
+
+module "purge_tenants" {
+  description     = "purge the remnants of tenants"
+  dead_letter_arn = local.lambda_dead_letter_arn
+  environment_variables = {
+    DYNAMODB_TABLE          = module.graph_table.name
+    ENVIRONMENT             = var.environment_prefix
+    LOG_LEVEL               = "INFO"
+    UI_USER_POOL_ID         = aws_cognito_user_pool.hl7_ninja_ui.id
+    DB_STREAM_HANDLER     = module.graph_table_tenant_stream_handler.name
+  }
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  memory_size = 1536
+  name        = "${var.environment_prefix}-purge-tenants"
+
+  policy_arns = [
+    aws_iam_policy.purge_tenants.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["purge_tenants"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.10"
+}
+
+
+resource "aws_cloudwatch_event_rule" "purge_tenants" {
+  name                = "purge-tenants"
+  description         = "Fires every hour"
+  schedule_expression = "cron(0 * * * ? *)"
+}
+
+resource "aws_cloudwatch_event_target" "purge_tenants" {
+  rule      = aws_cloudwatch_event_rule.every_one_minute.name
+  target_id = "purge-tenants"
+  arn       = module.purge_tenants.arn
+}
+
+resource "aws_lambda_permission" "purge_tenants" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = module.purge_tenants.name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.purge_tenants.arn
+}
