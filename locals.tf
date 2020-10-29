@@ -102,8 +102,8 @@ locals {
 
 
   tags = {
-    Terraform   = "true"
-    App         = "hl7-ninja"
-    Environment = var.environment_prefix
+    terraform   = "true"
+    app         = "hl7-ninja"
+    environment = var.environment_prefix
   }
 }
