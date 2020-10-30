@@ -45,8 +45,8 @@ module "graph_table_dynamodb_trigger" {
   environment_variables = {
     #TYPE_HANDLERS                = file("${path.module}/files/type-handlers-map.json")
     #GRAPH_TYPE_HANDLERS          = ""
-    DYNAMODB_TABLE               = module.graph_table.name
     DEFAULT_TENANT_SQS_QUEUE_URL = aws_sqs_queue.default_tenant_sqs_queue.id
+    DYNAMODB_TABLE               = module.graph_table.name
     ENVIRONMENT                  = var.environment_prefix
     INTERNAL_APPSYNC_ROLES       = local.internal_appsync_role_names
   }
@@ -139,15 +139,15 @@ module "graph_table_manage_users" {
 
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
-    EMAIL_FROM             = var.ses_email_address
     EMAIL_CC               = ""
+    EMAIL_FROM             = var.ses_email_address
     EMAIL_REPLY_TO         = var.ses_email_address
     EMAIL_RETURN_PATH      = ""
     ENVIRONMENT            = var.environment_prefix
-    USER_REMOVED_TEMPLATE  = aws_ses_template.remove_user.id
-    NEW_USER_TEMPLATE      = aws_ses_template.invite_user.id
     EXISTING_USER_TEMPLATE = aws_ses_template.notify_user.id
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
+    NEW_USER_TEMPLATE      = aws_ses_template.invite_user.id
+    USER_REMOVED_TEMPLATE  = aws_ses_template.remove_user.id
   }
 
   handler     = "function.handler"
@@ -277,10 +277,10 @@ module "graph_table_manage_resource_policies" {
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
     ENVIRONMENT            = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     MANAGED_APP_ROLE       = aws_iam_role.authenticated.arn
     NODE_FUNCTION_ROLE     = aws_iam_role.tenant_function_role.arn
     USER_POOL_ID           = aws_cognito_user_pool.echostream_apps.id
-    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
 
   handler     = "function.handler"
@@ -504,16 +504,16 @@ module "graph_table_manage_apps" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    DYNAMODB_TABLE         = module.graph_table.name
-    APP_USER_POOL_ID       = aws_cognito_user_pool.echostream_apps.id
-    APP_IDENTITY_POOL_ID   = aws_cognito_identity_pool.echostream.id
-    SSM_EXPIRATION         = ""
-    SSM_SERVICE_ROLE       = aws_iam_role.manage_apps_ssm_service_role.arn
     APP_CLOUD_INIT_TOPIC   = aws_sns_topic.hl7_app_cloud_init.name
+    APP_IDENTITY_POOL_ID   = aws_cognito_identity_pool.echostream.id
+    APP_USER_POOL_ID       = aws_cognito_user_pool.echostream_apps.id
+    DYNAMODB_TABLE         = module.graph_table.name
     ENVIRONMENT            = var.environment_prefix
     INBOUNDER_ECR_URL      = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.echostream_version}"
-    OUTBOUNDER_ECR_URL     = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.echostream_version}"
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
+    OUTBOUNDER_ECR_URL     = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.echostream_version}"
+    SSM_EXPIRATION         = ""
+    SSM_SERVICE_ROLE       = aws_iam_role.manage_apps_ssm_service_role.arn
   }
 
 
@@ -595,10 +595,10 @@ module "graph_table_tenant_stream_handler" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    TYPE_HANDLERS          = file("${path.module}/files/type-handlers-map.json")
     DYNAMODB_TABLE         = module.graph_table.name
     ENVIRONMENT            = var.environment_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
+    TYPE_HANDLERS          = file("${path.module}/files/type-handlers-map.json")
   }
 
   handler     = "function.handler"
@@ -712,10 +712,10 @@ module "graph_table_manage_message_types" {
   environment_variables = {
     DYNAMODB_TABLE             = module.graph_table.name
     ENVIRONMENT                = var.environment_prefix
-    LAMBDA_ROLE_ARN            = aws_iam_role.tenant_function_role.arn
     FUNCTIONS_BUCKET           = local.artifacts_bucket
-    VALIDATION_FUNCTION_S3_KEY = local.lambda_functions_keys["validate_function"]
     INTERNAL_APPSYNC_ROLES     = local.internal_appsync_role_names
+    LAMBDA_ROLE_ARN            = aws_iam_role.tenant_function_role.arn
+    VALIDATION_FUNCTION_S3_KEY = local.lambda_functions_keys["validate_function"]
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -805,18 +805,18 @@ module "graph_table_manage_nodes" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    LOG_LEVEL                      = "INFO"
+    ARTIFACTS_BUCKET_PREFIX        = local.artifacts_bucket_prefix
+    AUDIT_FIREHOSE                 = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
     DYNAMODB_TABLE                 = module.graph_table.name
     ENVIRONMENT                    = var.environment_prefix
-    ARTIFACTS_BUCKET_PREFIX        = local.artifacts_bucket_prefix
+    ID_TOKEN_KEY                   = local.id_token_key
+    INTERNAL_APPSYNC_ROLES         = local.internal_appsync_role_names
+    LAMBDA_ROLE_ARN                = aws_iam_role.tenant_function_role.arn
+    LOG_LEVEL                      = "INFO"
+    MANAGED_APP_ROLE               = aws_iam_role.authenticated.arn
     ROUTER_NODE_ARTIFACT           = local.lambda_functions_keys["router_node"]
     TRANS_NODE_ARTIFACT            = local.lambda_functions_keys["trans_node"]
     X_TENANT_SENDING_NODE_ARTIFACT = local.lambda_functions_keys["trans_node"]
-    LAMBDA_ROLE_ARN                = aws_iam_role.tenant_function_role.arn
-    MANAGED_APP_ROLE               = aws_iam_role.authenticated.arn
-    INTERNAL_APPSYNC_ROLES         = local.internal_appsync_role_names
-    ID_TOKEN_KEY                   = local.id_token_key
-    AUDIT_FIREHOSE                 = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
   }
 
   handler     = "function.handler"
@@ -927,13 +927,13 @@ module "graph_table_manage_tenants" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    LOG_LEVEL                 = "INFO"
     DYNAMODB_TABLE            = module.graph_table.name
-    ENVIRONMENT               = var.environment_prefix
-    TENANT_STREAM_HANDLER     = module.graph_table_tenant_stream_handler.arn
-    INTERNAL_APPSYNC_ROLES    = local.internal_appsync_role_names
-    UI_USER_POOL_ID           = aws_cognito_user_pool.echostream_ui.id
     DYNAMODB_TRIGGER_FUNCTION = module.graph_table_dynamodb_trigger.arn
+    ENVIRONMENT               = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES    = local.internal_appsync_role_names
+    LOG_LEVEL                 = "INFO"
+    TENANT_STREAM_HANDLER     = module.graph_table_tenant_stream_handler.arn
+    UI_USER_POOL_ID           = aws_cognito_user_pool.echostream_ui.id
   }
 
   handler     = "function.handler"

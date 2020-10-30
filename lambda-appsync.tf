@@ -235,13 +235,13 @@ module "appsync_tenant_datasource" {
   description     = "Creates/removes tenants and their AWS resources"
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
+    APP_VERSION             = var.echostream_version
+    ARTIFACTS_BUCKET        = local.artifacts_bucket
+    DEAD_LETTER_QUEUE       = aws_sqs_queue.stream_dead_letter_queue.arn
     DYNAMODB_TABLE          = module.graph_table.name
     ENVIRONMENT             = var.environment_prefix
     LOG_LEVEL               = "INFO"
-    ARTIFACTS_BUCKET        = local.artifacts_bucket
-    APP_VERSION             = var.echostream_version
     STREAM_HANDLER_FUNCTION = module.graph_table_tenant_stream_handler.arn
-    DEAD_LETTER_QUEUE       = aws_sqs_queue.stream_dead_letter_queue.arn
   }
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
@@ -770,11 +770,11 @@ module "appsync_message_type_datasource" {
   description = "AppSync datasource lambda function that handles putting of MessageTypes"
 
   environment_variables = {
+    APP_VERSION     = var.echostream_version
+    ARTIFACT_BUCKET = local.artifacts_bucket
     DYNAMODB_TABLE  = module.graph_table.name
     ENVIRONMENT     = var.environment_prefix
     LOG_LEVEL       = "INFO"
-    ARTIFACT_BUCKET = local.artifacts_bucket
-    APP_VERSION     = var.echostream_version
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -879,11 +879,11 @@ module "deployment_handler" {
   description = "Does appropriate deployments by getting notified from Artifacts bucket"
 
   environment_variables = {
+    API_ID                     = aws_appsync_graphql_api.echostream.id
+    ARTIFACTS_BUCKET           = local.artifacts_bucket
+    CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.webapp.id
     ECHOSTREAM_VERSION         = var.echostream_version
     ENVIRONMENT                = var.environment_prefix
-    ARTIFACTS_BUCKET           = local.artifacts_bucket
-    API_ID                     = aws_appsync_graphql_api.echostream.id
-    CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.webapp.id
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1022,19 +1022,19 @@ module "appsync_app_datasource" {
   description = "Appsync datasource for managing app"
 
   environment_variables = {
-    DYNAMODB_TABLE       = module.graph_table.name
-    LOG_LEVEL            = "INFO"
-    ENVIRONMENT          = var.environment_prefix
-    APP_USER_POOL_ID     = aws_cognito_user_pool.echostream_apps.id
-    APP_IDENTITY_POOL_ID = aws_cognito_identity_pool.echostream.id
-    SSM_SERVICE_ROLE     = aws_iam_role.manage_apps_ssm_service_role.name
-    APP_CLOUD_INIT_TOPIC = aws_sns_topic.hl7_app_cloud_init.name
-    INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.echostream_version}"
-    OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.echostream_version}"
-    APP_CLIENT_ID        = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
-    COGNITO_ROLE_ARN     = aws_iam_role.authenticated.arn
     APPSYNC_ENDPOINT     = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
+    APP_CLIENT_ID        = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
+    APP_CLOUD_INIT_TOPIC = aws_sns_topic.hl7_app_cloud_init.name
+    APP_IDENTITY_POOL_ID = aws_cognito_identity_pool.echostream.id
+    APP_USER_POOL_ID     = aws_cognito_user_pool.echostream_apps.id
     AUDIT_FIREHOSE       = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
+    COGNITO_ROLE_ARN     = aws_iam_role.authenticated.arn
+    DYNAMODB_TABLE       = module.graph_table.name
+    ENVIRONMENT          = var.environment_prefix
+    INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.echostream_version}"
+    LOG_LEVEL            = "INFO"
+    OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.echostream_version}"
+    SSM_SERVICE_ROLE     = aws_iam_role.manage_apps_ssm_service_role.name
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1267,10 +1267,10 @@ module "appsync_large_message_storage_datasource" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    LOG_LEVEL         = "INFO"
+    ACCESS_KEY_ID     = aws_iam_access_key.presign_large_messages.id
     DYNAMODB_TABLE    = module.graph_table.name
     ENVIRONMENT       = var.environment_prefix
-    ACCESS_KEY_ID     = aws_iam_access_key.presign_large_messages.id
+    LOG_LEVEL         = "INFO"
     SECRET_ACCESS_KEY = aws_iam_access_key.presign_large_messages.secret
   }
 
@@ -1324,10 +1324,10 @@ module "appsync_validate_function_datasource" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    LOG_LEVEL         = "INFO"
+    ACCESS_KEY_ID     = ""
     DYNAMODB_TABLE    = module.graph_table.name
     ENVIRONMENT       = var.environment_prefix
-    ACCESS_KEY_ID     = ""
+    LOG_LEVEL         = "INFO"
     SECRET_ACCESS_KEY = ""
   }
 
@@ -1381,9 +1381,9 @@ module "appsync_subscription_datasource" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    LOG_LEVEL      = "INFO"
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.environment_prefix
+    LOG_LEVEL      = "INFO"
   }
 
   handler     = "function.handler"
@@ -1477,11 +1477,11 @@ module "purge_tenants" {
   description     = "purge the remnants of tenants"
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
+    DB_STREAM_HANDLER = module.graph_table_tenant_stream_handler.name
     DYNAMODB_TABLE    = module.graph_table.name
     ENVIRONMENT       = var.environment_prefix
     LOG_LEVEL         = "INFO"
     UI_USER_POOL_ID   = aws_cognito_user_pool.echostream_ui.id
-    DB_STREAM_HANDLER = module.graph_table_tenant_stream_handler.name
   }
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
