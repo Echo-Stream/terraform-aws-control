@@ -1002,7 +1002,7 @@ data "aws_iam_policy_document" "appsync_app_datasource" {
     ]
 
     resources = [
-      "test_account_existance-*"
+      "arn:aws:iam::${var.allowed_account_id}:test_account_existance-*"
     ]
 
     sid = "IAMdeletePermissions"
@@ -1457,7 +1457,7 @@ data "aws_iam_policy_document" "purge_tenants" {
     ]
 
     resources = [
-      "_db-stream_*.fifo",
+      "arn:aws:sqs::${var.allowed_account_id}:_db-stream_*.fifo",
     ]
 
     sid = "SqsAction"
