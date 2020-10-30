@@ -36,6 +36,19 @@ data "aws_iam_policy_document" "tenant_function_role" {
 
     sid = "EdgeQueuesAccess"
   }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "dynamodb:GetItem",
+      "dynamodb:Query"
+    ]
+
+    resources = [module.graph_table.arn]
+
+    sid = "GraphTableAccess"
+  }
 }
 
 resource "aws_iam_policy" "tenant_function" {
