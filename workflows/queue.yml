@@ -1,0 +1,43 @@
+name: Terraform Run
+
+on:
+  push:
+    tags:
+    - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set env vars
+      run: |
+        echo "TOKEN=${{ secrets.TERRAFORM_API_KEY }}" >> $GITHUB_ENV
+    - name: Run Terraform
+      run: |
+        workspace_id=`curl \
+        --header "Authorization: Bearer $TOKEN" \
+        --header "Content-Type: application/vnd.api+json" \
+        https://app.terraform.io/api/v2/organizations/EchoStream/workspaces/echo-dev | jq '.data.id'`
+
+        curl \
+        --header "Authorization: Bearer $TOKEN" \
+        --header "Content-Type: application/vnd.api+json" \
+        --request POST \
+        --data '{
+            "data": {
+              "attributes": {
+                "is-destroy": false,
+                "message": "New version of Control Terraform published. Queued by Github actions"
+              },
+              "type": "runs",
+              "relationships": {
+                "workspace": {
+                  "data": {
+                    "type": "workspaces",
+                    "id": '$workspace_id'
+                  }
+                }
+              }
+            }
+          }' https://app.terraform.io/api/v2/runs
