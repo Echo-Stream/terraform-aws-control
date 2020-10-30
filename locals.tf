@@ -26,7 +26,7 @@ locals {
   id_token_key = <<-EOT
                     {
                       "kty": "oct",
-                      "kid": "${random_uuid.for_jwk.result}"
+                      "kid": "${random_uuid.for_jwk.result}",
                       "use": "sig",
                       "alg": "HS256",
                       "k": "${base64encode(random_string.for_jwk.result)}"
