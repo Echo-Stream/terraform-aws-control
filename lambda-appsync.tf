@@ -996,6 +996,17 @@ data "aws_iam_policy_document" "appsync_app_datasource" {
 
     sid = "IAMPermissions"
   }
+  statement {
+    actions = [
+      "iam:DeleteRole",
+    ]
+
+    resources = [
+      "arn:aws:iam::${var.allowed_account_id}:user/test_account_existance-*"
+    ]
+
+    sid = "IAMdeletePermissions"
+  }
 }
 
 resource "aws_iam_policy" "appsync_app_datasource" {
@@ -1437,17 +1448,19 @@ data "aws_iam_policy_document" "purge_tenants" {
       "*"
     ]
 
-    condition {
-      test = "StringEquals"
-
-      values = [
-        module.graph_table_tenant_stream_handler.arn
-      ]
-
-      variable = "lambda:FunctionArn"
-    }
-
     sid = "LambdaEventSourceMappings"
+  }
+  statement {
+    actions = [
+      "sqs:DeleteQueue",
+      "sqs:GetQueueUrl",
+    ]
+
+    resources = [
+      "arn:aws:sqs::${var.allowed_account_id}:_db-stream_*",
+    ]
+
+    sid = "SqsAction"
   }
 }
 
