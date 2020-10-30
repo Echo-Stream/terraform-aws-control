@@ -29,6 +29,18 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
 
     sid = "AllowReadingFromStreams"
   }
+
+  statement {
+    actions = [
+      "dynamodb:PutItem",
+    ]
+
+    resources = [
+      module.graph_table.arn,
+    ]
+
+    sid = "WriteAccesstoTable"
+  }
 }
 
 resource "aws_iam_policy" "graph_table_dynamodb_trigger" {
