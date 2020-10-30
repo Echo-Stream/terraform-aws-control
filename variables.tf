@@ -1,15 +1,10 @@
+variable "acm_arn" {
+  description = "ACM certificate arn for the domain being used for environment"
+  type        = string
+}
+
 variable "allowed_account_id" {
   description = "The Account Id which hosts the environment"
-  type        = string
-}
-
-variable "echostream_version" {
-  description = "Major.Minor Version to fetch artifacts from right location"
-  type        = string
-}
-
-variable "environment_prefix" {
-  description = "Environment Prefix for naming resources, a Unique name that could differentiate whole environment. Lower case only, No periods"
   type        = string
 }
 
@@ -23,9 +18,13 @@ variable "domain_zone_id" {
   type        = string
 }
 
+variable "echostream_version" {
+  description = "Major.Minor Version to fetch artifacts from right location"
+  type        = string
+}
 
-variable "ses_email_address" {
-  description = "Preferred Email Address that SES uses for communication with tenants"
+variable "environment_prefix" {
+  description = "Environment Prefix for naming resources, a Unique name that could differentiate whole environment. Lower case only, No periods"
   type        = string
 }
 
@@ -34,7 +33,10 @@ variable "region" {
   type        = string
 }
 
-variable "acm_arn" {
-  description = "ACM certificate arn for the domain being used for environment"
+variable "ses_email_address" {
+  description = "Preferred Email Address that SES uses for communication with tenants"
   type        = string
 }
+
+
+
