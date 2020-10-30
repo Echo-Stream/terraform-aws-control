@@ -986,6 +986,7 @@ data "aws_iam_policy_document" "appsync_app_datasource" {
 
     sid = "AppCognitoPoolAccess"
   }
+
   statement {
     actions = [
       "iam:CreateRole",
@@ -996,13 +997,14 @@ data "aws_iam_policy_document" "appsync_app_datasource" {
 
     sid = "IAMPermissions"
   }
+
   statement {
     actions = [
       "iam:DeleteRole",
     ]
 
     resources = [
-      "arn:aws:iam::${var.allowed_account_id}:user/test_account_existance-*"
+      "arn:aws:iam::${var.allowed_account_id}:role/test_account_existance-*"
     ]
 
     sid = "IAMdeletePermissions"
@@ -1460,7 +1462,7 @@ data "aws_iam_policy_document" "purge_tenants" {
       "arn:aws:sqs::${var.allowed_account_id}:_db-stream_*",
     ]
 
-    sid = "SqsAction"
+    sid = "PurgeQueues"
   }
 }
 
@@ -1488,7 +1490,6 @@ module "purge_tenants" {
 
   policy_arns = [
     aws_iam_policy.purge_tenants.arn,
-    aws_iam_policy.additional_ddb_policy.arn
   ]
 
   runtime       = "python3.8"
@@ -1503,7 +1504,7 @@ module "purge_tenants" {
 
 resource "aws_cloudwatch_event_rule" "purge_tenants" {
   name                = "${var.environment_prefix}-purge-tenants"
-  description         = "Fires every hour"
+  description         = "Purge ${var.environment_prefix} Tenants hourly"
   schedule_expression = "cron(0 * * * ? *)"
 }
 
