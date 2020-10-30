@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "tenant_function_role" {
       "sqs:GetQueueAttributes"
     ]
 
-    resources = ["arn:aws:sqs:*:*:_edge_*.fifo"]
+    resources = ["arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:_edge_*.fifo"]
 
     sid = "EdgeQueuesAccess"
   }
