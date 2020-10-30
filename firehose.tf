@@ -133,16 +133,6 @@ resource "aws_kinesis_firehose_delivery_stream" "process_audit_record_firehose" 
           parameter_name  = "LambdaArn"
           parameter_value = "${module.process_audit_record.arn}:$LATEST"
         }
-
-        parameters {
-          parameter_name  = "BufferSizeInMBs"
-          parameter_value = 128
-        }
-
-        parameters {
-          parameter_name  = "BufferIntervalInSeconds"
-          parameter_value = 900
-        }
       }
     }
 
