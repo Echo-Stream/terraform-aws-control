@@ -22,7 +22,7 @@ module "process_audit_record" {
   s3_object_key   = local.lambda_functions_keys["process_audit_record"]
   source          = "QuiNovas/lambda/aws"
   tags            = local.tags
-  timeout         = 30
+  timeout         = 300
   version         = "3.0.10"
 }
 
@@ -111,8 +111,8 @@ resource "aws_kinesis_firehose_delivery_stream" "process_audit_record_firehose" 
 
   extended_s3_configuration {
     bucket_arn      = aws_s3_bucket.audit_records.arn
-    buffer_interval = 300
-    buffer_size     = 5
+    buffer_interval = 900
+    buffer_size     = 128
 
     cloudwatch_logging_options {
       enabled         = true

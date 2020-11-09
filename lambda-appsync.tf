@@ -32,9 +32,22 @@ data "aws_iam_policy_document" "tenant_function_role" {
       "sqs:GetQueueAttributes"
     ]
 
-    resources = ["arn:aws:sqs:*:*:_edge_*.fifo"]
+    resources = ["arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:_edge_*.fifo"]
 
     sid = "EdgeQueuesAccess"
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "dynamodb:GetItem",
+      "dynamodb:Query"
+    ]
+
+    resources = [module.graph_table.arn]
+
+    sid = "GraphTableAccess"
   }
 }
 
@@ -82,6 +95,7 @@ data "aws_iam_policy_document" "appsync_kms_key_datasource" {
     actions = [
       "kms:CreateKey",
       "kms:DescribeKey",
+      "kms:PutKeyPolicy",
       "kms:TagResource"
     ]
 
@@ -103,9 +117,10 @@ module "appsync_kms_key_datasource" {
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
 
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
-    LOG_LEVEL      = "INFO"
+    DYNAMODB_TABLE          = module.graph_table.name
+    ENVIRONMENT             = var.environment_prefix
+    INTERNAL_FUNCTIONS_ROLE = aws_iam_role.tenant_function_role.arn
+    LOG_LEVEL               = "INFO"
 
   }
   handler     = "function.handler"
@@ -134,6 +149,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
   statement {
     actions = [
       "kms:CreateKey",
+      "kms:PutKeyPolicy",
       "kms:TagKey",
       "kms:TagResource",
     ]
@@ -240,6 +256,7 @@ module "appsync_tenant_datasource" {
     DEAD_LETTER_QUEUE       = aws_sqs_queue.stream_dead_letter_queue.arn
     DYNAMODB_TABLE          = module.graph_table.name
     ENVIRONMENT             = var.environment_prefix
+    INTERNAL_FUNCTIONS_ROLE = aws_iam_role.tenant_function_role.arn
     LOG_LEVEL               = "INFO"
     STREAM_HANDLER_FUNCTION = module.graph_table_tenant_stream_handler.arn
   }

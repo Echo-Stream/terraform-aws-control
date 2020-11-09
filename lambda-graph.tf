@@ -192,6 +192,7 @@ data "aws_iam_policy_document" "graph_table_manage_resource_policies" {
       "dynamodb:GetItem",
       "dynamodb:PutItem",
       "dynamodb:Query",
+      "dynamodb:UpdateItem"
     ]
 
     resources = [
