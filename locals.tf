@@ -14,6 +14,7 @@ locals {
     lambda                 = "${var.echostream_version}/lambda/control"
     message_types          = "${var.echostream_version}/message-types"
     tenant_lambda          = "${var.echostream_version}/lambda/tenant"
+    glue                   = "${var.echostream_version}/glue"
   }
 
   artifacts_account_id    = "672550935748"

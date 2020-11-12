@@ -64,3 +64,16 @@ data "aws_iam_policy_document" "edge_lambda_assume_role" {
     }
   }
 }
+
+data "aws_iam_policy_document" "aws_glue_assume_role" {
+  statement {
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    principals {
+      identifiers = ["glue.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+}
