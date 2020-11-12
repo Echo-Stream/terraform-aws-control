@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "audit_records" {
     ]
 
     resources = [
-      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${local.artifacts["glue"]}/*"
+      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${lookup(local.artifacts["glue"], "audit_records_etl")}"
     ]
 
     sid = "GetGlueArtifacts"
@@ -94,4 +94,34 @@ resource "aws_glue_crawler" "historical_records" {
 EOF
 
   tags = local.tags
+}
+
+##############
+## Glue Job ##
+##############
+resource "aws_glue_job" "audit_records" {
+  command {
+    script_location = "s3://echostream-artifacts-${local.current_region}/${lookup(local.artifacts["glue"], "audit_records_etl")}"
+    python_version  = 3
+  }
+
+  default_arguments = {
+    "--job-language"        = "python"
+    "--job-bookmark-option" = "job-bookmark-disable"
+    "--bucket"              = aws_s3_bucket.audit_records.id
+    "--database"            = aws_glue_catalog_database.audit_records.id
+  }
+
+  execution_property {
+    max_concurrent_runs = 1
+  }
+
+  glue_version      = "2.0"
+  max_retries       = 1
+  timeout           = 2880
+  name              = "${var.environment_prefix}-audit-records"
+  number_of_workers = 2
+  worker_type       = "G.1X"
+  role_arn          = aws_iam_role.audit_records.arn
+  tags              = local.tags
 }

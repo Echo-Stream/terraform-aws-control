@@ -14,7 +14,9 @@ locals {
     lambda                 = "${var.echostream_version}/lambda/control"
     message_types          = "${var.echostream_version}/message-types"
     tenant_lambda          = "${var.echostream_version}/lambda/tenant"
-    glue                   = "${var.echostream_version}/glue"
+    glue = {
+      audit_records_etl = "${var.echostream_version}/glue/audit-records-etl.py"
+    }
   }
 
   artifacts_account_id    = "672550935748"
