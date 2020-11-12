@@ -55,7 +55,7 @@ data "aws_iam_policy_document" "audit_records" {
 resource "aws_glue_crawler" "current_records" {
   description   = "Crawls over current audit records"
   database_name = aws_glue_catalog_database.audit_records.name
-  name          = "current"
+  name          = "${var.environment_prefix}-current"
   role          = aws_iam_role.audit_records.arn
 
   s3_target {
@@ -77,7 +77,7 @@ EOF
 resource "aws_glue_crawler" "historical_records" {
   description   = "Crawls over historical audit records"
   database_name = aws_glue_catalog_database.audit_records.name
-  name          = "historical"
+  name          = "${var.environment_prefix}-historical"
   role          = aws_iam_role.audit_records.arn
 
   s3_target {
@@ -100,6 +100,8 @@ EOF
 ## Glue Job ##
 ##############
 resource "aws_glue_job" "audit_records" {
+  description = "Extracts audit records and partitions them by tenant into historical table and the end of the every month"
+
   command {
     script_location = "s3://echostream-artifacts-${local.current_region}/${lookup(local.artifacts["glue"], "audit_records_etl")}"
     python_version  = 3
@@ -131,7 +133,7 @@ resource "aws_glue_job" "audit_records" {
 ###################
 resource "aws_glue_workflow" "audit_records" {
   name        = "${var.environment_prefix}-audit-records"
-  description = "ETL Current Audit records to Historical Records"
+  description = "Extracts audit records and partitions them by tenant into historical table and the end of the every month"
   tags        = local.tags
 }
 
@@ -154,7 +156,7 @@ resource "aws_glue_trigger" "audit_records_end" {
   name          = "${var.environment_prefix}-audit-records-end"
   description   = "Triggers Current and Historical Glue Crawlers on successful ETL job completion"
   workflow_name = aws_glue_workflow.audit_records.name
-  type          = "SCHEDULED"
+  type          = "CONDITIONAL"
 
   predicate {
     conditions {
