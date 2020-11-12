@@ -1,14 +1,14 @@
-########################################################
-### Audit records Glue Catalog DB/Tables and Crawler ###
-########################################################
+####################################################
+### Audit Records Glue Catalog DB/Tables/Crawler ###
+####################################################
 resource "aws_glue_catalog_database" "audit_records" {
   description = "Audit Records"
-  name        = "${replace(var.environment, "-", "_")}_audit_records"
+  name        = "${replace(var.environment_prefix, "-", "_")}_audit_records"
 }
 
 resource "aws_iam_role" "audit_records" {
   assume_role_policy = data.aws_iam_policy_document.aws_glue_assume_role.json
-  name               = "${var.environment}-audit-records"
+  name               = "${var.environment_prefix}-audit-records"
   tags               = local.tags
 }
 
@@ -18,7 +18,7 @@ resource "aws_iam_role_policy_attachment" "audit_records" {
 }
 
 resource "aws_iam_role_policy" "audit_records" {
-  name   = "${var.environment}-audit-records"
+  name   = "${var.environment_prefix}-audit-records"
   policy = data.aws_iam_policy_document.audit_records.json
   role   = aws_iam_role.audit_records.id
 }
