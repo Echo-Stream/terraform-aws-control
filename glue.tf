@@ -125,3 +125,51 @@ resource "aws_glue_job" "audit_records" {
   role_arn          = aws_iam_role.audit_records.arn
   tags              = local.tags
 }
+
+###################
+## Glue WorkFlow ##
+###################
+resource "aws_glue_workflow" "audit_records" {
+  name        = "${var.environment_prefix}-audit-records"
+  description = "ETL Current Audit records to Historical Records"
+  tags        = local.tags
+}
+
+resource "aws_glue_trigger" "audit_records_start" {
+  name          = "${var.environment_prefix}-audit-records-start"
+  description   = "Triggers Audit records ETL Job on First of every month at 12:30AM"
+  workflow_name = aws_glue_workflow.audit_records.name
+
+  schedule = "cron(30 0 1 * ? *)"
+  type     = "SCHEDULED"
+
+  actions {
+    job_name = aws_glue_job.audit_records.name
+  }
+
+  tags = local.tags
+}
+
+resource "aws_glue_trigger" "audit_records_end" {
+  name          = "${var.environment_prefix}-audit-records-end"
+  description   = "Triggers Current and Historical Glue Crawlers on successful ETL job completion"
+  workflow_name = aws_glue_workflow.audit_records.name
+  type          = "SCHEDULED"
+
+  predicate {
+    conditions {
+      job_name = aws_glue_job.audit_records.name
+      state    = "SUCCEEDED"
+    }
+  }
+
+  actions {
+    crawler_name = aws_glue_crawler.current_records.id
+  }
+
+  actions {
+    crawler_name = aws_glue_crawler.historical_records.id
+  }
+
+  tags = local.tags
+}
