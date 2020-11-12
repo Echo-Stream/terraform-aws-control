@@ -109,7 +109,7 @@ resource "aws_glue_job" "audit_records" {
     "--job-language"        = "python"
     "--job-bookmark-option" = "job-bookmark-disable"
     "--bucket"              = aws_s3_bucket.audit_records.id
-    "--database"            = aws_glue_catalog_database.audit_records.id
+    "--database"            = aws_glue_catalog_database.audit_records.name
   }
 
   execution_property {
