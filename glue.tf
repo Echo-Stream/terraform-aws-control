@@ -100,7 +100,7 @@ EOF
 ## Glue Job ##
 ##############
 resource "aws_glue_job" "audit_records" {
-  description = "Extracts audit records and partitions them by tenant into historical table and the end of the every month"
+  description = "Extracts audit records and partitions them by tenant into historical table at the end of every month"
 
   command {
     script_location = "s3://echostream-artifacts-${local.current_region}/${lookup(local.artifacts["glue"], "audit_records_etl")}"
@@ -133,7 +133,7 @@ resource "aws_glue_job" "audit_records" {
 ###################
 resource "aws_glue_workflow" "audit_records" {
   name        = "${var.environment_prefix}-audit-records"
-  description = "Extracts audit records and partitions them by tenant into historical table and the end of the every month"
+  description = "Extracts audit records and partitions them by tenant into historical table at the end of every month"
   tags        = local.tags
 }
 
