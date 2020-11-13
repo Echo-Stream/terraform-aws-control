@@ -1225,12 +1225,12 @@ data "aws_iam_policy_document" "presign_large_messages" {
       "kms:Encrypt",
     ]
 
-    resources = [
-      aws_kms_key.kms_us_east_1.arn,
-      aws_kms_key.kms_us_east_2.arn,
-      aws_kms_key.kms_us_west_1.arn,
-      aws_kms_key.kms_us_west_2.arn
-    ]
+    resources = flatten([
+      aws_kms_key.kms_us_east_1.*.arn,
+      aws_kms_key.kms_us_east_2.*.arn,
+      aws_kms_key.kms_us_west_1.*.arn,
+      aws_kms_key.kms_us_west_2.*.arn
+    ])
 
     sid = "EncryptDecryptEnvKMSKeys"
   }

@@ -53,8 +53,8 @@ resource "aws_s3_bucket_public_access_block" "audit_records" {
 module "large_messages_bucket_us_east_1" {
   count       = contains(local.regions, "us-east-1") == true ? 1 : 0
   name        = "${var.environment_prefix}-large-messages-us-east-1"
-  kms_key_arn = aws_kms_key.kms_us_east_1.arn
-  log_bucket  = module.log_bucket_us_east_1.id
+  kms_key_arn = aws_kms_key.kms_us_east_1.0.arn
+  log_bucket  = module.log_bucket_us_east_1.0.id
   tags        = local.tags
 
   providers = {
@@ -68,8 +68,8 @@ module "large_messages_bucket_us_east_1" {
 module "large_messages_bucket_us_east_2" {
   count       = contains(local.regions, "us-east-2") == true ? 1 : 0
   name        = "${var.environment_prefix}-large-messages-us-east-2"
-  kms_key_arn = aws_kms_key.kms_us_east_2.arn
-  log_bucket  = module.log_bucket_us_east_2.id
+  kms_key_arn = aws_kms_key.kms_us_east_2.0.arn
+  log_bucket  = module.log_bucket_us_east_2.0.id
   tags        = local.tags
 
   providers = {
@@ -83,8 +83,8 @@ module "large_messages_bucket_us_east_2" {
 module "large_messages_bucket_us_west_1" {
   count       = contains(local.regions, "us-west-1") == true ? 1 : 0
   name        = "${var.environment_prefix}-large-messages-us-west-1"
-  kms_key_arn = aws_kms_key.kms_us_west_1.arn
-  log_bucket  = module.log_bucket_us_west_1.id
+  kms_key_arn = aws_kms_key.kms_us_west_1.0.arn
+  log_bucket  = module.log_bucket_us_west_1.0.id
   tags        = local.tags
 
   providers = {
@@ -98,8 +98,8 @@ module "large_messages_bucket_us_west_1" {
 module "large_messages_bucket_us_west_2" {
   count       = contains(local.regions, "us-west-2") == true ? 1 : 0
   name        = "${var.environment_prefix}-large-messages-us-west-2"
-  kms_key_arn = aws_kms_key.kms_us_west_2.arn
-  log_bucket  = module.log_bucket_us_west_2.id
+  kms_key_arn = aws_kms_key.kms_us_west_2.0.arn
+  log_bucket  = module.log_bucket_us_west_2.0.id
   tags        = local.tags
 
   providers = {

@@ -43,6 +43,7 @@ module "log_bucket" {
 
 ## Regional Log buckets
 module "log_bucket_us_east_1" {
+  count       = contains(local.regions, "us-east-1") == true ? 1 : 0
   name_prefix = "${var.environment_prefix}-us-east-1"
   source      = "QuiNovas/log-bucket/aws"
   version     = "3.0.1"
@@ -53,6 +54,7 @@ module "log_bucket_us_east_1" {
 }
 
 module "log_bucket_us_east_2" {
+  count       = contains(local.regions, "us-east-2") == true ? 1 : 0
   name_prefix = "${var.environment_prefix}-us-east-2"
   source      = "QuiNovas/log-bucket/aws"
   version     = "3.0.1"
@@ -63,6 +65,7 @@ module "log_bucket_us_east_2" {
 }
 
 module "log_bucket_us_west_1" {
+  count       = contains(local.regions, "us-west-1") == true ? 1 : 0
   name_prefix = "${var.environment_prefix}-us-west-1"
   source      = "QuiNovas/log-bucket/aws"
   version     = "3.0.1"
@@ -73,6 +76,7 @@ module "log_bucket_us_west_1" {
 }
 
 module "log_bucket_us_west_2" {
+  count       = contains(local.regions, "us-west-2") == true ? 1 : 0
   name_prefix = "${var.environment_prefix}-us-west-2"
   source      = "QuiNovas/log-bucket/aws"
   version     = "3.0.1"
