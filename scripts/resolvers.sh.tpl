@@ -200,6 +200,6 @@ aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutManagedNode --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutManagedNode --data-source-name ${node_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteManagedNodeType --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteManagedNodeType --data-source-name ${node_datasource}
+aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name DeleteManagedNodeType --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Query --field-name DeleteManagedNodeType --data-source-name ${node_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name ListManagedNodeTypes --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name ListManagedNodeTypes --data-source-name ${node_datasource}
+aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name ListManagedNodeTypes --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Query --field-name ListManagedNodeTypes --data-source-name ${node_datasource}
