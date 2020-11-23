@@ -2,21 +2,21 @@
 #
 aws appsync create-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name tenant --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name tenant --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name tenant --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name tenant --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name sendEdges --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name sendEdges --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name sendEdges --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name sendEdges --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name sendMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name sendMessageType --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name sendMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name sendMessageType --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name app --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name app --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name app --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpInboundNode --field-name app --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name tenant --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name tenant --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name tenant --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name tenant --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name receiveEdges --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name receiveEdges --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name receiveEdges --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name receiveEdges --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name receiveMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name receiveMessageType --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name receiveMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name receiveMessageType --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name app --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name app --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name app --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name DicomTcpOutboundNode --field-name app --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Edge --field-name kmsKey --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Edge --field-name kmsKey --data-source-name ${sub_field_datasource}
 
@@ -44,21 +44,21 @@ aws appsync create-resolver --api-id ${api_id} --type-name ExternalNode --field-
 
 aws appsync create-resolver --api-id ${api_id} --type-name ExternalNode --field-name receiveMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name ExternalNode --field-name receiveMessageType --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name tenant --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name tenant --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name tenant --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name tenant --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name sendEdges --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name sendEdges --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name sendEdges --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name sendEdges --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name sendMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name sendMessageType --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name sendMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name sendMessageType --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name app --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name app --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name app --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpInboundNode --field-name app --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name tenant --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name tenant --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name tenant --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name tenant --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name receiveEdges --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name receiveEdges --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name receiveEdges --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name receiveEdges --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name receiveMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name receiveMessageType --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name receiveMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name receiveMessageType --data-source-name ${sub_field_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name app --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name app --data-source-name ${sub_field_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name app --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Hl7MllpOutboundNode --field-name app --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name KmsKey --field-name tenant --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name KmsKey --field-name tenant --data-source-name ${sub_field_datasource}
 
@@ -76,9 +76,9 @@ aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name MessageTypeNotification --data-source-name ${message_type_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name MessageTypeNotification --data-source-name ${message_type_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutDicomTcpInboundNode --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutDicomTcpInboundNode --data-source-name ${node_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutDicomTcpInboundNode --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutDicomTcpInboundNode --data-source-name ${node_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutDicomTcpOutboundNode --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutDicomTcpOutboundNode --data-source-name ${node_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutDicomTcpOutboundNode --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutDicomTcpOutboundNode --data-source-name ${node_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutEdge --data-source-name ${edge_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutEdge --data-source-name ${edge_datasource}
 
@@ -86,9 +86,9 @@ aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutExternalNode --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutExternalNode --data-source-name ${node_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutHl7MllpInboundNode --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutHl7MllpInboundNode --data-source-name ${node_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutHl7MllpInboundNode --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutHl7MllpInboundNode --data-source-name ${node_datasource}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutHl7MllpOutboundNode --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutHl7MllpOutboundNode --data-source-name ${node_datasource}
+# aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutHl7MllpOutboundNode --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutHl7MllpOutboundNode --data-source-name ${node_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutKmsKey --data-source-name ${kms_key_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutKmsKey --data-source-name ${kms_key_datasource}
 
@@ -193,3 +193,13 @@ aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --
 aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name receiveMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name receiveMessageType --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name app --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name app --data-source-name ${sub_field_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name ManagedNode --field-name managedNodeType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name ManagedNode --field-name managedNodeType --data-source-name ${sub_field_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutManagedNodeType --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutManagedNodeType --data-source-name ${node_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutManagedNode --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutManagedNode --data-source-name ${node_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteManagedNodeType --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteManagedNodeType --data-source-name ${node_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name ListManagedNodeTypes --data-source-name ${node_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name ListManagedNodeTypes --data-source-name ${node_datasource}
