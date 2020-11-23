@@ -1048,9 +1048,9 @@ module "appsync_app_datasource" {
     COGNITO_ROLE_ARN     = aws_iam_role.authenticated.arn
     DYNAMODB_TABLE       = module.graph_table.name
     ENVIRONMENT          = var.environment_prefix
-    INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.echostream_version}"
+    #INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.echostream_version}"
     LOG_LEVEL            = "INFO"
-    OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.echostream_version}"
+    #OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.echostream_version}"
     SSM_SERVICE_ROLE     = aws_iam_role.manage_apps_ssm_service_role.name
   }
 
