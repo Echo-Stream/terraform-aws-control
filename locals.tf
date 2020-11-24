@@ -7,13 +7,13 @@ resource "random_string" "for_jwk" {
 
 locals {
   artifacts = {
-    appsync                = "${var.echostream_version}/appsync"
-    frontend               = "${var.echostream_version}/frontend"
+    appsync  = "${var.echostream_version}/appsync"
+    frontend = "${var.echostream_version}/frontend"
     #hl7_mllp_inbound_node  = "${local.artifacts_account_id}.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-inbound-node"
     #hl7_mllp_outbound_node = "${local.artifacts_account_id}.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-outbound-node"
-    lambda                 = "${var.echostream_version}/lambda/control"
-    message_types          = "${var.echostream_version}/message-types"
-    tenant_lambda          = "${var.echostream_version}/lambda/tenant"
+    lambda        = "${var.echostream_version}/lambda/control"
+    message_types = "${var.echostream_version}/message-types"
+    tenant_lambda = "${var.echostream_version}/lambda/tenant"
     glue = {
       audit_records_etl = "${var.echostream_version}/glue/audit-records-etl.py"
     }

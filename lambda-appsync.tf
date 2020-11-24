@@ -883,6 +883,19 @@ data "aws_iam_policy_document" "deployment_handler" {
 
     sid = "InvalidateWebappObjects"
   }
+
+  statement {
+    actions = [
+      "dynamodb:UpdateItem",
+      "dynamodb:Scan",
+    ]
+
+    resources = [
+      aws_cloudfront_distribution.webapp.arn
+    ]
+
+    sid = "GraphTableUpdatePermissions"
+  }
 }
 
 resource "aws_iam_policy" "deployment_handler" {
@@ -899,6 +912,7 @@ module "deployment_handler" {
     API_ID                     = aws_appsync_graphql_api.echostream.id
     ARTIFACTS_BUCKET           = local.artifacts_bucket
     CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.webapp.id
+    DYNAMODB_TABLE             = module.graph_table.name
     ECHOSTREAM_VERSION         = var.echostream_version
     ENVIRONMENT                = var.environment_prefix
   }
@@ -1049,9 +1063,9 @@ module "appsync_app_datasource" {
     DYNAMODB_TABLE       = module.graph_table.name
     ENVIRONMENT          = var.environment_prefix
     #INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.echostream_version}"
-    LOG_LEVEL            = "INFO"
+    LOG_LEVEL = "INFO"
     #OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.echostream_version}"
-    SSM_SERVICE_ROLE     = aws_iam_role.manage_apps_ssm_service_role.name
+    SSM_SERVICE_ROLE = aws_iam_role.manage_apps_ssm_service_role.name
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn

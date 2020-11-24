@@ -517,16 +517,16 @@ module "graph_table_manage_apps" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    APP_CLOUD_INIT_TOPIC   = aws_sns_topic.hl7_app_cloud_init.name
-    APP_IDENTITY_POOL_ID   = aws_cognito_identity_pool.echostream.id
-    APP_USER_POOL_ID       = aws_cognito_user_pool.echostream_apps.id
-    DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
+    APP_CLOUD_INIT_TOPIC = aws_sns_topic.hl7_app_cloud_init.name
+    APP_IDENTITY_POOL_ID = aws_cognito_identity_pool.echostream.id
+    APP_USER_POOL_ID     = aws_cognito_user_pool.echostream_apps.id
+    DYNAMODB_TABLE       = module.graph_table.name
+    ENVIRONMENT          = var.environment_prefix
     #INBOUNDER_ECR_URL      = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.echostream_version}"
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     #OUTBOUNDER_ECR_URL     = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.echostream_version}"
-    SSM_EXPIRATION         = ""
-    SSM_SERVICE_ROLE       = aws_iam_role.manage_apps_ssm_service_role.arn
+    SSM_EXPIRATION   = ""
+    SSM_SERVICE_ROLE = aws_iam_role.manage_apps_ssm_service_role.arn
   }
 
 
