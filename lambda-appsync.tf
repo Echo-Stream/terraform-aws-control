@@ -891,7 +891,7 @@ data "aws_iam_policy_document" "deployment_handler" {
     ]
 
     resources = [
-      aws_cloudfront_distribution.webapp.arn
+      module.graph_table.arn
     ]
 
     sid = "GraphTableUpdatePermissions"
