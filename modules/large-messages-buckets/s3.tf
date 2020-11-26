@@ -10,17 +10,12 @@ resource "aws_s3_bucket" "large_messages" {
   # }
 
   lifecycle_rule {
-    id      = "archive"
+    id      = "expire"
     prefix  = "/"
     enabled = true
 
-    transition {
-      days          = 90
-      storage_class = "GLACIER"
-    }
-
     expiration {
-      days = 3650
+      days = 7
     }
   }
 
