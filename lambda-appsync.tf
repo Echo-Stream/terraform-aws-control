@@ -887,6 +887,7 @@ data "aws_iam_policy_document" "deployment_handler" {
   statement {
     actions = [
       "dynamodb:UpdateItem",
+      "dynamodb:PutItem",
       "dynamodb:Scan",
     ]
 

@@ -61,7 +61,7 @@ module "large_messages_bucket_us_east_1" {
     aws = aws.us-east-1
   }
 
-  source = "./modules/large-messages-buckets"
+  source = "./_modules/large-messages-buckets"
 }
 
 ## US-EAST-2
@@ -76,7 +76,7 @@ module "large_messages_bucket_us_east_2" {
     aws = aws.us-east-2
   }
 
-  source = "./modules/large-messages-buckets"
+  source = "./_modules/large-messages-buckets"
 }
 
 ## US-WEST-1
@@ -91,7 +91,7 @@ module "large_messages_bucket_us_west_1" {
     aws = aws.us-west-1
   }
 
-  source = "./modules/large-messages-buckets"
+  source = "./_modules/large-messages-buckets"
 }
 
 ## US-WEST-2
@@ -106,5 +106,5 @@ module "large_messages_bucket_us_west_2" {
     aws = aws.us-west-2
   }
 
-  source = "./modules/large-messages-buckets"
+  source = "./_modules/large-messages-buckets"
 }
