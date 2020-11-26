@@ -17,6 +17,10 @@ resource "aws_s3_bucket" "large_messages" {
     expiration {
       days = 7
     }
+
+    noncurrent_version_expiration {
+      days = 7
+    }
   }
 
   logging {
