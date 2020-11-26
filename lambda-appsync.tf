@@ -863,9 +863,12 @@ data "aws_iam_policy_document" "deployment_handler" {
   statement {
     actions = [
       "s3:GetObject*",
+      "s3:ListBucket",
+      "s3:ListObjects",
     ]
 
     resources = [
+      "arn:aws:s3:::echostream-artifacts-${local.current_region}",
       "arn:aws:s3:::echostream-artifacts-${local.current_region}/*"
     ]
 
@@ -886,9 +889,8 @@ data "aws_iam_policy_document" "deployment_handler" {
 
   statement {
     actions = [
-      "dynamodb:UpdateItem",
       "dynamodb:PutItem",
-      "dynamodb:Scan",
+      "dynamodb:Query",
     ]
 
     resources = [
