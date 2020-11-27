@@ -898,7 +898,7 @@ data "aws_iam_policy_document" "deployment_handler" {
 
     sid = "GraphTableUpdatePermissions"
   }
-    statement {
+  statement {
     actions = [
       "sns:Publish"
     ]
