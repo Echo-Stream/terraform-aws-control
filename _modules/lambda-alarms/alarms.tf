@@ -12,8 +12,8 @@ resource "aws_cloudwatch_metric_alarm" "lambda" {
   dimensions = {
     FunctionName = each.value
   }
-  alarm_actions     = [aws_sns_topic.alerts.arn]
-  ok_actions        = [aws_sns_topic.alerts.arn]
+  alarm_actions     = var.alarm_actions
+  ok_actions        = var.ok_actions
   alarm_description = "This metric monitors lambda errors"
   tags              = var.tags
 }
