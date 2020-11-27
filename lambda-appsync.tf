@@ -928,6 +928,7 @@ module "deployment_handler" {
     DYNAMODB_TABLE             = module.graph_table.name
     ECHOSTREAM_VERSION         = var.echostream_version
     ENVIRONMENT                = var.environment_prefix
+    SNS_TOPIC_ARN              = aws_sns_topic.ci_cd_errors.arn
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
