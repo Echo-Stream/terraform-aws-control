@@ -131,7 +131,7 @@ module "deployment_handler" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.10"
+  version       = "3.0.11"
 }
 
 resource "aws_sns_topic" "ci_cd_errors" {

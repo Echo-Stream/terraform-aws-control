@@ -43,5 +43,5 @@ module "graph_table" {
   stream_view_type       = "NEW_AND_OLD_IMAGES"
 
   source  = "QuiNovas/dynamodb-table/aws"
-  version = "3.0.6"
+  version = "3.0.7"
 }

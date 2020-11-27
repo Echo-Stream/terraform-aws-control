@@ -80,7 +80,7 @@ module "graph_table_dynamodb_trigger" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.10"
+  version       = "3.0.11"
 }
 
 resource "aws_lambda_event_source_mapping" "graph_table_dynamodb_trigger" {
@@ -179,7 +179,7 @@ module "graph_table_manage_users" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.10"
+  version       = "3.0.11"
 }
 
 
@@ -313,7 +313,7 @@ module "graph_table_manage_resource_policies" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.10"
+  version       = "3.0.11"
 }
 
 ##################################
@@ -396,7 +396,7 @@ module "graph_table_manage_queues" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.10"
+  version       = "3.0.11"
 }
 
 ###############################
@@ -546,7 +546,7 @@ module "graph_table_manage_apps" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.10"
+  version       = "3.0.11"
 }
 
 #######################################
@@ -639,7 +639,7 @@ module "graph_table_tenant_stream_handler" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.10"
+  version       = "3.0.11"
 }
 
 resource "aws_lambda_event_source_mapping" "graph_table_tenant_stream_handler" {
@@ -747,7 +747,7 @@ module "graph_table_manage_message_types" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.10"
+  version       = "3.0.11"
 }
 
 ##############################
@@ -849,7 +849,7 @@ module "graph_table_manage_nodes" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.10"
+  version       = "3.0.11"
 }
 
 ################################
@@ -966,7 +966,7 @@ module "graph_table_manage_tenants" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.10"
+  version       = "3.0.11"
 }
 
 ##############################
@@ -1048,7 +1048,7 @@ module "graph_table_manage_edges" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.10"
+  version       = "3.0.11"
 }
 
 #################################
@@ -1099,5 +1099,5 @@ module "graph_table_manage_kms_keys" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.10"
+  version       = "3.0.11"
 }

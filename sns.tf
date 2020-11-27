@@ -9,7 +9,7 @@ module "hl7_app_cloud_init_subscription" {
   topic_arn       = aws_sns_topic.hl7_app_cloud_init.arn
   email_address   = var.ses_email_address
   source          = "QuiNovas/sns-email-subscription/aws"
-  version         = "0.0.1"
+  version         = "0.0.2"
 }
 
 resource "aws_sns_topic" "alerts" {

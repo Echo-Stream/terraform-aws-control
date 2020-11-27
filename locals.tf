@@ -19,7 +19,7 @@ locals {
     }
   }
 
-  artifacts_account_id    = "672550935748"
+  artifacts_account_id    = "672550935748" # QuiNovas-MSP
   artifacts_bucket        = "echostream-artifacts-${local.current_region}"
   artifacts_bucket_prefix = "echostream-artifacts"
   aws_cli_command         = "~/bin/aws"

@@ -8,7 +8,7 @@ module "appsync_kms_key_lambda_datasource" {
   lambda_function_arn      = module.appsync_kms_key_datasource.arn
   name                     = replace("${var.environment_prefix}_kms_key_datasource", "-", "_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
-  version                  = "3.0.3"
+  version                  = "3.0.4"
 }
 
 module "appsync_edge_lambda_datasource" {
@@ -18,7 +18,7 @@ module "appsync_edge_lambda_datasource" {
   lambda_function_arn      = module.appsync_edge_datasource.arn
   name                     = replace("${var.environment_prefix}_edge_datasource", "-", "_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
-  version                  = "3.0.3"
+  version                  = "3.0.4"
 }
 
 module "appsync_graph_table_datasource" {
@@ -28,7 +28,7 @@ module "appsync_graph_table_datasource" {
   dynamodb_table_name = module.graph_table.name
   name                = replace("${var.environment_prefix}_dynamodb", "-", "_")
   source              = "QuiNovas/appsync-dynamodb-datasource/aws"
-  version             = "3.0.3"
+  version             = "3.0.4"
 }
 
 resource "aws_appsync_datasource" "none" {
@@ -44,7 +44,7 @@ module "validate_function_datasource" {
   lambda_function_arn      = module.appsync_validate_function_datasource.arn
   name                     = replace("${var.environment_prefix}_validate_function", "-", "_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
-  version                  = "3.0.3"
+  version                  = "3.0.4"
 }
 
 module "tenant_datasource" {
@@ -54,7 +54,7 @@ module "tenant_datasource" {
   lambda_function_arn      = module.appsync_tenant_datasource.arn
   name                     = replace("${var.environment_prefix}_tenant_datasource", "-", "_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
-  version                  = "3.0.3"
+  version                  = "3.0.4"
 }
 
 module "app_datasource" {
@@ -64,7 +64,7 @@ module "app_datasource" {
   lambda_function_arn      = module.appsync_app_datasource.arn
   name                     = replace("${var.environment_prefix}_app_datasource", "-", "_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
-  version                  = "3.0.3"
+  version                  = "3.0.4"
 }
 
 module "message_type_datasource" {
@@ -74,7 +74,7 @@ module "message_type_datasource" {
   lambda_function_arn      = module.appsync_message_type_datasource.arn
   name                     = replace("${var.environment_prefix}_message_type_datasource", "-", "_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
-  version                  = "3.0.3"
+  version                  = "3.0.4"
 }
 
 module "sub_field_datasource" {
@@ -84,7 +84,7 @@ module "sub_field_datasource" {
   lambda_function_arn      = module.appsync_sub_field_datasource.arn
   name                     = replace("${var.environment_prefix}_sub_field_datasource", "-", "_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
-  version                  = "3.0.3"
+  version                  = "3.0.4"
 }
 
 module "large_message_storage_datasource" {
@@ -94,7 +94,7 @@ module "large_message_storage_datasource" {
   lambda_function_arn      = module.appsync_large_message_storage_datasource.arn
   name                     = replace("${var.environment_prefix}_large_message_storage_datasource", "-", "_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
-  version                  = "3.0.3"
+  version                  = "3.0.4"
 }
 
 module "node_datasource" {
@@ -104,7 +104,7 @@ module "node_datasource" {
   lambda_function_arn      = module.appsync_node_datasource.arn
   name                     = replace("${var.environment_prefix}_node_datasource", "-", "_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
-  version                  = "3.0.3"
+  version                  = "3.0.4"
 }
 
 
@@ -115,5 +115,5 @@ module "subscription_datasource" {
   lambda_function_arn      = module.appsync_subscription_datasource.arn
   name                     = replace("${var.environment_prefix}_subscription_datasource", "-", "_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
-  version                  = "3.0.3"
+  version                  = "3.0.4"
 }
