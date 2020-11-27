@@ -898,6 +898,17 @@ data "aws_iam_policy_document" "deployment_handler" {
 
     sid = "GraphTableUpdatePermissions"
   }
+    statement {
+    actions = [
+      "sns:Publish"
+    ]
+
+    resources = [
+      aws_sns_topic.ci_cd_errors.arn
+    ]
+
+    sid = "snsPublish"
+  }
 }
 
 resource "aws_iam_policy" "deployment_handler" {

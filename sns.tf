@@ -5,10 +5,18 @@ resource "aws_sns_topic" "hl7_app_cloud_init" {
 }
 
 
+
 module "hl7_app_cloud_init_subscription" {
   install_aws_cli = true
   topic_arn       = aws_sns_topic.hl7_app_cloud_init.arn
   email_address   = var.ses_email_address
   source          = "QuiNovas/sns-email-subscription/aws"
   version         = "0.0.1"
+}
+
+
+resource "aws_sns_topic" "ci_cd_errors" {
+  name         = "${var.environment_prefix}-ci-cd-errors"
+  display_name = "cicd errors topic"
+  tags         = local.tags
 }
