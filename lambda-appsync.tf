@@ -1089,7 +1089,6 @@ data "aws_iam_policy_document" "presign_large_messages" {
     resources = flatten([
       module.large_messages_bucket_us_east_1.*.arn,
       module.large_messages_bucket_us_east_2.*.arn,
-      module.large_messages_bucket_us_west_1.*.arn,
       module.large_messages_bucket_us_west_2.*.arn
     ])
 
@@ -1105,7 +1104,6 @@ data "aws_iam_policy_document" "presign_large_messages" {
     resources = flatten([
       aws_kms_key.kms_us_east_1.*.arn,
       aws_kms_key.kms_us_east_2.*.arn,
-      aws_kms_key.kms_us_west_1.*.arn,
       aws_kms_key.kms_us_west_2.*.arn
     ])
 
