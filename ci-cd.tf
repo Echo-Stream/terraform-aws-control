@@ -148,7 +148,7 @@ resource "aws_lambda_permission" "deployment_handler" {
   source_arn    = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}"
 }
 
-resource "aws_sns_topic_subscription" "deployment_handler" {
+resource "aws_sns_topic_subscription" "artifacts" {
   topic_arn = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}"
   protocol  = "lambda"
   endpoint  = module.deployment_handler.arn
