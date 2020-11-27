@@ -14,6 +14,6 @@ resource "aws_cloudwatch_metric_alarm" "lambda" {
   }
   alarm_actions     = var.alarm_actions
   ok_actions        = var.ok_actions
-  alarm_description = "This metric monitors lambda errors"
+  alarm_description = "This metric monitors ${each.value} lambda errors"
   tags              = var.tags
 }
