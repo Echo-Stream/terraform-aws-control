@@ -11,3 +11,9 @@ module "hl7_app_cloud_init_subscription" {
   source          = "QuiNovas/sns-email-subscription/aws"
   version         = "0.0.1"
 }
+
+resource "aws_sns_topic" "alerts" {
+  name         = "${var.environment_prefix}-alerts"
+  display_name = "${var.environment_prefix} Alerts"
+  tags         = local.tags
+}
