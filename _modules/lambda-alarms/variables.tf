@@ -6,7 +6,7 @@ variable "tags" {
 }
 
 variable "lambdas" {
-    default = []
+    default = {}
     description = "list of lambda functions for which alarm is to be created."
     type = map(string)
 }
