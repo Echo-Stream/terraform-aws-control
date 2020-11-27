@@ -87,7 +87,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
     FunctionName = each.key
   }
 
-  alarm_actions     = aws_sns_topic.alerts.arn
+  alarm_actions     = [aws_sns_topic.alerts.arn]
   alarm_description = "Monitors ${each.key} lambda errors"
   tags              = local.tags
 }
