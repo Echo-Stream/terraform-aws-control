@@ -88,6 +88,7 @@ locals {
     graph_table_manage_tenants               = "${local.artifacts["lambda"]}/graph-table-manage-tenants.zip"
     graph_table_manage_users                 = "${local.artifacts["lambda"]}/graph-table-manage-users.zip"
     graph_table_tenant_stream_handler        = "${local.artifacts["lambda"]}/graph-table-tenant-stream-handler.zip"
+    log_retention                            = "${local.artifacts["lambda"]}/log-retention.zip"
     process_audit_record                     = "${local.artifacts["lambda"]}/process-audit-record.zip"
     purge_tenants                            = "${local.artifacts["lambda"]}/purge-tenants.zip"
     router_node                              = "${local.artifacts["tenant_lambda"]}/router-node.zip"

@@ -1413,3 +1413,64 @@ resource "aws_lambda_permission" "purge_tenants" {
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.purge_tenants.arn
 }
+
+
+##################################
+##  log-retention   ##############
+##################################
+data "aws_iam_policy_document" "log_retention" {
+  statement {
+    actions = [
+      "logs:DescribeLogGroups"
+    ]
+
+    resources = [
+      "arn:aws:logs:${var.region}:${var.allowed_account_id}:*",
+    ]
+
+    sid = "ListLogGroups"
+  }
+
+  statement {
+    actions = [
+      "logs:PutRetentionPolicy"
+    ]
+
+    resources = [
+      "arn:aws:logs:${var.region}:${var.allowed_account_id}:log-group:*",
+    ]
+
+    sid = "SetRetention"
+  }
+}
+
+resource "aws_iam_policy" "log_retention" {
+  description = "IAM permissions required for log-retention lambda"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-log-retention"
+  policy      = data.aws_iam_policy_document.log_retention.json
+}
+
+module "log_retention" {
+  description     = "set log group retention to 7 days"
+  dead_letter_arn = local.lambda_dead_letter_arn
+  environment_variables = {
+    ENVIRONMENT = var.environment_prefix
+  }
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  memory_size = 128
+  name        = "${var.environment_prefix}-log-retention"
+
+  policy_arns = [
+    aws_iam_policy.log_retention.arn,
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["log_retention"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 60
+  version       = "3.0.11"
+}
