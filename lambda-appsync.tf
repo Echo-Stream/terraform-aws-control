@@ -1474,3 +1474,24 @@ module "log_retention" {
   timeout       = 60
   version       = "3.0.11"
 }
+
+
+resource "aws_cloudwatch_event_rule" "log_retention" {
+  name                = "${var.environment_prefix}-log-retention"
+  description         = "set log group retention to 7 days daily"
+  schedule_expression = "cron(0 10 * * ? *)"
+}
+
+resource "aws_cloudwatch_event_target" "log_retention" {
+  rule      = aws_cloudwatch_event_rule.log_retention.name
+  target_id = "${var.environment_prefix}-log-retention"
+  arn       = module.log_retention.arn
+}
+
+resource "aws_lambda_permission" "log_retention" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = module.log_retention.name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.log_retention.arn
+}
