@@ -48,6 +48,12 @@ aws appsync create-resolver --api-id ${api_id} --type-name ManagedNode --field-n
 
 aws appsync create-resolver --api-id ${api_id} --type-name ManagedNode --field-name receiveMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name ManagedNode --field-name receiveMessageType --data-source-name ${sub_field_datasource}
 
+aws appsync create-resolver --api-id ${api_id} --type-name ManagedNodeType --field-name tenant --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name ManagedNodeType --field-name tenant --data-source-name ${sub_field_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name ManagedNodeType --field-name sendMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name ManagedNodeType --field-name sendMessageType --data-source-name ${sub_field_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name ManagedNodeType --field-name receiveMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name ManagedNodeType --field-name receiveMessageType --data-source-name ${sub_field_datasource}
+
 aws appsync create-resolver --api-id ${api_id} --type-name MessageType --field-name tenant --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name MessageType --field-name tenant --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name AppNotification --data-source-name ${app_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name AppNotification --data-source-name ${app_datasource}
