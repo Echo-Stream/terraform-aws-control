@@ -1087,9 +1087,9 @@ data "aws_iam_policy_document" "presign_large_messages" {
     ]
 
     resources = flatten([
-      module.large_messages_bucket_us_east_1.*.arn,
-      module.large_messages_bucket_us_east_2.*.arn,
-      module.large_messages_bucket_us_west_2.*.arn
+      [for lmb in module.large_messages_bucket_us_east_1 : "${lmb.arn}/*"],
+      [for lmb in module.large_messages_bucket_us_east_2 : "${lmb.arn}/*"],
+      [for lmb in module.large_messages_bucket_us_west_2 : "${lmb.arn}/*"]
     ])
 
     sid = "LargeMessagesBucketsAccess"
@@ -1099,27 +1099,16 @@ data "aws_iam_policy_document" "presign_large_messages" {
     actions = [
       "kms:Decrypt",
       "kms:Encrypt",
-    ]
-
-    resources = flatten([
-      aws_kms_key.kms_us_east_1.*.arn,
-      aws_kms_key.kms_us_east_2.*.arn,
-      aws_kms_key.kms_us_west_2.*.arn
-    ])
-
-    sid = "EncryptDecryptEnvKMSKeys"
-  }
-
-  statement {
-    actions = [
       "kms:GenerateDataKey",
     ]
 
-    resources = [
-      "*"
-    ]
+    resources = flatten([
+      aws_kms_key.kms_us_east_1[*].arn,
+      aws_kms_key.kms_us_east_2[*].arn,
+      aws_kms_key.kms_us_west_2[*].arn
+    ])
 
-    sid = "GenerateDataKeys"
+    sid = "EncryptDecryptEnvKMSKeys"
   }
 }
 
