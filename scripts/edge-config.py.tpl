@@ -12,8 +12,8 @@ def lambda_handler(event, context):
 				'graphQL':{
 					'graphqlEndpoint': '${graphql_endpoint}',
 					'appsync_authenticationType': 'AMAZON_COGNITO_USER_POOLS',
-					'aws_user_pools_web_client_id': '${api_id}',
-				}
+					'aws_user_pools_web_client_id': '${api_id}'
+				},
 				'LogoutTimeout': 900000,
 				'queryLimit': 300,
 				'region': '${region}',
