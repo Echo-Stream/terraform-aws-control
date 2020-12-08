@@ -13,6 +13,13 @@ resource "aws_cloudfront_distribution" "webapp" {
     }
   }
 
+  custom_error_response {
+    error_caching_min_ttl = 0
+    error_code            = 404
+    response_code         = 200
+    response_page_path    = "/index.html"
+  }
+
   enabled             = true
   is_ipv6_enabled     = true
   comment             = "${var.environment_prefix} Echo Stream ReactJS Webapp"
@@ -68,6 +75,8 @@ resource "aws_cloudfront_distribution" "webapp" {
     prefix          = "cloudfront/${var.environment_prefix}-webapp/"
   }
 
+  price_class = "PriceClass_100"
+
   restrictions {
     geo_restriction {
       restriction_type = "none"
@@ -75,9 +84,9 @@ resource "aws_cloudfront_distribution" "webapp" {
   }
 
   viewer_certificate {
-    #cloudfront_default_certificate = true
-    acm_certificate_arn = var.acm_arn
-    ssl_support_method  = "sni-only"
+    acm_certificate_arn      = var.acm_arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2019"
   }
 }
 
