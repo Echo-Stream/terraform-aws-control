@@ -7,7 +7,7 @@ import json
 
 def lambda_handler(event, context):
 	content = {
-				'debug': true,
+				'debug': 'true',
 				'clientId': '${client_id}',
 				'graphQL':{
 					'graphqlEndpoint': '${graphql_endpoint}',
