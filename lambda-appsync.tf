@@ -1070,57 +1070,7 @@ module "appsync_sub_field_datasource" {
 ## appsync-large-message-storage-datasource ##
 ##############################################
 
-resource "aws_iam_user" "presign_large_messages" {
-  name = "${var.environment_prefix}-presign-large-messages"
-  path = "/lambda/"
 
-  tags = merge(local.tags, {
-    lambda = "${var.environment_prefix}-appsync-large-message-storage-datasource"
-  })
-}
-
-data "aws_iam_policy_document" "presign_large_messages" {
-  statement {
-    actions = [
-      "s3:GetObject*",
-      "s3:PutObject*",
-    ]
-
-    resources = flatten([
-      [for lmb in module.large_messages_bucket_us_east_1 : "${lmb.arn}/*"],
-      [for lmb in module.large_messages_bucket_us_east_2 : "${lmb.arn}/*"],
-      [for lmb in module.large_messages_bucket_us_west_2 : "${lmb.arn}/*"]
-    ])
-
-    sid = "LargeMessagesBucketsAccess"
-  }
-
-  statement {
-    actions = [
-      "kms:Decrypt",
-      "kms:Encrypt",
-      "kms:GenerateDataKey",
-    ]
-
-    resources = flatten([
-      aws_kms_key.kms_us_east_1[*].arn,
-      aws_kms_key.kms_us_east_2[*].arn,
-      aws_kms_key.kms_us_west_2[*].arn
-    ])
-
-    sid = "EncryptDecryptEnvKMSKeys"
-  }
-}
-
-
-resource "aws_iam_user_policy" "presign_large_messages" {
-  user   = aws_iam_user.presign_large_messages.name
-  policy = data.aws_iam_policy_document.presign_large_messages.json
-}
-
-resource "aws_iam_access_key" "presign_large_messages" {
-  user = aws_iam_user.presign_large_messages.name
-}
 
 data "aws_iam_policy_document" "appsync_large_message_storage_datasource" {
   statement {

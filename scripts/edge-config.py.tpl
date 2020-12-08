@@ -7,11 +7,17 @@ import json
 
 def lambda_handler(event, context):
 	content = {
-				'endpoint': '${graphql_endpoint}',
-				'authenticationType': 'AMAZON_COGNITO_USER_POOLS',
+				'debug': true,
 				'clientId': '${client_id}',
+				'graphQL':{
+					'graphqlEndpoint': '${graphql_endpoint}',
+					'appsync_authenticationType': 'AMAZON_COGNITO_USER_POOLS',
+					'aws_user_pools_web_client_id': '${api_id}',
+				}
+				'LogoutTimeout': 900000,
+				'queryLimit': 300,
 				'region': '${region}',
-				'userPoolId': '${user_pool_id}'
+				'UserPoolId': '${user_pool_id}'
 	}
 	response = {
 		'status': '200',

@@ -88,6 +88,8 @@ resource "aws_cloudfront_distribution" "webapp" {
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2019"
   }
+
+  tags = local.tags
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
@@ -115,6 +117,7 @@ data "template_file" "edge_config" {
     client_id        = aws_cognito_user_pool_client.echostream_ui_userpool_client.id
     region           = local.current_region
     user_pool_id     = aws_cognito_user_pool.echostream_ui.id
+    api_id           = aws_appsync_graphql_api.echostream.id
   }
 }
 
