@@ -156,7 +156,7 @@ resource "aws_kms_key" "kms_ap_southeast_2" {
   tags                = local.tags
 }
 
-resource "aws_kms_alias" "kms_ap_southeast_1" {
+resource "aws_kms_alias" "kms_ap_southeast_2" {
   count         = contains(local.regions, "ap-southeast-1") == true ? 1 : 0
   name          = "alias/${var.environment_prefix}"
   target_key_id = aws_kms_key.kms_ap_southeast_2.0.key_id

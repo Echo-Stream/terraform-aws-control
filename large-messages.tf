@@ -85,21 +85,6 @@ module "large_messages_bucket_us_east_2" {
   source = "./_modules/large-messages-buckets"
 }
 
-## US-WEST-2
-module "large_messages_bucket_us_west_2" {
-  count       = contains(local.regions, "us-west-2") == true ? 1 : 0
-  name        = "${var.environment_prefix}-large-messages-us-west-2"
-  kms_key_arn = aws_kms_key.kms_us_west_2.0.arn
-  log_bucket  = module.log_bucket_us_west_2.0.id
-  tags        = local.tags
-
-  providers = {
-    aws = aws.us-west-2
-  }
-
-  source = "./_modules/large-messages-buckets"
-}
-
 ## US-WEST-1
 module "large_messages_bucket_us_west_1" {
   count       = contains(local.regions, "us-west-1") == true ? 1 : 0
