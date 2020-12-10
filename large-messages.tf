@@ -132,7 +132,7 @@ module "large_messages_bucket_af_south_1" {
   source = "./_modules/large-messages-buckets"
 }
 
-/*
+
 ## AP-EAST-1
 
 module "large_messages_bucket_ap_east_1" {
@@ -379,4 +379,4 @@ module "large_messages_bucket_sa_east_1" {
   }
 
   source = "./_modules/large-messages-buckets"
-}*/
+}

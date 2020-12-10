@@ -80,7 +80,7 @@ resource "aws_kms_alias" "kms_af_south_1" {
   target_key_id = aws_kms_key.kms_af_south_1.0.key_id
   provider      = aws.af-south-1
 }
-/*
+
 ## AP-EAST-1
 resource "aws_kms_key" "kms_ap_east_1" {
   count               = contains(local.regions, "ap-east-1") == true ? 1 : 0
@@ -336,4 +336,4 @@ resource "aws_kms_alias" "kms_sa_east_1" {
   name          = "alias/${var.environment_prefix}"
   target_key_id = aws_kms_key.kms_sa_east_1.0.key_id
   provider      = aws.sa-east-1
-}*/
+}

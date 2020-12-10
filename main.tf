@@ -81,7 +81,7 @@ module log_bucket_af_south_1 {
 }
 
 ####
-/*module log_bucket_ap_east_1 {
+module log_bucket_ap_east_1 {
   count       = contains(local.regions, "ap-east-1") == true ? 1 : 0
   name_prefix = "${var.environment_prefix}-ap-east-1"
   source      = "QuiNovas/log-bucket/aws"
@@ -248,4 +248,4 @@ module log_bucket_sa_east_1 {
   providers = {
     aws = aws.sa-east-1
   }
-}*/
+}
