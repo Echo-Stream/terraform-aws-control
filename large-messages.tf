@@ -118,7 +118,7 @@ module "large_messages_bucket_us_west_2" {
 
 ## AF-SOUTH-1
 
-/*module "large_messages_bucket_af_south_1" {
+module "large_messages_bucket_af_south_1" {
   count       = contains(local.regions, "af-south-1") == true ? 1 : 0
   name        = "${var.environment_prefix}-large-messages-af-south-1"
   kms_key_arn = aws_kms_key.kms_af_south_1.0.arn
@@ -132,7 +132,7 @@ module "large_messages_bucket_us_west_2" {
   source = "./_modules/large-messages-buckets"
 }
 
-
+/*
 ## AP-EAST-1
 
 module "large_messages_bucket_ap_east_1" {

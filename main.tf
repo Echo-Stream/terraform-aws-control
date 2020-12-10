@@ -68,7 +68,7 @@ module log_bucket_us_west_2 {
   }
 }
 
-#####
+####
 module log_bucket_af_south_1 {
   count       = contains(local.regions, "af-south-1") == true ? 1 : 0
   name_prefix = "${var.environment_prefix}-af-south-1"
