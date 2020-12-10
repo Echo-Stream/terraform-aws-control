@@ -66,7 +66,7 @@ resource "aws_kms_alias" "kms_us_west_2" {
 }
 
 ## AF-SOUTH-1
-resource "aws_kms_key" "kms_af_south_1" {
+/*resource "aws_kms_key" "kms_af_south_1" {
   count               = contains(local.regions, "af-south-1") == true ? 1 : 0
   description         = "Encryption key for ${var.environment_prefix}"
   enable_key_rotation = true
@@ -336,4 +336,4 @@ resource "aws_kms_alias" "kms_sa_east_1" {
   name          = "alias/${var.environment_prefix}"
   target_key_id = aws_kms_key.kms_sa_east_1.0.key_id
   provider      = aws.sa-east-1
-}
+}*/
