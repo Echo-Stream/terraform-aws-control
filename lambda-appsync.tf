@@ -462,7 +462,7 @@ module "appsync_edge_datasource" {
     DYNAMODB_TABLE         = module.graph_table.name
     ENVIRONMENT            = var.environment_prefix
     LOG_LEVEL              = "INFO"
-    MESSAGE_RETENTION_DAYS = 10
+    MESSAGE_RETENTION_DAYS = 7
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
