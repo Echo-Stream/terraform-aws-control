@@ -151,10 +151,10 @@ module "graph_table_manage_users" {
 
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
-    EMAIL_CC               = ""
+    EMAIL_CC               = var.ses_email_address
     EMAIL_FROM             = var.ses_email_address
     EMAIL_REPLY_TO         = var.ses_email_address
-    EMAIL_RETURN_PATH      = ""
+    EMAIL_RETURN_PATH      = var.ses_email_address
     ENVIRONMENT            = var.environment_prefix
     EXISTING_USER_TEMPLATE = aws_ses_template.notify_user.id
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
