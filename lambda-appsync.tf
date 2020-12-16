@@ -238,6 +238,18 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
 
     sid = "ListArtifactsS3"
   }
+
+  statement {
+    actions = [
+      "sns:CreateTopic",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "CreateSNSTopic"
+  }
 }
 
 resource "aws_iam_policy" "appsync_tenant_datasource" {
@@ -1140,6 +1152,27 @@ data "aws_iam_policy_document" "appsync_validate_function_datasource" {
     ]
 
     sid = "TableAccess"
+  }
+
+  statement {
+    actions = [
+      "lambda:Invoke",
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    condition {
+      test = "StringLike"
+
+      values = [
+        "validator"
+      ]
+
+      variable = "iam:ResourceTag/type"
+    }
+    sid = "InvokeValidators"
   }
 }
 
