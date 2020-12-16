@@ -1156,22 +1156,13 @@ data "aws_iam_policy_document" "appsync_validate_function_datasource" {
 
   statement {
     actions = [
-      "lambda:Invoke",
+      "lambda:InvokeFunction",
     ]
 
     resources = [
       "*",
     ]
 
-    condition {
-      test = "StringLike"
-
-      values = [
-        "validator"
-      ]
-
-      variable = "iam:ResourceTag/type"
-    }
     sid = "InvokeValidators"
   }
 }
