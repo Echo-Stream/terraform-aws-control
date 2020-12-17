@@ -877,6 +877,7 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
       "lambda:GetFunctionConfiguration",
       "lambda:ListEventSourceMappings",
       "lambda:UpdateFunctionConfiguration",
+      "lambda:DeleteFunction"
     ]
 
     resources = [
@@ -885,6 +886,7 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
 
     sid = "LambdaAccess"
   }
+
   statement {
     actions = [
       "dynamodb:BatchWriteItem",
@@ -925,6 +927,18 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
     ]
 
     sid = "Cognito"
+  }
+
+  statement {
+    actions = [
+      "sns:DeleteTopic"
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "SNSPublish"
   }
 }
 
