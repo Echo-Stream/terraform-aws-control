@@ -768,6 +768,18 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
 
   statement {
     actions = [
+      "logs:PutSubscriptionFilter",
+      "logs:DeleteSubscriptionFilter"
+    ]
+
+    resources = [
+      "*"
+    ]
+
+  }
+
+  statement {
+    actions = [
       "lambda:CreateFunction",
       "lambda:DeleteFunction",
       "lambda:TagFunction",
@@ -996,6 +1008,17 @@ data "aws_iam_policy_document" "graph_table_manage_edges" {
     ]
 
     sid = "DeleteQueue"
+  }
+
+  statement {
+    actions = [
+      "cloudwatch:PutMetricAlarm",
+      "cloudwatch:DeleteAlarms",
+    ]
+
+    resources = [
+      "*"
+    ]
   }
 
   statement {
