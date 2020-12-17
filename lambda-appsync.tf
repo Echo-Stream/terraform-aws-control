@@ -338,16 +338,17 @@ module "appsync_tenant_datasource" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    APP_VERSION             = var.echostream_version
-    ARTIFACTS_BUCKET        = local.artifacts_bucket
-    DEAD_LETTER_QUEUE       = aws_sqs_queue.stream_dead_letter_queue.arn
-    DYNAMODB_TABLE          = module.graph_table.name
-    ENVIRONMENT             = var.environment_prefix
-    INTERNAL_FUNCTIONS_ROLE = aws_iam_role.tenant_function_role.arn
-    LOG_LEVEL               = "INFO"
-    STREAM_HANDLER_FUNCTION = module.graph_table_tenant_stream_handler.arn
-    ERROR_LAMBDA_ARTIFACT   = local.lambda_functions_keys["node_error_publisher"]
-    ERROR_HANDLER_ROLE_ARN  = aws_iam_role.error_handler_role.arn
+    APP_VERSION              = var.echostream_version
+    ARTIFACTS_BUCKET         = local.artifacts_bucket
+    DEAD_LETTER_QUEUE        = aws_sqs_queue.stream_dead_letter_queue.arn
+    DYNAMODB_TABLE           = module.graph_table.name
+    ENVIRONMENT              = var.environment_prefix
+    INTERNAL_ALARM_SNS_TOPIC = aws_sns_topic.alerts.arn
+    INTERNAL_FUNCTIONS_ROLE  = aws_iam_role.tenant_function_role.arn
+    LOG_LEVEL                = "INFO"
+    STREAM_HANDLER_FUNCTION  = module.graph_table_tenant_stream_handler.arn
+    ERROR_LAMBDA_ARTIFACT    = local.lambda_functions_keys["node_error_publisher"]
+    ERROR_HANDLER_ROLE_ARN   = aws_iam_role.error_handler_role.arn
   }
 
   handler     = "function.handler"
