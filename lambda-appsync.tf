@@ -259,9 +259,55 @@ resource "aws_iam_policy" "appsync_tenant_datasource" {
   policy      = data.aws_iam_policy_document.appsync_tenant_datasource.json
 }
 
+resource "aws_iam_role" "error_handler_role" {
+  name               = "${var.environment_prefix}-error-handler"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  tags               = local.tags
+}
+
+data "aws_iam_policy_document" "error_handler_role" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "cloudwatch:PutMetricAlarm"
+    ]
+
+    resources = ["*"]
+
+    sid = "WriteCloudwatchMetrics"
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "lambda:CreateFunction*",
+      "lambda:AddPermission",
+      "lambda:TagResource"
+    ]
+
+    resources = ["*"]
+
+    sid = "LambdaCreateAccess"
+  }
+}
+
+resource "aws_iam_policy" "error_handler_role" {
+  description = "IAM permissions required for Node Error Publisher functions"
+  path        = "/${var.environment_prefix}-lambda/"
+  policy      = data.aws_iam_policy_document.error_handler_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "error_handler_role" {
+  role       = aws_iam_role.error_handler_role.name
+  policy_arn = aws_iam_policy.error_handler_role.arn
+}
+
 module "appsync_tenant_datasource" {
   description     = "Creates/removes tenants and their AWS resources"
   dead_letter_arn = local.lambda_dead_letter_arn
+
   environment_variables = {
     APP_VERSION             = var.echostream_version
     ARTIFACTS_BUCKET        = local.artifacts_bucket
@@ -271,7 +317,10 @@ module "appsync_tenant_datasource" {
     INTERNAL_FUNCTIONS_ROLE = aws_iam_role.tenant_function_role.arn
     LOG_LEVEL               = "INFO"
     STREAM_HANDLER_FUNCTION = module.graph_table_tenant_stream_handler.arn
+    ERROR_LAMBDA_ARTIFACT   = local.lambda_functions_keys["node_error_publisher"]
+    ERROR_HANDLER_ROLE_ARN  = aws_iam_role.error_handler_role.arn
   }
+
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
   memory_size = 1536
