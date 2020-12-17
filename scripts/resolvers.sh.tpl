@@ -183,3 +183,11 @@ aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --
 aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name receiveMessageType --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name receiveMessageType --data-source-name ${sub_field_datasource}
 
 aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name app --data-source-name ${sub_field_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name app --data-source-name ${sub_field_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name ListSnsSubscriptions --data-source-name ${subscription_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Query --field-name ListSnsSubscriptions --data-source-name ${subscription_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name SubscribeToSns --data-source-name ${subscription_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name SubscribeToSns --data-source-name ${subscription_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name ConfirmSnsSubscription --data-source-name ${subscription_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name ConfirmSnsSubscription --data-source-name ${subscription_datasource}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name UnsubscribeFromSns --data-source-name ${subscription_datasource} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name UnsubscribeFromSns --data-source-name ${subscription_datasource}
