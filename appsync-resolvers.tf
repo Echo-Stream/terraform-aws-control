@@ -6,6 +6,7 @@
 data "template_file" "resolver_sh" {
   template = file("${path.module}/scripts/resolvers.sh.tpl")
   vars = {
+    aws_path                         = "/home/terraform/bin/aws"
     api_id                           = aws_appsync_graphql_api.echostream.id
     tenant_datasource                = module.tenant_datasource.name
     node_datasource                  = module.node_datasource.name
