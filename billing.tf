@@ -1,5 +1,5 @@
-module "billing" {
-  environment_prefix = var.environment_prefix
-  tags               = local.tags
-  source             = "./_modules/billing"
+resource "aws_sns_topic" "tenant_usage_executions" {
+  name         = "${var.environment_prefix}-tenant-usage-executions"
+  display_name = "${var.environment_prefix} Tenant Usage Executions"
+  tags         = local.tags
 }
