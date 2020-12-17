@@ -937,8 +937,6 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
     resources = [
       "*"
     ]
-
-    sid = "SNSPublish"
   }
 }
 
