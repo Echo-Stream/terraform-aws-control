@@ -950,6 +950,16 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
       "*"
     ]
   }
+
+  statement {
+    actions = [
+      "cloudwatch:DeleteAlarms",
+    ]
+
+    resources = [
+      "*"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "graph_table_manage_tenants" {
