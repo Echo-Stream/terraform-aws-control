@@ -5,7 +5,7 @@ resource "aws_iam_role" "tenant_function_role" {
   tags               = local.tags
 }
 
-resource "aws_iam_role_policy_attachment" "tenant_function_logging" {
+resource "aws_iam_role_policy_attachment" "tenant_function_basic" {
   role       = aws_iam_role.tenant_function_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
@@ -250,22 +250,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
 
     sid = "CreateSNSTopic"
   }
-}
 
-resource "aws_iam_policy" "appsync_tenant_datasource" {
-  description = "IAM permissions required for appsync-tenant-datasource lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-appsync-tenant-datasource"
-  policy      = data.aws_iam_policy_document.appsync_tenant_datasource.json
-}
-
-resource "aws_iam_role" "error_handler_role" {
-  name               = "${var.environment_prefix}-error-handler"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
-  tags               = local.tags
-}
-
-data "aws_iam_policy_document" "error_handler_role" {
   statement {
     effect = "Allow"
 
@@ -290,6 +275,48 @@ data "aws_iam_policy_document" "error_handler_role" {
     resources = ["*"]
 
     sid = "LambdaCreateAccess"
+  }
+}
+
+resource "aws_iam_policy" "appsync_tenant_datasource" {
+  description = "IAM permissions required for appsync-tenant-datasource lambda"
+  path        = "/${var.environment_prefix}-lambda/"
+  name        = "${var.environment_prefix}-appsync-tenant-datasource"
+  policy      = data.aws_iam_policy_document.appsync_tenant_datasource.json
+}
+
+resource "aws_iam_role" "error_handler_role" {
+  name               = "${var.environment_prefix}-error-handler"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  tags               = local.tags
+}
+
+resource "aws_iam_role_policy_attachment" "error_handler_role_basic" {
+  role       = aws_iam_role.error_handler_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+data "aws_iam_policy_document" "error_handler_role" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sns:Publish"
+    ]
+
+    resources = ["*"]
+
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey",
+    ]
+
+    resources = ["*"]
   }
 }
 
