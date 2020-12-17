@@ -7,6 +7,7 @@ EOH
   }
 
   triggers = {
+    deploy                           = data.template_file.resolver_sh.rendered
     api_id                           = aws_appsync_graphql_api.echostream.id
     message_type_datasource          = module.message_type_datasource.name
     tenant_datasource                = module.tenant_datasource.name
@@ -16,5 +17,6 @@ EOH
     validate_function_datasource     = module.validate_function_datasource.name
     sub_field_datasource             = module.sub_field_datasource.name
     large_message_storage_datasource = module.large_message_storage_datasource.name
+    subscription_datasource          = module.subscription_datasource.name
   }
 }
