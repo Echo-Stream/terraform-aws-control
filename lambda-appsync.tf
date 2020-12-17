@@ -1299,6 +1299,20 @@ data "aws_iam_policy_document" "appsync_subscription_datasource" {
 
     sid = "TableAccess"
   }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sns:ListSubscriptionsByTopic",
+      "sns:Subscribe",
+      "sns:Unsubscribe",
+      "sns:ConfirmSubscription"
+    ]
+
+    resources = ["*"]
+
+  }
 }
 
 resource "aws_iam_policy" "appsync_subscription_datasource" {
