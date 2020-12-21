@@ -244,6 +244,7 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     actions = [
       "sns:CreateTopic",
       "sns:TagResource",
+      "sns:Subscribe",
     ]
 
     resources = [
