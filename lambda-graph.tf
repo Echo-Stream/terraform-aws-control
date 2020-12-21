@@ -889,7 +889,8 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
       "lambda:GetFunctionConfiguration",
       "lambda:ListEventSourceMappings",
       "lambda:UpdateFunctionConfiguration",
-      "lambda:DeleteFunction"
+      "lambda:DeleteFunction",
+      "lambda:CreateFunction"
     ]
 
     resources = [
