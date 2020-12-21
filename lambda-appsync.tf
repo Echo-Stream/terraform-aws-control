@@ -288,57 +288,15 @@ resource "aws_iam_policy" "appsync_tenant_datasource" {
   policy      = data.aws_iam_policy_document.appsync_tenant_datasource.json
 }
 
-resource "aws_iam_role" "error_handler_role" {
-  name               = "${var.environment_prefix}-error-handler"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
-  tags               = local.tags
-}
-
-resource "aws_iam_role_policy_attachment" "error_handler_role_basic" {
-  role       = aws_iam_role.error_handler_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
-
-data "aws_iam_policy_document" "error_handler_role" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "sns:Publish"
-    ]
-
-    resources = ["*"]
-
-  }
-
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "kms:Decrypt",
-      "kms:GenerateDataKey",
-    ]
-
-    resources = ["*"]
-  }
-}
-
-resource "aws_iam_policy" "error_handler_role" {
-  description = "IAM permissions required for Node Error Publisher functions"
-  path        = "/${var.environment_prefix}-lambda/"
-  policy      = data.aws_iam_policy_document.error_handler_role.json
-}
-
-resource "aws_iam_role_policy_attachment" "error_handler_role" {
-  role       = aws_iam_role.error_handler_role.name
-  policy_arn = aws_iam_policy.error_handler_role.arn
-}
-
 module "appsync_tenant_datasource" {
   description     = "Creates/removes tenants and their AWS resources"
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
+    ALARM_HANDLER_ROLE_ARN   = aws_iam_role.alarm_handler_role.arn
+    ALARM_LAMBDA_ARTIFACT    = local.lambda_functions_keys["queue_alarm_publisher"]
+    ALERT_HANDLER_ROLE_ARN   = aws_iam_role.alert_handler_role.arn
+    ALERT_LAMBDA_ARTIFACT    = local.lambda_functions_keys["tenant_alert_publisher"]
     APP_VERSION              = var.echostream_version
     ARTIFACTS_BUCKET         = local.artifacts_bucket
     DEAD_LETTER_QUEUE        = aws_sqs_queue.stream_dead_letter_queue.arn
