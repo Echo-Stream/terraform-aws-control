@@ -537,6 +537,16 @@ data "aws_iam_policy_document" "appsync_edge_datasource" {
 
     sid = "KMSPermissions"
   }
+
+
+  statement {
+    actions = [
+      "cloudwatch:PutMetricAlarm"
+    ]
+
+    resources = ["*"]
+
+  }
 }
 
 resource "aws_iam_policy" "appsync_edge_datasource" {
