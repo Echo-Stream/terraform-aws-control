@@ -1038,7 +1038,7 @@ data "aws_iam_policy_document" "appsync_node_datasource" {
     ]
 
     resources = [
-        "*"
+      "*"
     ]
 
     sid = "LogEvents"
