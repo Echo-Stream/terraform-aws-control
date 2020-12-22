@@ -769,7 +769,8 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
   statement {
     actions = [
       "logs:PutSubscriptionFilter",
-      "logs:DeleteSubscriptionFilter"
+      "logs:DeleteSubscriptionFilter",
+      "logs:PutRetentionPolicy",
     ]
 
     resources = [

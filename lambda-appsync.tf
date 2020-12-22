@@ -1032,6 +1032,17 @@ data "aws_iam_policy_document" "appsync_node_datasource" {
 
     sid = "TableAccess"
   }
+  statement {
+    actions = [
+      "logs:FilterLogEvents",
+    ]
+
+    resources = [
+        "*"
+    ]
+
+    sid = "LogEvents"
+  }
 }
 
 resource "aws_iam_policy" "appsync_node_datasource" {
