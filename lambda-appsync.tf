@@ -1205,13 +1205,15 @@ data "aws_iam_policy_document" "appsync_validate_function_datasource" {
   statement {
     actions = [
       "lambda:InvokeFunction",
+      "lambda:TagResource",
+      "lambda:CreateFunction",
     ]
 
     resources = [
       "*",
     ]
 
-    sid = "InvokeValidators"
+    sid = "InvokeCreateTagValidators"
   }
 }
 
