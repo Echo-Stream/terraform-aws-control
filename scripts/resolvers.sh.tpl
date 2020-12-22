@@ -189,3 +189,5 @@ ${aws_path} appsync create-resolver --api-id ${api_id} --type-name Mutation --fi
 ${aws_path} appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name ConfirmSnsSubscription --data-source-name ${subscription_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name ConfirmSnsSubscription --data-source-name ${subscription_datasource}
 
 ${aws_path} appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name UnsubscribeFromSns --data-source-name ${subscription_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name UnsubscribeFromSns --data-source-name ${subscription_datasource}
+
+${aws_path} appsync create-resolver --api-id ${api_id} --type-name Query --field-name GetNodeCallableLogs --data-source-name ${node_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Query --field-name GetNodeCallableLogs --data-source-name ${node_datasource}
