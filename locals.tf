@@ -92,7 +92,7 @@ locals {
     node_error_publisher                     = "${local.artifacts["tenant_lambda"]}/node-error-publisher.zip"
     process_audit_record                     = "${local.artifacts["lambda"]}/process-audit-record.zip"
     purge_tenants                            = "${local.artifacts["lambda"]}/purge-tenants.zip"
-    queue_alarm_publisher                    = "${local.artifacts["tenant_lambda"]}/queue-alarm-pubisher.zip"
+    queue_alarm_publisher                    = "${local.artifacts["tenant_lambda"]}/queue-alarm-publisher.zip"
     router_node                              = "${local.artifacts["tenant_lambda"]}/router-node.zip"
     tenant_alert_publisher                   = "${local.artifacts["tenant_lambda"]}/tenant-alert-publisher.zip"
     trans_node                               = "${local.artifacts["tenant_lambda"]}/trans-node.zip"

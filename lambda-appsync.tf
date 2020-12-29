@@ -279,6 +279,18 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
 
     sid = "LambdaCreateAccess"
   }
+  statement {
+    effect = "Allow"
+    actions = [
+      "iam:PassRole",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "LambdaPassRole"
+  }
 }
 
 resource "aws_iam_policy" "appsync_tenant_datasource" {

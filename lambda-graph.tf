@@ -771,6 +771,7 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
       "logs:PutSubscriptionFilter",
       "logs:DeleteSubscriptionFilter",
       "logs:PutRetentionPolicy",
+      "logs:CreateLogGroup",
     ]
 
     resources = [
