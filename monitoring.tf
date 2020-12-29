@@ -97,6 +97,16 @@ data "aws_iam_policy_document" "alert_handler_role" {
 
     resources = ["*"]
   }
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "dynamodb:Query"
+    ]
+
+    resources = ["*"]
+
+  }
 }
 
 resource "aws_iam_policy" "alert_handler_role" {
