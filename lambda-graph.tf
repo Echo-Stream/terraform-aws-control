@@ -131,7 +131,7 @@ data "aws_iam_policy_document" "graph_table_manage_users" {
 
     resources = [
       aws_appsync_graphql_api.echostream.arn,
-      "${aws_appsync_graphql_api.echostream.arn}/types/mutation/fields/StreamNotifications"
+      "${aws_appsync_graphql_api.echostream.arn}/types/Mutation/fields/StreamNotifications",
     ]
 
     sid = "AppsyncMutationQueryAccess"
@@ -341,7 +341,7 @@ data "aws_iam_policy_document" "graph_table_manage_queues" {
 
     resources = [
       aws_appsync_graphql_api.echostream.arn,
-      "${aws_appsync_graphql_api.echostream.arn}/types/mutation/fields/StreamNotifications"
+      "${aws_appsync_graphql_api.echostream.arn}/types/Mutation/fields/StreamNotifications",
     ]
 
     sid = "AppsyncFieldAndAPIAccess"
@@ -472,7 +472,7 @@ data "aws_iam_policy_document" "graph_table_manage_apps" {
 
     resources = [
       aws_appsync_graphql_api.echostream.arn,
-      "${aws_appsync_graphql_api.echostream.arn}/types/mutation/fields/StreamNotifications"
+      "${aws_appsync_graphql_api.echostream.arn}/types/Mutation/fields/StreamNotifications",
     ]
 
     sid = "AppsyncMutationQueryAccess"
@@ -573,7 +573,8 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
 
     resources = [
       aws_appsync_graphql_api.echostream.arn,
-      "${aws_appsync_graphql_api.echostream.arn}/types/mutation/*"
+      "${aws_appsync_graphql_api.echostream.arn}/types/Mutation/fields/NotifyApp",
+      "${aws_appsync_graphql_api.echostream.arn}/types/AppNotification/fields/*",
     ]
 
     sid = "AppsyncMutationQueryAccess"
@@ -608,6 +609,7 @@ module "graph_table_tenant_stream_handler" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
+    APPSYNC_ENDPOINT       = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
     DYNAMODB_TABLE         = module.graph_table.name
     ENVIRONMENT            = var.environment_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
@@ -877,8 +879,8 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
     ]
 
     resources = [
-      "arn:aws:appsync:${local.current_region}:${var.allowed_account_id}:apis/${aws_appsync_graphql_api.echostream.id}",
-      "arn:aws:appsync:${local.current_region}:${var.allowed_account_id}:apis/${aws_appsync_graphql_api.echostream.id}/types/mutation/fields/*",
+      aws_appsync_graphql_api.echostream.arn,
+      "${aws_appsync_graphql_api.echostream.arn}/types/Mutation/fields/*",
     ]
 
     sid = "AppSync"

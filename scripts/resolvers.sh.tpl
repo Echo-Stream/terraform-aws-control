@@ -56,12 +56,6 @@ ${aws_path} appsync create-resolver --api-id ${api_id} --type-name MessageType -
 
 ${aws_path} appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name AppNotification --data-source-name ${app_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name AppNotification --data-source-name ${app_datasource}
 
-${aws_path} appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name NodeNotification --data-source-name ${node_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name NodeNotification --data-source-name ${node_datasource}
-
-${aws_path} appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name EdgeNotification --data-source-name ${edge_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name EdgeNotification --data-source-name ${edge_datasource}
-
-${aws_path} appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name MessageTypeNotification --data-source-name ${message_type_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name MessageTypeNotification --data-source-name ${message_type_datasource}
-
 ${aws_path} appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutEdge --data-source-name ${edge_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutEdge --data-source-name ${edge_datasource}
 
 ${aws_path} appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutExternalApp --data-source-name ${app_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutExternalApp --data-source-name ${app_datasource}
@@ -138,14 +132,6 @@ ${aws_path} appsync create-resolver --api-id ${api_id} --type-name RouterNode --
 
 ${aws_path} appsync create-resolver --api-id ${api_id} --type-name RouterNode --field-name receiveMessageType --data-source-name ${sub_field_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name RouterNode --field-name receiveMessageType --data-source-name ${sub_field_datasource}
 
-${aws_path} appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name appUpdated --data-source-name ${subscription_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name appUpdated --data-source-name ${subscription_datasource}
-
-${aws_path} appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name nodeUpdated --data-source-name ${subscription_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name nodeUpdated --data-source-name ${subscription_datasource}
-
-${aws_path} appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name edgeUpdated --data-source-name ${subscription_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name edgeUpdated --data-source-name ${subscription_datasource}
-
-${aws_path} appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name messageTypeUpdated --data-source-name ${subscription_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name messageTypeUpdated --data-source-name ${subscription_datasource}
-
 ${aws_path} appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name sendEdges --data-source-name ${sub_field_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name TransNode --field-name sendEdges --data-source-name ${sub_field_datasource}
 
 ${aws_path} appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name sendMessageType --data-source-name ${sub_field_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name TransNode --field-name sendMessageType --data-source-name ${sub_field_datasource}
@@ -191,3 +177,13 @@ ${aws_path} appsync create-resolver --api-id ${api_id} --type-name Mutation --fi
 ${aws_path} appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name UnsubscribeFromSns --data-source-name ${subscription_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name UnsubscribeFromSns --data-source-name ${subscription_datasource}
 
 ${aws_path} appsync create-resolver --api-id ${api_id} --type-name Query --field-name GetNodeCallableLogs --data-source-name ${node_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Query --field-name GetNodeCallableLogs --data-source-name ${node_datasource}
+
+${aws_path} appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name appNotifications --data-source-name ${subscription_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name appNotifications --data-source-name ${subscription_datasource}
+
+${aws_path} appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name NotifyApp --data-source-name ${subscription_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name NotifyApp --data-source-name ${subscription_datasource}
+
+${aws_path} appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name NotifyUI --data-source-name ${subscription_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name NotifyUI --data-source-name ${subscription_datasource}
+
+${aws_path} appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name uiNotifications --data-source-name ${subscription_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name uiNotifications --data-source-name ${subscription_datasource}
+
+${aws_path} appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PurgeQueue --data-source-name ${edge_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PurgeQueue --data-source-name ${edge_datasource}

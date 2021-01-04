@@ -119,6 +119,7 @@ module "appsync_kms_key_datasource" {
 
     DYNAMODB_TABLE          = module.graph_table.name
     ENVIRONMENT             = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES  = local.internal_appsync_role_names
     INTERNAL_FUNCTIONS_ROLE = aws_iam_role.tenant_function_role.arn
     LOG_LEVEL               = "INFO"
 
@@ -314,6 +315,7 @@ module "appsync_tenant_datasource" {
     DEAD_LETTER_QUEUE        = aws_sqs_queue.stream_dead_letter_queue.arn
     DYNAMODB_TABLE           = module.graph_table.name
     ENVIRONMENT              = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES   = local.internal_appsync_role_names
     INTERNAL_ALARM_SNS_TOPIC = aws_sns_topic.alerts.arn
     INTERNAL_FUNCTIONS_ROLE  = aws_iam_role.tenant_function_role.arn
     LOG_LEVEL                = "INFO"
@@ -488,6 +490,7 @@ data "aws_iam_policy_document" "appsync_edge_datasource" {
       "sqs:GetQueueUrl",
       "sqs:TagQueue",
       "sqs:DeleteQueue",
+      "sqs:PurgeQueue",
     ]
 
     resources = [
@@ -533,6 +536,7 @@ module "appsync_edge_datasource" {
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
     ENVIRONMENT            = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     LOG_LEVEL              = "INFO"
     MESSAGE_RETENTION_DAYS = 7
   }
@@ -859,11 +863,12 @@ module "appsync_message_type_datasource" {
   description = "AppSync datasource lambda function that handles putting of MessageTypes"
 
   environment_variables = {
-    APP_VERSION     = var.echostream_version
-    ARTIFACT_BUCKET = local.artifacts_bucket
-    DYNAMODB_TABLE  = module.graph_table.name
-    ENVIRONMENT     = var.environment_prefix
-    LOG_LEVEL       = "INFO"
+    APP_VERSION            = var.echostream_version
+    ARTIFACT_BUCKET        = local.artifacts_bucket
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
+    LOG_LEVEL              = "INFO"
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -988,15 +993,16 @@ module "appsync_app_datasource" {
   description = "Appsync datasource for managing app"
 
   environment_variables = {
-    APPSYNC_ENDPOINT     = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
-    APP_CLIENT_ID        = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
-    APP_CLOUD_INIT_TOPIC = aws_sns_topic.hl7_app_cloud_init.name
-    APP_IDENTITY_POOL_ID = aws_cognito_identity_pool.echostream.id
-    APP_USER_POOL_ID     = aws_cognito_user_pool.echostream_apps.id
-    AUDIT_FIREHOSE       = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
-    COGNITO_ROLE_ARN     = aws_iam_role.authenticated.arn
-    DYNAMODB_TABLE       = module.graph_table.name
-    ENVIRONMENT          = var.environment_prefix
+    APPSYNC_ENDPOINT       = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
+    APP_CLIENT_ID          = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
+    APP_CLOUD_INIT_TOPIC   = aws_sns_topic.hl7_app_cloud_init.name
+    APP_IDENTITY_POOL_ID   = aws_cognito_identity_pool.echostream.id
+    APP_USER_POOL_ID       = aws_cognito_user_pool.echostream_apps.id
+    AUDIT_FIREHOSE         = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
+    COGNITO_ROLE_ARN       = aws_iam_role.authenticated.arn
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     #INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.echostream_version}"
     LOG_LEVEL = "INFO"
     #OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.echostream_version}"
@@ -1068,9 +1074,10 @@ module "appsync_node_datasource" {
   description = "Datasource for managing nodes"
 
   environment_variables = {
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
-    LOG_LEVEL      = "INFO"
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
+    LOG_LEVEL              = "INFO"
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1123,9 +1130,10 @@ module "appsync_sub_field_datasource" {
   description = "Resolves child Appsync fields"
 
   environment_variables = {
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
-    LOG_LEVEL      = "INFO"
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
+    LOG_LEVEL              = "INFO"
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -1181,11 +1189,12 @@ module "appsync_large_message_storage_datasource" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    ACCESS_KEY_ID     = aws_iam_access_key.presign_large_messages.id
-    DYNAMODB_TABLE    = module.graph_table.name
-    ENVIRONMENT       = var.environment_prefix
-    LOG_LEVEL         = "INFO"
-    SECRET_ACCESS_KEY = aws_iam_access_key.presign_large_messages.secret
+    ACCESS_KEY_ID          = aws_iam_access_key.presign_large_messages.id
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
+    LOG_LEVEL              = "INFO"
+    SECRET_ACCESS_KEY      = aws_iam_access_key.presign_large_messages.secret
   }
 
   handler     = "function.handler"
@@ -1252,11 +1261,12 @@ module "appsync_validate_function_datasource" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    ACCESS_KEY_ID     = ""
-    DYNAMODB_TABLE    = module.graph_table.name
-    ENVIRONMENT       = var.environment_prefix
-    LOG_LEVEL         = "INFO"
-    SECRET_ACCESS_KEY = ""
+    ACCESS_KEY_ID          = ""
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
+    LOG_LEVEL              = "INFO"
+    SECRET_ACCESS_KEY      = ""
   }
 
   handler     = "function.handler"
@@ -1323,9 +1333,10 @@ module "appsync_subscription_datasource" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
-    LOG_LEVEL      = "INFO"
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.environment_prefix
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
+    LOG_LEVEL              = "INFO"
   }
 
   handler     = "function.handler"
