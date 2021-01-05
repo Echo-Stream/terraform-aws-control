@@ -1382,7 +1382,8 @@ data "aws_iam_policy_document" "purge_tenants" {
     actions = [
       "dynamodb:BatchWriteItem",
       "dynamodb:Query",
-      "dynamodb:DeleteItem"
+      "dynamodb:DeleteItem",
+      "dynamodb:UpdateItem"
     ]
 
     resources = [
