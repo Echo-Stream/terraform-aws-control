@@ -575,6 +575,8 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
       aws_appsync_graphql_api.echostream.arn,
       "${aws_appsync_graphql_api.echostream.arn}/types/Mutation/fields/NotifyApp",
       "${aws_appsync_graphql_api.echostream.arn}/types/AppNotification/fields/*",
+      "${aws_appsync_graphql_api.echostream.arn}/types/Mutation/fields/NotifyUI",
+      "${aws_appsync_graphql_api.echostream.arn}/types/UINotification/fields/*",
     ]
 
     sid = "AppsyncMutationQueryAccess"
