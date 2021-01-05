@@ -3,12 +3,12 @@
 ####################################################
 resource "aws_glue_catalog_database" "audit_records" {
   description = "Audit Records"
-  name        = "${replace(var.environment_prefix, "-", "_")}_audit_records"
+  name        = "${replace(var.resource_prefix, "-", "_")}_audit_records"
 }
 
 resource "aws_iam_role" "audit_records" {
   assume_role_policy = data.aws_iam_policy_document.aws_glue_assume_role.json
-  name               = "${var.environment_prefix}-audit-records"
+  name               = "${var.resource_prefix}-audit-records"
   tags               = local.tags
 }
 
@@ -18,7 +18,7 @@ resource "aws_iam_role_policy_attachment" "audit_records" {
 }
 
 resource "aws_iam_role_policy" "audit_records" {
-  name   = "${var.environment_prefix}-audit-records"
+  name   = "${var.resource_prefix}-audit-records"
   policy = data.aws_iam_policy_document.audit_records.json
   role   = aws_iam_role.audit_records.id
 }
@@ -55,7 +55,7 @@ data "aws_iam_policy_document" "audit_records" {
 resource "aws_glue_crawler" "current_records" {
   description   = "Crawls over current audit records"
   database_name = aws_glue_catalog_database.audit_records.name
-  name          = "${var.environment_prefix}-current"
+  name          = "${var.resource_prefix}-current"
   role          = aws_iam_role.audit_records.arn
 
   s3_target {
@@ -77,7 +77,7 @@ EOF
 resource "aws_glue_crawler" "historical_records" {
   description   = "Crawls over historical audit records"
   database_name = aws_glue_catalog_database.audit_records.name
-  name          = "${var.environment_prefix}-historical"
+  name          = "${var.resource_prefix}-historical"
   role          = aws_iam_role.audit_records.arn
 
   s3_target {
@@ -121,7 +121,7 @@ resource "aws_glue_job" "audit_records" {
   glue_version      = "2.0"
   max_retries       = 1
   timeout           = 2880
-  name              = "${var.environment_prefix}-audit-records"
+  name              = "${var.resource_prefix}-audit-records"
   number_of_workers = 2
   worker_type       = "G.1X"
   role_arn          = aws_iam_role.audit_records.arn
@@ -132,13 +132,13 @@ resource "aws_glue_job" "audit_records" {
 ## Glue WorkFlow ##
 ###################
 resource "aws_glue_workflow" "audit_records" {
-  name        = "${var.environment_prefix}-audit-records"
+  name        = "${var.resource_prefix}-audit-records"
   description = "Extracts audit records and partitions them by tenant into historical table at the end of every month"
   tags        = local.tags
 }
 
 resource "aws_glue_trigger" "audit_records_start" {
-  name          = "${var.environment_prefix}-audit-records-start"
+  name          = "${var.resource_prefix}-audit-records-start"
   description   = "Triggers Audit records ETL Job on First of every month at 12:30AM"
   workflow_name = aws_glue_workflow.audit_records.name
 
@@ -153,7 +153,7 @@ resource "aws_glue_trigger" "audit_records_start" {
 }
 
 resource "aws_glue_trigger" "audit_records_end" {
-  name          = "${var.environment_prefix}-audit-records-end"
+  name          = "${var.resource_prefix}-audit-records-end"
   description   = "Triggers Current and Historical Glue Crawlers on successful ETL job completion"
   workflow_name = aws_glue_workflow.audit_records.name
   type          = "CONDITIONAL"

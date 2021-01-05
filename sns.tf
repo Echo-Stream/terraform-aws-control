@@ -1,5 +1,5 @@
 resource "aws_sns_topic" "hl7_app_cloud_init" {
-  name         = "${var.environment_prefix}-hl7-app-cloud-init"
+  name         = "${var.resource_prefix}-hl7-app-cloud-init"
   display_name = "HL7 App Cloud Init topic"
   tags         = local.tags
 }
@@ -13,7 +13,7 @@ module "hl7_app_cloud_init_subscription" {
 }
 
 resource "aws_sns_topic" "alerts" {
-  name         = "${var.environment_prefix}-alerts"
-  display_name = "${var.environment_prefix} Alerts"
+  name         = "${var.resource_prefix}-alerts"
+  display_name = "${var.resource_prefix} Alerts"
   tags         = local.tags
 }

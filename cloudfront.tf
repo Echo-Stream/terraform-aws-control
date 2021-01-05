@@ -5,7 +5,7 @@ resource "aws_cloudfront_distribution" "webapp" {
 
   origin {
     domain_name = "${local.artifacts_bucket}.s3.amazonaws.com"
-    origin_id   = "${var.environment_prefix}-webapp"
+    origin_id   = "${var.resource_prefix}-webapp"
     origin_path = "/${var.echostream_version}/reactjs"
 
     s3_origin_config {
@@ -22,13 +22,13 @@ resource "aws_cloudfront_distribution" "webapp" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = "${var.environment_prefix} Echo Stream ReactJS Webapp"
+  comment             = "${var.resource_prefix} Echo Stream ReactJS Webapp"
   default_root_object = "index.html"
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "${var.environment_prefix}-webapp"
+    target_origin_id = "${var.resource_prefix}-webapp"
 
     forwarded_values {
       query_string = false
@@ -48,7 +48,7 @@ resource "aws_cloudfront_distribution" "webapp" {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
     path_pattern     = "/config/config.json"
-    target_origin_id = "${var.environment_prefix}-webapp"
+    target_origin_id = "${var.resource_prefix}-webapp"
 
     forwarded_values {
       query_string = false
@@ -72,7 +72,7 @@ resource "aws_cloudfront_distribution" "webapp" {
   logging_config {
     bucket          = data.aws_s3_bucket.log_bucket.bucket_domain_name
     include_cookies = false
-    prefix          = "cloudfront/${var.environment_prefix}-webapp/"
+    prefix          = "cloudfront/${var.resource_prefix}-webapp/"
   }
 
   price_class = "PriceClass_100"
@@ -93,7 +93,7 @@ resource "aws_cloudfront_distribution" "webapp" {
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
-  comment = "${var.environment_prefix} Echo Stream ReactJS Webapp"
+  comment = "${var.resource_prefix} Echo Stream ReactJS Webapp"
 }
 
 resource "aws_route53_record" "webapp_cloudfront" {
@@ -133,7 +133,7 @@ data "archive_file" "edge_config" {
 
 resource "aws_iam_role" "edge_config" {
   assume_role_policy = data.aws_iam_policy_document.edge_lambda_assume_role.json
-  name               = "${var.environment_prefix}-edge-config"
+  name               = "${var.resource_prefix}-edge-config"
   tags               = local.tags
 }
 
@@ -144,7 +144,7 @@ resource "aws_lambda_function" "edge_config" {
 
   description      = "Edge Lambda that returns an environment specific config for reactjs application"
   filename         = "${path.module}/edge-config.zip"
-  function_name    = "${var.environment_prefix}-edge-config"
+  function_name    = "${var.resource_prefix}-edge-config"
   handler          = "function.lambda_handler"
   publish          = true
   role             = aws_iam_role.edge_config.arn

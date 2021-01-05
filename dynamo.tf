@@ -38,7 +38,7 @@ module "graph_table" {
 
   hash_key               = "pk"
   range_key              = "sk"
-  name                   = "${var.environment_prefix}-graph"
+  name                   = "${var.resource_prefix}-graph"
   point_in_time_recovery = true
   stream_view_type       = "NEW_AND_OLD_IMAGES"
 

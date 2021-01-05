@@ -1,5 +1,5 @@
 resource "aws_cognito_identity_pool" "echostream" {
-  identity_pool_name               = replace(var.environment_prefix, "/[^aA-zZ]/", "")
+  identity_pool_name               = replace(var.resource_prefix, "/[^aA-zZ]/", "")
   allow_unauthenticated_identities = false
 
   cognito_identity_providers {
@@ -51,7 +51,7 @@ data "aws_iam_policy_document" "authenticated_id_pool_assume_role" {
 resource "aws_iam_role" "authenticated" {
   description        = "Permissions to AWS for Authenticated Identities"
   assume_role_policy = data.aws_iam_policy_document.authenticated_id_pool_assume_role.json
-  name               = "${var.environment_prefix}-authenticated-idp"
+  name               = "${var.resource_prefix}-authenticated-idp"
   tags               = local.tags
 }
 
@@ -136,7 +136,7 @@ data "aws_iam_policy_document" "unauthenticated_id_pool_assume_role" {
 resource "aws_iam_role" "unauthenticated" {
   description        = "Permissions to AWS for Unauthenticated Identities, typically belong to guest users"
   assume_role_policy = data.aws_iam_policy_document.unauthenticated_id_pool_assume_role.json
-  name               = "${var.environment_prefix}-unauthenticated-idp"
+  name               = "${var.resource_prefix}-unauthenticated-idp"
   tags               = local.tags
 }
 

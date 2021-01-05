@@ -23,9 +23,8 @@ variable "echostream_version" {
   type        = string
 }
 
-variable "environment_prefix" {
-  description = "Environment Prefix for naming resources, a Unique name that could differentiate whole environment. Lower case only, No periods"
-  type        = string
+variable "resource_prefix" {
+  description = "Prefix for naming resources. Lower case only, No periods"
 }
 
 variable "region" {

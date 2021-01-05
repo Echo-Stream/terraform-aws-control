@@ -24,7 +24,7 @@ locals {
   artifacts_bucket_prefix = "echostream-artifacts"
   aws_cli_command         = "~/bin/aws"
   current_region          = data.aws_region.current.name
-  domain                  = "${var.environment_prefix}.${var.domain_name}"
+  domain                  = "${var.resource_prefix}.${var.domain_name}"
 
   id_token_key = <<-EOT
                     {
@@ -37,27 +37,27 @@ locals {
                   EOT
 
   internal_appsync_role_names = jsonencode([
-    "${var.environment_prefix}-appsync-app-datasource",
-    "${var.environment_prefix}-appsync-edge-datasource",
-    "${var.environment_prefix}-appsync-kms-key-datasource",
-    "${var.environment_prefix}-appsync-large-message-storage-datasource",
-    "${var.environment_prefix}-appsync-message-type-datasource",
-    "${var.environment_prefix}-appsync-node-datasource",
-    "${var.environment_prefix}-appsync-sub-field-datasource",
-    "${var.environment_prefix}-appsync-subscription-datasource",
-    "${var.environment_prefix}-appsync-tenant-datasource",
-    "${var.environment_prefix}-appsync-validate-function-datasource",
-    "${var.environment_prefix}-graph-table-dynamodb-trigger",
-    "${var.environment_prefix}-graph-table-manage-apps",
-    "${var.environment_prefix}-graph-table-manage-edges",
-    "${var.environment_prefix}-graph-table-manage-kms-keys",
-    "${var.environment_prefix}-graph-table-manage-message-types",
-    "${var.environment_prefix}-graph-table-manage-nodes",
-    "${var.environment_prefix}-graph-table-manage-queues",
-    "${var.environment_prefix}-graph-table-manage-resource-policies",
-    "${var.environment_prefix}-graph-table-manage-tenants",
-    "${var.environment_prefix}-graph-table-manage-users",
-    "${var.environment_prefix}-graph-table-tenant-stream-handler",
+    "${var.resource_prefix}-appsync-app-datasource",
+    "${var.resource_prefix}-appsync-edge-datasource",
+    "${var.resource_prefix}-appsync-kms-key-datasource",
+    "${var.resource_prefix}-appsync-large-message-storage-datasource",
+    "${var.resource_prefix}-appsync-message-type-datasource",
+    "${var.resource_prefix}-appsync-node-datasource",
+    "${var.resource_prefix}-appsync-sub-field-datasource",
+    "${var.resource_prefix}-appsync-subscription-datasource",
+    "${var.resource_prefix}-appsync-tenant-datasource",
+    "${var.resource_prefix}-appsync-validate-function-datasource",
+    "${var.resource_prefix}-graph-table-dynamodb-trigger",
+    "${var.resource_prefix}-graph-table-manage-apps",
+    "${var.resource_prefix}-graph-table-manage-edges",
+    "${var.resource_prefix}-graph-table-manage-kms-keys",
+    "${var.resource_prefix}-graph-table-manage-message-types",
+    "${var.resource_prefix}-graph-table-manage-nodes",
+    "${var.resource_prefix}-graph-table-manage-queues",
+    "${var.resource_prefix}-graph-table-manage-resource-policies",
+    "${var.resource_prefix}-graph-table-manage-tenants",
+    "${var.resource_prefix}-graph-table-manage-users",
+    "${var.resource_prefix}-graph-table-tenant-stream-handler",
   ])
 
   lambda_dead_letter_arn      = aws_sns_topic.lambda_dead_letter.arn
@@ -108,7 +108,7 @@ locals {
 
   tags = {
     app         = "echostream"
-    environment = var.environment_prefix
+    environment = var.resource_prefix
     terraform   = "true"
     version     = var.echostream_version
   }

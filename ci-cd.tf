@@ -97,8 +97,8 @@ data "aws_iam_policy_document" "deployment_handler" {
 
 resource "aws_iam_policy" "deployment_handler" {
   description = "IAM permissions required for deployment-handler lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-deployment-handler"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-deployment-handler"
   policy      = data.aws_iam_policy_document.deployment_handler.json
 }
 
@@ -111,7 +111,7 @@ module "deployment_handler" {
     CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.webapp.id
     DYNAMODB_TABLE             = module.graph_table.name
     ECHOSTREAM_VERSION         = var.echostream_version
-    ENVIRONMENT                = var.environment_prefix
+    ENVIRONMENT                = var.resource_prefix
     SNS_TOPIC_ARN              = aws_sns_topic.ci_cd_errors.arn
   }
 
@@ -119,7 +119,7 @@ module "deployment_handler" {
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.environment_prefix}-deployment-handler"
+  name            = "${var.resource_prefix}-deployment-handler"
 
   policy_arns = [
     aws_iam_policy.deployment_handler.arn,
@@ -135,8 +135,8 @@ module "deployment_handler" {
 }
 
 resource "aws_sns_topic" "ci_cd_errors" {
-  name         = "${var.environment_prefix}-ci-cd-errors"
-  display_name = "${var.environment_prefix} CI/CD Notifications"
+  name         = "${var.resource_prefix}-ci-cd-errors"
+  display_name = "${var.resource_prefix} CI/CD Notifications"
   tags         = local.tags
 }
 

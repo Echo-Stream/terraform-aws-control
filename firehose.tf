@@ -6,7 +6,7 @@ module "process_audit_record" {
 
   environment_variables = {
     APP_CLIENT_ID   = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
-    ENVIRONMENT     = var.environment_prefix
+    ENVIRONMENT     = var.resource_prefix
     ID_TOKEN_KEY    = local.id_token_key
     USERPOOL_ID     = aws_cognito_user_pool.echostream_apps.id
     USERPOOL_REGION = local.current_region
@@ -16,7 +16,7 @@ module "process_audit_record" {
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.environment_prefix}-process-audit-record"
+  name            = "${var.resource_prefix}-process-audit-record"
   runtime         = "python3.8"
   s3_bucket       = local.artifacts_bucket
   s3_object_key   = local.lambda_functions_keys["process_audit_record"]
@@ -27,7 +27,7 @@ module "process_audit_record" {
 }
 
 resource "aws_cloudwatch_log_group" "process_audit_record_firehose" {
-  name              = "/aws/kinesisfirehose/${var.environment_prefix}-process-audit-record-firehose"
+  name              = "/aws/kinesisfirehose/${var.resource_prefix}-process-audit-record-firehose"
   retention_in_days = 7
   tags              = local.tags
 }
@@ -40,7 +40,7 @@ resource "aws_cloudwatch_log_stream" "process_audit_record_firehose" {
 resource "aws_iam_role" "process_audit_record_firehose" {
   description        = "Write Transformed audit records into the bucket"
   assume_role_policy = data.aws_iam_policy_document.firehose_assume_role.json
-  name               = "${var.environment_prefix}-process-audit-record-firehose"
+  name               = "${var.resource_prefix}-process-audit-record-firehose"
   tags               = local.tags
 }
 
@@ -100,14 +100,14 @@ data "aws_iam_policy_document" "process_audit_record_firehose" {
 }
 
 resource "aws_iam_role_policy" "process_audit_record_firehose" {
-  name   = "${var.environment_prefix}-process-audit-record-firehose-access"
+  name   = "${var.resource_prefix}-process-audit-record-firehose-access"
   policy = data.aws_iam_policy_document.process_audit_record_firehose.json
   role   = aws_iam_role.process_audit_record_firehose.id
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "process_audit_record_firehose" {
   destination = "extended_s3"
-  name        = "${var.environment_prefix}-process-audit-record"
+  name        = "${var.resource_prefix}-process-audit-record"
 
   extended_s3_configuration {
     bucket_arn      = aws_s3_bucket.audit_records.arn

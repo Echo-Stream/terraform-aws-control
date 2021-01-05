@@ -3,19 +3,19 @@ resource "aws_ses_email_identity" "support" {
 }
 
 resource "aws_ses_template" "invite_user" {
-  name    = "${var.environment_prefix}-invite-user"
+  name    = "${var.resource_prefix}-invite-user"
   subject = "Invitation from EchoStream"
   html    = file("${path.module}/files/Lorem-Ipsum-All-the-facts-Lipsum-generator.html")
 }
 
 resource "aws_ses_template" "notify_user" {
-  name    = "${var.environment_prefix}-notify-user"
+  name    = "${var.resource_prefix}-notify-user"
   subject = "Notification from EchoStream"
   html    = file("${path.module}/files/Lorem-Ipsum-All-the-facts-Lipsum-generator.html")
 }
 
 resource "aws_ses_template" "remove_user" {
-  name    = "${var.environment_prefix}-remove-user"
+  name    = "${var.resource_prefix}-remove-user"
   subject = "Goodbye from EchoStream"
   html    = file("${path.module}/files/Lorem-Ipsum-All-the-facts-Lipsum-generator.html")
 }

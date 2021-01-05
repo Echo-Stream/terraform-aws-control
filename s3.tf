@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "audit_records" {
   acl    = "private"
-  bucket = "${var.environment_prefix}-audit-records"
+  bucket = "${var.resource_prefix}-audit-records"
 
   # lifecycle {
   #   prevent_destroy = true
@@ -23,7 +23,7 @@ resource "aws_s3_bucket" "audit_records" {
 
   logging {
     target_bucket = local.log_bucket
-    target_prefix = "s3/${var.environment_prefix}-audit-records/"
+    target_prefix = "s3/${var.resource_prefix}-audit-records/"
   }
 
   server_side_encryption_configuration {

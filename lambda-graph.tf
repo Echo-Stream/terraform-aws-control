@@ -45,8 +45,8 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
 
 resource "aws_iam_policy" "graph_table_dynamodb_trigger" {
   description = "IAM permissions required for graph-table-dynamodb-trigger"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-graph-table-dynamodb-trigger"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-graph-table-dynamodb-trigger"
   policy      = data.aws_iam_policy_document.graph_table_dynamodb_trigger.json
 }
 
@@ -59,7 +59,7 @@ module "graph_table_dynamodb_trigger" {
     #GRAPH_TYPE_HANDLERS          = ""
     DEFAULT_TENANT_SQS_QUEUE_URL = aws_sqs_queue.default_tenant_sqs_queue.id
     DYNAMODB_TABLE               = module.graph_table.name
-    ENVIRONMENT                  = var.environment_prefix
+    ENVIRONMENT                  = var.resource_prefix
     INTERNAL_APPSYNC_ROLES       = local.internal_appsync_role_names
   }
 
@@ -67,7 +67,7 @@ module "graph_table_dynamodb_trigger" {
   kms_key_arn = local.lambda_env_vars_kms_key_arn
 
   memory_size = 1536
-  name        = "${var.environment_prefix}-graph-table-dynamodb-trigger"
+  name        = "${var.resource_prefix}-graph-table-dynamodb-trigger"
 
   policy_arns = [
     aws_iam_policy.graph_table_dynamodb_trigger.arn,
@@ -140,8 +140,8 @@ data "aws_iam_policy_document" "graph_table_manage_users" {
 
 resource "aws_iam_policy" "graph_table_manage_users" {
   description = "IAM permissions required for graph-table-manage-users"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-graph-table-manage-users"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-graph-table-manage-users"
   policy      = data.aws_iam_policy_document.graph_table_manage_users.json
 }
 
@@ -155,7 +155,7 @@ module "graph_table_manage_users" {
     EMAIL_FROM             = var.ses_email_address
     EMAIL_REPLY_TO         = var.ses_email_address
     EMAIL_RETURN_PATH      = var.ses_email_address
-    ENVIRONMENT            = var.environment_prefix
+    ENVIRONMENT            = var.resource_prefix
     EXISTING_USER_TEMPLATE = aws_ses_template.notify_user.id
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     NEW_USER_TEMPLATE      = aws_ses_template.invite_user.id
@@ -166,7 +166,7 @@ module "graph_table_manage_users" {
   kms_key_arn = local.lambda_env_vars_kms_key_arn
 
   memory_size = 1536
-  name        = "${var.environment_prefix}-graph-table-manage-users"
+  name        = "${var.resource_prefix}-graph-table-manage-users"
 
   policy_arns = [
     aws_iam_policy.graph_table_manage_users.arn,
@@ -278,8 +278,8 @@ data "aws_iam_policy_document" "graph_table_manage_resource_policies" {
 
 resource "aws_iam_policy" "graph_table_manage_resource_policies" {
   description = "IAM permissions required for graph-table-manage-resource-policies lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-graph-table-manage-resource-policies"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-graph-table-manage-resource-policies"
   policy      = data.aws_iam_policy_document.graph_table_manage_resource_policies.json
 }
 
@@ -289,7 +289,7 @@ module "graph_table_manage_resource_policies" {
 
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
+    ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     MANAGED_APP_ROLE       = aws_iam_role.authenticated.arn
     NODE_FUNCTION_ROLE     = aws_iam_role.tenant_function_role.arn
@@ -300,7 +300,7 @@ module "graph_table_manage_resource_policies" {
   kms_key_arn = local.lambda_env_vars_kms_key_arn
 
   memory_size = 1536
-  name        = "${var.environment_prefix}-graph-table-manage-resource-policies"
+  name        = "${var.resource_prefix}-graph-table-manage-resource-policies"
 
   policy_arns = [
     aws_iam_policy.graph_table_manage_resource_policies.arn,
@@ -364,8 +364,8 @@ data "aws_iam_policy_document" "graph_table_manage_queues" {
 
 resource "aws_iam_policy" "graph_table_manage_queues" {
   description = "IAM permissions required for graph-table-manage-queues lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-graph-table-manage-queues"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-graph-table-manage-queues"
   policy      = data.aws_iam_policy_document.graph_table_manage_queues.json
 }
 
@@ -375,7 +375,7 @@ module "graph_table_manage_queues" {
 
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
+    ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
 
@@ -383,7 +383,7 @@ module "graph_table_manage_queues" {
   kms_key_arn = local.lambda_env_vars_kms_key_arn
 
   memory_size = 1536
-  name        = "${var.environment_prefix}-graph-table-manage-queues"
+  name        = "${var.resource_prefix}-graph-table-manage-queues"
 
   policy_arns = [
     aws_iam_policy.graph_table_manage_queues.arn,
@@ -481,7 +481,7 @@ data "aws_iam_policy_document" "graph_table_manage_apps" {
 
 resource "aws_iam_role" "manage_apps_ssm_service_role" {
   description        = "Enable AWS Systems Manager service core functionality"
-  name               = "${var.environment_prefix}-manage-apps-ssm-role"
+  name               = "${var.resource_prefix}-manage-apps-ssm-role"
   assume_role_policy = data.aws_iam_policy_document.manage_apps_ssm_service_role.json
   tags               = local.tags
 }
@@ -507,8 +507,8 @@ resource "aws_iam_role_policy_attachment" "manage_apps_ssm_service_role" {
 
 resource "aws_iam_policy" "graph_table_manage_apps" {
   description = "IAM permissions required for graph-table-manage-apps"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-graph-table-manage-apps"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-graph-table-manage-apps"
   policy      = data.aws_iam_policy_document.graph_table_manage_apps.json
 }
 
@@ -521,7 +521,7 @@ module "graph_table_manage_apps" {
     APP_IDENTITY_POOL_ID = aws_cognito_identity_pool.echostream.id
     APP_USER_POOL_ID     = aws_cognito_user_pool.echostream_apps.id
     DYNAMODB_TABLE       = module.graph_table.name
-    ENVIRONMENT          = var.environment_prefix
+    ENVIRONMENT          = var.resource_prefix
     #INBOUNDER_ECR_URL      = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.echostream_version}"
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     #OUTBOUNDER_ECR_URL     = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.echostream_version}"
@@ -534,7 +534,7 @@ module "graph_table_manage_apps" {
   kms_key_arn = local.lambda_env_vars_kms_key_arn
 
   memory_size = 1536
-  name        = "${var.environment_prefix}-graph-table-manage-apps"
+  name        = "${var.resource_prefix}-graph-table-manage-apps"
 
   policy_arns = [
     aws_iam_policy.graph_table_manage_apps.arn,
@@ -601,8 +601,8 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
 
 resource "aws_iam_policy" "graph_table_tenant_stream_handler" {
   description = "IAM permissions required for graph-table-tenant-stream-handler"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-graph-table-tenant-stream-handler"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-graph-table-tenant-stream-handler"
   policy      = data.aws_iam_policy_document.graph_table_tenant_stream_handler.json
 }
 
@@ -613,7 +613,7 @@ module "graph_table_tenant_stream_handler" {
   environment_variables = {
     APPSYNC_ENDPOINT       = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
     DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
+    ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     TYPE_HANDLERS          = file("${path.module}/files/type-handlers-map.json")
   }
@@ -622,7 +622,7 @@ module "graph_table_tenant_stream_handler" {
   kms_key_arn = local.lambda_env_vars_kms_key_arn
 
   memory_size = 1536
-  name        = "${var.environment_prefix}-graph-table-tenant-stream-handler"
+  name        = "${var.resource_prefix}-graph-table-tenant-stream-handler"
 
   policy_arns = [
     aws_iam_policy.graph_table_tenant_stream_handler.arn,
@@ -718,8 +718,8 @@ data "aws_iam_policy_document" "graph_table_manage_message_types" {
 
 resource "aws_iam_policy" "graph_table_manage_message_types" {
   description = "IAM permissions required for graph-table-manage-message-types"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-graph-table-manage-message-types"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-graph-table-manage-message-types"
   policy      = data.aws_iam_policy_document.graph_table_manage_message_types.json
 }
 
@@ -728,7 +728,7 @@ module "graph_table_manage_message_types" {
 
   environment_variables = {
     DYNAMODB_TABLE             = module.graph_table.name
-    ENVIRONMENT                = var.environment_prefix
+    ENVIRONMENT                = var.resource_prefix
     FUNCTIONS_BUCKET           = local.artifacts_bucket
     INTERNAL_APPSYNC_ROLES     = local.internal_appsync_role_names
     LAMBDA_ROLE_ARN            = aws_iam_role.tenant_function_role.arn
@@ -739,7 +739,7 @@ module "graph_table_manage_message_types" {
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.environment_prefix}-graph-table-manage-message-types"
+  name            = "${var.resource_prefix}-graph-table-manage-message-types"
 
   policy_arns = [
     aws_iam_policy.graph_table_manage_message_types.arn
@@ -826,8 +826,8 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
 
 resource "aws_iam_policy" "graph_table_manage_nodes" {
   description = "IAM permissions required for graph-table-manage-nodes"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-graph-table-manage-nodes"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-graph-table-manage-nodes"
   policy      = data.aws_iam_policy_document.graph_table_manage_nodes.json
 }
 
@@ -839,7 +839,7 @@ module "graph_table_manage_nodes" {
     ARTIFACTS_BUCKET_PREFIX        = local.artifacts_bucket_prefix
     AUDIT_FIREHOSE                 = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
     DYNAMODB_TABLE                 = module.graph_table.name
-    ENVIRONMENT                    = var.environment_prefix
+    ENVIRONMENT                    = var.resource_prefix
     ID_TOKEN_KEY                   = local.id_token_key
     INTERNAL_APPSYNC_ROLES         = local.internal_appsync_role_names
     LAMBDA_ROLE_ARN                = aws_iam_role.tenant_function_role.arn
@@ -854,7 +854,7 @@ module "graph_table_manage_nodes" {
   kms_key_arn = local.lambda_env_vars_kms_key_arn
 
   memory_size = 1536
-  name        = "${var.environment_prefix}-graph-table-manage-nodes"
+  name        = "${var.resource_prefix}-graph-table-manage-nodes"
 
   policy_arns = [
     aws_iam_policy.graph_table_manage_nodes.arn,
@@ -971,8 +971,8 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
 
 resource "aws_iam_policy" "graph_table_manage_tenants" {
   description = "IAM permissions required for graph-table-manage-tenants"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-graph-table-manage-tenants"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-graph-table-manage-tenants"
   policy      = data.aws_iam_policy_document.graph_table_manage_tenants.json
 }
 
@@ -983,7 +983,7 @@ module "graph_table_manage_tenants" {
   environment_variables = {
     DYNAMODB_TABLE            = module.graph_table.name
     DYNAMODB_TRIGGER_FUNCTION = module.graph_table_dynamodb_trigger.arn
-    ENVIRONMENT               = var.environment_prefix
+    ENVIRONMENT               = var.resource_prefix
     INTERNAL_APPSYNC_ROLES    = local.internal_appsync_role_names
     LOG_LEVEL                 = "INFO"
     TENANT_STREAM_HANDLER     = module.graph_table_tenant_stream_handler.arn
@@ -994,7 +994,7 @@ module "graph_table_manage_tenants" {
   kms_key_arn = local.lambda_env_vars_kms_key_arn
 
   memory_size = 1536
-  name        = "${var.environment_prefix}-graph-table-manage-tenants"
+  name        = "${var.resource_prefix}-graph-table-manage-tenants"
 
   policy_arns = [
     aws_iam_policy.graph_table_manage_tenants.arn,
@@ -1069,8 +1069,8 @@ data "aws_iam_policy_document" "graph_table_manage_edges" {
 
 resource "aws_iam_policy" "graph_table_manage_edges" {
   description = "IAM permissions required for graph-table-manage-edges"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-graph-table-manage-edges"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-graph-table-manage-edges"
   policy      = data.aws_iam_policy_document.graph_table_manage_edges.json
 }
 
@@ -1080,7 +1080,7 @@ module "graph_table_manage_edges" {
 
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
+    ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
 
@@ -1088,7 +1088,7 @@ module "graph_table_manage_edges" {
   kms_key_arn = local.lambda_env_vars_kms_key_arn
 
   memory_size = 1536
-  name        = "${var.environment_prefix}-graph-table-manage-edges"
+  name        = "${var.resource_prefix}-graph-table-manage-edges"
 
   policy_arns = [
     aws_iam_policy.graph_table_manage_edges.arn,
@@ -1121,8 +1121,8 @@ data "aws_iam_policy_document" "graph_table_manage_kms_keys" {
 
 resource "aws_iam_policy" "graph_table_manage_kms_keys" {
   description = "IAM permissions required for graph-table-manage-kms-keys"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-graph-table-manage-kms-keys"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-graph-table-manage-kms-keys"
   policy      = data.aws_iam_policy_document.graph_table_manage_kms_keys.json
 }
 
@@ -1132,14 +1132,14 @@ module "graph_table_manage_kms_keys" {
 
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
+    ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
   }
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
   memory_size = 1536
-  name        = "${var.environment_prefix}-graph-table-manage-kms-keys"
+  name        = "${var.resource_prefix}-graph-table-manage-kms-keys"
 
   policy_arns = [
     aws_iam_policy.graph_table_manage_kms_keys.arn,

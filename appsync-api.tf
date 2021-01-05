@@ -34,12 +34,12 @@ resource "aws_appsync_graphql_api" "echostream" {
 
   schema = data.aws_s3_bucket_object.graphql_schema.body
 
-  name = "${var.environment_prefix}-api"
+  name = "${var.resource_prefix}-api"
   tags = local.tags
 }
 
 resource "aws_iam_role" "echostream_appsync" {
-  name               = "${var.environment_prefix}-appsync"
+  name               = "${var.resource_prefix}-appsync"
   assume_role_policy = data.aws_iam_policy_document.appsync_assume_role.json
   tags               = local.tags
 }

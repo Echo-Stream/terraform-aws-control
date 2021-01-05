@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "cognito_sms_assume_role" {
 
 resource "aws_iam_role" "cognito_sms" {
   assume_role_policy = data.aws_iam_policy_document.cognito_sms_assume_role.json
-  name               = "${var.environment_prefix}-ui-cognito-sms"
+  name               = "${var.resource_prefix}-ui-cognito-sms"
   tags               = local.tags
 }
 
@@ -77,7 +77,7 @@ resource "aws_cognito_user_pool" "echostream_apps" {
     # prevent_destroy = true
   }
 
-  name = "${var.environment_prefix}-apps"
+  name = "${var.resource_prefix}-apps"
 
   lambda_config {
     pre_authentication   = module.app_cognito_pre_authentication.arn
@@ -97,7 +97,7 @@ resource "aws_cognito_user_pool" "echostream_apps" {
 }
 
 resource "aws_cognito_user_pool_client" "echostream_apps_userpool_client" {
-  name                   = "${var.environment_prefix}-apps"
+  name                   = "${var.resource_prefix}-apps"
   refresh_token_validity = 30
 
   supported_identity_providers = [
@@ -139,7 +139,7 @@ resource "aws_cognito_user_pool" "echostream_ui" {
   }
 
   #mfa_configuration = "ON"
-  name = "${var.environment_prefix}-ui"
+  name = "${var.resource_prefix}-ui"
 
   lambda_config {
     pre_sign_up          = module.ui_cognito_pre_signup.arn
@@ -194,7 +194,7 @@ resource "aws_cognito_user_pool" "echostream_ui" {
 }
 
 resource "aws_cognito_user_pool_client" "echostream_ui_userpool_client" {
-  name                   = "${var.environment_prefix}-reactjs"
+  name                   = "${var.resource_prefix}-reactjs"
   refresh_token_validity = 30
 
   supported_identity_providers = [
@@ -212,6 +212,6 @@ resource "aws_cognito_user_pool_client" "echostream_ui_userpool_client" {
 ## Amazon Cognito domain, Will be a Custom Domain in Future
 
 resource "aws_cognito_user_pool_domain" "echostream_amazon_cognito_domain" {
-  domain       = var.environment_prefix
+  domain       = var.resource_prefix
   user_pool_id = aws_cognito_user_pool.echostream_ui.id
 }

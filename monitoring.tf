@@ -1,13 +1,13 @@
 resource "aws_sns_topic" "tenant_usage_executions" {
-  name         = "${var.environment_prefix}-tenant-usage-executions"
-  display_name = "${var.environment_prefix} Tenant Usage Executions"
+  name         = "${var.resource_prefix}-tenant-usage-executions"
+  display_name = "${var.resource_prefix} Tenant Usage Executions"
   tags         = local.tags
 }
 
 ## IAM Roles
 ## Error Handler ##
 resource "aws_iam_role" "error_handler_role" {
-  name               = "${var.environment_prefix}-error-handler"
+  name               = "${var.resource_prefix}-error-handler"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
   tags               = local.tags
 }
@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "error_handler_role" {
 
 resource "aws_iam_policy" "error_handler_role" {
   description = "IAM permissions required for Node Error Publisher functions"
-  path        = "/${var.environment_prefix}-lambda/"
+  path        = "/${var.resource_prefix}-lambda/"
   policy      = data.aws_iam_policy_document.error_handler_role.json
 }
 
@@ -54,7 +54,7 @@ resource "aws_iam_role_policy_attachment" "error_handler_role" {
 
 ## Alert Handler ##
 resource "aws_iam_role" "alert_handler_role" {
-  name               = "${var.environment_prefix}-alert-handler"
+  name               = "${var.resource_prefix}-alert-handler"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
   tags               = local.tags
 }
@@ -111,7 +111,7 @@ data "aws_iam_policy_document" "alert_handler_role" {
 
 resource "aws_iam_policy" "alert_handler_role" {
   description = "IAM permissions required for Node alert Publisher functions"
-  path        = "/${var.environment_prefix}-lambda/"
+  path        = "/${var.resource_prefix}-lambda/"
   policy      = data.aws_iam_policy_document.alert_handler_role.json
 }
 
@@ -122,7 +122,7 @@ resource "aws_iam_role_policy_attachment" "alert_handler_role" {
 
 ## Alarm Handler ##
 resource "aws_iam_role" "alarm_handler_role" {
-  name               = "${var.environment_prefix}-alarm-handler"
+  name               = "${var.resource_prefix}-alarm-handler"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
   tags               = local.tags
 }
@@ -147,7 +147,7 @@ data "aws_iam_policy_document" "alarm_handler_role" {
 
 resource "aws_iam_policy" "alarm_handler_role" {
   description = "IAM permissions required for Node alarm Publisher functions"
-  path        = "/${var.environment_prefix}-lambda/"
+  path        = "/${var.resource_prefix}-lambda/"
   policy      = data.aws_iam_policy_document.alarm_handler_role.json
 }
 

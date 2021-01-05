@@ -1,6 +1,6 @@
 ## Internal Fn IAM assume role
 resource "aws_iam_role" "tenant_function_role" {
-  name               = "${var.environment_prefix}-tenant-functions"
+  name               = "${var.resource_prefix}-tenant-functions"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
   tags               = local.tags
 }
@@ -53,7 +53,7 @@ data "aws_iam_policy_document" "tenant_function_role" {
 
 resource "aws_iam_policy" "tenant_function" {
   description = "IAM permissions required for tenant functions"
-  path        = "/${var.environment_prefix}-lambda/"
+  path        = "/${var.resource_prefix}-lambda/"
   policy      = data.aws_iam_policy_document.tenant_function_role.json
 }
 
@@ -82,8 +82,8 @@ data "aws_iam_policy_document" "additional_ddb_policy" {
 
 resource "aws_iam_policy" "additional_ddb_policy" {
   description = "IAM permissions to read graph-table-dynamodb-trigger"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-additional-ddb-policy"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-additional-ddb-policy"
   policy      = data.aws_iam_policy_document.additional_ddb_policy.json
 }
 
@@ -107,8 +107,8 @@ data "aws_iam_policy_document" "appsync_kms_key_datasource" {
 
 resource "aws_iam_policy" "appsync_kms_key_datasource" {
   description = "IAM permissions required for appsync-kms-key-datasource lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-appsync-kms-key-datasource"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-appsync-kms-key-datasource"
   policy      = data.aws_iam_policy_document.appsync_kms_key_datasource.json
 }
 
@@ -118,7 +118,7 @@ module "appsync_kms_key_datasource" {
   environment_variables = {
 
     DYNAMODB_TABLE          = module.graph_table.name
-    ENVIRONMENT             = var.environment_prefix
+    ENVIRONMENT             = var.resource_prefix
     INTERNAL_APPSYNC_ROLES  = local.internal_appsync_role_names
     INTERNAL_FUNCTIONS_ROLE = aws_iam_role.tenant_function_role.arn
     LOG_LEVEL               = "INFO"
@@ -127,7 +127,7 @@ module "appsync_kms_key_datasource" {
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
   memory_size = 1536
-  name        = "${var.environment_prefix}-appsync-kms-key-datasource"
+  name        = "${var.resource_prefix}-appsync-kms-key-datasource"
 
   policy_arns = [
     aws_iam_policy.appsync_kms_key_datasource.arn,
@@ -296,8 +296,8 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
 
 resource "aws_iam_policy" "appsync_tenant_datasource" {
   description = "IAM permissions required for appsync-tenant-datasource lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-appsync-tenant-datasource"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-appsync-tenant-datasource"
   policy      = data.aws_iam_policy_document.appsync_tenant_datasource.json
 }
 
@@ -314,7 +314,7 @@ module "appsync_tenant_datasource" {
     ARTIFACTS_BUCKET         = local.artifacts_bucket
     DEAD_LETTER_QUEUE        = aws_sqs_queue.stream_dead_letter_queue.arn
     DYNAMODB_TABLE           = module.graph_table.name
-    ENVIRONMENT              = var.environment_prefix
+    ENVIRONMENT              = var.resource_prefix
     INTERNAL_APPSYNC_ROLES   = local.internal_appsync_role_names
     INTERNAL_ALARM_SNS_TOPIC = aws_sns_topic.alerts.arn
     INTERNAL_FUNCTIONS_ROLE  = aws_iam_role.tenant_function_role.arn
@@ -327,7 +327,7 @@ module "appsync_tenant_datasource" {
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
   memory_size = 1536
-  name        = "${var.environment_prefix}-appsync-tenant-datasource"
+  name        = "${var.resource_prefix}-appsync-tenant-datasource"
 
   policy_arns = [
     aws_iam_policy.appsync_tenant_datasource.arn,
@@ -362,8 +362,8 @@ data "aws_iam_policy_document" "app_cognito_pre_authentication" {
 
 resource "aws_iam_policy" "app_cognito_pre_authentication" {
   description = "IAM permissions required for app-cognito-pre-authentication lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-app-cognito-pre-authentication"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-app-cognito-pre-authentication"
   policy      = data.aws_iam_policy_document.app_cognito_pre_authentication.json
 }
 
@@ -372,7 +372,7 @@ module "app_cognito_pre_authentication" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
+    ENVIRONMENT    = var.resource_prefix
     INDEX_NAME     = "gsi0"
   }
 
@@ -380,7 +380,7 @@ module "app_cognito_pre_authentication" {
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.environment_prefix}-app-cognito-pre-authentication"
+  name            = "${var.resource_prefix}-app-cognito-pre-authentication"
 
   policy_arns = [
     aws_iam_policy.app_cognito_pre_authentication.arn,
@@ -424,8 +424,8 @@ data "aws_iam_policy_document" "app_cognito_pre_token_generation" {
 
 resource "aws_iam_policy" "app_cognito_pre_token_generation" {
   description = "IAM permissions required for app-cognito-pre-token-generation lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-app-cognito-pre-token-generation"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-app-cognito-pre-token-generation"
   policy      = data.aws_iam_policy_document.app_cognito_pre_token_generation.json
 }
 
@@ -434,14 +434,14 @@ module "app_cognito_pre_token_generation" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
+    ENVIRONMENT    = var.resource_prefix
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.environment_prefix}-app-cognito-pre-token-generation"
+  name            = "${var.resource_prefix}-app-cognito-pre-token-generation"
 
   policy_arns = [
     aws_iam_policy.app_cognito_pre_token_generation.arn,
@@ -525,8 +525,8 @@ data "aws_iam_policy_document" "appsync_edge_datasource" {
 
 resource "aws_iam_policy" "appsync_edge_datasource" {
   description = "IAM permissions required for appsync-edge-datasource lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-appsync-edge-datasource"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-appsync-edge-datasource"
   policy      = data.aws_iam_policy_document.appsync_edge_datasource.json
 }
 
@@ -535,7 +535,7 @@ module "appsync_edge_datasource" {
 
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
+    ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     LOG_LEVEL              = "INFO"
     MESSAGE_RETENTION_DAYS = 7
@@ -545,7 +545,7 @@ module "appsync_edge_datasource" {
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.environment_prefix}-appsync-edge-datasource"
+  name            = "${var.resource_prefix}-appsync-edge-datasource"
 
   policy_arns = [
     aws_iam_policy.appsync_edge_datasource.arn,
@@ -583,8 +583,8 @@ data "aws_iam_policy_document" "ui_cognito_post_signup" {
 
 resource "aws_iam_policy" "ui_cognito_post_signup" {
   description = "IAM permissions required for ui-cognito-post-signup lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-ui-cognito-post-signup"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-ui-cognito-post-signup"
   policy      = data.aws_iam_policy_document.ui_cognito_post_signup.json
 }
 
@@ -593,14 +593,14 @@ module "ui_cognito_post_signup" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
+    ENVIRONMENT    = var.resource_prefix
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.environment_prefix}-ui-cognito-post-signup"
+  name            = "${var.resource_prefix}-ui-cognito-post-signup"
 
   policy_arns = [
     aws_iam_policy.ui_cognito_post_signup.arn,
@@ -645,8 +645,8 @@ data "aws_iam_policy_document" "ui_cognito_pre_authentication" {
 
 resource "aws_iam_policy" "ui_cognito_pre_authentication" {
   description = "IAM permissions required for ui-cognito-pre-authentication lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-ui-cognito-pre-authentication"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-ui-cognito-pre-authentication"
   policy      = data.aws_iam_policy_document.ui_cognito_pre_authentication.json
 }
 
@@ -655,14 +655,14 @@ module "ui_cognito_pre_authentication" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
+    ENVIRONMENT    = var.resource_prefix
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.environment_prefix}-ui-cognito-pre-authentication"
+  name            = "${var.resource_prefix}-ui-cognito-pre-authentication"
 
   policy_arns = [
     aws_iam_policy.ui_cognito_pre_authentication.arn,
@@ -706,8 +706,8 @@ data "aws_iam_policy_document" "ui_cognito_pre_signup" {
 
 resource "aws_iam_policy" "ui_cognito_pre_signup" {
   description = "IAM permissions required for ui-cognito-pre-signup lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-ui-cognito-pre-signup"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-ui-cognito-pre-signup"
   policy      = data.aws_iam_policy_document.ui_cognito_pre_signup.json
 }
 
@@ -716,14 +716,14 @@ module "ui_cognito_pre_signup" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
+    ENVIRONMENT    = var.resource_prefix
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.environment_prefix}-ui-cognito-pre-signup"
+  name            = "${var.resource_prefix}-ui-cognito-pre-signup"
 
   policy_arns = [
     aws_iam_policy.ui_cognito_pre_signup.arn,
@@ -767,8 +767,8 @@ data "aws_iam_policy_document" "ui_cognito_pre_token_generation" {
 
 resource "aws_iam_policy" "ui_cognito_pre_token_generation" {
   description = "IAM permissions required for ui-cognito-pre-token-generation lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-ui-cognito-pre-token-generation"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-ui-cognito-pre-token-generation"
   policy      = data.aws_iam_policy_document.ui_cognito_pre_token_generation.json
 }
 
@@ -777,14 +777,14 @@ module "ui_cognito_pre_token_generation" {
 
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.environment_prefix
+    ENVIRONMENT    = var.resource_prefix
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.environment_prefix}-ui-cognito-pre-token-generation"
+  name            = "${var.resource_prefix}-ui-cognito-pre-token-generation"
 
   policy_arns = [
     aws_iam_policy.ui_cognito_pre_token_generation.arn,
@@ -815,12 +815,12 @@ module "validate_function" {
   description     = "Validates a python function that is passed in by running it and returning the results"
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
-    ENVIRONMENT = var.environment_prefix
+    ENVIRONMENT = var.resource_prefix
   }
   handler       = "function.handler"
   kms_key_arn   = local.lambda_env_vars_kms_key_arn
   memory_size   = 1536
-  name          = "${var.environment_prefix}-validate-function"
+  name          = "${var.resource_prefix}-validate-function"
   runtime       = "python3.8"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["validate_function"]
@@ -854,8 +854,8 @@ data "aws_iam_policy_document" "appsync_message_type_datasource" {
 
 resource "aws_iam_policy" "appsync_message_type_datasource" {
   description = "IAM permissions required for appsync-message-type-datasource lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-appsync-message-type-datasource"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-appsync-message-type-datasource"
   policy      = data.aws_iam_policy_document.appsync_message_type_datasource.json
 }
 
@@ -866,7 +866,7 @@ module "appsync_message_type_datasource" {
     APP_VERSION            = var.echostream_version
     ARTIFACT_BUCKET        = local.artifacts_bucket
     DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
+    ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     LOG_LEVEL              = "INFO"
   }
@@ -875,7 +875,7 @@ module "appsync_message_type_datasource" {
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.environment_prefix}-appsync-message-type-datasource"
+  name            = "${var.resource_prefix}-appsync-message-type-datasource"
 
   policy_arns = [
     aws_iam_policy.appsync_message_type_datasource.arn,
@@ -984,8 +984,8 @@ data "aws_iam_policy_document" "appsync_app_datasource" {
 
 resource "aws_iam_policy" "appsync_app_datasource" {
   description = "IAM permissions required for appsync_app_datasource lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-appsync-app-datasource"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-appsync-app-datasource"
   policy      = data.aws_iam_policy_document.appsync_app_datasource.json
 }
 
@@ -1001,7 +1001,7 @@ module "appsync_app_datasource" {
     AUDIT_FIREHOSE         = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
     COGNITO_ROLE_ARN       = aws_iam_role.authenticated.arn
     DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
+    ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     #INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.echostream_version}"
     LOG_LEVEL = "INFO"
@@ -1013,7 +1013,7 @@ module "appsync_app_datasource" {
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.environment_prefix}-appsync-app-datasource"
+  name            = "${var.resource_prefix}-appsync-app-datasource"
 
   policy_arns = [
     aws_iam_policy.appsync_app_datasource.arn,
@@ -1065,8 +1065,8 @@ data "aws_iam_policy_document" "appsync_node_datasource" {
 
 resource "aws_iam_policy" "appsync_node_datasource" {
   description = "IAM permissions required for appsync-node-datasource lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-appsync-node-datasource"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-appsync-node-datasource"
   policy      = data.aws_iam_policy_document.appsync_node_datasource.json
 }
 
@@ -1075,7 +1075,7 @@ module "appsync_node_datasource" {
 
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
+    ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     LOG_LEVEL              = "INFO"
   }
@@ -1084,7 +1084,7 @@ module "appsync_node_datasource" {
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.environment_prefix}-appsync-node-datasource"
+  name            = "${var.resource_prefix}-appsync-node-datasource"
 
   policy_arns = [
     aws_iam_policy.appsync_node_datasource.arn,
@@ -1121,8 +1121,8 @@ data "aws_iam_policy_document" "appsync_sub_field_datasource" {
 
 resource "aws_iam_policy" "appsync_sub_field_datasource" {
   description = "IAM permissions required for appsync-sub-field-datasource lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-appsync-sub-field-datasource"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-appsync-sub-field-datasource"
   policy      = data.aws_iam_policy_document.appsync_sub_field_datasource.json
 }
 
@@ -1131,7 +1131,7 @@ module "appsync_sub_field_datasource" {
 
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
+    ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     LOG_LEVEL              = "INFO"
   }
@@ -1140,7 +1140,7 @@ module "appsync_sub_field_datasource" {
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.environment_prefix}-appsync-sub-field-datasource"
+  name            = "${var.resource_prefix}-appsync-sub-field-datasource"
 
   policy_arns = [
     aws_iam_policy.appsync_sub_field_datasource.arn,
@@ -1179,8 +1179,8 @@ data "aws_iam_policy_document" "appsync_large_message_storage_datasource" {
 
 resource "aws_iam_policy" "appsync_large_message_storage_datasource" {
   description = "IAM permissions required for appsync-large-message-storage-datasource"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-appsync-large-message-storage-datasource"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-appsync-large-message-storage-datasource"
   policy      = data.aws_iam_policy_document.appsync_large_message_storage_datasource.json
 }
 
@@ -1191,7 +1191,7 @@ module "appsync_large_message_storage_datasource" {
   environment_variables = {
     ACCESS_KEY_ID          = aws_iam_access_key.presign_large_messages.id
     DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
+    ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     LOG_LEVEL              = "INFO"
     SECRET_ACCESS_KEY      = aws_iam_access_key.presign_large_messages.secret
@@ -1201,7 +1201,7 @@ module "appsync_large_message_storage_datasource" {
   kms_key_arn = local.lambda_env_vars_kms_key_arn
 
   memory_size = 1536
-  name        = "${var.environment_prefix}-appsync-large-message-storage-datasource"
+  name        = "${var.resource_prefix}-appsync-large-message-storage-datasource"
 
   policy_arns = [
     aws_iam_policy.appsync_large_message_storage_datasource.arn,
@@ -1251,8 +1251,8 @@ data "aws_iam_policy_document" "appsync_validate_function_datasource" {
 
 resource "aws_iam_policy" "appsync_validate_function_datasource" {
   description = "IAM permissions required for appsync-validate-function-datasource"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-appsync-validate-function-datasource"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-appsync-validate-function-datasource"
   policy      = data.aws_iam_policy_document.appsync_validate_function_datasource.json
 }
 
@@ -1263,7 +1263,7 @@ module "appsync_validate_function_datasource" {
   environment_variables = {
     ACCESS_KEY_ID          = ""
     DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
+    ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     LOG_LEVEL              = "INFO"
     SECRET_ACCESS_KEY      = ""
@@ -1273,7 +1273,7 @@ module "appsync_validate_function_datasource" {
   kms_key_arn = local.lambda_env_vars_kms_key_arn
 
   memory_size = 1536
-  name        = "${var.environment_prefix}-appsync-validate-function-datasource"
+  name        = "${var.resource_prefix}-appsync-validate-function-datasource"
 
   policy_arns = [
     aws_iam_policy.appsync_validate_function_datasource.arn,
@@ -1323,8 +1323,8 @@ data "aws_iam_policy_document" "appsync_subscription_datasource" {
 
 resource "aws_iam_policy" "appsync_subscription_datasource" {
   description = "IAM permissions required for appsync-subscription-datasource"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-appsync-subscription-datasource"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-appsync-subscription-datasource"
   policy      = data.aws_iam_policy_document.appsync_subscription_datasource.json
 }
 
@@ -1334,7 +1334,7 @@ module "appsync_subscription_datasource" {
 
   environment_variables = {
     DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.environment_prefix
+    ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     LOG_LEVEL              = "INFO"
   }
@@ -1343,7 +1343,7 @@ module "appsync_subscription_datasource" {
   kms_key_arn = local.lambda_env_vars_kms_key_arn
 
   memory_size = 1536
-  name        = "${var.environment_prefix}-appsync-subscription-datasource"
+  name        = "${var.resource_prefix}-appsync-subscription-datasource"
 
   policy_arns = [
     aws_iam_policy.appsync_subscription_datasource.arn,
@@ -1421,8 +1421,8 @@ data "aws_iam_policy_document" "purge_tenants" {
 
 resource "aws_iam_policy" "purge_tenants" {
   description = "IAM permissions required for purge-tenants lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-purge-tenants"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-purge-tenants"
   policy      = data.aws_iam_policy_document.purge_tenants.json
 }
 
@@ -1432,14 +1432,14 @@ module "purge_tenants" {
   environment_variables = {
     DB_STREAM_HANDLER = module.graph_table_tenant_stream_handler.name
     DYNAMODB_TABLE    = module.graph_table.name
-    ENVIRONMENT       = var.environment_prefix
+    ENVIRONMENT       = var.resource_prefix
     LOG_LEVEL         = "INFO"
     UI_USER_POOL_ID   = aws_cognito_user_pool.echostream_ui.id
   }
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
   memory_size = 128
-  name        = "${var.environment_prefix}-purge-tenants"
+  name        = "${var.resource_prefix}-purge-tenants"
 
   policy_arns = [
     aws_iam_policy.purge_tenants.arn,
@@ -1456,14 +1456,14 @@ module "purge_tenants" {
 
 
 resource "aws_cloudwatch_event_rule" "purge_tenants" {
-  name                = "${var.environment_prefix}-purge-tenants"
-  description         = "Purge ${var.environment_prefix} Tenants hourly"
+  name                = "${var.resource_prefix}-purge-tenants"
+  description         = "Purge ${var.resource_prefix} Tenants hourly"
   schedule_expression = "cron(0 * * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "purge_tenants" {
   rule      = aws_cloudwatch_event_rule.purge_tenants.name
-  target_id = "${var.environment_prefix}-purge-tenants"
+  target_id = "${var.resource_prefix}-purge-tenants"
   arn       = module.purge_tenants.arn
 }
 
@@ -1507,8 +1507,8 @@ data "aws_iam_policy_document" "log_retention" {
 
 resource "aws_iam_policy" "log_retention" {
   description = "IAM permissions required for log-retention lambda"
-  path        = "/${var.environment_prefix}-lambda/"
-  name        = "${var.environment_prefix}-log-retention"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-log-retention"
   policy      = data.aws_iam_policy_document.log_retention.json
 }
 
@@ -1516,12 +1516,12 @@ module "log_retention" {
   description     = "set log group retention to 7 days"
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
-    ENVIRONMENT = var.environment_prefix
+    ENVIRONMENT = var.resource_prefix
   }
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
   memory_size = 128
-  name        = "${var.environment_prefix}-log-retention"
+  name        = "${var.resource_prefix}-log-retention"
 
   policy_arns = [
     aws_iam_policy.log_retention.arn,
@@ -1538,14 +1538,14 @@ module "log_retention" {
 
 
 resource "aws_cloudwatch_event_rule" "log_retention" {
-  name                = "${var.environment_prefix}-log-retention"
+  name                = "${var.resource_prefix}-log-retention"
   description         = "set log group retention to 7 days daily"
   schedule_expression = "cron(0 10 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "log_retention" {
   rule      = aws_cloudwatch_event_rule.log_retention.name
-  target_id = "${var.environment_prefix}-log-retention"
+  target_id = "${var.resource_prefix}-log-retention"
   arn       = module.log_retention.arn
 }
 
