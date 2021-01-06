@@ -17,3 +17,9 @@ resource "aws_sns_topic" "alerts" {
   display_name = "${var.resource_prefix} Alerts"
   tags         = local.tags
 }
+
+resource "aws_sns_topic" "alarms" {
+  name         = "${var.resource_prefix}-alarms"
+  display_name = "${var.resource_prefix} Alarms"
+  tags         = local.tags
+}
