@@ -39,7 +39,7 @@ module "control_alert_handler" {
   environment_variables = {
     ALERT_TOPIC  = aws_sns_topic.alarms.arn
     ENVIRONMENT  = var.resource_prefix
-    INTEGRATIONS = "{${module.control_clickup_integration.arn}}"
+    INTEGRATIONS = "[${module.control_clickup_integration.arn}]"
   }
 
   handler     = "function.handler"
@@ -70,11 +70,11 @@ module "control_clickup_integration" {
   environment_variables = {
     ENVIRONMENT = var.resource_prefix
     TEAM        = "HL7-Ninja"
-    SPACE       = ""
-    PROJECT     = ""
-    TASK_LIST   = ""
-    ASSIGN_TO   = ""
-    API_KEY     = ""
+    SPACE       = "HL7-Ninja MVP"
+    PROJECT     = "Sprints and backlogs"
+    TASK_LIST   = "Bugs"
+    ASSIGN_TO   = "mmoon@quinovas.com"
+    API_KEY     = "pk_10629580_3BHCYV0Y5Z8C5IL1LPJP7PWSJP0HZB6M"
   }
 
   handler       = "function.handler"
