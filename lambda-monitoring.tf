@@ -60,6 +60,13 @@ module "control_alert_handler" {
   version       = "3.0.11"
 }
 
+resource "aws_lambda_permission" "allow_cloudwatch" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = module.control_alert_handler.name
+  principal     = "logs.${local.current_region}.amazonaws.com"
+}
+
 ###########################
 ## control-clickup-integration ##
 ###########################

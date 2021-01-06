@@ -140,7 +140,14 @@ module "appsync_kms_key_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "appsync_kms_key_datasource" {
+  name            = "${var.resource_prefix}-appsync-kms-key-datasource"
+  log_group_name  = module.appsync_kms_key_datasource.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 ##################################
