@@ -465,7 +465,7 @@ data "aws_iam_policy_document" "graph_table_manage_apps" {
 resource "aws_iam_role" "manage_apps_ssm_service_role" {
   description        = "Enable AWS Systems Manager service core functionality"
   name               = "${var.resource_prefix}-manage-apps-ssm-role"
-  path               = "service-role"
+  path               = "/service-role/"
   assume_role_policy = data.aws_iam_policy_document.manage_apps_ssm_service_role.json
   tags               = local.tags
 }
