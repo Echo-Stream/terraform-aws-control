@@ -54,7 +54,7 @@ resource "aws_iam_role_policy_attachment" "error_handler_role" {
 
 ## Alert Handler ##
 resource "aws_iam_role" "alert_handler_role" {
-  name               = "${var.resource_prefix}-alert-handler"
+  name               = "${var.resource_prefix}-bndler"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
   tags               = local.tags
 }

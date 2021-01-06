@@ -1,0 +1,91 @@
+###########################
+## control-alert-handler ##
+###########################
+data "aws_iam_policy_document" "control_alert_handler" {
+  statement {
+    actions = [
+      "lambda:Invoke",
+    ]
+    resources = [
+      "*"
+    ]
+
+    sid = "LambdaInvoke"
+  }
+
+  statement {
+    actions = [
+      "sns:Publish",
+    ]
+    resources = [
+      "*"
+    ]
+
+    sid = "SnsPublish"
+  }
+}
+
+resource "aws_iam_policy" "control_alert_handler" {
+  description = "IAM permissions required for control-alert-handler"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-control-alert-handler"
+  policy      = data.aws_iam_policy_document.control_alert_handler.json
+}
+
+module "control_alert_handler" {
+  description     = "Processes CW alarms and log subscriptions"
+  dead_letter_arn = local.lambda_dead_letter_arn
+
+  environment_variables = {
+    ALERT_TOPIC  = aws_sns_topic.alarms.arn
+    ENVIRONMENT  = var.resource_prefix
+    INTEGRATIONS = "{${module.control_clickup_integration.arn}}"
+  }
+
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  memory_size = 1536
+  name        = "${var.resource_prefix}-control-alert-handler"
+
+  policy_arns = [
+    aws_iam_policy.control_alert_handler.arn,
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["control_alert_handler"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 300
+  version       = "3.0.11"
+}
+
+###########################
+## control-clickup-integration ##
+###########################
+module "control_clickup_integration" {
+  description     = "Configurable integration to open clickup tasks from CW alarms and Log Filter Subscriptions"
+  dead_letter_arn = local.lambda_dead_letter_arn
+
+  environment_variables = {
+    ENVIRONMENT = var.resource_prefix
+    TEAM        = "HL7-Ninja"
+    SPACE       = ""
+    PROJECT     = ""
+    TASK_LIST   = ""
+    ASSIGN_TO   = ""
+    API_KEY     = ""
+  }
+
+  handler       = "function.handler"
+  kms_key_arn   = local.lambda_env_vars_kms_key_arn
+  memory_size   = 1536
+  name          = "${var.resource_prefix}-control-clickup-integration"
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["control_clickup_integration"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 300
+  version       = "3.0.11"
+}
