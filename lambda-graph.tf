@@ -449,7 +449,9 @@ data "aws_iam_policy_document" "graph_table_manage_apps" {
   statement {
     actions = [
       "logs:DeleteLogGroup",
-      "logs:CreateLogGroup"
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
     ]
 
     resources = [
@@ -463,6 +465,7 @@ data "aws_iam_policy_document" "graph_table_manage_apps" {
 resource "aws_iam_role" "manage_apps_ssm_service_role" {
   description        = "Enable AWS Systems Manager service core functionality"
   name               = "${var.resource_prefix}-manage-apps-ssm-role"
+  path               = "service-role"
   assume_role_policy = data.aws_iam_policy_document.manage_apps_ssm_service_role.json
   tags               = local.tags
 }
@@ -483,6 +486,11 @@ data "aws_iam_policy_document" "manage_apps_ssm_service_role" {
 
 resource "aws_iam_role_policy_attachment" "manage_apps_ssm_service_role" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  role       = aws_iam_role.manage_apps_ssm_service_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "manage_apps_ssm_directory_role" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMDirectoryServiceAccess"
   role       = aws_iam_role.manage_apps_ssm_service_role.name
 }
 
