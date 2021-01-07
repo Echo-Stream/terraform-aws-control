@@ -131,7 +131,14 @@ module "deployment_handler" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "deployment_handler" {
+  name            = "${var.resource_prefix}-deployment-handler"
+  log_group_name  = module.deployment_handler.log_group_name
+  filter_pattern  = "ERROR -USERERROR"
+  destination_arn = module.control_alert_handler.arn
 }
 
 resource "aws_sns_topic" "ci_cd_errors" {

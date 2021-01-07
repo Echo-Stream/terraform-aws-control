@@ -23,7 +23,14 @@ module "process_audit_record" {
   source          = "QuiNovas/lambda/aws"
   tags            = local.tags
   timeout         = 300
-  version         = "3.0.11"
+  version         = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "process_audit_record" {
+  name            = "${var.resource_prefix}-process-audit-record"
+  log_group_name  = module.process_audit_record.log_group_name
+  filter_pattern  = "ERROR -USERERROR"
+  destination_arn = module.control_alert_handler.arn
 }
 
 resource "aws_cloudwatch_log_group" "process_audit_record_firehose" {
