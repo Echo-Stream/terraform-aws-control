@@ -18,6 +18,7 @@ locals {
     module.appsync_validate_function_datasource.name,
     module.appsync_subscription_datasource.name,
     module.purge_tenants.name,
+    module.log_retention.name,
     module.graph_table_dynamodb_trigger.name,
     module.graph_table_manage_users.name,
     module.graph_table_manage_resource_policies.name,

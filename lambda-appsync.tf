@@ -347,7 +347,14 @@ module "appsync_tenant_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "appsync_tenant_datasource" {
+  name            = "${var.resource_prefix}-appsync-tenant-datasource"
+  log_group_name  = module.appsync_tenant_datasource.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 ######################################
@@ -400,7 +407,7 @@ module "app_cognito_pre_authentication" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
 }
 
 resource "aws_lambda_permission" "app_cognito_pre_authentication" {
@@ -409,6 +416,13 @@ resource "aws_lambda_permission" "app_cognito_pre_authentication" {
   function_name = module.app_cognito_pre_authentication.name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.echostream_apps.arn
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_authentication" {
+  name            = "${var.resource_prefix}-app-cognito-pre-authentication"
+  log_group_name  = module.app_cognito_pre_authentication.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 ########################################
@@ -461,7 +475,7 @@ module "app_cognito_pre_token_generation" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
 }
 
 resource "aws_lambda_permission" "app_cognito_pre_token_generation" {
@@ -470,6 +484,13 @@ resource "aws_lambda_permission" "app_cognito_pre_token_generation" {
   function_name = module.app_cognito_pre_token_generation.name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.echostream_apps.arn
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_token_generation" {
+  name            = "${var.resource_prefix}-app-cognito-pre-token-generation"
+  log_group_name  = module.app_cognito_pre_token_generation.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 ###############################
@@ -565,7 +586,14 @@ module "appsync_edge_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "appsync_edge_datasource" {
+  name            = "${var.resource_prefix}-appsync-edge-datasource"
+  log_group_name  = module.appsync_edge_datasource.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 
@@ -620,7 +648,7 @@ module "ui_cognito_post_signup" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
 }
 
 resource "aws_lambda_permission" "ui_cognito_post_signup" {
@@ -629,6 +657,13 @@ resource "aws_lambda_permission" "ui_cognito_post_signup" {
   function_name = module.ui_cognito_post_signup.name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.echostream_ui.arn
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_post_signup" {
+  name            = "${var.resource_prefix}-ui-cognito-post-signup"
+  log_group_name  = module.ui_cognito_post_signup.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 #####################################
@@ -682,7 +717,7 @@ module "ui_cognito_pre_authentication" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
 }
 
 resource "aws_lambda_permission" "ui_cognito_pre_authentication" {
@@ -691,6 +726,13 @@ resource "aws_lambda_permission" "ui_cognito_pre_authentication" {
   function_name = module.ui_cognito_pre_authentication.name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.echostream_ui.arn
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_authentication" {
+  name            = "${var.resource_prefix}-ui-cognito-pre-authentication"
+  log_group_name  = module.ui_cognito_pre_authentication.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 #############################
@@ -743,7 +785,7 @@ module "ui_cognito_pre_signup" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
 }
 
 resource "aws_lambda_permission" "ui_cognito_pre_signup" {
@@ -752,6 +794,13 @@ resource "aws_lambda_permission" "ui_cognito_pre_signup" {
   function_name = module.ui_cognito_pre_signup.name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.echostream_ui.arn
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_signup" {
+  name            = "${var.resource_prefix}-ui-cognito-pre-signup"
+  log_group_name  = module.ui_cognito_pre_signup.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 #######################################
@@ -804,7 +853,7 @@ module "ui_cognito_pre_token_generation" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
 }
 
 resource "aws_lambda_permission" "ui_cognito_pre_token_generation" {
@@ -813,6 +862,13 @@ resource "aws_lambda_permission" "ui_cognito_pre_token_generation" {
   function_name = module.ui_cognito_pre_token_generation.name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.echostream_ui.arn
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_token_generation" {
+  name            = "${var.resource_prefix}-ui-cognito-pre-token-generation"
+  log_group_name  = module.ui_cognito_pre_token_generation.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 #########################
@@ -834,7 +890,14 @@ module "validate_function" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "validate_function" {
+  name            = "${var.resource_prefix}-validate-function"
+  log_group_name  = module.validate_function.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 #######################################
@@ -895,7 +958,14 @@ module "appsync_message_type_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "appsync_message_type_datasource" {
+  name            = "${var.resource_prefix}-appsync-message-type-datasource"
+  log_group_name  = module.validate_function.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 ###############################
@@ -1033,7 +1103,14 @@ module "appsync_app_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "appsync_app_datasource" {
+  name            = "${var.resource_prefix}-appsync-app-datasource"
+  log_group_name  = module.appsync_app_datasource.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 ###############################
@@ -1104,7 +1181,14 @@ module "appsync_node_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "appsync_node_datasource" {
+  name            = "${var.resource_prefix}-appsync-node-datasource"
+  log_group_name  = module.appsync_node_datasource.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 ####################################
@@ -1160,7 +1244,14 @@ module "appsync_sub_field_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "appsync_sub_field_datasource" {
+  name            = "${var.resource_prefix}-appsync-sub-field-datasource"
+  log_group_name  = module.appsync_sub_field_datasource.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 
@@ -1221,7 +1312,14 @@ module "appsync_large_message_storage_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "appsync_large_message_storage_datasource" {
+  name            = "${var.resource_prefix}-appsync-large-message-storage-datasource"
+  log_group_name  = module.appsync_large_message_storage_datasource.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 ############################################
@@ -1293,7 +1391,14 @@ module "appsync_validate_function_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "appsync_validate_function_datasource" {
+  name            = "${var.resource_prefix}-appsync-validate-function-datasource"
+  log_group_name  = module.appsync_validate_function_datasource.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
 
 ######################################
@@ -1363,9 +1468,15 @@ module "appsync_subscription_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
 }
 
+resource "aws_cloudwatch_log_subscription_filter" "appsync_subscription_datasource" {
+  name            = "${var.resource_prefix}-appsync-subscription-datasource"
+  log_group_name  = module.appsync_subscription_datasource.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
+}
 
 ##################################
 ##  purge-tenants   ##############
@@ -1459,7 +1570,7 @@ module "purge_tenants" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.11"
+  version       = "3.0.12"
 }
 
 
@@ -1483,6 +1594,12 @@ resource "aws_lambda_permission" "purge_tenants" {
   source_arn    = aws_cloudwatch_event_rule.purge_tenants.arn
 }
 
+resource "aws_cloudwatch_log_subscription_filter" "purge_tenants" {
+  name            = "${var.resource_prefix}-purge-tenants"
+  log_group_name  = module.purge_tenants.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
+}
 
 ##################################
 ##  log-retention   ##############
@@ -1541,7 +1658,7 @@ module "log_retention" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 60
-  version       = "3.0.11"
+  version       = "3.0.12"
 }
 
 
@@ -1563,4 +1680,11 @@ resource "aws_lambda_permission" "log_retention" {
   function_name = module.log_retention.name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.log_retention.arn
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
+  name            = "${var.resource_prefix}-log-retention"
+  log_group_name  = module.log_retention.log_group_name
+  filter_pattern  = "[ERROR]"
+  destination_arn = module.control_alert_handler.arn
 }
