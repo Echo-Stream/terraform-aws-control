@@ -134,13 +134,6 @@ module "deployment_handler" {
   version       = "3.0.12"
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "deployment_handler" {
-  name            = "${var.resource_prefix}-deployment-handler"
-  log_group_name  = module.deployment_handler.log_group_name
-  filter_pattern  = "ERROR -USERERROR"
-  destination_arn = module.control_alert_handler.arn
-}
-
 resource "aws_sns_topic" "ci_cd_errors" {
   name         = "${var.resource_prefix}-ci-cd-errors"
   display_name = "${var.resource_prefix} CI/CD Notifications"
