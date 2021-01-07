@@ -93,7 +93,7 @@ resource "aws_lambda_event_source_mapping" "graph_table_dynamodb_trigger" {
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_dynamodb_trigger" {
   name            = "${var.resource_prefix}-graph-table-dynamodb-trigger"
   log_group_name  = module.graph_table_dynamodb_trigger.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -192,7 +192,7 @@ module "graph_table_manage_users" {
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_users" {
   name            = "${var.resource_prefix}-graph-table-manage-users"
   log_group_name  = module.graph_table_manage_users.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -332,7 +332,7 @@ module "graph_table_manage_resource_policies" {
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_resource_policies" {
   name            = "${var.resource_prefix}-graph-table-manage-resource-policies"
   log_group_name  = module.graph_table_manage_resource_policies.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -422,7 +422,7 @@ module "graph_table_manage_queues" {
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_queues" {
   name            = "${var.resource_prefix}-graph-table-manage-queues"
   log_group_name  = module.graph_table_manage_queues.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -560,7 +560,7 @@ module "graph_table_manage_apps" {
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_apps" {
   name            = "${var.resource_prefix}-graph-table-manage-apps"
   log_group_name  = module.graph_table_manage_apps.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -669,7 +669,7 @@ resource "aws_lambda_event_source_mapping" "graph_table_tenant_stream_handler" {
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_handler" {
   name            = "${var.resource_prefix}-graph-table-tenant-stream-handler"
   log_group_name  = module.graph_table_tenant_stream_handler.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -779,7 +779,7 @@ module "graph_table_manage_message_types" {
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_message_types" {
   name            = "${var.resource_prefix}-graph-table-manage-message-types"
   log_group_name  = module.graph_table_manage_message_types.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -902,7 +902,7 @@ module "graph_table_manage_nodes" {
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_nodes" {
   name            = "${var.resource_prefix}-graph-table-manage-nodes"
   log_group_name  = module.graph_table_manage_nodes.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -1049,7 +1049,7 @@ module "graph_table_manage_tenants" {
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_tenants" {
   name            = "${var.resource_prefix}-graph-table-manage-tenants"
   log_group_name  = module.graph_table_manage_tenants.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -1149,7 +1149,7 @@ module "graph_table_manage_edges" {
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_edges" {
   name            = "${var.resource_prefix}-graph-table-manage-edges"
   log_group_name  = module.graph_table_manage_edges.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -1207,6 +1207,6 @@ module "graph_table_manage_kms_keys" {
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_kms_keys" {
   name            = "${var.resource_prefix}-graph-table-manage-kms-keys"
   log_group_name  = module.graph_table_manage_kms_keys.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }

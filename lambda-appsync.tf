@@ -146,7 +146,7 @@ module "appsync_kms_key_datasource" {
 resource "aws_cloudwatch_log_subscription_filter" "appsync_kms_key_datasource" {
   name            = "${var.resource_prefix}-appsync-kms-key-datasource"
   log_group_name  = module.appsync_kms_key_datasource.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -353,7 +353,7 @@ module "appsync_tenant_datasource" {
 resource "aws_cloudwatch_log_subscription_filter" "appsync_tenant_datasource" {
   name            = "${var.resource_prefix}-appsync-tenant-datasource"
   log_group_name  = module.appsync_tenant_datasource.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -421,7 +421,7 @@ resource "aws_lambda_permission" "app_cognito_pre_authentication" {
 resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_authentication" {
   name            = "${var.resource_prefix}-app-cognito-pre-authentication"
   log_group_name  = module.app_cognito_pre_authentication.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -489,7 +489,7 @@ resource "aws_lambda_permission" "app_cognito_pre_token_generation" {
 resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_token_generation" {
   name            = "${var.resource_prefix}-app-cognito-pre-token-generation"
   log_group_name  = module.app_cognito_pre_token_generation.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -592,7 +592,7 @@ module "appsync_edge_datasource" {
 resource "aws_cloudwatch_log_subscription_filter" "appsync_edge_datasource" {
   name            = "${var.resource_prefix}-appsync-edge-datasource"
   log_group_name  = module.appsync_edge_datasource.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -662,7 +662,7 @@ resource "aws_lambda_permission" "ui_cognito_post_signup" {
 resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_post_signup" {
   name            = "${var.resource_prefix}-ui-cognito-post-signup"
   log_group_name  = module.ui_cognito_post_signup.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -731,7 +731,7 @@ resource "aws_lambda_permission" "ui_cognito_pre_authentication" {
 resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_authentication" {
   name            = "${var.resource_prefix}-ui-cognito-pre-authentication"
   log_group_name  = module.ui_cognito_pre_authentication.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -799,7 +799,7 @@ resource "aws_lambda_permission" "ui_cognito_pre_signup" {
 resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_signup" {
   name            = "${var.resource_prefix}-ui-cognito-pre-signup"
   log_group_name  = module.ui_cognito_pre_signup.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -867,7 +867,7 @@ resource "aws_lambda_permission" "ui_cognito_pre_token_generation" {
 resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_token_generation" {
   name            = "${var.resource_prefix}-ui-cognito-pre-token-generation"
   log_group_name  = module.ui_cognito_pre_token_generation.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -896,7 +896,7 @@ module "validate_function" {
 resource "aws_cloudwatch_log_subscription_filter" "validate_function" {
   name            = "${var.resource_prefix}-validate-function"
   log_group_name  = module.validate_function.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -964,7 +964,7 @@ module "appsync_message_type_datasource" {
 resource "aws_cloudwatch_log_subscription_filter" "appsync_message_type_datasource" {
   name            = "${var.resource_prefix}-appsync-message-type-datasource"
   log_group_name  = module.validate_function.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -1109,7 +1109,7 @@ module "appsync_app_datasource" {
 resource "aws_cloudwatch_log_subscription_filter" "appsync_app_datasource" {
   name            = "${var.resource_prefix}-appsync-app-datasource"
   log_group_name  = module.appsync_app_datasource.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -1187,7 +1187,7 @@ module "appsync_node_datasource" {
 resource "aws_cloudwatch_log_subscription_filter" "appsync_node_datasource" {
   name            = "${var.resource_prefix}-appsync-node-datasource"
   log_group_name  = module.appsync_node_datasource.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -1250,7 +1250,7 @@ module "appsync_sub_field_datasource" {
 resource "aws_cloudwatch_log_subscription_filter" "appsync_sub_field_datasource" {
   name            = "${var.resource_prefix}-appsync-sub-field-datasource"
   log_group_name  = module.appsync_sub_field_datasource.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -1318,7 +1318,7 @@ module "appsync_large_message_storage_datasource" {
 resource "aws_cloudwatch_log_subscription_filter" "appsync_large_message_storage_datasource" {
   name            = "${var.resource_prefix}-appsync-large-message-storage-datasource"
   log_group_name  = module.appsync_large_message_storage_datasource.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -1397,7 +1397,7 @@ module "appsync_validate_function_datasource" {
 resource "aws_cloudwatch_log_subscription_filter" "appsync_validate_function_datasource" {
   name            = "${var.resource_prefix}-appsync-validate-function-datasource"
   log_group_name  = module.appsync_validate_function_datasource.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -1474,7 +1474,7 @@ module "appsync_subscription_datasource" {
 resource "aws_cloudwatch_log_subscription_filter" "appsync_subscription_datasource" {
   name            = "${var.resource_prefix}-appsync-subscription-datasource"
   log_group_name  = module.appsync_subscription_datasource.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -1597,7 +1597,7 @@ resource "aws_lambda_permission" "purge_tenants" {
 resource "aws_cloudwatch_log_subscription_filter" "purge_tenants" {
   name            = "${var.resource_prefix}-purge-tenants"
   log_group_name  = module.purge_tenants.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -1685,6 +1685,6 @@ resource "aws_lambda_permission" "log_retention" {
 resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
   name            = "${var.resource_prefix}-log-retention"
   log_group_name  = module.log_retention.log_group_name
-  filter_pattern  = "[ERROR]"
+  filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
