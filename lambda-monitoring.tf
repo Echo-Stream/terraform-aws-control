@@ -39,7 +39,7 @@ module "control_alert_handler" {
   environment_variables = {
     ALERT_TOPIC  = aws_sns_topic.alarms.arn
     ENVIRONMENT  = var.resource_prefix
-    INTEGRATIONS = "[${module.control_clickup_integration.arn}]"
+    INTEGRATIONS = "[\"${module.control_clickup_integration.arn}\"]"
   }
 
   handler     = "function.handler"
@@ -49,6 +49,7 @@ module "control_alert_handler" {
 
   policy_arns = [
     aws_iam_policy.control_alert_handler.arn,
+    module.control_clickup_integration.invoke_policy_arn
   ]
 
   runtime       = "python3.8"
