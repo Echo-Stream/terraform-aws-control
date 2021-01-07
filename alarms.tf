@@ -5,6 +5,8 @@ locals {
     module.app_cognito_pre_authentication.name,
     module.app_cognito_pre_token_generation.name,
     module.appsync_edge_datasource.name,
+    module.control_alert_handler.name,
+    module.control_clickup_integration.name,
     module.ui_cognito_post_signup.name,
     module.ui_cognito_pre_authentication.name,
     module.ui_cognito_pre_signup.name,
@@ -42,7 +44,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   namespace           = "AWS/Lambda"
   period              = "60"
   statistic           = "Sum"
-  threshold           = "5"
+  threshold           = "1"
   actions_enabled     = "true"
 
   dimensions = {
