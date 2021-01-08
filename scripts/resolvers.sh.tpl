@@ -1,4 +1,4 @@
-${aws_path} appsync create-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource}
+${aws_path} appsync create-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template files/response-template.vtl 
 
 ${aws_path} appsync create-resolver --api-id ${api_id} --type-name Edge --field-name kmsKey --data-source-name ${sub_field_datasource} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Edge --field-name kmsKey --data-source-name ${sub_field_datasource}
 
