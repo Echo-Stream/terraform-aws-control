@@ -1,4 +1,3 @@
-${aws_path} appsync create-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
 ${aws_path} appsync create-resolver --api-id ${api_id} --type-name Edge --field-name kmsKey --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Edge --field-name kmsKey --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
@@ -187,3 +186,5 @@ ${aws_path} appsync create-resolver --api-id ${api_id} --type-name Subscription 
 ${aws_path} appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name uiNotifications --data-source-name ${subscription_datasource} --response-mapping-template file://${templates_path} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name uiNotifications --data-source-name ${subscription_datasource} --response-mapping-template file://${templates_path}
 
 ${aws_path} appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PurgeQueue --data-source-name ${edge_datasource} --response-mapping-template file://${templates_path} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PurgeQueue --data-source-name ${edge_datasource} --response-mapping-template file://${templates_path}
+
+${aws_path} appsync create-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || ${aws_path} appsync update-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
