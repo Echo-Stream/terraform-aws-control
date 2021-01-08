@@ -512,14 +512,19 @@ data "aws_iam_policy_document" "manage_apps_ssm_service_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "manage_apps_ssm_service_role" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
   role       = aws_iam_role.manage_apps_ssm_service_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "manage_apps_ssm_directory_role" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMDirectoryServiceAccess"
-  role       = aws_iam_role.manage_apps_ssm_service_role.name
-}
+# resource "aws_iam_role_policy_attachment" "manage_apps_ssm_service_role" {
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+#   role       = aws_iam_role.manage_apps_ssm_service_role.name
+# }
+
+# resource "aws_iam_role_policy_attachment" "manage_apps_ssm_directory_role" {
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMDirectoryServiceAccess"
+#   role       = aws_iam_role.manage_apps_ssm_service_role.name
+# }
 
 resource "aws_iam_policy" "graph_table_manage_apps" {
   description = "IAM permissions required for graph-table-manage-apps"
