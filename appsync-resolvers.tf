@@ -40,6 +40,7 @@ resource "null_resource" "all_resolvers" {
     command = "./ ${data.template_file.resolver_sh.rendered}"
   }
   triggers = {
+    templates_path = "${path.module}/files/response-template.vtl"
     deploy                           = data.template_file.resolver_sh.rendered
     api_id                           = aws_appsync_graphql_api.echostream.id
     message_type_datasource          = module.message_type_datasource.name
