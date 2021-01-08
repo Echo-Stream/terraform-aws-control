@@ -1083,7 +1083,7 @@ module "appsync_app_datasource" {
     #INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.echostream_version}"
     LOG_LEVEL = "INFO"
     #OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.echostream_version}"
-    SSM_SERVICE_ROLE = aws_iam_role.manage_apps_ssm_service_role.name
+    SSM_SERVICE_ROLE = aws_iam_role.manage_apps_ssm_service_role.arn
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
