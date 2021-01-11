@@ -72,9 +72,9 @@ resource "aws_cloudwatch_metric_alarm" "cognito_errors" {
   evaluation_periods  = "1"
   metric_name         = "CognitoErrors"
   namespace           = "AWS/Lambda"
-  period              = "60"
+  period              = "300"
   statistic           = "Sum"
-  threshold           = "1"
+  threshold           = "3"
   actions_enabled     = "true"
 
   dimensions = {
