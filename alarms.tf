@@ -54,7 +54,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   period              = "60"
   statistic           = "Sum"
   threshold           = "1"
-  treat_missing_data  = "ignore"
+  treat_missing_data  = "notBreaching"
   actions_enabled     = "true"
 
   dimensions = {
@@ -77,7 +77,7 @@ resource "aws_cloudwatch_metric_alarm" "cognito_errors" {
   statistic           = "Sum"
   threshold           = "3"
   actions_enabled     = "true"
-  treat_missing_data  = "ignore"
+  treat_missing_data  = "notBreaching"
 
   dimensions = {
     FunctionName = each.key
