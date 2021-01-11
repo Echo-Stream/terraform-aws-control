@@ -33,6 +33,15 @@ locals {
     module.graph_table_manage_edges.name,
     module.graph_table_manage_kms_keys.name,
   ])
+
+  cognito_trigger_lambdas = toset([
+    module.app_cognito_pre_authentication.name,
+    module.app_cognito_pre_token_generation.name,
+    module.ui_cognito_post_signup.name,
+    module.ui_cognito_pre_authentication.name,
+    module.ui_cognito_pre_signup.name,
+    module.ui_cognito_pre_token_generation.name,
+  ])
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
@@ -41,6 +50,27 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = "Errors"
+  namespace           = "AWS/Lambda"
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = "1"
+  actions_enabled     = "true"
+
+  dimensions = {
+    FunctionName = each.key
+  }
+
+  alarm_actions     = [aws_sns_topic.alerts.arn]
+  alarm_description = "Monitors ${each.key} lambda errors"
+  tags              = local.tags
+}
+
+resource "aws_cloudwatch_metric_alarm" "cognito_errors" {
+  for_each            = local.cognito_trigger_lambdas
+  alarm_name          = "lambda/errors/${each.value}"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "CognitoErrors"
   namespace           = "AWS/Lambda"
   period              = "60"
   statistic           = "Sum"

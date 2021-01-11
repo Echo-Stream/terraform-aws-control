@@ -372,6 +372,18 @@ data "aws_iam_policy_document" "app_cognito_pre_authentication" {
 
     sid = "TableAccess"
   }
+
+  statement {
+    actions = [
+      "cloudwatch:PutMetricData",
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "CWPutMetrics"
+  }
 }
 
 resource "aws_iam_policy" "app_cognito_pre_authentication" {
@@ -440,6 +452,18 @@ data "aws_iam_policy_document" "app_cognito_pre_token_generation" {
     ]
 
     sid = "TableAccess"
+  }
+
+  statement {
+    actions = [
+      "cloudwatch:PutMetricData",
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "CWPutMetrics"
   }
 }
 
@@ -614,6 +638,17 @@ data "aws_iam_policy_document" "ui_cognito_post_signup" {
 
     sid = "TableAccess"
   }
+  statement {
+    actions = [
+      "cloudwatch:PutMetricData",
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "CWPutMetrics"
+  }
 }
 
 resource "aws_iam_policy" "ui_cognito_post_signup" {
@@ -683,6 +718,17 @@ data "aws_iam_policy_document" "ui_cognito_pre_authentication" {
 
     sid = "TableAccess"
   }
+  statement {
+    actions = [
+      "cloudwatch:PutMetricData",
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "CWPutMetrics"
+  }
 }
 
 resource "aws_iam_policy" "ui_cognito_pre_authentication" {
@@ -751,6 +797,17 @@ data "aws_iam_policy_document" "ui_cognito_pre_signup" {
 
     sid = "TableAccess"
   }
+  statement {
+    actions = [
+      "cloudwatch:PutMetricData",
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "CWPutMetrics"
+  }
 }
 
 resource "aws_iam_policy" "ui_cognito_pre_signup" {
@@ -818,6 +875,18 @@ data "aws_iam_policy_document" "ui_cognito_pre_token_generation" {
     ]
 
     sid = "TableAccess"
+  }
+
+  statement {
+    actions = [
+      "cloudwatch:PutMetricData",
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "CWPutMetrics"
   }
 }
 
