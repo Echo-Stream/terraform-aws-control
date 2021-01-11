@@ -97,10 +97,3 @@ module "control_clickup_integration" {
   timeout       = 300
   version       = "3.0.12"
 }
-
-resource "aws_cloudwatch_log_subscription_filter" "control_clickup_integration" {
-  name            = "${var.resource_prefix}-control-clickup-integration"
-  log_group_name  = module.control_clickup_integration.log_group_name
-  filter_pattern  = "ERROR -USERERROR"
-  destination_arn = module.control_alert_handler.arn
-}
