@@ -479,13 +479,14 @@ data "aws_iam_policy_document" "graph_table_manage_apps" {
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
+      "logs:PutRetentionPolicy",
     ]
 
     resources = [
       "*"
     ]
 
-    sid = "AppsyncMutationQueryAccess"
+    sid = "LogsAccess"
   }
 }
 
