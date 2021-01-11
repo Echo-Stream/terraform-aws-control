@@ -421,7 +421,7 @@ resource "aws_lambda_permission" "app_cognito_pre_authentication" {
 resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_authentication" {
   name            = "${var.resource_prefix}-app-cognito-pre-authentication"
   log_group_name  = module.app_cognito_pre_authentication.log_group_name
-  filter_pattern  = "ERROR -USERERROR"
+  filter_pattern  = "ERROR -AppNotAuthorizedError"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -489,7 +489,7 @@ resource "aws_lambda_permission" "app_cognito_pre_token_generation" {
 resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_token_generation" {
   name            = "${var.resource_prefix}-app-cognito-pre-token-generation"
   log_group_name  = module.app_cognito_pre_token_generation.log_group_name
-  filter_pattern  = "ERROR -USERERROR"
+  filter_pattern  = "ERROR -AppNotAuthorizedError"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -662,7 +662,7 @@ resource "aws_lambda_permission" "ui_cognito_post_signup" {
 resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_post_signup" {
   name            = "${var.resource_prefix}-ui-cognito-post-signup"
   log_group_name  = module.ui_cognito_post_signup.log_group_name
-  filter_pattern  = "ERROR -USERERROR"
+  filter_pattern  = "ERROR -SignupError"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -731,7 +731,7 @@ resource "aws_lambda_permission" "ui_cognito_pre_authentication" {
 resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_authentication" {
   name            = "${var.resource_prefix}-ui-cognito-pre-authentication"
   log_group_name  = module.ui_cognito_pre_authentication.log_group_name
-  filter_pattern  = "ERROR -USERERROR"
+  filter_pattern  = "ERROR -UserNotAuthorizedError"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -799,7 +799,7 @@ resource "aws_lambda_permission" "ui_cognito_pre_signup" {
 resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_signup" {
   name            = "${var.resource_prefix}-ui-cognito-pre-signup"
   log_group_name  = module.ui_cognito_pre_signup.log_group_name
-  filter_pattern  = "ERROR -USERERROR"
+  filter_pattern  = "ERROR -SignupError"
   destination_arn = module.control_alert_handler.arn
 }
 
@@ -867,7 +867,7 @@ resource "aws_lambda_permission" "ui_cognito_pre_token_generation" {
 resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_token_generation" {
   name            = "${var.resource_prefix}-ui-cognito-pre-token-generation"
   log_group_name  = module.ui_cognito_pre_token_generation.log_group_name
-  filter_pattern  = "ERROR -USERERROR"
+  filter_pattern  = "ERROR -UserNotAuthorizedError"
   destination_arn = module.control_alert_handler.arn
 }
 
