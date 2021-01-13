@@ -690,6 +690,7 @@ data "aws_iam_policy_document" "graph_table_manage_message_types" {
       "lambda:PublishLayerVersion",
       "lambda:UpdateFunctionConfiguration",
       "lambda:DeleteFunction",
+      "lambda:ListFunctions",
       "lambda:DeleteLayerVersion",
       "lambda:GetLayerVersion",
       "lambda:GetFunctionConfiguration",
