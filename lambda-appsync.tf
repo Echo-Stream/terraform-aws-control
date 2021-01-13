@@ -1139,17 +1139,16 @@ module "appsync_app_datasource" {
   description = "Appsync datasource for managing app"
 
   environment_variables = {
-    APPSYNC_ENDPOINT         = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
-    APP_CLIENT_ID            = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
-    APP_CLOUD_INIT_TOPIC     = aws_sns_topic.hl7_app_cloud_init.name
-    APP_CLOUD_INIT_TOPIC_ARN = aws_sns_topic.hl7_app_cloud_init.arn
-    APP_IDENTITY_POOL_ID     = aws_cognito_identity_pool.echostream.id
-    APP_USER_POOL_ID         = aws_cognito_user_pool.echostream_apps.id
-    AUDIT_FIREHOSE           = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
-    COGNITO_ROLE_ARN         = aws_iam_role.authenticated.arn
-    DYNAMODB_TABLE           = module.graph_table.name
-    ENVIRONMENT              = var.resource_prefix
-    INTERNAL_APPSYNC_ROLES   = local.internal_appsync_role_names
+    APPSYNC_ENDPOINT       = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
+    APP_CLIENT_ID          = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
+    APP_CLOUD_INIT_TOPIC   = aws_sns_topic.hl7_app_cloud_init.arn
+    APP_IDENTITY_POOL_ID   = aws_cognito_identity_pool.echostream.id
+    APP_USER_POOL_ID       = aws_cognito_user_pool.echostream_apps.id
+    AUDIT_FIREHOSE         = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
+    COGNITO_ROLE_ARN       = aws_iam_role.authenticated.arn
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.resource_prefix
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     #INBOUNDER_ECR_URL    = "${local.artifacts["hl7_mllp_inbound_node"]}:${var.echostream_version}"
     LOG_LEVEL = "INFO"
     #OUTBOUNDER_ECR_URL   = "${local.artifacts["hl7_mllp_outbound_node"]}:${var.echostream_version}"
