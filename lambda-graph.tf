@@ -512,10 +512,50 @@ data "aws_iam_policy_document" "manage_apps_ssm_service_role" {
   }
 }
 
-# resource "aws_iam_role_policy_attachment" "manage_apps_ssm_service_role" {
-#   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
-#   role       = aws_iam_role.manage_apps_ssm_service_role.name
-# }
+data "aws_iam_policy_document" "manage_apps_ssm_service_role_customer_policy" {
+  statement {
+    actions = [
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:BatchGetImage",
+      "ecr:DescribeImages",
+      "ecr:DescribeRepositories",
+      "ecr:GetAuthorizationToken",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:GetRepositoryPolicy",
+      "ecr:ListImages",
+    ]
+
+    resources = [
+      "arn:aws:ecr:${local.current_region}:${local.artifacts_account_id}:repository/*"
+    ]
+
+    sid = "AppCognitoPoolAccess"
+  }
+
+  statement {
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "LogsAccess"
+  }
+}
+
+resource "aws_iam_policy" "manage_apps_ssm_service_role_customer_policy" {
+  description = "IAM permissions required for manage apps ssm"
+  path        = "/${var.resource_prefix}-lambda/"
+  policy      = data.aws_iam_policy_document.manage_apps_ssm_service_role_customer_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "manage_apps_ssm_service_role_customer_policy" {
+  policy_arn = aws_iam_policy.manage_apps_ssm_service_role_customer_policy.arn
+  role       = aws_iam_role.manage_apps_ssm_service_role.name
+}
 
 resource "aws_iam_role_policy_attachment" "manage_apps_ssm_service_role" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
