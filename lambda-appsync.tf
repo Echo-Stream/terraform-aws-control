@@ -1435,12 +1435,11 @@ module "appsync_validate_function_datasource" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    ACCESS_KEY_ID          = ""
     DYNAMODB_TABLE         = module.graph_table.name
     ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
+    LAMBDA_ROLE_ARN        = aws_iam_role.tenant_function_role.arn
     LOG_LEVEL              = "INFO"
-    SECRET_ACCESS_KEY      = ""
   }
 
   handler     = "function.handler"
