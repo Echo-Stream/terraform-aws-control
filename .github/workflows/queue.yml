@@ -28,7 +28,7 @@ jobs:
             "data": {
               "attributes": {
                 "is-destroy": false,
-                "message": "New version of Control Terraform published. Queued by Github actions"
+                "message": "New version of Control Terraform published, Commit ID `echo $GITHUB_SHA | cut -c1-7`. Queued by Github actions $GITHUB_ACTOR"
               },
               "type": "runs",
               "relationships": {
