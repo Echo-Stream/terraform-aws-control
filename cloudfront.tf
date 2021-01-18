@@ -111,7 +111,7 @@ resource "aws_route53_record" "webapp_cloudfront" {
 ## Origin Request Lambda, listening on path /config/config.json
 
 data "template_file" "edge_config" {
-  template = file("${path.module}/scripts/edge-config.py.tpl")
+  template = file("${path.module}/scripts/edge-config.py")
   vars = {
     graphql_endpoint = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
     client_id        = aws_cognito_user_pool_client.echostream_ui_userpool_client.id

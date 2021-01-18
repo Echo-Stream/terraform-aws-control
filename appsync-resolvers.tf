@@ -4,7 +4,7 @@
 # https://github.com/terraform-providers/terraform-provider-aws/issues/15593
 
 data "template_file" "resolver_sh" {
-  template = file("${path.module}/scripts/resolvers.sh.tpl")
+  template = file("${path.module}/scripts/resolvers.sh")
   vars = {
     aws_path                         = "/home/terraform/bin/aws"
     api_id                           = aws_appsync_graphql_api.echostream.id
@@ -24,7 +24,7 @@ data "template_file" "resolver_sh" {
 
 resource "null_resource" "all_resolvers" {
   depends_on = [
-    null_resource.install_aws_cli,
+    #null_resource.install_aws_cli,
     data.template_file.resolver_sh,
     module.tenant_datasource,
     module.message_type_datasource,
