@@ -113,11 +113,11 @@ resource "aws_route53_record" "webapp_cloudfront" {
 data "template_file" "edge_config" {
   template = file("${path.module}/scripts/edge-config.py")
   vars = {
-    graphql_endpoint = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
+    api_id           = aws_appsync_graphql_api.echostream.id
     client_id        = aws_cognito_user_pool_client.echostream_ui_userpool_client.id
+    graphql_endpoint = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
     region           = local.current_region
     user_pool_id     = aws_cognito_user_pool.echostream_ui.id
-    api_id           = aws_appsync_graphql_api.echostream.id
   }
 }
 
