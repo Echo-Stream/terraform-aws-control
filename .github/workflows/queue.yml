@@ -13,7 +13,7 @@ jobs:
     - name: Set env vars
       run: |
         echo "TOKEN=${{ secrets.TERRAFORM_API_KEY }}" >> $GITHUB_ENV
-        echo $GITHUB_SHA | cut -c1-7
+        echo "COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
     - name: Run Terraform
       run: |
         workspace_id=`curl \
@@ -29,7 +29,7 @@ jobs:
             "data": {
               "attributes": {
                 "is-destroy": false,
-                "message": "New version of Control Terraform published, Commit ID `echo $GITHUB_SHA | cut -c1-7`. Queued by Github actions $GITHUB_ACTOR"
+                "message": "Control Terraform is updated COMMIT_SHA. Queued by Github actions $GITHUB_ACTOR"
               },
               "type": "runs",
               "relationships": {
@@ -42,3 +42,6 @@ jobs:
               }
             }
           }' https://app.terraform.io/api/v2/runs
+      env:
+        GITHUB_ACTOR: $GITHUB_ACTOR
+        COMMIT_SHA: $COMMIT_SHA
