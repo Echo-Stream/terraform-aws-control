@@ -78,7 +78,7 @@ module "control_clickup_integration" {
   environment_variables = {
     ENVIRONMENT = var.resource_prefix
     TEAM        = "EchoStream"
-    SPACE       = "EchoStream"
+    SPACE       = "EchoStream MVP"
     PROJECT     = "Sprints and backlogs"
     TASK_LIST   = "Bugs"
     ASSIGN_TO   = "mmoon@quinovas.com"
