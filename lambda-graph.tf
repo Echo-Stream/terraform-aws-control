@@ -430,23 +430,22 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_queues" {
 ##  graph-table-manage-apps  ##
 ###############################
 data "aws_iam_policy_document" "graph_table_manage_apps" {
-  # statement {
-  #   actions = [
-  #     "ssm:CreateActivation",
-  #     "ssm:DeleteActivation",
-  #     "ssm:DescribeActivations",
-  #     "ssm:ListActivations",
-  #     "ssm:DescribeInstanceInformation",
-  #     "ssm:ListTagsForResource",
-  #     "ssm:DeregisterManagedInstance"
-  #   ]
+  statement {
+    actions = [
+      "ssm:DeleteActivation",
+      "ssm:DescribeActivations",
+      "ssm:ListActivations",
+      "ssm:DescribeInstanceInformation",
+      "ssm:ListTagsForResource",
+      "ssm:DeregisterManagedInstance"
+    ]
 
-  #   resources = [
+    resources = [
+      "*"
+    ]
 
-  #   ]
-
-  #   sid = "SSMAccess"
-  # }
+    sid = "SSMAccess"
+  }
 
   # statement {
   #   actions = [
@@ -852,6 +851,7 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
       "logs:DeleteSubscriptionFilter",
       "logs:PutRetentionPolicy",
       "logs:CreateLogGroup",
+      "logs:DeleteLogGroup",
     ]
 
     resources = [

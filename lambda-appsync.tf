@@ -1435,11 +1435,14 @@ module "appsync_validate_function_datasource" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.resource_prefix
-    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
-    LAMBDA_ROLE_ARN        = aws_iam_role.tenant_function_role.arn
-    LOG_LEVEL              = "INFO"
+    DYNAMODB_TABLE             = module.graph_table.name
+    ENVIRONMENT                = var.resource_prefix
+    FUNCTIONS_BUCKET           = local.artifacts_bucket
+    INTERNAL_APPSYNC_ROLES     = local.internal_appsync_role_names
+    LAMBDA_ROLE_ARN            = aws_iam_role.tenant_function_role.arn
+    LOG_LEVEL                  = "INFO"
+    VALIDATION_FUNCTION_S3_KEY = local.lambda_functions_keys["validate_function"]
+
   }
 
   handler     = "function.handler"
