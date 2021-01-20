@@ -21,6 +21,7 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
       "dynamodb:GetRecords",
       "dynamodb:GetShardIterator",
       "dynamodb:ListStreams",
+      "dynamodb:PutItem"
     ]
 
     resources = [
