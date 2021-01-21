@@ -1413,6 +1413,7 @@ data "aws_iam_policy_document" "appsync_validate_function_datasource" {
       "lambda:InvokeFunction",
       "lambda:TagResource",
       "lambda:CreateFunction",
+      "lambda:GetLayerVersion",
     ]
 
     resources = [
@@ -1420,6 +1421,18 @@ data "aws_iam_policy_document" "appsync_validate_function_datasource" {
     ]
 
     sid = "InvokeCreateTagValidators"
+  }
+
+  statement {
+    actions = [
+      "iam:PassRole",
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "iamPassRole"
   }
 }
 
