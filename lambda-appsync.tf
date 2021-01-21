@@ -1434,6 +1434,18 @@ data "aws_iam_policy_document" "appsync_validate_function_datasource" {
 
     sid = "iamPassRole"
   }
+
+  statement {
+    actions = [
+      "s3:GetObject*",
+    ]
+
+    resources = [
+      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${local.lambda_functions_keys["validate_function"]}"
+    ]
+
+    sid = "GetValidateFnArtifact"
+  }
 }
 
 resource "aws_iam_policy" "appsync_validate_function_datasource" {
