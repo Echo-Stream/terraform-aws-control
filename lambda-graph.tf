@@ -1268,3 +1268,78 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_kms_keys" 
   filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
+
+##################################
+## graph-table-manage-functions ##
+##################################
+data "aws_iam_policy_document" "graph_table_manage_functions" {
+  statement {
+    actions = [
+      "dynamodb:Query",
+      "dynamodb:UpdateItem",
+    ]
+
+    resources = [
+      module.graph_table.arn,
+    ]
+
+    sid = "TableAccess"
+  }
+  statement {
+    actions = [
+      "lambda:GetFunctionConfiguration",
+      "lambda:UpdateFunctionConfiguration",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "LambdaEventSourceMappings"
+  }
+}
+
+resource "aws_iam_policy" "graph_table_manage_functions" {
+  description = "IAM permissions required for graph-table-manage-functions"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-graph-table-manage-functions"
+  policy      = data.aws_iam_policy_document.graph_table_manage_functions.json
+}
+
+module "graph_table_manage_functions" {
+  description     = "manages functions in the Dynamodb Stream"
+  dead_letter_arn = local.lambda_dead_letter_arn
+
+  environment_variables = {
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.resource_prefix
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
+    LOG_LEVEL              = "INFO"
+  }
+
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+
+  memory_size = 1536
+  name        = "${var.resource_prefix}-graph-table-manage-functions"
+
+  policy_arns = [
+    aws_iam_policy.graph_table_manage_functions.arn,
+    aws_iam_policy.additional_ddb_policy.arn,
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["graph_table_manage_functions"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 300
+  version       = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_functions" {
+  name            = "${var.resource_prefix}-graph-table-manage-functions"
+  log_group_name  = module.graph_table_manage_functions.log_group_name
+  filter_pattern  = "ERROR -USERERROR"
+  destination_arn = module.control_alert_handler.arn
+}

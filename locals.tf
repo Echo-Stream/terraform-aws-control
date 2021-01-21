@@ -46,6 +46,7 @@ locals {
     "${var.resource_prefix}-appsync-sub-field-datasource",
     "${var.resource_prefix}-appsync-subscription-datasource",
     "${var.resource_prefix}-appsync-tenant-datasource",
+    "${var.resource_prefix}-appsync-function-datasource",
     "${var.resource_prefix}-appsync-validate-function-datasource",
     "${var.resource_prefix}-graph-table-dynamodb-trigger",
     "${var.resource_prefix}-graph-table-manage-apps",
@@ -58,6 +59,7 @@ locals {
     "${var.resource_prefix}-graph-table-manage-tenants",
     "${var.resource_prefix}-graph-table-manage-users",
     "${var.resource_prefix}-graph-table-tenant-stream-handler",
+    "${var.resource_prefix}-graph-table-manage-functions",
   ])
 
   lambda_dead_letter_arn      = aws_sns_topic.lambda_dead_letter.arn
@@ -76,6 +78,7 @@ locals {
     appsync_subscription_datasource          = "${local.artifacts["lambda"]}/appsync-subscription-datasource.zip"
     appsync_tenant_datasource                = "${local.artifacts["lambda"]}/appsync-tenant-datasource.zip"
     appsync_validate_function_datasource     = "${local.artifacts["lambda"]}/appsync-validate-function-datasource.zip"
+    appsync_function_datasource              = "${local.artifacts["lambda"]}/appsync-function-datasource.zip"
     control_alert_handler                    = "${local.artifacts["lambda"]}/control-alert-handler.zip"
     control_clickup_integration              = "${local.artifacts["lambda"]}/control-clickup-integration.zip"
     deployment_handler                       = "${local.artifacts["lambda"]}/deployment-handler.zip"
@@ -90,6 +93,7 @@ locals {
     graph_table_manage_tenants               = "${local.artifacts["lambda"]}/graph-table-manage-tenants.zip"
     graph_table_manage_users                 = "${local.artifacts["lambda"]}/graph-table-manage-users.zip"
     graph_table_tenant_stream_handler        = "${local.artifacts["lambda"]}/graph-table-tenant-stream-handler.zip"
+    graph_table_manage_functions             = "${local.artifacts["lambda"]}/graph-table-manage-functions.zip"
     log_retention                            = "${local.artifacts["lambda"]}/log-retention.zip"
     node_error_publisher                     = "${local.artifacts["tenant_lambda"]}/node-error-publisher.zip"
     process_audit_record                     = "${local.artifacts["lambda"]}/process-audit-record.zip"
