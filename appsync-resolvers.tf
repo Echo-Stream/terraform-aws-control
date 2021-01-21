@@ -17,6 +17,7 @@ data "template_file" "resolver_sh" {
     sub_field_datasource             = module.sub_field_datasource.name
     templates_path                   = "${path.module}/files/response-template.vtl"
     tenant_datasource                = module.tenant_datasource.name
+    function_datasource              = module.function_datasource.name
     validate_function_datasource     = module.validate_function_datasource.name
   }
 }
@@ -32,6 +33,7 @@ resource "null_resource" "all_resolvers" {
     module.subscription_datasource,
     module.sub_field_datasource,
     module.tenant_datasource,
+    module.function_datasource,
     module.validate_function_datasource,
   ]
 
@@ -49,6 +51,7 @@ resource "null_resource" "all_resolvers" {
     sub_field_datasource             = module.sub_field_datasource.name
     templates_path                   = "${path.module}/files/response-template.vtl"
     tenant_datasource                = module.tenant_datasource.name
+    function_datasource              = module.function_datasource.name
     validate_function_datasource     = module.validate_function_datasource.name
   }
 }

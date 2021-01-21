@@ -1759,3 +1759,68 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
   filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
+
+
+
+###################################
+##  appsync-function-datasource  ##
+###################################
+data "aws_iam_policy_document" "appsync_function_datasource" {
+  statement {
+    actions = [
+      "dynamodb:Query",
+      "dynamodb:GetItem",
+      "dynamodb:DeleteItem",
+    ]
+
+    resources = [
+      module.graph_table.arn,
+    ]
+
+    sid = "TableAccess"
+  }
+}
+
+resource "aws_iam_policy" "appsync_function_datasource" {
+  description = "IAM permissions required for appsync-function-datasource lambda"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-appsync-function-datasource"
+  policy      = data.aws_iam_policy_document.appsync_function_datasource.json
+}
+
+module "appsync_function_datasource" {
+  description = "Appsync datasource that manages echostream function type"
+
+  environment_variables = {
+    DYNAMODB_TABLE         = module.graph_table.name
+    ENVIRONMENT            = var.resource_prefix
+    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
+    LOG_LEVEL              = "INFO"
+  }
+
+  dead_letter_arn = local.lambda_dead_letter_arn
+  handler         = "function.handler"
+  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  memory_size     = 1536
+  name            = "${var.resource_prefix}-appsync-function-datasource"
+
+  policy_arns = [
+    aws_iam_policy.appsync_function_datasource.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["appsync_function_datasource"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "appsync_function_datasource" {
+  name            = "${var.resource_prefix}-appsync-function-datasource"
+  log_group_name  = module.appsync_function_datasource.log_group_name
+  filter_pattern  = "ERROR -USERERROR"
+  destination_arn = module.control_alert_handler.arn
+}
