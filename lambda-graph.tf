@@ -144,6 +144,20 @@ data "aws_iam_policy_document" "graph_table_manage_users" {
 
     sid = "AppsyncMutationQueryAccess"
   }
+
+    statement {
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "LogsAccess"
+  }
 }
 
 resource "aws_iam_policy" "graph_table_manage_users" {
