@@ -40,6 +40,7 @@ module "graph_table" {
   range_key              = "sk"
   name                   = "${var.resource_prefix}-graph"
   point_in_time_recovery = true
+  ttl_attribute_name     = "TTL"
   stream_view_type       = "NEW_AND_OLD_IMAGES"
 
   source  = "QuiNovas/dynamodb-table/aws"
