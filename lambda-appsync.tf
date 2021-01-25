@@ -787,8 +787,10 @@ resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_authentication
 data "aws_iam_policy_document" "ui_cognito_pre_signup" {
   statement {
     actions = [
+      "dynamodb:DeleteItem",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
       "dynamodb:UpdateItem",
-      "dynamodb:PutItem"
     ]
 
     resources = [
