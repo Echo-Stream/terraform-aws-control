@@ -462,8 +462,8 @@ data "aws_iam_policy_document" "graph_table_manage_apps" {
 
   statement {
     actions = [
-      "cognito:AdminDeleteUser",
-      "cognito:AdminGetUser",
+      "cognito-idp:AdminDeleteUser",
+      "cognito-idp:AdminGetUser",
     ]
 
     resources = [
