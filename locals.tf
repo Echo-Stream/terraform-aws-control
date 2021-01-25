@@ -84,6 +84,7 @@ locals {
     control_clickup_integration              = "${local.artifacts["lambda"]}/control-clickup-integration.zip"
     deployment_handler                       = "${local.artifacts["lambda"]}/deployment-handler.zip"
     graph_table_dynamodb_trigger             = "${local.artifacts["lambda"]}/graph-table-dynamodb-trigger.zip"
+    graph_table_manage_authorizations        = "${local.artifacts["lambda"]}/graph-table-manage-authorizations.zip"
     graph_table_manage_apps                  = "${local.artifacts["lambda"]}/graph-table-manage-apps.zip"
     graph_table_manage_edges                 = "${local.artifacts["lambda"]}/graph-table-manage-edges.zip"
     graph_table_manage_functions             = "${local.artifacts["lambda"]}/graph-table-manage-functions.zip"
