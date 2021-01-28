@@ -147,7 +147,7 @@ aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-nam
 
 aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name transformerFunction --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name TransNode --field-name transformerFunction --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
-aws appsync create-resolver --api-id ${api_id} --type-name User --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name User --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
+aws appsync create-resolver --api-id ${api_id} --type-name User --field-name tenants --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name User --field-name tenants --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name XTenantReceivingApp --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name XTenantReceivingApp --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
