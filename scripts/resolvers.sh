@@ -149,6 +149,8 @@ aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-nam
 
 aws appsync create-resolver --api-id ${api_id} --type-name User --field-name tenants --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name User --field-name tenants --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
+aws appsync create-resolver --api-id ${api_id} --type-name User --field-name tenantInfo --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name User --field-name tenantInfo --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
+
 aws appsync create-resolver --api-id ${api_id} --type-name XTenantReceivingApp --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name XTenantReceivingApp --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name XTenantReceivingApp --field-name nodes --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name XTenantReceivingApp --field-name nodes --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
@@ -207,3 +209,5 @@ aws appsync create-resolver --api-id ${api_id} --type-name ManagedApp --field-na
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutFunction --data-source-name ${function_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutFunction --data-source-name ${function_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteFunction --data-source-name ${function_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteFunction --data-source-name ${function_datasource} --response-mapping-template file://${templates_path}
+
+aws appsync create-resolver --api-id ${api_id} --type-name TenantInfo --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name TenantInfo --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
