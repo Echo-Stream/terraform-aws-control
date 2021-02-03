@@ -268,7 +268,7 @@ resource "aws_cognito_user_pool" "echostream_api" {
     minimum_length                   = 60
     require_lowercase                = true
     require_numbers                  = true
-    require_symbols                  = false
+    require_symbols                  = true
     require_uppercase                = true
     temporary_password_validity_days = 90
   }
