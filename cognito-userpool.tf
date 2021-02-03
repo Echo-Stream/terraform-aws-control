@@ -114,6 +114,19 @@ resource "aws_cognito_user_pool_client" "echostream_apps_userpool_client" {
 
 ### echostream-ui cognito pool
 resource "aws_cognito_user_pool" "echostream_ui" {
+
+  account_recovery_setting {
+    recovery_mechanism {
+      name     = "verified_email"
+      priority = 1
+    }
+
+    recovery_mechanism {
+      name     = "verified_phone_number"
+      priority = 2
+    }
+  }
+
   admin_create_user_config {
     allow_admin_create_user_only = false
 
@@ -138,8 +151,8 @@ resource "aws_cognito_user_pool" "echostream_ui" {
     ]
   }
 
-  #mfa_configuration = "ON"
-  name = "${var.resource_prefix}-ui"
+  mfa_configuration = "OPTIONAL"
+  name              = "${var.resource_prefix}-ui"
 
   lambda_config {
     pre_sign_up          = module.ui_cognito_pre_signup.arn
@@ -182,6 +195,9 @@ resource "aws_cognito_user_pool" "echostream_ui" {
     "email",
   ]
 
+  user_pool_add_ons {
+    advanced_security_mode = "ENFORCED"
+  }
   # software_token_mfa_configuration {
   #   enabled = true
   # }
@@ -189,6 +205,8 @@ resource "aws_cognito_user_pool" "echostream_ui" {
   verification_message_template {
     default_email_option = "CONFIRM_WITH_LINK"
   }
+
+
 
   tags = local.tags
 }
