@@ -66,6 +66,8 @@ locals {
   lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn
 
   lambda_functions_keys = {
+    api_cognito_pre_authentication           = "${local.artifacts["lambda"]}/api-cognito-pre-authentication.zip"
+    api_cognito_pre_token_generation         = "${local.artifacts["lambda"]}/api-cognito-pre-token-generation.zip"
     app_cognito_pre_authentication           = "${local.artifacts["lambda"]}/app-cognito-pre-authentication.zip"
     app_cognito_pre_token_generation         = "${local.artifacts["lambda"]}/app-cognito-pre-token-generation.zip"
     appsync_app_datasource                   = "${local.artifacts["lambda"]}/appsync-app-datasource.zip"
@@ -84,8 +86,8 @@ locals {
     control_clickup_integration              = "${local.artifacts["lambda"]}/control-clickup-integration.zip"
     deployment_handler                       = "${local.artifacts["lambda"]}/deployment-handler.zip"
     graph_table_dynamodb_trigger             = "${local.artifacts["lambda"]}/graph-table-dynamodb-trigger.zip"
-    graph_table_manage_authorizations        = "${local.artifacts["lambda"]}/graph-table-manage-authorizations.zip"
     graph_table_manage_apps                  = "${local.artifacts["lambda"]}/graph-table-manage-apps.zip"
+    graph_table_manage_authorizations        = "${local.artifacts["lambda"]}/graph-table-manage-authorizations.zip"
     graph_table_manage_edges                 = "${local.artifacts["lambda"]}/graph-table-manage-edges.zip"
     graph_table_manage_functions             = "${local.artifacts["lambda"]}/graph-table-manage-functions.zip"
     graph_table_manage_kms_keys              = "${local.artifacts["lambda"]}/graph-table-manage-kms-keys.zip"
