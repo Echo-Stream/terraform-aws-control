@@ -127,3 +127,13 @@ module "function_datasource" {
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
   version                  = "3.0.4"
 }
+
+module "api_user_datasource" {
+  api_id                   = aws_appsync_graphql_api.echostream.id
+  description              = "Appsync lambda datasource for appsync-api-user-datasource function"
+  invoke_lambda_policy_arn = module.appsync_api_user_datasource.invoke_policy_arn
+  lambda_function_arn      = module.appsync_api_user_datasource.arn
+  name                     = replace("${var.resource_prefix}_api_user_datasource", "-", "_")
+  source                   = "QuiNovas/appsync-lambda-datasource/aws"
+  version                  = "3.0.4"
+}

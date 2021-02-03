@@ -1940,3 +1940,85 @@ resource "aws_cloudwatch_log_subscription_filter" "appsync_integrations_datasour
   filter_pattern  = "ERROR -USERERROR"
   destination_arn = module.control_alert_handler.arn
 }
+
+
+###################################
+##  appsync-api-user-datasource  ##
+###################################
+data "aws_iam_policy_document" "appsync_api_user_datasource" {
+  statement {
+    actions = [
+      "dynamodb:DeleteItem",
+      "dynamodb:GetItem",
+      "dynamodb:Query"
+    ]
+
+    resources = [
+      module.graph_table.arn,
+      "${module.graph_table.arn}/index/*",
+    ]
+
+    sid = "TableAccess"
+  }
+
+  statement {
+    actions = [
+      "cognito-idp:AdminCreateUser",
+      "cognito-idp:AdminDeleteUser",
+      "cognito-idp:AdminSetUserPassword"
+      #"cognito-idp:AdminConfirmSignup",
+      #"cognito-idp:AdminGetUser",
+    ]
+
+    resources = [
+      aws_cognito_user_pool.echostream_apps.arn
+    ]
+
+    sid = "AppCognitoPoolAccess"
+  }
+}
+
+resource "aws_iam_policy" "appsync_api_user_datasource" {
+  description = "IAM permissions required for appsync_api_user_datasource lambda"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-appsync-api-user-datasource"
+  policy      = data.aws_iam_policy_document.appsync_api_user_datasource.json
+}
+
+module "appsync_api_user_datasource" {
+  description = "Appsync datasource for API Users"
+
+  environment_variables = {
+    APPSYNC_ENDPOINT = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
+    API_CLIENT_ID    = aws_cognito_user_pool_client.echostream_ui_userpool_client.id
+    API_USER_POOL_ID = aws_cognito_user_pool.echostream_api.id
+    DYNAMODB_TABLE   = module.graph_table.name
+    ENVIRONMENT      = var.resource_prefix
+  }
+
+  dead_letter_arn = local.lambda_dead_letter_arn
+  handler         = "function.handler"
+  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  memory_size     = 1536
+  name            = "${var.resource_prefix}-appsync-api-user-datasource"
+
+  policy_arns = [
+    aws_iam_policy.appsync_api_user_datasource.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["appsync_api_user_datasource"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.12"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "appsync_api_user_datasource" {
+  name            = "${var.resource_prefix}-appsync-api-user-datasource"
+  log_group_name  = module.appsync_api_user_datasource.log_group_name
+  filter_pattern  = "ERROR -USERERROR"
+  destination_arn = module.control_alert_handler.arn
+}

@@ -275,3 +275,20 @@ resource "aws_cognito_user_pool" "echostream_api" {
 
   tags = local.tags
 }
+
+resource "aws_cognito_user_pool_client" "echostream_api_userpool_client" {
+  name                   = "${var.resource_prefix}-api"
+  refresh_token_validity = 30
+
+  supported_identity_providers = [
+    "COGNITO",
+  ]
+
+  user_pool_id = aws_cognito_user_pool.echostream_api.id
+
+  explicit_auth_flows = [
+    "ALLOW_REFRESH_TOKEN_AUTH",
+    "ALLOW_USER_SRP_AUTH"
+  ]
+}
+
