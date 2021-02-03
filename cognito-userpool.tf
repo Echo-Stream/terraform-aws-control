@@ -233,3 +233,45 @@ resource "aws_cognito_user_pool_domain" "echostream_amazon_cognito_domain" {
   domain       = var.resource_prefix
   user_pool_id = aws_cognito_user_pool.echostream_ui.id
 }
+
+## API userpool
+resource "aws_cognito_user_pool" "echostream_api" {
+  admin_create_user_config {
+    allow_admin_create_user_only = true
+
+    invite_message_template {
+      email_message = "Your username is {username} and temporary password is {####}. "
+      email_subject = "Your temporary password"
+      sms_message   = "Your username is {username} and temporary password is {####}. "
+    }
+  }
+
+  email_verification_message = "Your verification code is {####}. "
+  email_verification_subject = "Your verification code"
+
+  lifecycle {
+    ignore_changes = [
+      schema
+    ]
+
+    # prevent_destroy = true
+  }
+
+  name = "${var.resource_prefix}-api"
+
+  # lambda_config {
+  #   pre_authentication   = module.app_cognito_pre_authentication.arn
+  #   pre_token_generation = module.app_cognito_pre_token_generation.arn
+  # }
+
+  password_policy {
+    minimum_length                   = 60
+    require_lowercase                = true
+    require_numbers                  = true
+    require_symbols                  = false
+    require_uppercase                = true
+    temporary_password_validity_days = 90
+  }
+
+  tags = local.tags
+}
