@@ -1971,7 +1971,7 @@ data "aws_iam_policy_document" "appsync_api_user_datasource" {
     ]
 
     resources = [
-      aws_cognito_user_pool.echostream_apps.arn
+      aws_cognito_user_pool.echostream_api.arn
     ]
 
     sid = "AppCognitoPoolAccess"
