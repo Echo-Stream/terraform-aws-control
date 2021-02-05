@@ -1950,6 +1950,7 @@ data "aws_iam_policy_document" "appsync_api_user_datasource" {
     actions = [
       "dynamodb:DeleteItem",
       "dynamodb:GetItem",
+      "dynamodb:PutItem",
       "dynamodb:Query"
     ]
 
