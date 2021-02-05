@@ -217,3 +217,10 @@ aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name Li
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutApiUser --data-source-name ${api_user_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutApiUser --data-source-name ${api_user_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteApiUser --data-source-name ${api_user_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteApiUser --data-source-name ${api_user_datasource} --response-mapping-template file://${templates_path}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutXTenantReceivingApp --data-source-name ${app_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutXTenantReceivingApp --data-source-name ${app_datasource} --response-mapping-template file://${templates_path}
+
+
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name UpdateTenantUser --data-source-name ${tenant_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name UpdateTenantUser --data-source-name ${tenant_datasource} --response-mapping-template file://${templates_path}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name RemoveTenantUser --data-source-name ${tenant_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name RemoveTenantUser --data-source-name ${tenant_datasource} --response-mapping-template file://${templates_path}
