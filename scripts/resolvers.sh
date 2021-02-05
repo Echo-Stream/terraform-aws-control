@@ -53,7 +53,7 @@ aws appsync create-resolver --api-id ${api_id} --type-name ManagedNodeType --fie
 
 aws appsync create-resolver --api-id ${api_id} --type-name MessageType --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name MessageType --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name AppNotification --data-source-name ${app_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name AppNotification --data-source-name ${app_datasource} --response-mapping-template file://${templates_path}
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name NotifyApp --data-source-name ${app_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name NotifyApp --data-source-name ${app_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutEdge --data-source-name ${edge_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutEdge --data-source-name ${edge_datasource} --response-mapping-template file://${templates_path}
 
@@ -127,7 +127,7 @@ aws appsync create-resolver --api-id ${api_id} --type-name RouterNode --field-na
 
 aws appsync create-resolver --api-id ${api_id} --type-name RouterNode --field-name sendEdges --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name RouterNode --field-name sendEdges --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
-aws appsync create-resolver --api-id ${api_id} --type-name RouterNode --field-name sendMessageType --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name RouterNode --field-name sendMessageType --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
+# aws appsync create-resolver --api-id ${api_id} --type-name RouterNode --field-name sendMessageType --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name RouterNode --field-name sendMessageType --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name RouterNode --field-name receiveEdges --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name RouterNode --field-name receiveEdges --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
@@ -147,7 +147,7 @@ aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-nam
 
 aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name transformerFunction --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name TransNode --field-name transformerFunction --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
-aws appsync create-resolver --api-id ${api_id} --type-name User --field-name tenants --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name User --field-name tenants --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
+# aws appsync create-resolver --api-id ${api_id} --type-name User --field-name tenants --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name User --field-name tenants --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name User --field-name tenantInfo --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name User --field-name tenantInfo --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
@@ -189,15 +189,13 @@ aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name Ge
 
 aws appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name appNotifications --data-source-name ${subscription_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name appNotifications --data-source-name ${subscription_datasource} --response-mapping-template file://${templates_path}
 
-aws appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name NotifyApp --data-source-name ${subscription_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name NotifyApp --data-source-name ${subscription_datasource} --response-mapping-template file://${templates_path}
-
-aws appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name NotifyUI --data-source-name ${subscription_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name NotifyUI --data-source-name ${subscription_datasource} --response-mapping-template file://${templates_path}
+# aws appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name NotifyApp --data-source-name ${subscription_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name NotifyApp --data-source-name ${subscription_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name uiNotifications --data-source-name ${subscription_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name uiNotifications --data-source-name ${subscription_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PurgeQueue --data-source-name ${edge_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PurgeQueue --data-source-name ${edge_datasource} --response-mapping-template file://${templates_path}
 
-aws appsync create-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
+# aws appsync create-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name CognitoUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name RegenerateAppISO --data-source-name ${app_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name RegenerateAppISO --data-source-name ${app_datasource} --response-mapping-template file://${templates_path}
 
