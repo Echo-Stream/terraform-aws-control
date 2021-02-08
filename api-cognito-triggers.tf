@@ -82,7 +82,7 @@ resource "aws_lambda_permission" "api_cognito_pre_token_generation" {
   action        = "lambda:InvokeFunction"
   function_name = module.api_cognito_pre_token_generation.name
   principal     = "cognito-idp.amazonaws.com"
-  source_arn    = aws_cognito_user_pool.echostream_ui.arn
+  source_arn    = aws_cognito_user_pool.echostream_api.arn
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "api_cognito_pre_token_generation" {
@@ -176,7 +176,7 @@ resource "aws_lambda_permission" "api_cognito_pre_authentication" {
   action        = "lambda:InvokeFunction"
   function_name = module.api_cognito_pre_authentication.name
   principal     = "cognito-idp.amazonaws.com"
-  source_arn    = aws_cognito_user_pool.echostream_apps.arn
+  source_arn    = aws_cognito_user_pool.echostream_api.arn
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "api_cognito_pre_authentication" {
