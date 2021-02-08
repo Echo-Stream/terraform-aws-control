@@ -1991,7 +1991,7 @@ module "appsync_api_user_datasource" {
 
   environment_variables = {
     APPSYNC_ENDPOINT = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
-    API_CLIENT_ID    = aws_cognito_user_pool_client.echostream_ui_userpool_client.id
+    API_CLIENT_ID    = aws_cognito_user_pool_client.echostream_api_userpool_client.id
     API_USER_POOL_ID = aws_cognito_user_pool.echostream_api.id
     DYNAMODB_TABLE   = module.graph_table.name
     ENVIRONMENT      = var.resource_prefix
