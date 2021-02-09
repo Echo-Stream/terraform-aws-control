@@ -430,12 +430,12 @@ resource "aws_lambda_permission" "app_cognito_pre_authentication" {
   source_arn    = aws_cognito_user_pool.echostream_apps.arn
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_authentication" {
-  name            = "${var.resource_prefix}-app-cognito-pre-authentication"
-  log_group_name  = module.app_cognito_pre_authentication.log_group_name
-  filter_pattern  = "ERROR -AppNotAuthorizedError -InternalError"
-  destination_arn = module.control_alert_handler.arn
-}
+# resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_authentication" {
+#   name            = "${var.resource_prefix}-app-cognito-pre-authentication"
+#   log_group_name  = module.app_cognito_pre_authentication.log_group_name
+#   filter_pattern  = "ERROR -AppNotAuthorizedError -InternalError"
+#   destination_arn = module.control_alert_handler.arn
+# }
 
 ########################################
 ##  app-cognito-pre-token-generation  ##
@@ -510,12 +510,12 @@ resource "aws_lambda_permission" "app_cognito_pre_token_generation" {
   source_arn    = aws_cognito_user_pool.echostream_apps.arn
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_token_generation" {
-  name            = "${var.resource_prefix}-app-cognito-pre-token-generation"
-  log_group_name  = module.app_cognito_pre_token_generation.log_group_name
-  filter_pattern  = "ERROR -AppNotAuthorizedError -InternalError"
-  destination_arn = module.control_alert_handler.arn
-}
+# resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_token_generation" {
+#   name            = "${var.resource_prefix}-app-cognito-pre-token-generation"
+#   log_group_name  = module.app_cognito_pre_token_generation.log_group_name
+#   filter_pattern  = "ERROR -AppNotAuthorizedError -InternalError"
+#   destination_arn = module.control_alert_handler.arn
+# }
 
 ###############################
 ##  appsync-edge-datasource  ##
@@ -774,12 +774,12 @@ resource "aws_lambda_permission" "ui_cognito_pre_authentication" {
   source_arn    = aws_cognito_user_pool.echostream_ui.arn
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_authentication" {
-  name            = "${var.resource_prefix}-ui-cognito-pre-authentication"
-  log_group_name  = module.ui_cognito_pre_authentication.log_group_name
-  filter_pattern  = "ERROR -UserNotAuthorizedError -InternalError"
-  destination_arn = module.control_alert_handler.arn
-}
+# resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_authentication" {
+#   name            = "${var.resource_prefix}-ui-cognito-pre-authentication"
+#   log_group_name  = module.ui_cognito_pre_authentication.log_group_name
+#   filter_pattern  = "ERROR -UserNotAuthorizedError -InternalError"
+#   destination_arn = module.control_alert_handler.arn
+# }
 
 #############################
 ##  ui-cognito-pre-signup  ##
@@ -935,12 +935,12 @@ resource "aws_lambda_permission" "ui_cognito_pre_token_generation" {
   source_arn    = aws_cognito_user_pool.echostream_ui.arn
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_token_generation" {
-  name            = "${var.resource_prefix}-ui-cognito-pre-token-generation"
-  log_group_name  = module.ui_cognito_pre_token_generation.log_group_name
-  filter_pattern  = "ERROR -UserNotAuthorizedError -InternalError"
-  destination_arn = module.control_alert_handler.arn
-}
+# resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_token_generation" {
+#   name            = "${var.resource_prefix}-ui-cognito-pre-token-generation"
+#   log_group_name  = module.ui_cognito_pre_token_generation.log_group_name
+#   filter_pattern  = "ERROR -UserNotAuthorizedError -InternalError"
+#   destination_arn = module.control_alert_handler.arn
+# }
 
 #########################
 ##  validate-function  ##
