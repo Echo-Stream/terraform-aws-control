@@ -121,20 +121,14 @@ resource "aws_cognito_user_pool" "echostream_ui" {
       priority = 1
     }
 
-    recovery_mechanism {
-      name     = "verified_phone_number"
-      priority = 2
-    }
+    # recovery_mechanism {
+    #   name     = "verified_phone_number"
+    #   priority = 2
+    # }
   }
 
   admin_create_user_config {
     allow_admin_create_user_only = false
-
-    invite_message_template {
-      email_message = "Your username is {username} and temporary password is {####}. "
-      email_subject = "Your temporary password"
-      sms_message   = "Your username is {username} and temporary password is {####}. "
-    }
   }
 
   auto_verified_attributes = [
@@ -182,14 +176,14 @@ resource "aws_cognito_user_pool" "echostream_ui" {
     required            = true
   }
 
-  sms_authentication_message = "Your authentication code is {####}. "
+  # sms_authentication_message = "Your authentication code is {####}. "
 
-  sms_configuration {
-    external_id    = random_string.echostream_ui_external_id.result
-    sns_caller_arn = aws_iam_role.cognito_sms.arn
-  }
+  # sms_configuration {
+  #   external_id    = random_string.echostream_ui_external_id.result
+  #   sns_caller_arn = aws_iam_role.cognito_sms.arn
+  # }
 
-  sms_verification_message = "Your verification code is {####}. "
+  #sms_verification_message = "Your verification code is {####}. "
 
   username_attributes = [
     "email",
@@ -198,15 +192,14 @@ resource "aws_cognito_user_pool" "echostream_ui" {
   user_pool_add_ons {
     advanced_security_mode = "ENFORCED"
   }
-  # software_token_mfa_configuration {
-  #   enabled = true
-  # }
+
+  software_token_mfa_configuration {
+    enabled = true
+  }
 
   verification_message_template {
     default_email_option = "CONFIRM_WITH_LINK"
   }
-
-
 
   tags = local.tags
 }

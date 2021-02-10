@@ -22,5 +22,5 @@ Terraform Module for Echo Stream Control Resources
 
 ### Notes for Internal team
 - Apps userpool MFA is OFF, Password policy length set to 16 instead of maximum
-- Medium/High risk Requires MFA for UI Userpool set manually
+- Medium/High risk Requires MFA for UI Userpool set manually, Low risk Optional MFA (No Notify Users)set manually
 - Resolvers are deployed by shell
