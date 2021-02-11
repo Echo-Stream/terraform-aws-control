@@ -196,7 +196,7 @@ aws appsync create-resolver --api-id ${api_id} --type-name Subscription --field-
  
 
 ############# type-name = TenantInfo ###############
-aws appsync create-resolver --api-id ${api_id} --type-name TenantInfo --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name TenantInfo --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
+# aws appsync create-resolver --api-id ${api_id} --type-name TenantInfo --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name TenantInfo --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
 
 ############# type-name = TransNode ###############
