@@ -69,6 +69,10 @@ resource "aws_cognito_user_pool" "echostream_apps" {
   email_verification_message = "Your verification code is {####}. "
   email_verification_subject = "Your verification code"
 
+  device_configuration {
+    device_only_remembered_on_user_prompt = false
+  }
+  
   lifecycle {
     ignore_changes = [
       schema
