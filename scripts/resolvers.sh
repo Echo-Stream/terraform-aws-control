@@ -215,7 +215,7 @@ aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-nam
 
 
 ############# type-name = User ############################
-aws appsync create-resolver --api-id ${api_id} --type-name User --field-name tenantInfo --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name User --field-name tenantInfo --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
+aws appsync create-resolver --api-id ${api_id} --type-name User --field-name tenants --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name User --field-name tenants --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
 
 ############# type-name = XTenantReceivingApp ###############
