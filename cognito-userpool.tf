@@ -66,19 +66,8 @@ resource "aws_cognito_user_pool" "echostream_apps" {
     }
   }
 
-  device_configuration {
-    device_only_remembered_on_user_prompt = true ## Set to always in the console by hand
-  }                                              ## TF 14.5, aws plugin 3.26.0 doesn't support to set it to 'always'
-
-  email_configuration {
-    source_arn            = aws_ses_email_identity.support.arn
-    from_email_address    = var.ses_email_address
-    email_sending_account = "DEVELOPER"
-  }
-
   email_verification_message = "Your verification code is {####}. "
   email_verification_subject = "Your verification code"
-
 
   lifecycle {
     ignore_changes = [
@@ -147,13 +136,25 @@ resource "aws_cognito_user_pool" "echostream_ui" {
     "email"
   ]
 
+
+  device_configuration {
+    device_only_remembered_on_user_prompt = true ## Set to always in the console by hand
+  }                                              ## TF 14.5, aws plugin 3.26.0 doesn't support to set it to 'always'
+
+  email_configuration {
+    source_arn            = aws_ses_email_identity.support.arn
+    from_email_address    = var.ses_email_address
+    email_sending_account = "DEVELOPER"
+  }
+
   email_verification_message = "Your verification code is {####}. "
   email_verification_subject = "Your verification code"
 
   lifecycle {
     # prevent_destroy = true
     ignore_changes = [
-      schema
+      schema,
+      device_configuration
     ]
   }
 
