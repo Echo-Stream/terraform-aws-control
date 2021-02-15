@@ -1157,6 +1157,7 @@ data "aws_iam_policy_document" "graph_table_manage_edges" {
   statement {
     actions = [
       "dynamodb:GetItem",
+      "dynamodb:DeleteItem",
     ]
     resources = [
       module.graph_table.arn,
