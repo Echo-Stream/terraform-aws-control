@@ -319,6 +319,7 @@ module "appsync_tenant_datasource" {
     ALERT_LAMBDA_ARTIFACT    = local.lambda_functions_keys["tenant_alert_publisher"]
     APP_VERSION              = var.echostream_version
     ARTIFACTS_BUCKET         = local.artifacts_bucket
+    ARTIFACTS_BUCKET_PREFIX  = local.artifacts_bucket_prefix
     DEAD_LETTER_QUEUE        = aws_sqs_queue.stream_dead_letter_queue.arn
     DYNAMODB_TABLE           = module.graph_table.name
     ENVIRONMENT              = var.resource_prefix
