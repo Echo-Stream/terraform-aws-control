@@ -851,6 +851,7 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
   statement {
     actions = [
       "dynamodb:GetItem",
+      "dynamodb:DeleteItem",
     ]
 
     resources = [
