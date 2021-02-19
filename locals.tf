@@ -116,6 +116,14 @@ locals {
 
   log_bucket = module.log_bucket.id
   regions    = concat(var.tenant_regions, [var.region])
+  regional_artifacts_bucket_arns = [
+    "arn:aws:s3:::echostream-artifacts-us-east-1/${local.artifacts["message_types"]}/*",
+    "arn:aws:s3:::echostream-artifacts-us-east-1/${local.artifacts["tenant_lambda"]}/*",
+    "arn:aws:s3:::echostream-artifacts-us-east-2/${local.artifacts["message_types"]}/*",
+    "arn:aws:s3:::echostream-artifacts-us-east-2/${local.artifacts["tenant_lambda"]}/*",
+    "arn:aws:s3:::echostream-artifacts-us-west-2/${local.artifacts["message_types"]}/*",
+    "arn:aws:s3:::echostream-artifacts-us-west-2/${local.artifacts["tenant_lambda"]}/*",
+  ]
 
   tags = {
     app         = "echostream"

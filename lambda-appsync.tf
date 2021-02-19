@@ -228,10 +228,9 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
       "s3:GetObject*",
     ]
 
-    resources = [
-      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${local.artifacts["message_types"]}/*",
-      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${local.artifacts["tenant_lambda"]}/*"
-    ]
+    resources = flatten([
+      local.regional_artifacts_bucket_arns
+    ])
 
     sid = "GetArtifacts"
   }
