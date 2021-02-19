@@ -158,7 +158,7 @@ resource "aws_cognito_user_pool" "echostream_ui" {
     ]
   }
 
-  mfa_configuration = "OPTIONAL"
+  mfa_configuration = "ON"
   name              = "${var.resource_prefix}-ui"
 
   lambda_config {
@@ -202,16 +202,16 @@ resource "aws_cognito_user_pool" "echostream_ui" {
     "email",
   ]
 
-  user_pool_add_ons {
-    advanced_security_mode = "ENFORCED"
-  }
+  # user_pool_add_ons {
+  #   advanced_security_mode = "ENFORCED"
+  # }
 
   software_token_mfa_configuration {
     enabled = true
   }
 
   verification_message_template {
-    default_email_option = "CONFIRM_WITH_LINK"
+    default_email_option = "CONFIRM_WITH_CODE"
   }
 
   tags = local.tags
