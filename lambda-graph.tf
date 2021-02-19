@@ -812,6 +812,7 @@ module "graph_table_manage_message_types" {
   description = "No Description"
 
   environment_variables = {
+    AVAILABLE_REGIONS          = ["us-east-1", "us-east-2"]
     DYNAMODB_TABLE             = module.graph_table.name
     ENVIRONMENT                = var.resource_prefix
     FUNCTIONS_BUCKET           = local.artifacts_bucket
