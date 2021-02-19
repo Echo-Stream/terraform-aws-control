@@ -45,7 +45,9 @@ data "aws_iam_policy_document" "audit_records" {
     ]
 
     resources = [
-      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${lookup(local.artifacts["glue"], "audit_records_etl")}"
+      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${lookup(local.artifacts["glue"], "audit_records_etl")}",
+      "arn:aws:s3:::echostream-artifacts-us-east-2/${lookup(local.artifacts["glue"], "audit_records_etl")}",
+      "arn:aws:s3:::echostream-artifacts-us-west-2/${lookup(local.artifacts["glue"], "audit_records_etl")}",
     ]
 
     sid = "GetGlueArtifacts"
