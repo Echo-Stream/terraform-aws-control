@@ -52,7 +52,12 @@ data "aws_iam_policy_document" "deployment_handler" {
 
     resources = [
       "arn:aws:s3:::echostream-artifacts-${local.current_region}",
-      "arn:aws:s3:::echostream-artifacts-${local.current_region}/*"
+      "arn:aws:s3:::echostream-artifacts-${local.current_region}/*",
+      "arn:aws:s3:::echostream-artifacts-us-east-2",
+      "arn:aws:s3:::echostream-artifacts-us-east-2/*",
+      "arn:aws:s3:::echostream-artifacts-us-west-2",
+      "arn:aws:s3:::echostream-artifacts-us-west-2/*",
+
     ]
 
     sid = "GetArtifacts"

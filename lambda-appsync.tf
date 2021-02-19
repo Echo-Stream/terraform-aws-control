@@ -229,8 +229,12 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     ]
 
     resources = [
-      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${local.artifacts["message_types"]}/*",
-      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${local.artifacts["tenant_lambda"]}/*"
+      "arn:aws:s3:::echostream-artifacts-us-east-1/${local.artifacts["message_types"]}/*",
+      "arn:aws:s3:::echostream-artifacts-us-east-1/${local.artifacts["tenant_lambda"]}/*",
+      "arn:aws:s3:::echostream-artifacts-us-east-2/${local.artifacts["message_types"]}/*",
+      "arn:aws:s3:::echostream-artifacts-us-east-2/${local.artifacts["tenant_lambda"]}/*",
+      "arn:aws:s3:::echostream-artifacts-us-west-2/${local.artifacts["message_types"]}/*",
+      "arn:aws:s3:::echostream-artifacts-us-west-2/${local.artifacts["tenant_lambda"]}/*",
     ]
 
     sid = "GetArtifacts"
@@ -242,7 +246,9 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
     ]
 
     resources = [
-      "arn:aws:s3:::echostream-artifacts-${local.current_region}"
+      "arn:aws:s3:::echostream-artifacts-${local.current_region}",
+      "arn:aws:s3:::echostream-artifacts-us-east-2",
+      "arn:aws:s3:::echostream-artifacts-us-west-2",
     ]
 
     sid = "ListArtifactsS3"
@@ -1444,7 +1450,9 @@ data "aws_iam_policy_document" "appsync_validate_function_datasource" {
     ]
 
     resources = [
-      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${local.lambda_functions_keys["validate_function"]}"
+      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${local.lambda_functions_keys["validate_function"]}",
+      "arn:aws:s3:::echostream-artifacts-us-east-2/${local.lambda_functions_keys["validate_function"]}",
+      "arn:aws:s3:::echostream-artifacts-us-west-2/${local.lambda_functions_keys["validate_function"]}",
     ]
 
     sid = "GetValidateFnArtifact"
