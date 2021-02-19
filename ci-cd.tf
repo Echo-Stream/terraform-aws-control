@@ -114,6 +114,7 @@ module "deployment_handler" {
     API_ID                     = aws_appsync_graphql_api.echostream.id
     ARTIFACTS_BUCKET           = local.artifacts_bucket
     CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.webapp.id
+    DEFAULT_TENANT_NAME        = "DEFAULT_TENANT"
     DYNAMODB_TABLE             = module.graph_table.name
     ECHOSTREAM_VERSION         = var.echostream_version
     ENVIRONMENT                = var.resource_prefix
