@@ -534,6 +534,7 @@ data "aws_iam_policy_document" "appsync_edge_datasource" {
       "dynamodb:PutItem",
       "dynamodb:GetItem",
       "dynamodb:DeleteItem",
+      "dynamodb:UpdateItem",
     ]
 
     resources = [
