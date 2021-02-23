@@ -1203,9 +1203,7 @@ data "aws_iam_policy_document" "appsync_node_datasource" {
       "dynamodb:GetItem",
       "dynamodb:Query",
       "dynamodb:DeleteItem",
-      "dynamodb:Updatetem",
-
-
+      "dynamodb:UpdateItem",
     ]
 
     resources = [
