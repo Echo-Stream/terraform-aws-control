@@ -815,7 +815,7 @@ module "graph_table_manage_message_types" {
     AVAILABLE_REGIONS          = "[\"us-east-1\", \"us-east-2\"]"
     DYNAMODB_TABLE             = module.graph_table.name
     ENVIRONMENT                = var.resource_prefix
-    FUNCTIONS_BUCKET           = local.artifacts_bucket
+    FUNCTIONS_BUCKET           = local.artifacts_bucket_prefix
     INTERNAL_APPSYNC_ROLES     = local.internal_appsync_role_names
     LAMBDA_ROLE_ARN            = aws_iam_role.tenant_function_role.arn
     VALIDATION_FUNCTION_S3_KEY = local.lambda_functions_keys["validate_function"]
