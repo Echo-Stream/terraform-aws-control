@@ -16,6 +16,10 @@ module "graph_table" {
       name = "gsi0_pk"
       type = "S"
     },
+    {
+      name = "lsi1_sk"
+      type = "S"
+    },
   ]
 
   billing_mode = "PAY_PER_REQUEST"
@@ -33,7 +37,12 @@ module "graph_table" {
       range_key       = "lsi0_sk"
       name            = "lsi0"
       projection_type = "ALL"
-    }
+    },
+    {
+      range_key       = "lsi1_sk"
+      name            = "lsi1"
+      projection_type = "ALL"
+    },
   ]
 
   hash_key               = "pk"
