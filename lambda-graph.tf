@@ -104,9 +104,10 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_dynamodb_trigger"
 data "aws_iam_policy_document" "graph_table_manage_users" {
   statement {
     actions = [
+      "dynamodb:DeleteItem",
       "dynamodb:DescribeTable",
       "dynamodb:PutItem",
-      "dynamodb:Query"
+      "dynamodb:Query",
     ]
 
     resources = [
@@ -158,6 +159,18 @@ data "aws_iam_policy_document" "graph_table_manage_users" {
 
     sid = "LogsAccess"
   }
+
+  statement {
+    actions = [
+      "cognito-idp:AdminDeleteUser",
+    ]
+
+    resources = [
+      aws_cognito_user_pool.echostream_api.arn
+    ]
+
+    sid = "DeleteApiUser"
+  }
 }
 
 resource "aws_iam_policy" "graph_table_manage_users" {
@@ -172,6 +185,7 @@ module "graph_table_manage_users" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
+    API_USER_POOL_ID       = aws_cognito_user_pool.echostream_api.id
     DYNAMODB_TABLE         = module.graph_table.name
     EMAIL_CC               = var.ses_email_address
     EMAIL_FROM             = var.ses_email_address
