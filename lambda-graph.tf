@@ -516,6 +516,18 @@ data "aws_iam_policy_document" "graph_table_manage_apps" {
 
     sid = "LogsAccess"
   }
+
+  statement {
+    actions = [
+      "dynamodb:DeleteItem",
+    ]
+
+    resources = [
+      module.graph_table.arn,
+    ]
+
+    sid = "TableAccess"
+  }
 }
 
 resource "aws_iam_role" "manage_apps_ssm_service_role" {
