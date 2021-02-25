@@ -329,13 +329,13 @@ module "appsync_tenant_datasource" {
     DEAD_LETTER_QUEUE        = aws_sqs_queue.stream_dead_letter_queue.arn
     DYNAMODB_TABLE           = module.graph_table.name
     ENVIRONMENT              = var.resource_prefix
-    INTERNAL_APPSYNC_ROLES   = local.internal_appsync_role_names
+    ERROR_HANDLER_ROLE_ARN   = aws_iam_role.error_handler_role.arn
+    ERROR_LAMBDA_ARTIFACT    = local.lambda_functions_keys["node_error_publisher"]
     INTERNAL_ALARM_SNS_TOPIC = aws_sns_topic.alerts.arn
+    INTERNAL_APPSYNC_ROLES   = local.internal_appsync_role_names
     INTERNAL_FUNCTIONS_ROLE  = aws_iam_role.tenant_function_role.arn
     LOG_LEVEL                = "INFO"
     STREAM_HANDLER_FUNCTION  = module.graph_table_tenant_stream_handler.arn
-    ERROR_LAMBDA_ARTIFACT    = local.lambda_functions_keys["node_error_publisher"]
-    ERROR_HANDLER_ROLE_ARN   = aws_iam_role.error_handler_role.arn
   }
 
   handler     = "function.handler"

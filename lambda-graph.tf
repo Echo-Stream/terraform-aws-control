@@ -1026,6 +1026,32 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
 
   statement {
     actions = [
+      "lambda:DeleteEventSourceMapping",
+      "lambda:ListEventSourceMappings",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "LambdaEventSourceMappings"
+  }
+
+  statement {
+    actions = [
+      "sqs:DeleteQueue",
+      "sqs:GetQueueAttributes",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "DeleteQueue"
+  }
+
+  statement {
+    actions = [
       "dynamodb:BatchWriteItem",
       "dynamodb:Query",
       "dynamodb:GetItem",
@@ -1114,6 +1140,7 @@ module "graph_table_manage_tenants" {
     ENVIRONMENT               = var.resource_prefix
     INTERNAL_APPSYNC_ROLES    = local.internal_appsync_role_names
     LOG_LEVEL                 = "INFO"
+    STREAM_HANDLER_FUNCTION   = module.graph_table_tenant_stream_handler.arn
     TENANT_STREAM_HANDLER     = module.graph_table_tenant_stream_handler.arn
     UI_USER_POOL_ID           = aws_cognito_user_pool.echostream_ui.id
   }

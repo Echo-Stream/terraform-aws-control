@@ -8,7 +8,7 @@ module "graph_table" {
       name = "sk"
       type = "S"
     },
-        {
+    {
       name = "gsi0_pk"
       type = "S"
     },
