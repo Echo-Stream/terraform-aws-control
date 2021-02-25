@@ -8,16 +8,28 @@ module "graph_table" {
       name = "sk"
       type = "S"
     },
+        {
+      name = "gsi0_pk"
+      type = "S"
+    },
     {
       name = "lsi0_sk"
       type = "S"
     },
     {
-      name = "gsi0_pk"
+      name = "lsi1_sk"
       type = "S"
     },
     {
-      name = "lsi1_sk"
+      name = "lsi2_sk"
+      type = "S"
+    },
+    {
+      name = "lsi3_sk"
+      type = "S"
+    },
+    {
+      name = "lsi4_sk"
       type = "S"
     },
   ]
@@ -41,6 +53,21 @@ module "graph_table" {
     {
       range_key       = "lsi1_sk"
       name            = "lsi1"
+      projection_type = "ALL"
+    },
+    {
+      range_key       = "lsi2_sk"
+      name            = "lsi2"
+      projection_type = "ALL"
+    },
+    {
+      range_key       = "lsi3_sk"
+      name            = "lsi3"
+      projection_type = "ALL"
+    },
+    {
+      range_key       = "lsi4_sk"
+      name            = "lsi4"
       projection_type = "ALL"
     },
   ]
