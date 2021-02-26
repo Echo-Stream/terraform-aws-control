@@ -1053,10 +1053,11 @@ resource "aws_cloudwatch_log_subscription_filter" "appsync_message_type_datasour
 data "aws_iam_policy_document" "appsync_app_datasource" {
   statement {
     actions = [
-      "dynamodb:PutItem",
-      "dynamodb:GetItem",
       "dynamodb:DeleteItem",
-      "dynamodb:Query"
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:Query",
+      "dynamodb:UpdateItem",
     ]
 
     resources = [
