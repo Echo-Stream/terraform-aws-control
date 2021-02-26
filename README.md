@@ -19,6 +19,7 @@ Terraform Module for Echo Stream Control Resources
 | region | AWS Region for the environment | `string` | n/a | yes |
 | acm_arn | ACM certificate arn (output from pre-control TF) of the environment sub domain | `string` | n/a | yes |
 | tenant_regions | List of regions where tenants exist | `list(string)` | `[]` | no |
+| manual_deployment_trigger | Toggle for deployment of all echo tenant lambdas, system types, appsync, cloudfront etc | `string` | `foobar` | no |
 
 ### Notes for Internal team
 - Apps userpool MFA is OFF, Password policy length set to 16 instead of maximum

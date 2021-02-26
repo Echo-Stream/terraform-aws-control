@@ -249,3 +249,15 @@ module "log_bucket_sa_east_1" {
     aws = aws.sa-east-1
   }
 }
+
+## Trigger Deployment
+resource "null_resource" "echo_deployment" {
+  triggers = {
+    version        = var.echostream_version
+    manual_trigger = var.manual_deployment_trigger
+  }
+
+  provisioner "local-exec" {
+    command = "aws lambda invoke --function-name ${module.deployment_handler.name} --invocation-type Event --cli-binary-format raw-in-base64-out --payload '{\"trigger\": \"terraform\"}' response.json"
+  }
+}

@@ -42,3 +42,9 @@ variable "tenant_regions" {
   type        = list(string)
   default     = []
 }
+
+variable "manual_deployment_trigger" {
+  description = "Toggle for deployment of all echo tenant and system types, appsync, cloudfront etc"
+  type        = string
+  default     = "foobar"
+}
