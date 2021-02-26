@@ -44,7 +44,7 @@ variable "tenant_regions" {
 }
 
 variable "manual_deployment_trigger" {
-  description = "Toggle for deployment of all echo tenant and system types, appsync, cloudfront etc"
+  description = "Toggle for deployment of all echo tenant and system types, appsync, cloudfront etc. Changing the previous existing value acts as a trigger"
   type        = string
   default     = "foobar"
 }

@@ -258,6 +258,6 @@ resource "null_resource" "echo_deployment" {
   }
 
   provisioner "local-exec" {
-    command = "aws lambda invoke --function-name ${module.deployment_handler.name} --invocation-type Event --cli-binary-format raw-in-base64-out --payload '{\"trigger\": \"terraform\"}' response.json"
+    command = "aws lambda invoke --function-name ${module.deployment_handler.name} --invocation-type Event --payload '{\"trigger\": \"terraform\"}' response.json"
   }
 }
