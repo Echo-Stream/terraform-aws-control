@@ -124,7 +124,7 @@ module "deployment_handler" {
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
-  memory_size     = 1536
+  memory_size     = 256
   name            = "${var.resource_prefix}-deployment-handler"
 
   policy_arns = [
