@@ -136,7 +136,7 @@ module "deployment_handler" {
   s3_object_key = local.lambda_functions_keys["deployment_handler"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
-  timeout       = 30
+  timeout       = 600
   version       = "3.0.12"
 }
 
