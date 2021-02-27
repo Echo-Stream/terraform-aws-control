@@ -252,6 +252,12 @@ module "log_bucket_sa_east_1" {
 
 ## Trigger Deployment
 resource "null_resource" "echo_deployment" {
+  depends_on = [
+    module.graph_table,
+    module.deployment_handler,
+    aws_appsync_graphql_api.echostream,
+    aws_cloudfront_distribution.webapp
+  ]
   triggers = {
     version        = var.echostream_version
     manual_trigger = var.manual_deployment_trigger
