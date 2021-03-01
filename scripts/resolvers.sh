@@ -263,3 +263,10 @@ aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --
 
 ############# type-name = ApiUser ###############
 aws appsync create-resolver --api-id ${api_id} --type-name ApiUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name ApiUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
+
+############# type-name = Function ###############
+aws appsync create-resolver --api-id ${api_id} --type-name Function --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Function --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Function --field-name argumentMessageType --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Function --field-name argumentMessageType --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Function --field-name resultMessageType --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Function --field-name resultMessageType --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
