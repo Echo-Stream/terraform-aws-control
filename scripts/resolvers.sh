@@ -57,6 +57,7 @@ aws appsync create-resolver --api-id ${api_id} --type-name ManagedNode --field-n
 
 aws appsync create-resolver --api-id ${api_id} --type-name ManagedNode --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name ManagedNode --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
+aws appsync create-resolver --api-id ${api_id} --type-name ManagedNode --field-name managedFunction --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name ManagedNode --field-name managedFunction --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
 ############# type-name = ManagedNodeType ###############
 aws appsync create-resolver --api-id ${api_id} --type-name ManagedNodeType --field-name receiveMessageType --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name ManagedNodeType --field-name receiveMessageType --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
@@ -160,6 +161,8 @@ aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name Ge
 
 aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name ListApiUsers --data-source-name ${api_user_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Query --field-name ListApiUsers --data-source-name ${api_user_datasource} --response-mapping-template file://${templates_path}
 
+aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name ListFunctions --data-source-name ${function_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Query --field-name ListFunctions --data-source-name ${function_datasource} --response-mapping-template file://${templates_path}
+
 aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name ListKeys --data-source-name ${kms_key_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Query --field-name ListKeys --data-source-name ${kms_key_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name ListManagedNodeTypes --data-source-name ${node_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Query --field-name ListManagedNodeTypes --data-source-name ${node_datasource} --response-mapping-template file://${templates_path}
@@ -190,6 +193,8 @@ aws appsync create-resolver --api-id ${api_id} --type-name RouterNode --field-na
 
 aws appsync create-resolver --api-id ${api_id} --type-name RouterNode --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name RouterNode --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
+aws appsync create-resolver --api-id ${api_id} --type-name RouterNode --field-name managedBitmapper --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name RouterNode --field-name managedBitmapper --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
+
 
 ############# type-name = Subscription ###############
 aws appsync create-resolver --api-id ${api_id} --type-name Subscription --field-name appNotifications --data-source-name ${subscription_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Subscription --field-name appNotifications --data-source-name ${subscription_datasource} --response-mapping-template file://${templates_path}
@@ -213,6 +218,8 @@ aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-nam
 aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name TransNode --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name transformerFunction --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name TransNode --field-name transformerFunction --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
+
+aws appsync create-resolver --api-id ${api_id} --type-name TransNode --field-name managedTransformer --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name TransNode --field-name managedTransformer --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
 
 
@@ -253,3 +260,6 @@ aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --
 aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name managedTransformer --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name XTenantSendingNode --field-name managedTransformer --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
+
+############# type-name = ApiUser ###############
+aws appsync create-resolver --api-id ${api_id} --type-name ApiUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name ApiUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
