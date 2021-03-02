@@ -270,3 +270,7 @@ aws appsync create-resolver --api-id ${api_id} --type-name Function --field-name
 aws appsync create-resolver --api-id ${api_id} --type-name Function --field-name argumentMessageType --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Function --field-name argumentMessageType --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Function --field-name resultMessageType --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Function --field-name resultMessageType --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
+
+
+############# type-name = TenantUser ###############
+aws appsync create-resolver --api-id ${api_id} --type-name TenantUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name TenantUser --field-name tenant --data-source-name ${sub_field_datasource} --response-mapping-template file://${templates_path}
