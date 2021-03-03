@@ -143,6 +143,8 @@ aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name UpdateTenantUser --data-source-name ${tenant_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name UpdateTenantUser --data-source-name ${tenant_datasource} --response-mapping-template file://${templates_path}
 
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name PutValidator --data-source-name ${validate_function_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name PutValidator --data-source-name ${validate_function_datasource} --response-mapping-template file://${templates_path}
+
 
 ############# type-name = Query ###############
 aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name GetLargeMessageStorage --data-source-name ${large_message_storage_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Query --field-name GetLargeMessageStorage --data-source-name ${large_message_storage_datasource} --response-mapping-template file://${templates_path}
@@ -178,6 +180,8 @@ aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name Se
 aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name SearchNodes --data-source-name ${node_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Query --field-name SearchNodes --data-source-name ${node_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name ValidateFunction --data-source-name ${validate_function_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Query --field-name ValidateFunction --data-source-name ${validate_function_datasource} --response-mapping-template file://${templates_path}
+
+aws appsync create-resolver --api-id ${api_id} --type-name Query --field-name ValidatorExists --data-source-name ${validate_function_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Query --field-name ValidatorExists --data-source-name ${validate_function_datasource} --response-mapping-template file://${templates_path}
 
 
 ############# type-name = RouterNode ###############
