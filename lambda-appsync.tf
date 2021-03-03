@@ -954,16 +954,42 @@ resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_token_generati
 #########################
 ##  validate-function  ##
 #########################
+data "aws_iam_policy_document" "validate_function" {
+  statement {
+    actions = [
+      "dynamodb:PutItem",
+    ]
+
+    resources = [
+      module.graph_table.arn,
+    ]
+
+    sid = "TableAccess"
+  }
+}
+
+resource "aws_iam_policy" "validate_function" {
+  description = "IAM permissions required for validate_function lambda"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-validate-function"
+  policy      = data.aws_iam_policy_document.validate_function.json
+}
+
 module "validate_function" {
   description     = "Validates a python function that is passed in by running it and returning the results"
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
     ENVIRONMENT = var.resource_prefix
   }
-  handler       = "function.handler"
-  kms_key_arn   = local.lambda_env_vars_kms_key_arn
-  memory_size   = 1536
-  name          = "${var.resource_prefix}-validate-function"
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  memory_size = 1536
+  name        = "${var.resource_prefix}-validate-function"
+
+  policy_arns = [
+    aws_iam_policy.validate_function.arn,
+  ]
+
   runtime       = "python3.8"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["validate_function"]
