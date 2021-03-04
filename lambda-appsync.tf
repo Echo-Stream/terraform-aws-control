@@ -103,6 +103,18 @@ data "aws_iam_policy_document" "appsync_kms_key_datasource" {
 
     sid = "KMSPermissions"
   }
+    statement {
+    actions = [
+      "dynamodb:PutItem",
+    ]
+
+    resources = [
+      "${module.graph_table.arn}/*",
+      module.graph_table.arn,
+    ]
+
+    sid = "PutAccess"
+  }
 }
 
 resource "aws_iam_policy" "appsync_kms_key_datasource" {
@@ -1437,9 +1449,11 @@ data "aws_iam_policy_document" "appsync_validate_function_datasource" {
   statement {
     actions = [
       "dynamodb:GetItem",
+      "dynamodb:PutItem",
     ]
 
     resources = [
+            "${module.graph_table.arn}/*",
       module.graph_table.arn,
     ]
 
@@ -1502,7 +1516,7 @@ module "appsync_validate_function_datasource" {
   environment_variables = {
     DYNAMODB_TABLE             = module.graph_table.name
     ENVIRONMENT                = var.resource_prefix
-    FUNCTIONS_BUCKET           = local.artifacts_bucket
+    FUNCTIONS_BUCKET           = local.artifacts_bucket_prefix
     INTERNAL_APPSYNC_ROLES     = local.internal_appsync_role_names
     LAMBDA_ROLE_ARN            = aws_iam_role.tenant_function_role.arn
     LOG_LEVEL                  = "INFO"
