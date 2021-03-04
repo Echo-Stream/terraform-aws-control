@@ -103,7 +103,7 @@ data "aws_iam_policy_document" "appsync_kms_key_datasource" {
 
     sid = "KMSPermissions"
   }
-    statement {
+  statement {
     actions = [
       "dynamodb:PutItem",
     ]
@@ -1453,7 +1453,7 @@ data "aws_iam_policy_document" "appsync_validate_function_datasource" {
     ]
 
     resources = [
-            "${module.graph_table.arn}/*",
+      "${module.graph_table.arn}/*",
       module.graph_table.arn,
     ]
 
