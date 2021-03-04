@@ -1847,9 +1847,10 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 data "aws_iam_policy_document" "appsync_function_datasource" {
   statement {
     actions = [
-      "dynamodb:Query",
-      "dynamodb:GetItem",
       "dynamodb:DeleteItem",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:Query",
     ]
 
     resources = [
