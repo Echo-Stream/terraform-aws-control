@@ -85,6 +85,8 @@ aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteFunction --data-source-name ${function_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteFunction --data-source-name ${function_datasource} --response-mapping-template file://${templates_path}
 
+aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteKmsKey --data-source-name ${kms_key_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteKmsKey --data-source-name ${kms_key_datasource} --response-mapping-template file://${templates_path}
+
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteManagedNodeType --data-source-name ${node_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteManagedNodeType --data-source-name ${node_datasource} --response-mapping-template file://${templates_path}
 
 aws appsync create-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteMessageType --data-source-name ${message_type_datasource} --response-mapping-template file://${templates_path} || aws appsync update-resolver --api-id ${api_id} --type-name Mutation --field-name DeleteMessageType --data-source-name ${message_type_datasource} --response-mapping-template file://${templates_path}
