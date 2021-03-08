@@ -1,44 +1,96 @@
-name: Terraform Run
+name: Terraform Publish Module
 
 on:
   push:
-    tags:
-    - '*'
+    branches:
+      - "[0-9].[0-9]+.[0-9]+"
+
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set env vars
-      run: |
-        echo "TOKEN=${{ secrets.TERRAFORM_API_KEY }}" >> $GITHUB_ENV
-        echo "COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
-    - name: Run Terraform
-      run: |
-        workspace_id=`curl \
-        --header "Authorization: Bearer $TOKEN" \
-        --header "Content-Type: application/vnd.api+json" \
-        https://app.terraform.io/api/v2/organizations/EchoStream/workspaces/echo-dev | jq '.data.id'`
-
-        curl \
-        --header "Authorization: Bearer $TOKEN" \
-        --header "Content-Type: application/vnd.api+json" \
-        --request POST \
-        --data '{
-            "data": {
-              "attributes": {
-                "is-destroy": false,
-                "message": "Ctrl TF is updated, commit id:'$COMMIT_SHA'. Queued by Github actions '$GITHUB_ACTOR'"
-              },
-              "type": "runs",
-              "relationships": {
-                "workspace": {
-                  "data": {
-                    "type": "workspaces",
-                    "id": '$workspace_id'
+      - uses: actions/checkout@v2
+      - name: Set env vars
+        run: |
+          echo "TOKEN=${{ secrets.TERRAFORM_API_KEY }}" >> $GITHUB_ENV
+          echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - name: Create the Module
+        run: |
+          curl \
+          --header "Authorization:Bearer $TOKEN" \
+          --header "Content-Type:application/vnd.api+json" \
+          --request POST \
+          --data '{
+              "data": {
+              "type": "registry-modules",
+                "attributes": {
+                  "name":"control",
+                  "provider": "aws"
                   }
                 }
-              }
-            }
-          }' https://app.terraform.io/api/v2/runs
+              }' https://app.terraform.io/api/v2/organizations/EchoStream/registry-modules
+        if: ${{ success() }}
+      - name: Delete the version if already exists
+        run: |
+          curl \
+          --header "Authorization:Bearer $TOKEN" \
+          --header "Content-Type:application/vnd.api+json" \
+          --request POST \
+          https://app.terraform.io/api/v2/registry-modules/actions/delete/EchoStream/control/aws/$VERSION
+      - name: Publish and Upload
+        run: |
+          echo $VERSION
+          sleep 4
+          response=`curl \
+          --header "Authorization: Bearer $TOKEN" \
+          --header "Content-Type: application/vnd.api+json" \
+          --request POST \
+          --data '{"data": {
+              "type": "registry-module-versions",
+              "attributes": { 
+                "version": "'$VERSION'"
+                }
+              } 
+            }' https://app.terraform.io/api/v2/registry-modules/EchoStream/control/aws/versions`
+
+          echo $response
+
+          upload_url=$(echo $response | jq .data.links.upload | sed -e 's/^"//' -e 's/"$//')
+          tar zcvf module.tar.gz *
+
+          ## Upload
+          curl \
+          --header "Content-Type: application/octet-stream" \
+          --request PUT \
+          --data-binary @module.tar.gz $upload_url | true
+
+    ## This step is yet to be finished and tested
+    ## It runs Echo dev environment
+    # - name: Run Terraform (Echo-Dev)
+    #   run: |
+    #     workspace_id=`curl \
+    #     --header "Authorization: Bearer $TOKEN" \
+    #     --header "Content-Type: application/vnd.api+json" \
+    #     https://app.terraform.io/api/v2/organizations/EchoStream/workspaces/echo-dev | jq '.data.id'`
+    #     curl \
+    #     --header "Authorization: Bearer $TOKEN" \
+    #     --header "Content-Type: application/vnd.api+json" \
+    #     --request POST \
+    #     --data '{
+    #         "data": {
+    #           "attributes": {
+    #             "is-destroy": false,
+    #             "message": "Pre Ctrl TF is updated, commit id:'$COMMIT_SHA'. Queued by Github actions '$GITHUB_ACTOR'"
+    #           },
+    #           "type": "runs",
+    #           "relationships": {
+    #             "workspace": {
+    #               "data": {
+    #                 "type": "workspaces",
+    #                 "id": '$workspace_id'
+    #               }
+    #             }
+    #           }
+    #         }
+    #       }' https://app.terraform.io/api/v2/runs
