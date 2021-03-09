@@ -38,7 +38,7 @@ data "aws_iam_policy_document" "deployment_handler" {
     ]
 
     resources = [
-      "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}-${var.echostream_version}"
+      local.artifacts_sns_arn
     ]
 
     sid = "RegionalArtifactsSNSTopicSubscription"
@@ -161,11 +161,11 @@ resource "aws_lambda_permission" "deployment_handler" {
   action        = "lambda:InvokeFunction"
   function_name = module.deployment_handler.name
   principal     = "sns.amazonaws.com"
-  source_arn    = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}-${var.echostream_version}"
+  source_arn    = local.artifacts_sns_arn
 }
 
 resource "aws_sns_topic_subscription" "artifacts" {
-  topic_arn = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}-${var.echostream_version}"
+  topic_arn = local.artifacts_sns_arn
   protocol  = "lambda"
   endpoint  = module.deployment_handler.arn
 }
