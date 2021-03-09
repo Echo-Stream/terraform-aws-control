@@ -3,8 +3,7 @@ name: Terraform Publish Module
 on:
   push:
     branches:
-      - "[0-9].[0-9]+.[0-9]+"
-
+      - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   build:
@@ -14,7 +13,7 @@ jobs:
       - name: Set env vars
         run: |
           echo "TOKEN=${{ secrets.TERRAFORM_API_KEY }}" >> $GITHUB_ENV
-          echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          echo "VERSION=${GITHUB_REF##*/v}" >> $GITHUB_ENV
       - name: Delete the version if already exists
         run: |
           curl \
@@ -38,6 +37,7 @@ jobs:
                 }
               }' https://app.terraform.io/api/v2/organizations/EchoStream/registry-modules
         if: ${{ success() }}
+
       - name: Publish and Upload
         run: |
           echo $VERSION
