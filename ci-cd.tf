@@ -38,7 +38,7 @@ data "aws_iam_policy_document" "deployment_handler" {
     ]
 
     resources = [
-      "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}"
+      "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}-${var.echostream_version}"
     ]
 
     sid = "RegionalArtifactsSNSTopicSubscription"
