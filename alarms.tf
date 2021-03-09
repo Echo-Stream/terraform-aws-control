@@ -25,7 +25,6 @@ locals {
     module.graph_table_manage_kms_keys.name,
     module.graph_table_manage_message_types.name,
     module.graph_table_manage_nodes.name,
-    module.graph_table_manage_queues.name,
     module.graph_table_manage_resource_policies.name,
     module.graph_table_manage_tenants.name,
     module.graph_table_manage_users.name,

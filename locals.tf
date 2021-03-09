@@ -56,7 +56,6 @@ locals {
     "${var.resource_prefix}-graph-table-manage-kms-keys",
     "${var.resource_prefix}-graph-table-manage-message-types",
     "${var.resource_prefix}-graph-table-manage-nodes",
-    "${var.resource_prefix}-graph-table-manage-queues",
     "${var.resource_prefix}-graph-table-manage-resource-policies",
     "${var.resource_prefix}-graph-table-manage-tenants",
     "${var.resource_prefix}-graph-table-manage-users",
@@ -95,7 +94,6 @@ locals {
     graph_table_manage_kms_keys              = "${local.artifacts["lambda"]}/graph-table-manage-kms-keys.zip"
     graph_table_manage_message_types         = "${local.artifacts["lambda"]}/graph-table-manage-message-types.zip"
     graph_table_manage_nodes                 = "${local.artifacts["lambda"]}/graph-table-manage-nodes.zip"
-    graph_table_manage_queues                = "${local.artifacts["lambda"]}/graph-table-manage-queues.zip"
     graph_table_manage_resource_policies     = "${local.artifacts["lambda"]}/graph-table-manage-resource-policies.zip"
     graph_table_manage_tenants               = "${local.artifacts["lambda"]}/graph-table-manage-tenants.zip"
     graph_table_manage_users                 = "${local.artifacts["lambda"]}/graph-table-manage-users.zip"
