@@ -6,7 +6,7 @@ resource "random_string" "for_jwk" {
 }
 
 locals {
-  artifacts_sns_arn ="arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}-${replace(var.echostream_version, ".", "-")}"
+  artifacts_sns_arn ="arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}_${replace(var.echostream_version, ".", "-")}"
   artifacts = {
     #hl7_mllp_inbound_node  = "${local.artifacts_account_id}.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-inbound-node"
     #hl7_mllp_outbound_node = "${local.artifacts_account_id}.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-outbound-node"
