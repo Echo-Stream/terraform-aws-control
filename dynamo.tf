@@ -89,13 +89,27 @@ resource "aws_dynamodb_table_item" "default_tenant" {
 
   item = <<ITEM
 {
-  "billingInfo": {"M": {}},
-  "dbStreamUrl": {"S": "${aws_sqs_queue.default_tenant_sqs_queue.id}"},
-  "name": {"S": "DEFAULT_TENANT"},
-  "pk": {"S": "DEFAULT_TENANT"},
-  "sk": {"S": "T~DEFAULT_TENANT"},
-  "tenant": {"S": "DEFAULT_TENANT"},
-  "region": {"S": "${var.region}"},
+    "billingInfo": {
+        "M": {}
+    },
+    "dbStreamUrl": {
+        "S": "${aws_sqs_queue.default_tenant_sqs_queue.id}"
+    },
+    "name": {
+        "S": "DEFAULT_TENANT"
+    },
+    "pk": {
+        "S": "DEFAULT_TENANT"
+    },
+    "sk": {
+        "S": "T~DEFAULT_TENANT"
+    },
+    "tenant": {
+        "S": "DEFAULT_TENANT"
+    },
+    "region": {
+        "S": "${var.region}"
+    }
 }
 ITEM
 }
