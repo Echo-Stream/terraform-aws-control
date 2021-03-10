@@ -90,7 +90,7 @@ resource "aws_dynamodb_table_item" "default_tenant" {
   item = <<ITEM
 {
     "billingInfo": {
-        "M": {}
+        "S": "{}"
     },
     "dbStreamUrl": {
         "S": "${aws_sqs_queue.default_tenant_sqs_queue.id}"
