@@ -257,12 +257,11 @@ resource "null_resource" "echo_deployment" {
     module.deployment_handler,
     aws_appsync_graphql_api.echostream,
     aws_cloudfront_distribution.webapp,
-    aws_dynamodb_table_item.default_tenant
   ]
+
   triggers = {
     version        = var.echostream_version
     manual_trigger = var.manual_deployment_trigger
-    default_tenant = aws_dynamodb_table_item.default_tenant.item
   }
 
   provisioner "local-exec" {
