@@ -11,6 +11,7 @@ data "template_file" "resolver_sh" {
     app_datasource                   = module.app_datasource.name
     edge_datasource                  = module.appsync_edge_lambda_datasource.name
     function_datasource              = module.function_datasource.name
+    integration_datasource           = module.integration_datasource.name
     kms_key_datasource               = module.appsync_kms_key_lambda_datasource.name
     large_message_storage_datasource = module.large_message_storage_datasource.name
     message_type_datasource          = module.message_type_datasource.name
@@ -30,6 +31,7 @@ resource "null_resource" "all_resolvers" {
     module.appsync_edge_lambda_datasource,
     module.appsync_kms_key_lambda_datasource,
     module.function_datasource,
+    module.integration_datasource,
     module.large_message_storage_datasource,
     module.message_type_datasource,
     module.node_datasource,
@@ -49,6 +51,7 @@ resource "null_resource" "all_resolvers" {
     deploy                           = data.template_file.resolver_sh.rendered
     edge_datasource                  = module.appsync_edge_lambda_datasource.name
     function_datasource              = module.function_datasource.name
+    integration_datasource           = module.integration_datasource.name
     large_message_storage_datasource = module.large_message_storage_datasource.name
     message_type_datasource          = module.message_type_datasource.name
     node_datasource                  = module.node_datasource.name
