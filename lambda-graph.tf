@@ -700,7 +700,8 @@ data "aws_iam_policy_document" "graph_table_manage_message_types" {
       "dynamodb:PutItem",
       "dynamodb:GetItem",
       "dynamodb:Query",
-      "dynamodb:UpdateItem"
+      "dynamodb:UpdateItem",
+      "dynamodb:DeleteItem"
     ]
 
     resources = [
