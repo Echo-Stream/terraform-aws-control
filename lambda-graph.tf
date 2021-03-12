@@ -975,6 +975,21 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
   }
 
   statement {
+    effect = "Deny"
+
+    actions = [
+      "sqs:DeleteQueue",
+    ]
+
+    resources = [
+      aws_sqs_queue.default_tenant_sqs_queue.arn
+    ]
+
+    sid = "DoNotDeleteDefaultTenantQueue"
+  }
+
+
+  statement {
     actions = [
       "dynamodb:BatchWriteItem",
       "dynamodb:Query",
@@ -1111,6 +1126,20 @@ data "aws_iam_policy_document" "graph_table_manage_edges" {
     ]
 
     sid = "DeleteQueue"
+  }
+
+  statement {
+    effect = "Deny"
+
+    actions = [
+      "sqs:DeleteQueue",
+    ]
+
+    resources = [
+      aws_sqs_queue.default_tenant_sqs_queue.arn
+    ]
+
+    sid = "DoNotDeleteDefaultTenantQueue"
   }
 
   statement {

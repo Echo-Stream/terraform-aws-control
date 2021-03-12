@@ -196,6 +196,20 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
   }
 
   statement {
+    effect = "Deny"
+
+    actions = [
+      "sqs:DeleteQueue",
+    ]
+
+    resources = [
+      aws_sqs_queue.default_tenant_sqs_queue.arn
+    ]
+
+    sid = "DoNotDeleteDefaultTenantQueue"
+  }
+
+  statement {
     actions = [
       "lambda:CreateEventSourceMapping",
       "lambda:GetEventSourceMapping",
@@ -571,6 +585,20 @@ data "aws_iam_policy_document" "appsync_edge_datasource" {
     ]
 
     sid = "SQS"
+  }
+
+  statement {
+    effect = "Deny"
+
+    actions = [
+      "sqs:DeleteQueue",
+    ]
+
+    resources = [
+      aws_sqs_queue.default_tenant_sqs_queue.arn
+    ]
+
+    sid = "DoNotDeleteDefaultTenantQueue"
   }
 
   statement {
@@ -1686,6 +1714,20 @@ data "aws_iam_policy_document" "purge_tenants" {
     ]
 
     sid = "PurgeQueues"
+  }
+
+  statement {
+    effect = "Deny"
+
+    actions = [
+      "sqs:DeleteQueue",
+    ]
+
+    resources = [
+      aws_sqs_queue.default_tenant_sqs_queue.arn
+    ]
+
+    sid = "DoNotDeleteDefaultTenantQueue"
   }
 }
 
