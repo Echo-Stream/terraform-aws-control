@@ -196,6 +196,20 @@ data "aws_iam_policy_document" "appsync_tenant_datasource" {
   }
 
   statement {
+    effect = "Deny"
+
+    actions = [
+      "sqs:DeleteQueue",
+    ]
+
+    resources = [
+      aws_sqs_queue.default_tenant_sqs_queue.arn
+    ]
+
+    sid = "DoNotDeleteDefaultTenantQueue"
+  }
+
+  statement {
     actions = [
       "lambda:CreateEventSourceMapping",
       "lambda:GetEventSourceMapping",
@@ -571,6 +585,20 @@ data "aws_iam_policy_document" "appsync_edge_datasource" {
     ]
 
     sid = "SQS"
+  }
+
+  statement {
+    effect = "Deny"
+
+    actions = [
+      "sqs:DeleteQueue",
+    ]
+
+    resources = [
+      aws_sqs_queue.default_tenant_sqs_queue.arn
+    ]
+
+    sid = "DoNotDeleteDefaultTenantQueue"
   }
 
   statement {
@@ -1687,6 +1715,20 @@ data "aws_iam_policy_document" "purge_tenants" {
 
     sid = "PurgeQueues"
   }
+
+  statement {
+    effect = "Deny"
+
+    actions = [
+      "sqs:DeleteQueue",
+    ]
+
+    resources = [
+      aws_sqs_queue.default_tenant_sqs_queue.arn
+    ]
+
+    sid = "DoNotDeleteDefaultTenantQueue"
+  }
 }
 
 resource "aws_iam_policy" "purge_tenants" {
@@ -1906,9 +1948,9 @@ resource "aws_cloudwatch_log_subscription_filter" "appsync_function_datasource" 
   destination_arn = module.control_alert_handler.arn
 }
 
-###################################
+#######################################
 ##  appsync-integrations-datasource  ##
-###################################
+#######################################
 data "aws_iam_policy_document" "appsync_integrations_datasource" {
 
   statement {
@@ -1923,7 +1965,21 @@ data "aws_iam_policy_document" "appsync_integrations_datasource" {
       "*",
     ]
 
-    sid = "InvokeCreateDleteLambda"
+    sid = "InvokeCreateDeleteLambda"
+  }
+
+  statement {
+    effect = "Deny"
+
+    actions = [
+      "lambda:DeleteFunction",
+    ]
+
+    resources = [
+      "arn:aws:lambda:${local.current_region}:${data.aws_caller_identity.current.account_id}:function:echo-dev-*"
+    ]
+
+    sid = "DenyDeletingControlFunctions"
   }
 
   statement {

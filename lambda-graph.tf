@@ -244,41 +244,6 @@ data "aws_iam_policy_document" "graph_table_manage_resource_policies" {
     sid = "TableAccess"
   }
 
-  # statement {
-  #   actions = [
-  #     "appsync:GraphQL",
-  #     "appsync:GetGraphqlApi"
-  #   ]
-
-  #   resources = [
-  #     aws_appsync_graphql_api.echostream.arn,
-  #     "${aws_appsync_graphql_api.echostream.arn}/types/mutation/fields/StreamNotifications"
-  #   ]
-
-  #   sid = "AppsyncFieldAndAPIAccess"
-  # }
-
-  # statement {
-  #   actions = [
-  #     "iam:CreateRole",
-  #     "iam:DeleteRole",
-  #     "iam:DeleteRolePolicy",
-  #     "iam:GetRole",
-  #     "iam:GetRolePolicy",
-  #     "iam:ListRolePolicies",
-  #     "iam:ListRoleTags",
-  #     "iam:ListRoles",
-  #     "iam:PassRole",
-  #     "iam:PutRolePolicy",
-  #     "iam:TagRole",
-  #     "iam:UntagRole"
-  #   ]
-
-  #   resources = ["*"]
-
-  #   sid = "IAMPermissions"
-  # }
-
   statement {
     actions = [
       "kms:CreateGrant",
@@ -695,6 +660,20 @@ data "aws_iam_policy_document" "graph_table_manage_message_types" {
   }
 
   statement {
+    effect = "Deny"
+
+    actions = [
+      "lambda:DeleteFunction",
+    ]
+
+    resources = [
+      "arn:aws:lambda:${local.current_region}:${data.aws_caller_identity.current.account_id}:function:echo-dev-*"
+    ]
+
+    sid = "DenyDeletingControlFunctions"
+  }
+
+  statement {
     actions = [
       "dynamodb:BatchWriteItem",
       "dynamodb:PutItem",
@@ -833,6 +812,19 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
   }
 
   statement {
+    effect = "Deny"
+
+    actions = [
+      "lambda:DeleteFunction",
+    ]
+
+    resources = [
+      "arn:aws:lambda:${local.current_region}:${data.aws_caller_identity.current.account_id}:function:echo-dev-*"
+    ]
+
+    sid = "DenyDeletingControlFunctions"
+  }
+  statement {
     actions = [
       "s3:GetObject*",
     ]
@@ -949,6 +941,20 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
   }
 
   statement {
+    effect = "Deny"
+
+    actions = [
+      "lambda:DeleteFunction",
+    ]
+
+    resources = [
+      "arn:aws:lambda:${local.current_region}:${data.aws_caller_identity.current.account_id}:function:echo-dev-*"
+    ]
+
+    sid = "DenyDeletingControlFunctions"
+  }
+
+  statement {
     actions = [
       "lambda:DeleteEventSourceMapping",
       "lambda:ListEventSourceMappings",
@@ -973,6 +979,21 @@ data "aws_iam_policy_document" "graph_table_manage_tenants" {
 
     sid = "DeleteQueue"
   }
+
+  statement {
+    effect = "Deny"
+
+    actions = [
+      "sqs:DeleteQueue",
+    ]
+
+    resources = [
+      aws_sqs_queue.default_tenant_sqs_queue.arn
+    ]
+
+    sid = "DoNotDeleteDefaultTenantQueue"
+  }
+
 
   statement {
     actions = [
@@ -1111,6 +1132,20 @@ data "aws_iam_policy_document" "graph_table_manage_edges" {
     ]
 
     sid = "DeleteQueue"
+  }
+
+  statement {
+    effect = "Deny"
+
+    actions = [
+      "sqs:DeleteQueue",
+    ]
+
+    resources = [
+      aws_sqs_queue.default_tenant_sqs_queue.arn
+    ]
+
+    sid = "DoNotDeleteDefaultTenantQueue"
   }
 
   statement {
