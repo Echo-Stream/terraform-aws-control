@@ -2,7 +2,7 @@
 Terraform Module for Echo Stream Control Resources
 
 ### Important Note
-- Domain name and ACM certificate covering the domain Inputs are needed. This resources are created by Pre control TF.
+- Domain name and ACM certificate covering the domain Inputs are needed. These resources are created by Pre control TF.
 - This module is supported in all US Regions except `US-WEST-1` region
 - Verifying an email address provided to SES service is manual. User needs to verify a link that is sent by AWS SES to the provided email.
 - DKIM is not enabled.
@@ -23,7 +23,7 @@ Terraform Module for Echo Stream Control Resources
 
 ### Publish Module (Deployment)
 - To publish the module, merge/checkout changes from `main` to branch named like `vX.X.X`
-- Merging changes into already existing versioned branch, will re publish new code on same version.
+- Merging changes into a already existing versioned branch will publish new code on same version.
 
 ### Usage
 ```
