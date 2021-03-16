@@ -1948,9 +1948,9 @@ resource "aws_cloudwatch_log_subscription_filter" "appsync_function_datasource" 
   destination_arn = module.control_alert_handler.arn
 }
 
-###################################
+#######################################
 ##  appsync-integrations-datasource  ##
-###################################
+#######################################
 data "aws_iam_policy_document" "appsync_integrations_datasource" {
 
   statement {
@@ -1965,7 +1965,21 @@ data "aws_iam_policy_document" "appsync_integrations_datasource" {
       "*",
     ]
 
-    sid = "InvokeCreateDleteLambda"
+    sid = "InvokeCreateDeleteLambda"
+  }
+
+  statement {
+    effect = "Deny"
+
+    actions = [
+      "lambda:DeleteFunction",
+    ]
+
+    resources = [
+      "arn:aws:lambda:${local.current_region}:${data.aws_caller_identity.current.account_id}:function:echo-dev-*"
+    ]
+
+    sid = "DenyDeletingControlFunctions"
   }
 
   statement {
