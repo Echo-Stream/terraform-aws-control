@@ -244,41 +244,6 @@ data "aws_iam_policy_document" "graph_table_manage_resource_policies" {
     sid = "TableAccess"
   }
 
-  # statement {
-  #   actions = [
-  #     "appsync:GraphQL",
-  #     "appsync:GetGraphqlApi"
-  #   ]
-
-  #   resources = [
-  #     aws_appsync_graphql_api.echostream.arn,
-  #     "${aws_appsync_graphql_api.echostream.arn}/types/mutation/fields/StreamNotifications"
-  #   ]
-
-  #   sid = "AppsyncFieldAndAPIAccess"
-  # }
-
-  # statement {
-  #   actions = [
-  #     "iam:CreateRole",
-  #     "iam:DeleteRole",
-  #     "iam:DeleteRolePolicy",
-  #     "iam:GetRole",
-  #     "iam:GetRolePolicy",
-  #     "iam:ListRolePolicies",
-  #     "iam:ListRoleTags",
-  #     "iam:ListRoles",
-  #     "iam:PassRole",
-  #     "iam:PutRolePolicy",
-  #     "iam:TagRole",
-  #     "iam:UntagRole"
-  #   ]
-
-  #   resources = ["*"]
-
-  #   sid = "IAMPermissions"
-  # }
-
   statement {
     actions = [
       "kms:CreateGrant",
