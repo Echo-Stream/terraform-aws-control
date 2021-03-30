@@ -770,8 +770,9 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_message_ty
 data "aws_iam_policy_document" "graph_table_manage_nodes" {
   statement {
     actions = [
-      "dynamodb:GetItem",
       "dynamodb:DeleteItem",
+      "dynamodb:GetItem",
+      "dynamodb:UpdateItem",
     ]
 
     resources = [
@@ -779,6 +780,17 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
     ]
 
     sid = "TableAccess"
+  }
+
+  statement {
+    actions = [
+      "kms:CreateGrant",
+      "kms:RetireGrant",
+    ]
+
+    resources = ["*"]
+
+    sid = "KMSPermissions"
   }
 
   statement {
