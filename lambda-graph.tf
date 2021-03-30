@@ -716,6 +716,17 @@ data "aws_iam_policy_document" "graph_table_manage_message_types" {
 
     sid = "TenantFunctionRoleIAM"
   }
+
+    statement {
+    actions = [
+      "kms:CreateGrant",
+      "kms:RetireGrant",
+    ]
+
+    resources = ["*"]
+
+    sid = "KMSCreateRetireGrantAll"
+  }
 }
 
 resource "aws_iam_policy" "graph_table_manage_message_types" {
