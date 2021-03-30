@@ -1,66 +1,4 @@
-## Internal Fn IAM assume role
-resource "aws_iam_role" "tenant_function_role" {
-  name               = "${var.resource_prefix}-tenant-functions"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
-  tags               = local.tags
-}
 
-resource "aws_iam_role_policy_attachment" "tenant_function_basic" {
-  role       = aws_iam_role.tenant_function_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
-
-data "aws_iam_policy_document" "tenant_function_role" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "firehose:PutRecord*"
-    ]
-
-    resources = [aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.arn]
-
-    sid = "WriteToFirehose"
-  }
-
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "sqs:ReceiveMessage*",
-      "sqs:DeleteMessage*",
-      "sqs:GetQueueAttributes"
-    ]
-
-    resources = ["arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:_edge_*.fifo"]
-
-    sid = "EdgeQueuesAccess"
-  }
-
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "dynamodb:GetItem",
-      "dynamodb:Query"
-    ]
-
-    resources = [module.graph_table.arn]
-
-    sid = "GraphTableAccess"
-  }
-}
-
-resource "aws_iam_policy" "tenant_function" {
-  description = "IAM permissions required for tenant functions"
-  path        = "/${var.resource_prefix}-lambda/"
-  policy      = data.aws_iam_policy_document.tenant_function_role.json
-}
-
-resource "aws_iam_role_policy_attachment" "tenant_function_role" {
-  role       = aws_iam_role.tenant_function_role.name
-  policy_arn = aws_iam_policy.tenant_function.arn
-}
 
 ## additional-ddb-policy ##
 data "aws_iam_policy_document" "additional_ddb_policy" {
@@ -132,7 +70,7 @@ module "appsync_kms_key_datasource" {
     DYNAMODB_TABLE          = module.graph_table.name
     ENVIRONMENT             = var.resource_prefix
     INTERNAL_APPSYNC_ROLES  = local.internal_appsync_role_names
-    INTERNAL_FUNCTIONS_ROLE = aws_iam_role.tenant_function_role.arn
+    INTERNAL_FUNCTIONS_ROLE = aws_iam_role.tenant_function.arn
     LOG_LEVEL               = "INFO"
 
   }
@@ -360,7 +298,7 @@ module "appsync_tenant_datasource" {
     ERROR_LAMBDA_ARTIFACT    = local.lambda_functions_keys["node_error_publisher"]
     INTERNAL_ALARM_SNS_TOPIC = aws_sns_topic.alerts.arn
     INTERNAL_APPSYNC_ROLES   = local.internal_appsync_role_names
-    INTERNAL_FUNCTIONS_ROLE  = aws_iam_role.tenant_function_role.arn
+    INTERNAL_FUNCTIONS_ROLE  = aws_iam_role.tenant_function.arn
     LOG_LEVEL                = "INFO"
     STREAM_HANDLER_FUNCTION  = module.graph_table_tenant_stream_handler.arn
   }
@@ -1547,7 +1485,7 @@ module "appsync_validate_function_datasource" {
     ENVIRONMENT                = var.resource_prefix
     FUNCTIONS_BUCKET           = local.artifacts_bucket_prefix
     INTERNAL_APPSYNC_ROLES     = local.internal_appsync_role_names
-    LAMBDA_ROLE_ARN            = aws_iam_role.tenant_function_role.arn
+    LAMBDA_ROLE_ARN            = aws_iam_role.validate_functions_tenant_function.arn
     LOG_LEVEL                  = "INFO"
     VALIDATION_FUNCTION_S3_KEY = local.lambda_functions_keys["validate_function"]
 

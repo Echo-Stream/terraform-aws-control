@@ -299,7 +299,7 @@ module "graph_table_manage_resource_policies" {
     ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     MANAGED_APP_ROLE       = aws_iam_role.authenticated.arn
-    NODE_FUNCTION_ROLE     = aws_iam_role.tenant_function_role.arn
+    NODE_FUNCTION_ROLE     = aws_iam_role.tenant_function.arn
     USER_POOL_ID           = aws_cognito_user_pool.echostream_apps.id
   }
 
@@ -711,7 +711,7 @@ data "aws_iam_policy_document" "graph_table_manage_message_types" {
     ]
 
     resources = [
-      aws_iam_role.tenant_function_role.arn
+      aws_iam_role.tenant_function.arn
     ]
 
     sid = "TenantFunctionRoleIAM"
@@ -734,7 +734,7 @@ module "graph_table_manage_message_types" {
     ENVIRONMENT                = var.resource_prefix
     FUNCTIONS_BUCKET           = local.artifacts_bucket_prefix
     INTERNAL_APPSYNC_ROLES     = local.internal_appsync_role_names
-    LAMBDA_ROLE_ARN            = aws_iam_role.tenant_function_role.arn
+    LAMBDA_ROLE_ARN            = aws_iam_role.tenant_function.arn
     VALIDATION_FUNCTION_S3_KEY = local.lambda_functions_keys["validate_function"]
   }
 
@@ -844,7 +844,7 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
     ]
 
     resources = [
-      aws_iam_role.tenant_function_role.arn
+      aws_iam_role.tenant_function.arn
     ]
 
     sid = "TenantFunctionRoleIAM"
@@ -869,7 +869,7 @@ module "graph_table_manage_nodes" {
     ENVIRONMENT                    = var.resource_prefix
     ID_TOKEN_KEY                   = local.id_token_key
     INTERNAL_APPSYNC_ROLES         = local.internal_appsync_role_names
-    LAMBDA_ROLE_ARN                = aws_iam_role.tenant_function_role.arn
+    LAMBDA_ROLE_ARN                = aws_iam_role.tenant_function.arn
     LOG_LEVEL                      = "INFO"
     MANAGED_APP_ROLE               = aws_iam_role.authenticated.arn
     ROUTER_NODE_ARTIFACT           = local.lambda_functions_keys["router_node"]
@@ -1425,7 +1425,7 @@ module "graph_table_manage_authorizations" {
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     LOG_LEVEL              = "INFO"
     MANAGED_APP_ROLE       = aws_iam_role.authenticated.arn
-    NODE_FUNCTION_ROLE     = aws_iam_role.tenant_function_role.arn
+    NODE_FUNCTION_ROLE     = aws_iam_role.tenant_function.arn
     USER_POOL_ID           = aws_cognito_user_pool.echostream_apps.id
   }
 
