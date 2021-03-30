@@ -1444,6 +1444,16 @@ data "aws_iam_policy_document" "appsync_validate_function_datasource" {
 
   statement {
     actions = [
+      "kms:CreateGrant",
+    ]
+
+    resources = ["*"]
+
+    sid = "KMSCreateGrantAll"
+  }
+
+  statement {
+    actions = [
       "iam:PassRole",
     ]
 
