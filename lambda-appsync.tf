@@ -1222,6 +1222,20 @@ data "aws_iam_policy_document" "appsync_node_datasource" {
   }
   statement {
     actions = [
+      "kms:Decrypt",
+      "kms:Encrypt",
+      "kms:GenerateDataKey",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "EncryptDecryptEnvKMSKeys"
+  }
+
+  statement {
+    actions = [
       "logs:FilterLogEvents",
     ]
 

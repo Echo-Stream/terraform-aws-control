@@ -717,7 +717,7 @@ data "aws_iam_policy_document" "graph_table_manage_message_types" {
     sid = "TenantFunctionRoleIAM"
   }
 
-    statement {
+  statement {
     actions = [
       "kms:CreateGrant",
       "kms:RetireGrant",
