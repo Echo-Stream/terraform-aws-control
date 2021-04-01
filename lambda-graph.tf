@@ -745,7 +745,7 @@ module "graph_table_manage_message_types" {
     ENVIRONMENT                = var.resource_prefix
     FUNCTIONS_BUCKET           = local.artifacts_bucket_prefix
     INTERNAL_APPSYNC_ROLES     = local.internal_appsync_role_names
-    LAMBDA_ROLE_ARN            = aws_iam_role.tenant_function.arn
+    LAMBDA_ROLE_ARN            = aws_iam_role.validate_functions_tenant_function.arn
     VALIDATION_FUNCTION_S3_KEY = local.lambda_functions_keys["validate_function"]
   }
 
