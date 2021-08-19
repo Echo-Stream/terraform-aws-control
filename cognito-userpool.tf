@@ -100,7 +100,7 @@ resource "aws_cognito_user_pool" "echostream_apps" {
 
 resource "aws_cognito_user_pool_client" "echostream_apps_userpool_client" {
   name                   = "${var.resource_prefix}-apps"
-  refresh_token_validity = 60
+  refresh_token_validity = 30
 
   supported_identity_providers = [
     "COGNITO",
@@ -221,7 +221,7 @@ resource "aws_cognito_user_pool" "echostream_ui" {
 
 resource "aws_cognito_user_pool_client" "echostream_ui_userpool_client" {
   name                   = "${var.resource_prefix}-reactjs"
-  refresh_token_validity = 30
+  refresh_token_validity = 60
 
   supported_identity_providers = [
     "COGNITO",
