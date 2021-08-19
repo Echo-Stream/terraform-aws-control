@@ -20,9 +20,14 @@ locals {
     tenant_lambda = "${var.echostream_version}/lambda/tenant"
   }
 
-  artifacts_account_id    = "672550935748" # QuiNovas-MSP
-  artifacts_bucket        = "echostream-artifacts-${local.current_region}"
-  artifacts_bucket_prefix = "echostream-artifacts"
+  #artifacts_account_id    = "672550935748" # QuiNovas-MSP
+  #artifacts_bucket        = "echostream-artifacts-${local.current_region}"
+  #artifacts_bucket_prefix = "echostream-artifacts"
+
+  artifacts_account_id    = "226390263822" # echostream-artifacts
+  artifacts_bucket        = "echostream--artifacts-${local.current_region}"
+  artifacts_bucket_prefix = "echostream--artifacts"
+
   aws_cli_command         = "~/bin/aws"
   current_region          = data.aws_region.current.name
   domain                  = "${var.resource_prefix}.${var.domain_name}"
