@@ -73,6 +73,7 @@ resource "aws_cognito_user_pool" "echostream_apps" {
     ignore_changes = [
       schema,
       device_configuration,
+      account_recovery_setting
     ]
 
     # prevent_destroy = true
