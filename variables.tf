@@ -48,3 +48,9 @@ variable "manual_deployment_trigger" {
   type        = string
   default     = "foobar"
 }
+
+variable "tags" {
+  description = "(Optional) A mapping of tags to assign to the resources"
+  type        = map(string)
+  default     = {}
+}

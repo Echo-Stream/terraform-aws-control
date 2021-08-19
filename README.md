@@ -20,6 +20,7 @@ Terraform Module for Echo Stream Control Resources
 | resource_prefix | Environment Prefix for naming resources, a Unique name that could differentiate whole environment. `lower case` only, `No periods`, `No Special Char` except `-`. Length less than 15 char | `string` | n/a | yes |
 | ses_email_address | Preferred Email Address that SES uses for communication with tenants | `string` | n/a | yes |
 | tenant_regions | List of regions where tenants exist | `list(string)` | `[]` | no |
+| tags | A mapping of tags to assign to the resources | `map(string)` | `{}` | no |
 
 ### Publish Module (Deployment)
 - To publish the module, merge/checkout changes from `main` to branch named like `vX.X.X`
@@ -39,8 +40,12 @@ module "control" {
   ses_email_address         = var.ses_email_address
   tenant_regions            = var.tenant_regions
 
+  tags = {
+    terraform-workspace = "my-first-dev-app"
+  }
+
   source  = "app.terraform.io/EchoStream/control/aws"
-  version = "0.0.1"
+  version = "0.0.2"
 }
 ```
 

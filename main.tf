@@ -4,7 +4,7 @@
 module "log_bucket" {
   name_prefix = var.resource_prefix
   source      = "QuiNovas/log-bucket/aws"
-  version     = "3.0.2"
+  version     = "3.0.4"
 }
 
 resource "aws_sns_topic" "lambda_dead_letter" {

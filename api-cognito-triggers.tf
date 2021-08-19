@@ -74,7 +74,7 @@ module "api_cognito_pre_token_generation" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_lambda_permission" "api_cognito_pre_token_generation" {
@@ -168,7 +168,7 @@ module "api_cognito_pre_authentication" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_lambda_permission" "api_cognito_pre_authentication" {

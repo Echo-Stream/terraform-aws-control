@@ -81,7 +81,7 @@ module "graph_table_dynamodb_trigger" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_lambda_event_source_mapping" "graph_table_dynamodb_trigger" {
@@ -215,7 +215,7 @@ module "graph_table_manage_users" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_users" {
@@ -320,7 +320,7 @@ module "graph_table_manage_resource_policies" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_resource_policies" {
@@ -516,7 +516,7 @@ module "graph_table_manage_apps" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_apps" {
@@ -620,7 +620,7 @@ module "graph_table_tenant_stream_handler" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_lambda_event_source_mapping" "graph_table_tenant_stream_handler" {
@@ -765,7 +765,7 @@ module "graph_table_manage_message_types" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_message_types" {
@@ -917,7 +917,7 @@ module "graph_table_manage_nodes" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_nodes" {
@@ -1130,7 +1130,7 @@ module "graph_table_manage_tenants" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_tenants" {
@@ -1245,7 +1245,7 @@ module "graph_table_manage_edges" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_edges" {
@@ -1303,7 +1303,7 @@ module "graph_table_manage_kms_keys" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_kms_keys" {
@@ -1378,7 +1378,7 @@ module "graph_table_manage_functions" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_functions" {
@@ -1469,7 +1469,7 @@ module "graph_table_manage_authorizations" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_manage_authorizations" {

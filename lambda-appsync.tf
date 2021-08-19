@@ -90,7 +90,7 @@ module "appsync_kms_key_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "appsync_kms_key_datasource" {
@@ -319,7 +319,7 @@ module "appsync_tenant_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "appsync_tenant_datasource" {
@@ -391,7 +391,7 @@ module "app_cognito_pre_authentication" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_lambda_permission" "app_cognito_pre_authentication" {
@@ -471,7 +471,7 @@ module "app_cognito_pre_token_generation" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_lambda_permission" "app_cognito_pre_token_generation" {
@@ -597,7 +597,7 @@ module "appsync_edge_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "appsync_edge_datasource" {
@@ -670,7 +670,7 @@ module "ui_cognito_post_signup" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_lambda_permission" "ui_cognito_post_signup" {
@@ -750,7 +750,7 @@ module "ui_cognito_pre_authentication" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_lambda_permission" "ui_cognito_pre_authentication" {
@@ -831,7 +831,7 @@ module "ui_cognito_pre_signup" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_lambda_permission" "ui_cognito_pre_signup" {
@@ -911,7 +911,7 @@ module "ui_cognito_pre_token_generation" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_lambda_permission" "ui_cognito_pre_token_generation" {
@@ -974,7 +974,7 @@ module "validate_function" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "validate_function" {
@@ -1043,7 +1043,7 @@ module "appsync_message_type_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "appsync_message_type_datasource" {
@@ -1189,7 +1189,7 @@ module "appsync_app_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "appsync_app_datasource" {
@@ -1281,7 +1281,7 @@ module "appsync_node_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "appsync_node_datasource" {
@@ -1344,7 +1344,7 @@ module "appsync_sub_field_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "appsync_sub_field_datasource" {
@@ -1358,9 +1358,6 @@ resource "aws_cloudwatch_log_subscription_filter" "appsync_sub_field_datasource"
 ##############################################
 ## appsync-large-message-storage-datasource ##
 ##############################################
-
-
-
 data "aws_iam_policy_document" "appsync_large_message_storage_datasource" {
   statement {
     actions = [
@@ -1412,7 +1409,7 @@ module "appsync_large_message_storage_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "appsync_large_message_storage_datasource" {
@@ -1532,7 +1529,7 @@ module "appsync_validate_function_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "appsync_validate_function_datasource" {
@@ -1609,7 +1606,7 @@ module "appsync_subscription_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "appsync_subscription_datasource" {
@@ -1725,7 +1722,7 @@ module "purge_tenants" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 
@@ -1813,7 +1810,7 @@ module "log_retention" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 60
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 
@@ -1900,7 +1897,7 @@ module "appsync_function_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "appsync_function_datasource" {
@@ -2003,7 +2000,7 @@ module "appsync_integrations_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "appsync_integrations_datasource" {
@@ -2086,7 +2083,7 @@ module "appsync_api_user_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.12"
+  version       = "3.0.14"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "appsync_api_user_datasource" {

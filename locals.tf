@@ -116,10 +116,10 @@ locals {
   log_bucket = module.log_bucket.id
   regions    = concat(var.tenant_regions, [var.region])
 
-  tags = {
+  tags = merge({
     app         = "echostream"
     environment = var.resource_prefix
     terraform   = "true"
     version     = var.echostream_version
-  }
+  }, var.tags)
 }
