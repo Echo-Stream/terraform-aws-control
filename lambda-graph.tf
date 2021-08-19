@@ -697,9 +697,9 @@ data "aws_iam_policy_document" "graph_table_manage_message_types" {
     ]
 
     resources = [
-      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${local.artifacts["lambda"]}/*",
-      "arn:aws:s3:::echostream-artifacts-us-east-2/${local.artifacts["lambda"]}/*",
-      "arn:aws:s3:::echostream-artifacts-us-west-2/${local.artifacts["lambda"]}/*",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${local.artifacts["lambda"]}/*",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${local.artifacts["lambda"]}/*",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${local.artifacts["lambda"]}/*",
     ]
 
     sid = "GetValidateFnLambda"
@@ -853,9 +853,9 @@ data "aws_iam_policy_document" "graph_table_manage_nodes" {
     ]
 
     resources = [
-      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${local.artifacts["tenant_lambda"]}/*",
-      "arn:aws:s3:::echostream-artifacts-us-east-2/${local.artifacts["tenant_lambda"]}/*",
-      "arn:aws:s3:::echostream-artifacts-us-west-2/${local.artifacts["tenant_lambda"]}/*",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${local.artifacts["tenant_lambda"]}/*",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${local.artifacts["tenant_lambda"]}/*",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${local.artifacts["tenant_lambda"]}/*",
     ]
 
     sid = "GetArtifacts"

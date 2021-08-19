@@ -45,9 +45,9 @@ data "aws_iam_policy_document" "audit_records" {
     ]
 
     resources = [
-      "arn:aws:s3:::echostream-artifacts-${local.current_region}/${lookup(local.artifacts["glue"], "audit_records_etl")}",
-      "arn:aws:s3:::echostream-artifacts-us-east-2/${lookup(local.artifacts["glue"], "audit_records_etl")}",
-      "arn:aws:s3:::echostream-artifacts-us-west-2/${lookup(local.artifacts["glue"], "audit_records_etl")}",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${lookup(local.artifacts["glue"], "audit_records_etl")}",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${lookup(local.artifacts["glue"], "audit_records_etl")}",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${lookup(local.artifacts["glue"], "audit_records_etl")}",
     ]
 
     sid = "GetGlueArtifacts"
@@ -105,7 +105,7 @@ resource "aws_glue_job" "audit_records" {
   description = "Extracts audit records and partitions them by tenant into historical table at the end of every month"
 
   command {
-    script_location = "s3://echostream-artifacts-${local.current_region}/${lookup(local.artifacts["glue"], "audit_records_etl")}"
+    script_location = "s3://${local.artifacts_bucket_prefix}-${local.current_region}/${lookup(local.artifacts["glue"], "audit_records_etl")}"
     python_version  = 3
   }
 
