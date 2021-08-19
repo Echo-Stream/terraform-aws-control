@@ -72,7 +72,7 @@ resource "aws_cognito_user_pool" "echostream_apps" {
   lifecycle {
     ignore_changes = [
       schema,
-      device_configuration
+      device_configuration,
     ]
 
     # prevent_destroy = true
@@ -154,7 +154,8 @@ resource "aws_cognito_user_pool" "echostream_ui" {
     # prevent_destroy = true
     ignore_changes = [
       schema,
-      device_configuration
+      device_configuration,
+      account_recovery_setting
     ]
   }
 
