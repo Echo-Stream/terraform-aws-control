@@ -25,8 +25,8 @@ locals {
   #artifacts_bucket_prefix = "echostream-artifacts"
 
   artifacts_account_id    = "226390263822" # echostream-artifacts
-  artifacts_bucket        = "echostream--artifacts-${local.current_region}"
-  artifacts_bucket_prefix = "echostream--artifacts"
+  artifacts_bucket        = "echostream-artifacts-${local.current_region}"
+  artifacts_bucket_prefix = "echostream-artifacts"
 
   aws_cli_command         = "~/bin/aws"
   current_region          = data.aws_region.current.name
