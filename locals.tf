@@ -28,9 +28,9 @@ locals {
   artifacts_bucket        = "echostream-artifacts-${local.current_region}"
   artifacts_bucket_prefix = "echostream-artifacts"
 
-  aws_cli_command         = "~/bin/aws"
-  current_region          = data.aws_region.current.name
-  domain                  = "${var.resource_prefix}.${var.domain_name}"
+  aws_cli_command = "~/bin/aws"
+  current_region  = data.aws_region.current.name
+  domain          = "${var.resource_prefix}.${var.domain_name}"
 
   id_token_key = <<-EOT
                     {

@@ -1,7 +1,7 @@
 ############################
 ## Large Messages Buckets ##
 ############################
-resource "aws_s3_bucket" "large_messages" {
+resource "aws_s3_bucket" "bulk_data" {
   acl    = "private"
   bucket = var.name
 
@@ -38,7 +38,7 @@ resource "aws_s3_bucket" "large_messages" {
   }
 }
 
-data "aws_iam_policy_document" "large_messages" {
+data "aws_iam_policy_document" "bulk_data" {
   statement {
     actions = [
       "s3:*",
@@ -62,8 +62,8 @@ data "aws_iam_policy_document" "large_messages" {
     }
 
     resources = [
-      aws_s3_bucket.large_messages.arn,
-      "${aws_s3_bucket.large_messages.arn}/*",
+      aws_s3_bucket.bulk_data.arn,
+      "${aws_s3_bucket.bulk_data.arn}/*",
     ]
     sid = "DenyUnsecuredTransport"
   }
@@ -91,7 +91,7 @@ data "aws_iam_policy_document" "large_messages" {
     }
 
     resources = [
-      "${aws_s3_bucket.large_messages.arn}/*",
+      "${aws_s3_bucket.bulk_data.arn}/*",
     ]
     sid = "DenySSEWithAES"
   }
@@ -121,21 +121,21 @@ data "aws_iam_policy_document" "large_messages" {
     }
 
     resources = [
-      "${aws_s3_bucket.large_messages.arn}/*",
+      "${aws_s3_bucket.bulk_data.arn}/*",
     ]
 
     sid = "RequiresEnvironmentKMSKeyEncryption"
   }
 }
 
-resource "aws_s3_bucket_policy" "large_messages" {
-  bucket = aws_s3_bucket.large_messages.id
-  policy = data.aws_iam_policy_document.large_messages.json
+resource "aws_s3_bucket_policy" "bulk_data" {
+  bucket = aws_s3_bucket.bulk_data.id
+  policy = data.aws_iam_policy_document.bulk_data.json
 }
 
 ## Block public access (bucket settings)
-resource "aws_s3_bucket_public_access_block" "large_messages" {
-  bucket                  = aws_s3_bucket.large_messages.id
+resource "aws_s3_bucket_public_access_block" "bulk_data" {
+  bucket                  = aws_s3_bucket.bulk_data.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true

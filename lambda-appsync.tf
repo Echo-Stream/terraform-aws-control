@@ -1384,12 +1384,12 @@ module "appsync_large_message_storage_datasource" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    ACCESS_KEY_ID          = aws_iam_access_key.presign_large_messages.id
+    ACCESS_KEY_ID          = aws_iam_access_key.presign_bulk_data.id
     DYNAMODB_TABLE         = module.graph_table.name
     ENVIRONMENT            = var.resource_prefix
     INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
     LOG_LEVEL              = "INFO"
-    SECRET_ACCESS_KEY      = aws_iam_access_key.presign_large_messages.secret
+    SECRET_ACCESS_KEY      = aws_iam_access_key.presign_bulk_data.secret
   }
 
   handler     = "function.handler"
