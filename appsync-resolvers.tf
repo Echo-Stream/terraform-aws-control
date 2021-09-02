@@ -414,7 +414,7 @@ resource "aws_appsync_resolver" "list_message_types" {
 resource "aws_appsync_resolver" "list_tenants" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
-  field             = "List_Tenants"
+  field             = "ListTenants"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "Query"
