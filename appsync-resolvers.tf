@@ -69,7 +69,169 @@ resource "aws_appsync_resolver" "create_api_user" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "CreateApiUser"
-  request_template  = file("${path.module}/files/request-template.vtl")
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_bitmapper_function" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateBitmapperFunction"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_change_notification" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateChangeNotification"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_cross_account_app" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateCrossAccountApp"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_cross_tenant_receiving_app" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateCrossTenantReceivingApp"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_cross_tenant_sending_app" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateCrossTenantSendingApp"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_cross_tenant_sending_node" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateCrossTenantSendingNode"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_edge" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateEdge"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_external_app" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateExternalApp"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_external_node" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateExternalNode"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_kms_key" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateKmsKey"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_managed_app" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateManagedApp"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_managed_node" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateManagedNode"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_managed_node_type" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateManagedNodeType"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_message_type" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateMessageType"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_router_node" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateRouterNode"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_tenant" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateTenant"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_transformer_function" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateTransformerFunction"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
+resource "aws_appsync_resolver" "create_transformer_node" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateTransformerNode"
+  request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "Mutation"
 }
