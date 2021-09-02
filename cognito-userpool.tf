@@ -81,10 +81,10 @@ resource "aws_cognito_user_pool" "echostream_apps" {
 
   name = "${var.resource_prefix}-apps"
 
-  lambda_config {
-    pre_authentication   = module.app_cognito_pre_authentication.arn
-    pre_token_generation = module.app_cognito_pre_token_generation.arn
-  }
+  # lambda_config {
+  #   pre_authentication   = module.app_cognito_pre_authentication.arn
+  #   pre_token_generation = module.app_cognito_pre_token_generation.arn
+  # }
 
   password_policy {
     minimum_length                   = 16
@@ -163,12 +163,12 @@ resource "aws_cognito_user_pool" "echostream_ui" {
   mfa_configuration = "ON"
   name              = "${var.resource_prefix}-ui"
 
-  lambda_config {
-    pre_sign_up          = module.ui_cognito_pre_signup.arn
-    post_confirmation    = module.ui_cognito_post_signup.arn
-    pre_authentication   = module.ui_cognito_pre_authentication.arn
-    pre_token_generation = module.ui_cognito_pre_token_generation.arn
-  }
+  # lambda_config {
+  #   pre_sign_up          = module.ui_cognito_pre_signup.arn
+  #   post_confirmation    = module.ui_cognito_post_signup.arn
+  #   pre_authentication   = module.ui_cognito_pre_authentication.arn
+  #   pre_token_generation = module.ui_cognito_pre_token_generation.arn
+  # }
 
   password_policy {
     minimum_length                   = 16
@@ -267,10 +267,10 @@ resource "aws_cognito_user_pool" "echostream_api" {
 
   name = "${var.resource_prefix}-api"
 
-  lambda_config {
-    pre_authentication   = module.api_cognito_pre_authentication.arn
-    pre_token_generation = module.api_cognito_pre_token_generation.arn
-  }
+  # lambda_config {
+  #   pre_authentication   = module.api_cognito_pre_authentication.arn
+  #   pre_token_generation = module.api_cognito_pre_token_generation.arn
+  # }
 
   password_policy {
     minimum_length                   = 60
