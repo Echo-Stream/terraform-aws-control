@@ -246,7 +246,7 @@ resource "aws_appsync_resolver" "get_api_user" {
   field             = "GetApiUser"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "get_app" {
@@ -255,7 +255,7 @@ resource "aws_appsync_resolver" "get_app" {
   field             = "GetApp"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "get_bulk_data_storage" {
@@ -264,7 +264,7 @@ resource "aws_appsync_resolver" "get_bulk_data_storage" {
   field             = "GetBulkDataStorage"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "get_edge" {
@@ -273,7 +273,7 @@ resource "aws_appsync_resolver" "get_edge" {
   field             = "GetEdge"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "get_function" {
@@ -282,7 +282,7 @@ resource "aws_appsync_resolver" "get_function" {
   field             = "GetFunction"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "get_kms_key" {
@@ -291,7 +291,7 @@ resource "aws_appsync_resolver" "get_kms_key" {
   field             = "GetKmsKey"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "get_managed_node_type" {
@@ -300,7 +300,7 @@ resource "aws_appsync_resolver" "get_managed_node_type" {
   field             = "GetManagedNodeType"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "get_message_type" {
@@ -309,7 +309,7 @@ resource "aws_appsync_resolver" "get_message_type" {
   field             = "GetMessageType"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "get_node" {
@@ -318,7 +318,7 @@ resource "aws_appsync_resolver" "get_node" {
   field             = "GetNode"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "get_tenant" {
@@ -327,7 +327,7 @@ resource "aws_appsync_resolver" "get_tenant" {
   field             = "GetTenant"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "get_tenant_user" {
@@ -336,7 +336,7 @@ resource "aws_appsync_resolver" "get_tenant_user" {
   field             = "GetTenantUser"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "get_user" {
@@ -345,7 +345,7 @@ resource "aws_appsync_resolver" "get_user" {
   field             = "GetUser"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "list_api_users" {
@@ -354,7 +354,7 @@ resource "aws_appsync_resolver" "list_api_users" {
   field             = "ListApiUsers"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "list_apps" {
@@ -363,7 +363,7 @@ resource "aws_appsync_resolver" "list_apps" {
   field             = "ListApps"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "list_functions" {
@@ -372,7 +372,7 @@ resource "aws_appsync_resolver" "list_functions" {
   field             = "ListFunctions"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "list_keys" {
@@ -381,7 +381,7 @@ resource "aws_appsync_resolver" "list_keys" {
   field             = "ListKeys"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "list_nodes" {
@@ -390,7 +390,7 @@ resource "aws_appsync_resolver" "list_nodes" {
   field             = "ListNodes"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "list_managed_node_types" {
@@ -399,7 +399,7 @@ resource "aws_appsync_resolver" "list_managed_node_types" {
   field             = "ListManagedNodeTypes"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "list_message_types" {
@@ -408,7 +408,7 @@ resource "aws_appsync_resolver" "list_message_types" {
   field             = "ListMessageTypes"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "list_tenants" {
@@ -417,7 +417,7 @@ resource "aws_appsync_resolver" "list_tenants" {
   field             = "List_Tenants"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "list_tenant_users" {
@@ -426,5 +426,5 @@ resource "aws_appsync_resolver" "list_tenant_users" {
   field             = "ListTenantUsers"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
+  type              = "Query"
 }
