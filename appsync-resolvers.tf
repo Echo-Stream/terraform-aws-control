@@ -434,7 +434,7 @@ resource "aws_appsync_resolver" "alert_emitter_node_sendmessagetype" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "sendMessageType"
-  request_template  = file("${path.module}/files/batch_invoke.vtl")
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "AlertEmitterNode"
 }
@@ -443,7 +443,175 @@ resource "aws_appsync_resolver" "alert_emitter_node_tenant" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "tenant"
-  request_template  = file("${path.module}/files/batch_invoke.vtl")
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "AlertEmitterNode"
+}
+
+## api user
+resource "aws_appsync_resolver" "api_user_config" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "config"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ApiUser"
+}
+
+resource "aws_appsync_resolver" "api_user_tenant" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "tenant"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ApiUser"
+}
+
+resource "aws_appsync_resolver" "api_user_delete" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ApiUser"
+}
+
+resource "aws_appsync_resolver" "api_user_update" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "Update"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ApiUser"
+}
+
+## BitmapperFunction
+
+resource "aws_appsync_resolver" "bitmapper_function_argumentMessageType" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "argumentMessageType"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "BitmapperFunction"
+}
+
+resource "aws_appsync_resolver" "bitmapper_function_tenant" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "tenant"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "BitmapperFunction"
+}
+
+resource "aws_appsync_resolver" "bitmapper_function_delete" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "BitmapperFunction"
+}
+
+resource "aws_appsync_resolver" "bitmapper_function_update" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "Update"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "BitmapperFunction"
+}
+
+resource "aws_appsync_resolver" "bitmapper_function_validate" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "Validate"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "BitmapperFunction"
+}
+
+## ChangeEmitterNode
+resource "aws_appsync_resolver" "change_emitter_node_sendMessageType" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "sendMessageType"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ChangeEmitterNode"
+}
+
+resource "aws_appsync_resolver" "change_emitter_node_tenant" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "tenant"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ChangeEmitterNode"
+}
+
+## ChangeNotification
+resource "aws_appsync_resolver" "change_notification_tenant" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "tenant"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ChangeNotification"
+}
+
+## CrossAccountApp
+resource "aws_appsync_resolver" "cross_account_app_config" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "config"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossAccountApp"
+}
+
+resource "aws_appsync_resolver" "cross_account_app_nodes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "nodes"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossAccountApp"
+}
+
+resource "aws_appsync_resolver" "cross_account_app_tenant" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "tenant"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossAccountApp"
+}
+
+resource "aws_appsync_resolver" "cross_account_app_delete" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossAccountApp"
+}
+
+resource "aws_appsync_resolver" "cross_account_app_reset_password" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ResetPassword"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossAccountApp"
+}
+
+resource "aws_appsync_resolver" "cross_account_app_update" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "Update"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossAccountApp"
 }
