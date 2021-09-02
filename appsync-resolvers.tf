@@ -61,3 +61,29 @@
 #     validate_function_datasource     = module.validate_function_datasource.name
 #   }
 # }
+
+resource "aws_appsync_resolver" "create_api_user" {
+  api_id      = aws_appsync_graphql_api.echostream.id
+  field       = "CreateApiUser"
+  type        = "Mutation"
+  data_source = module.appsync_datasource_.name
+
+  request_template = <<EOF
+{
+    "version": "2018-05-29",
+    "method": "GET",
+    "resourcePath": "/",
+    "params":{
+        "headers": $utils.http.copyheaders($ctx.request.headers)
+    }
+}
+EOF
+
+  response_template = <<EOF
+#if($ctx.result.statusCode == 200)
+    $ctx.result.body
+#else
+    $utils.appendError($ctx.result.body, $ctx.result.statusCode)
+#end
+EOF
+}
