@@ -69,7 +69,7 @@ resource "aws_appsync_resolver" "create_api_user" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "CreateApiUser"
-  request_template  = file("${path.module}/files/request.template.vtl")
-  response_template = file("${path.module}/files/response.template.vtl")
+  request_template  = file("${path.module}/files/request-template.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
   type              = "Mutation"
 }
