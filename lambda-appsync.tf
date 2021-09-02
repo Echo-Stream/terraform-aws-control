@@ -2092,3 +2092,48 @@ resource "aws_iam_policy" "additional_ddb_policy" {
 #   filter_pattern  = "ERROR -USERERROR"
 #   destination_arn = module.control_alert_handler.arn
 # }
+
+###########################
+##  appsync--datasource  ##
+###########################
+data "aws_iam_policy_document" "appsync_datasource" {
+  statement {
+    actions = [ "*"
+    ]
+
+    resources = ["*"]
+
+    sid = "AdminLevel"
+  }
+}
+
+resource "aws_iam_policy" "appsync_datasource" {
+  description = "IAM permissions required for appsync-datasource lambda"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-appsync-datasource"
+  policy      = data.aws_iam_policy_document.appsync_datasource.json
+}
+
+module "appsync_datasource" {
+  description     = "The main datasource for the echo-stream API "
+  dead_letter_arn = local.lambda_dead_letter_arn
+  # environment_variables = {
+
+  # }
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  memory_size = 1536
+  name        = "${var.resource_prefix}-appsync-datasource"
+
+  policy_arns = [
+    aws_iam_policy.appsync_datasource.arn,
+  ]
+
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["appsync_datasource"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 120
+  version       = "3.0.14"
+}

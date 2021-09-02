@@ -75,6 +75,7 @@ locals {
     api_cognito_pre_token_generation         = "${local.artifacts["lambda"]}/api-cognito-pre-token-generation.zip"
     app_cognito_pre_authentication           = "${local.artifacts["lambda"]}/app-cognito-pre-authentication.zip"
     app_cognito_pre_token_generation         = "${local.artifacts["lambda"]}/app-cognito-pre-token-generation.zip"
+    appsync_datasource              = "${local.artifacts["lambda"]}/appsync-datasource.zip"
     appsync_api_user_datasource              = "${local.artifacts["lambda"]}/appsync-api-user-datasource.zip"
     appsync_app_datasource                   = "${local.artifacts["lambda"]}/appsync-app-datasource.zip"
     appsync_edge_datasource                  = "${local.artifacts["lambda"]}/appsync-edge-datasource.zip"
