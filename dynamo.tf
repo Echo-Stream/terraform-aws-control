@@ -13,6 +13,14 @@ module "graph_table" {
       type = "S"
     },
     {
+      name = "gsi1_pk"
+      type = "S"
+    },
+    {
+      name = "gsi2_pk"
+      type = "S"
+    },
+    {
       name = "lsi0_sk"
       type = "S"
     },
