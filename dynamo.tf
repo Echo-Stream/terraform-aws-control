@@ -52,12 +52,12 @@ module "graph_table" {
     },
     {
       hash_key        = "gsi1_pk"
-      name            = "gsi0"
+      name            = "gsi1"
       projection_type = "ALL",
     },
     {
       hash_key        = "gsi2_pk"
-      name            = "gsi0"
+      name            = "gsi2"
       projection_type = "ALL",
     }
   ]
