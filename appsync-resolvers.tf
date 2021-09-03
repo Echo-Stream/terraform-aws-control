@@ -1023,10 +1023,10 @@ resource "aws_appsync_resolver" "external_node_receive_edges" {
   type              = "ExternalNode"
 }
 
-resource "aws_appsync_resolver" "external_node_receive_mes`sage_type" {
+resource "aws_appsync_resolver" "external_node_receive_message_type" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
-  field             = "receiveMes`sageType"
+  field             = "receiveMessageType"
   request_template  = file("${path.module}/files/batch-invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ExternalNode"
