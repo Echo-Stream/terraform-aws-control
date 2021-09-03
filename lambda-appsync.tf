@@ -2118,20 +2118,19 @@ module "appsync_datasource" {
   description     = "The main datasource for the echo-stream API "
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
-    ALARM_SNS_TOPIC               = aws_sns_topic.alerts.arn
-    API_USER_POOL_APP_ID          = aws_cognito_user_pool_client.echostream_api_userpool_client.id
-    API_USER_POOL_ID              = aws_cognito_user_pool.echostream_api.id
-    APP_USER_POOL_APP_ID          = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
-    APP_USER_POOL_ID              = aws_cognito_user_pool.echostream_apps.id
-    APP_IDENTITY_POOL_ID          = aws_cognito_identity_pool.echostream.id
-    APPSYNC_ENDPOINT              = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
-    ARTIFACTS_BUCKET              = local.artifacts_bucket_prefix
-    AUDIT_FIREHOSE                = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
-    CONTROL_REGION                = local.current_region
-    ENVIRONMENT                   = var.resource_prefix
-    INTERNAL_APPSYNC_ROLES        = local.internal_appsync_role_names
-    INTERNAL_NODE_CODE            = ""
-    INTERNAL_NODE_ROLE            = ""
+    ALARM_SNS_TOPIC      = aws_sns_topic.alerts.arn
+    API_USER_POOL_APP_ID = aws_cognito_user_pool_client.echostream_api_userpool_client.id
+    API_USER_POOL_ID     = aws_cognito_user_pool.echostream_api.id
+    APP_USER_POOL_APP_ID = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
+    APP_USER_POOL_ID     = aws_cognito_user_pool.echostream_apps.id
+    APP_IDENTITY_POOL_ID = aws_cognito_identity_pool.echostream.id
+    APPSYNC_ENDPOINT     = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
+    ARTIFACTS_BUCKET     = local.artifacts_bucket_prefix
+    AUDIT_FIREHOSE       = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
+    CONTROL_REGION       = local.current_region
+    ENVIRONMENT          = var.resource_prefix
+    #INTERNAL_APPSYNC_ROLES        = local.internal_appsync_role_names
+    INTERNAL_NODE_CODE            = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
     MANAGED_APP_CLOUD_INIT_TOPIC  = aws_sns_topic.hl7_app_cloud_init.arn
     REMOTE_APP_ROLE               = ""
     SSM_SERVICE_ROLE              = "service-role/${aws_iam_role.manage_apps_ssm_service_role.name}"
@@ -2139,7 +2138,7 @@ module "appsync_datasource" {
     TENANT_DB_STREAM_HANDLER      = module.graph_table_tenant_stream_handler.name
     TENANT_DB_STREAM_HANDLER_ROLE = ""
     UI_USER_POOL_ID               = aws_cognito_user_pool.echostream_ui.id
-    VALIDATOR_CODE                = ""
+    VALIDATOR_CODE                = "{\"S3Key\": \"${local.artifacts["lambda"]}/validate-function.zip\"}"
     VALIDATOR_ROLE                = ""
   }
 
