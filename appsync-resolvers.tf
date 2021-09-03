@@ -1077,41 +1077,41 @@ resource "aws_appsync_resolver" "external_node_update" {
   type              = "ExternalNode"
 }
 
-resource "aws_appsync_resolver" "function_argument_message_type" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "argumentMessageType"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Function"
-}
+# resource "aws_appsync_resolver" "function_argument_message_type" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "argumentMessageType"
+#   request_template  = file("${path.module}/files/batch-invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "Function"
+# }
 
-resource "aws_appsync_resolver" "function_tenant" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "tenant"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Function"
-}
+# resource "aws_appsync_resolver" "function_tenant" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "tenant"
+#   request_template  = file("${path.module}/files/batch-invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "Function"
+# }
 
-resource "aws_appsync_resolver" "function_delete" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "Delete"
-  request_template  = file("${path.module}/files/invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Function"
-}
+# resource "aws_appsync_resolver" "function_delete" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "Delete"
+#   request_template  = file("${path.module}/files/invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "Function"
+# }
 
-resource "aws_appsync_resolver" "function_validate" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "Validate"
-  request_template  = file("${path.module}/files/invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Function"
-}
+# resource "aws_appsync_resolver" "function_validate" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "Validate"
+#   request_template  = file("${path.module}/files/invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "Function"
+# }
 
 resource "aws_appsync_resolver" "log_emitter_node_send_message_type" {
   api_id            = aws_appsync_graphql_api.echostream.id
