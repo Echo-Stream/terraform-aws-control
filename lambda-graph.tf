@@ -699,7 +699,7 @@ module "graph_table_tenant_stream_handler" {
 
   environment_variables = {
     ALARM_SNS_TOPIC          = aws_sns_topic.alarms.arn
-    ALERT_EMITTER_NODE_CODE  = "{\"S3Key\": \"${local.artifacts["lambda"]}/validate-function.zip\"}"
+    //ALERT_EMITTER_NODE_CODE  = "{\"S3Key\": \"${local.artifacts["lambda"]}/validate-function.zip\"}"
     ALERT_SNS_TOPIC          = aws_sns_topic.alerts.arn
     APPSYNC_ENDPOINT         = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
     ARTIFACTS_BUCKET         = local.artifacts_bucket_prefix
@@ -713,7 +713,7 @@ module "graph_table_tenant_stream_handler" {
     INTERNAL_NODE_ROLE       = aws_iam_role.tenant_function.name
     TENANT_DB_STREAM_HANDLER = "echo-dev-graph-table-tenant-stream-handler"
     TYPE_HANDLERS            = file("${path.module}/files/type-handlers-map.json")
-    VALIDATOR_CODE           = "${local.artifacts["lambda"]}/validate-function.zip"
+    VALIDATOR_CODE           = "{\"S3Key\": \"${local.artifacts["lambda"]}/validate-function.zip\"}"
     VALIDATOR_ROLE           = aws_iam_role.tenant_function.name
   }
 
