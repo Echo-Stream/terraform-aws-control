@@ -88,7 +88,6 @@ data "aws_iam_policy_document" "unauthenticated_id_pool_policy" {
   statement {
     effect = "Allow"
     actions = [
-      "mobileanalytics:PutEvents",
       "cognito-sync:*",
     ]
     resources = ["*"]
