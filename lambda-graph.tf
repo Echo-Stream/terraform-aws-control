@@ -698,11 +698,23 @@ module "graph_table_tenant_stream_handler" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    APPSYNC_ENDPOINT       = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
-    DYNAMODB_TABLE         = module.graph_table.name
-    ENVIRONMENT            = var.resource_prefix
-    INTERNAL_APPSYNC_ROLES = local.internal_appsync_role_names
-    TYPE_HANDLERS          = file("${path.module}/files/type-handlers-map.json")
+    ALARM_SNS_TOPIC          = aws_sns_topic.alarms.arn
+    ALERT_EMITTER_NODE_CODE  = "{\"S3Key\": \"${local.artifacts["lambda"]}/validate-function.zip\"}"
+    ALERT_SNS_TOPIC          = aws_sns_topic.alerts.arn
+    APPSYNC_ENDPOINT         = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
+    ARTIFACTS_BUCKET         = local.artifacts_bucket_prefix
+    AUDIT_FIREHOSE           = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
+    CONTROL_REGION           = local.current_region
+    DYNAMODB_TABLE           = module.graph_table.name
+    ENVIRONMENT              = var.resource_prefix
+    ID_TOKEN_KEY             = local.id_token_key
+    INTERNAL_APPSYNC_ROLES   = local.internal_appsync_role_names
+    INTERNAL_NODE_CODE       = "${local.artifacts["tenant_lambda"]}/internal-node.zip"
+    INTERNAL_NODE_ROLE       = aws_iam_role.tenant_function.name
+    TENANT_DB_STREAM_HANDLER = "echo-dev-graph-table-tenant-stream-handler"
+    TYPE_HANDLERS            = file("${path.module}/files/type-handlers-map.json")
+    VALIDATOR_CODE           = "${local.artifacts["lambda"]}/validate-function.zip"
+    VALIDATOR_ROLE           = aws_iam_role.tenant_function.name
   }
 
   handler     = "function.handler"
