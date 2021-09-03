@@ -2138,8 +2138,8 @@ module "appsync_datasource" {
     TENANT_DB_STREAM_HANDLER      = module.graph_table_tenant_stream_handler.name
     TENANT_DB_STREAM_HANDLER_ROLE = ""
     UI_USER_POOL_ID               = aws_cognito_user_pool.echostream_ui.id
-    VALIDATOR_CODE                = "{\"S3Key\": \"${local.artifacts["lambda"]}/validate-function.zip\"}"
-    VALIDATOR_ROLE                = ""
+    #VALIDATOR_CODE                = "{\"S3Key\": \"${local.artifacts["lambda"]}/validate-function.zip\"}"
+    #VALIDATOR_ROLE                = ""
   }
 
   handler     = "function.handler"

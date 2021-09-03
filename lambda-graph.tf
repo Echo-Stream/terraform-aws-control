@@ -72,8 +72,8 @@ module "graph_table_dynamodb_trigger" {
     INTERNAL_NODE_CODE           = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
     TENANT_DB_STREAM_HANDLER     = "echo-dev-graph-table-tenant-stream-handler"
     #TYPE_HANDLERS                = file("${path.module}/files/type-handlers-map.json")
-    VALIDATOR_CODE               = "{\"S3Key\": \"${local.artifacts["lambda"]}/validate-function.zip\"}"
-    VALIDATOR_ROLE               = aws_iam_role.tenant_function.name
+    #VALIDATOR_CODE               = "{\"S3Key\": \"${local.artifacts["lambda"]}/validate-function.zip\"}"
+    #VALIDATOR_ROLE               = aws_iam_role.tenant_function.name
   }
 
   handler     = "function.handler"
@@ -406,8 +406,8 @@ module "graph_table_tenant_stream_handler" {
     INTERNAL_NODE_ROLE       = aws_iam_role.tenant_function.name
     #TENANT_DB_STREAM_HANDLER = "echo-dev-graph-table-tenant-stream-handler"
     #TYPE_HANDLERS            = file("${path.module}/files/type-handlers-map.json")
-    VALIDATOR_CODE           = "{\"S3Key\": \"${local.artifacts["lambda"]}/validate-function.zip\"}"
-    VALIDATOR_ROLE           = aws_iam_role.tenant_function.name
+    #VALIDATOR_CODE           = "{\"S3Key\": \"${local.artifacts["lambda"]}/validate-function.zip\"}"
+    #VALIDATOR_ROLE           = aws_iam_role.tenant_function.name
   }
 
   handler     = "function.handler"
