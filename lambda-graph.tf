@@ -404,7 +404,7 @@ module "graph_table_tenant_stream_handler" {
     #INTERNAL_APPSYNC_ROLES   = local.internal_appsync_role_names
     INTERNAL_NODE_CODE       = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
     INTERNAL_NODE_ROLE       = aws_iam_role.tenant_function.name
-    TENANT_DB_STREAM_HANDLER = "echo-dev-graph-table-tenant-stream-handler"
+    #TENANT_DB_STREAM_HANDLER = "echo-dev-graph-table-tenant-stream-handler"
     #TYPE_HANDLERS            = file("${path.module}/files/type-handlers-map.json")
     VALIDATOR_CODE           = "{\"S3Key\": \"${local.artifacts["lambda"]}/validate-function.zip\"}"
     VALIDATOR_ROLE           = aws_iam_role.tenant_function.name
