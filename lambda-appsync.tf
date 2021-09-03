@@ -1,6 +1,6 @@
 
 
-## additional-ddb-policy ##
+# additional-ddb-policy ##
 data "aws_iam_policy_document" "additional_ddb_policy" {
   statement {
     actions = [
@@ -329,165 +329,165 @@ resource "aws_iam_policy" "additional_ddb_policy" {
 #   destination_arn = module.control_alert_handler.arn
 # }
 
-# ######################################
-# ##  app-cognito-pre-authentication  ##
-# ######################################
-# data "aws_iam_policy_document" "app_cognito_pre_authentication" {
-#   statement {
-#     actions = [
-#       "dynamodb:Query",
-#     ]
+######################################
+##  app-api-cognito-pre-authentication  ##
+######################################
+data "aws_iam_policy_document" "app_api_cognito_pre_authentication" {
+  statement {
+    actions = [
+      "dynamodb:Query",
+    ]
 
-#     resources = [
-#       "${module.graph_table.arn}/*",
-#     ]
+    resources = [
+      "${module.graph_table.arn}/*",
+    ]
 
-#     sid = "TableAccess"
-#   }
+    sid = "TableAccess"
+  }
 
-#   statement {
-#     actions = [
-#       "cloudwatch:PutMetricData",
-#     ]
+  statement {
+    actions = [
+      "cloudwatch:PutMetricData",
+    ]
 
-#     resources = [
-#       "*",
-#     ]
+    resources = [
+      "*",
+    ]
 
-#     sid = "CWPutMetrics"
-#   }
-# }
+    sid = "CWPutMetrics"
+  }
+}
 
-# resource "aws_iam_policy" "app_cognito_pre_authentication" {
-#   description = "IAM permissions required for app-cognito-pre-authentication lambda"
-#   path        = "/${var.resource_prefix}-lambda/"
-#   name        = "${var.resource_prefix}-app-cognito-pre-authentication"
-#   policy      = data.aws_iam_policy_document.app_cognito_pre_authentication.json
-# }
+resource "aws_iam_policy" "app_api_cognito_pre_authentication" {
+  description = "IAM permissions required for app-api-cognito-pre-authentication lambda"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-app-api-cognito-pre-authentication"
+  policy      = data.aws_iam_policy_document.app_api_cognito_pre_authentication.json
+}
 
-# module "app_cognito_pre_authentication" {
-#   description = "Function that gets triggered when cognito user to be authenticated"
+module "app_api_cognito_pre_authentication" {
+  description = "Function that gets triggered when cognito user to be authenticated"
 
-#   environment_variables = {
-#     DYNAMODB_TABLE = module.graph_table.name
-#     ENVIRONMENT    = var.resource_prefix
-#     INDEX_NAME     = "gsi0"
-#   }
+  environment_variables = {
+    DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.resource_prefix
+    INDEX_NAME     = "gsi0"
+  }
 
-#   dead_letter_arn = local.lambda_dead_letter_arn
-#   handler         = "function.handler"
-#   kms_key_arn     = local.lambda_env_vars_kms_key_arn
-#   memory_size     = 1536
-#   name            = "${var.resource_prefix}-app-cognito-pre-authentication"
+  dead_letter_arn = local.lambda_dead_letter_arn
+  handler         = "function.handler"
+  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  memory_size     = 1536
+  name            = "${var.resource_prefix}-app-api-cognito-pre-authentication"
 
-#   policy_arns = [
-#     aws_iam_policy.app_cognito_pre_authentication.arn,
-#     aws_iam_policy.additional_ddb_policy.arn
-#   ]
+  policy_arns = [
+    aws_iam_policy.app_api_cognito_pre_authentication.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
 
-#   runtime       = "python3.8"
-#   s3_bucket     = local.artifacts_bucket
-#   s3_object_key = local.lambda_functions_keys["app_cognito_pre_authentication"]
-#   source        = "QuiNovas/lambda/aws"
-#   tags          = local.tags
-#   timeout       = 30
-#   version       = "3.0.14"
-# }
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["app_api_cognito_pre_authentication"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.14"
+}
 
-# resource "aws_lambda_permission" "app_cognito_pre_authentication" {
-#   statement_id  = "AllowExecutionFromCognito"
-#   action        = "lambda:InvokeFunction"
-#   function_name = module.app_cognito_pre_authentication.name
-#   principal     = "cognito-idp.amazonaws.com"
-#   source_arn    = aws_cognito_user_pool.echostream_apps.arn
-# }
+resource "aws_lambda_permission" "app_api_cognito_pre_authentication" {
+  statement_id  = "AllowExecutionFromCognito"
+  action        = "lambda:InvokeFunction"
+  function_name = module.app_api_cognito_pre_authentication.name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.echostream_apps.arn
+}
 
-# resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_authentication" {
-#   name            = "${var.resource_prefix}-app-cognito-pre-authentication"
-#   log_group_name  = module.app_cognito_pre_authentication.log_group_name
-#   filter_pattern  = "ERROR -AppNotAuthorizedError"
-#   destination_arn = module.control_alert_handler.arn
-# }
+resource "aws_cloudwatch_log_subscription_filter" "app_api_cognito_pre_authentication" {
+  name            = "${var.resource_prefix}-app-api-cognito-pre-authentication"
+  log_group_name  = module.app_api_cognito_pre_authentication.log_group_name
+  filter_pattern  = "ERROR -AppNotAuthorizedError"
+  destination_arn = module.control_alert_handler.arn
+}
 
-# ########################################
-# ##  app-cognito-pre-token-generation  ##
-# ########################################
-# data "aws_iam_policy_document" "app_cognito_pre_token_generation" {
-#   statement {
-#     actions = [
-#       "dynamodb:DescribeTable",
-#       "dynamodb:GetItem",
-#     ]
+########################################
+##  app-cognito-pre-token-generation  ##
+########################################
+data "aws_iam_policy_document" "app_cognito_pre_token_generation" {
+  statement {
+    actions = [
+      "dynamodb:DescribeTable",
+      "dynamodb:GetItem",
+    ]
 
-#     resources = [
-#       module.graph_table.arn,
-#     ]
+    resources = [
+      module.graph_table.arn,
+    ]
 
-#     sid = "TableAccess"
-#   }
+    sid = "TableAccess"
+  }
 
-#   statement {
-#     actions = [
-#       "cloudwatch:PutMetricData",
-#     ]
+  statement {
+    actions = [
+      "cloudwatch:PutMetricData",
+    ]
 
-#     resources = [
-#       "*",
-#     ]
+    resources = [
+      "*",
+    ]
 
-#     sid = "CWPutMetrics"
-#   }
-# }
+    sid = "CWPutMetrics"
+  }
+}
 
-# resource "aws_iam_policy" "app_cognito_pre_token_generation" {
-#   description = "IAM permissions required for app-cognito-pre-token-generation lambda"
-#   path        = "/${var.resource_prefix}-lambda/"
-#   name        = "${var.resource_prefix}-app-cognito-pre-token-generation"
-#   policy      = data.aws_iam_policy_document.app_cognito_pre_token_generation.json
-# }
+resource "aws_iam_policy" "app_cognito_pre_token_generation" {
+  description = "IAM permissions required for app-cognito-pre-token-generation lambda"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-app-cognito-pre-token-generation"
+  policy      = data.aws_iam_policy_document.app_cognito_pre_token_generation.json
+}
 
-# module "app_cognito_pre_token_generation" {
-#   description = "Customizes the claims in the identity token"
+module "app_cognito_pre_token_generation" {
+  description = "Customizes the claims in the identity token"
 
-#   environment_variables = {
-#     DYNAMODB_TABLE = module.graph_table.name
-#     ENVIRONMENT    = var.resource_prefix
-#   }
+  environment_variables = {
+    DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.resource_prefix
+  }
 
-#   dead_letter_arn = local.lambda_dead_letter_arn
-#   handler         = "function.handler"
-#   kms_key_arn     = local.lambda_env_vars_kms_key_arn
-#   memory_size     = 1536
-#   name            = "${var.resource_prefix}-app-cognito-pre-token-generation"
+  dead_letter_arn = local.lambda_dead_letter_arn
+  handler         = "function.handler"
+  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  memory_size     = 1536
+  name            = "${var.resource_prefix}-app-cognito-pre-token-generation"
 
-#   policy_arns = [
-#     aws_iam_policy.app_cognito_pre_token_generation.arn,
-#     aws_iam_policy.additional_ddb_policy.arn
-#   ]
+  policy_arns = [
+    aws_iam_policy.app_cognito_pre_token_generation.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
 
-#   runtime       = "python3.8"
-#   s3_bucket     = local.artifacts_bucket
-#   s3_object_key = local.lambda_functions_keys["app_cognito_pre_token_generation"]
-#   source        = "QuiNovas/lambda/aws"
-#   tags          = local.tags
-#   timeout       = 30
-#   version       = "3.0.14"
-# }
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["app_cognito_pre_token_generation"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.14"
+}
 
-# resource "aws_lambda_permission" "app_cognito_pre_token_generation" {
-#   statement_id  = "AllowExecutionFromCognito"
-#   action        = "lambda:InvokeFunction"
-#   function_name = module.app_cognito_pre_token_generation.name
-#   principal     = "cognito-idp.amazonaws.com"
-#   source_arn    = aws_cognito_user_pool.echostream_apps.arn
-# }
+resource "aws_lambda_permission" "app_cognito_pre_token_generation" {
+  statement_id  = "AllowExecutionFromCognito"
+  action        = "lambda:InvokeFunction"
+  function_name = module.app_cognito_pre_token_generation.name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.echostream_apps.arn
+}
 
-# resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_token_generation" {
-#   name            = "${var.resource_prefix}-app-cognito-pre-token-generation"
-#   log_group_name  = module.app_cognito_pre_token_generation.log_group_name
-#   filter_pattern  = "ERROR -AppNotAuthorizedError"
-#   destination_arn = module.control_alert_handler.arn
-# }
+resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_token_generation" {
+  name            = "${var.resource_prefix}-app-cognito-pre-token-generation"
+  log_group_name  = module.app_cognito_pre_token_generation.log_group_name
+  filter_pattern  = "ERROR -AppNotAuthorizedError"
+  destination_arn = module.control_alert_handler.arn
+}
 
 # ###############################
 # ##  appsync-edge-datasource  ##
@@ -608,246 +608,246 @@ resource "aws_iam_policy" "additional_ddb_policy" {
 # }
 
 
-# ##############################
-# ##  ui-cognito-post-signup  ##
-# ##############################
-# data "aws_iam_policy_document" "ui_cognito_post_signup" {
-#   statement {
-#     actions = [
-#       "dynamodb:UpdateItem",
-#       "dynamodb:Query",
-#     ]
+##############################
+##  ui-cognito-post-signup  ##
+##############################
+data "aws_iam_policy_document" "ui_cognito_post_signup" {
+  statement {
+    actions = [
+      "dynamodb:UpdateItem",
+      "dynamodb:Query",
+    ]
 
-#     resources = [
-#       module.graph_table.arn,
-#       "${module.graph_table.arn}/*",
-#     ]
+    resources = [
+      module.graph_table.arn,
+      "${module.graph_table.arn}/*",
+    ]
 
-#     sid = "TableAccess"
-#   }
-#   statement {
-#     actions = [
-#       "cloudwatch:PutMetricData",
-#     ]
+    sid = "TableAccess"
+  }
+  statement {
+    actions = [
+      "cloudwatch:PutMetricData",
+    ]
 
-#     resources = [
-#       "*",
-#     ]
+    resources = [
+      "*",
+    ]
 
-#     sid = "CWPutMetrics"
-#   }
-# }
+    sid = "CWPutMetrics"
+  }
+}
 
-# resource "aws_iam_policy" "ui_cognito_post_signup" {
-#   description = "IAM permissions required for ui-cognito-post-signup lambda"
-#   path        = "/${var.resource_prefix}-lambda/"
-#   name        = "${var.resource_prefix}-ui-cognito-post-signup"
-#   policy      = data.aws_iam_policy_document.ui_cognito_post_signup.json
-# }
+resource "aws_iam_policy" "ui_cognito_post_signup" {
+  description = "IAM permissions required for ui-cognito-post-signup lambda"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-ui-cognito-post-signup"
+  policy      = data.aws_iam_policy_document.ui_cognito_post_signup.json
+}
 
-# module "ui_cognito_post_signup" {
-#   description = "Set attributes on UI user and validate invitation token post signup "
+module "ui_cognito_post_signup" {
+  description = "Set attributes on UI user and validate invitation token post signup "
 
-#   environment_variables = {
-#     DYNAMODB_TABLE = module.graph_table.name
-#     ENVIRONMENT    = var.resource_prefix
-#   }
+  environment_variables = {
+    DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.resource_prefix
+  }
 
-#   dead_letter_arn = local.lambda_dead_letter_arn
-#   handler         = "function.handler"
-#   kms_key_arn     = local.lambda_env_vars_kms_key_arn
-#   memory_size     = 1536
-#   name            = "${var.resource_prefix}-ui-cognito-post-signup"
+  dead_letter_arn = local.lambda_dead_letter_arn
+  handler         = "function.handler"
+  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  memory_size     = 1536
+  name            = "${var.resource_prefix}-ui-cognito-post-signup"
 
-#   policy_arns = [
-#     aws_iam_policy.ui_cognito_post_signup.arn,
-#     aws_iam_policy.additional_ddb_policy.arn
-#   ]
+  policy_arns = [
+    aws_iam_policy.ui_cognito_post_signup.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
 
-#   runtime       = "python3.8"
-#   s3_bucket     = local.artifacts_bucket
-#   s3_object_key = local.lambda_functions_keys["ui_cognito_post_signup"]
-#   source        = "QuiNovas/lambda/aws"
-#   tags          = local.tags
-#   timeout       = 30
-#   version       = "3.0.14"
-# }
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["ui_cognito_post_signup"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.14"
+}
 
-# resource "aws_lambda_permission" "ui_cognito_post_signup" {
-#   statement_id  = "AllowExecutionFromCognito"
-#   action        = "lambda:InvokeFunction"
-#   function_name = module.ui_cognito_post_signup.name
-#   principal     = "cognito-idp.amazonaws.com"
-#   source_arn    = aws_cognito_user_pool.echostream_ui.arn
-# }
+resource "aws_lambda_permission" "ui_cognito_post_signup" {
+  statement_id  = "AllowExecutionFromCognito"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ui_cognito_post_signup.name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.echostream_ui.arn
+}
 
-# resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_post_signup" {
-#   name            = "${var.resource_prefix}-ui-cognito-post-signup"
-#   log_group_name  = module.ui_cognito_post_signup.log_group_name
-#   filter_pattern  = "ERROR -SignupError -InternalError"
-#   destination_arn = module.control_alert_handler.arn
-# }
+resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_post_signup" {
+  name            = "${var.resource_prefix}-ui-cognito-post-signup"
+  log_group_name  = module.ui_cognito_post_signup.log_group_name
+  filter_pattern  = "ERROR -SignupError -InternalError"
+  destination_arn = module.control_alert_handler.arn
+}
 
-# #####################################
-# ##  ui-cognito-pre-authentication  ##
-# #####################################
-# data "aws_iam_policy_document" "ui_cognito_pre_authentication" {
-#   statement {
-#     actions = [
-#       "dynamodb:DescribeTable",
-#       "dynamodb:GetItem"
+#####################################
+##  ui-cognito-pre-authentication  ##
+#####################################
+data "aws_iam_policy_document" "ui_cognito_pre_authentication" {
+  statement {
+    actions = [
+      "dynamodb:DescribeTable",
+      "dynamodb:GetItem"
 
-#     ]
+    ]
 
-#     resources = [
-#       module.graph_table.arn,
-#     ]
+    resources = [
+      module.graph_table.arn,
+    ]
 
-#     sid = "TableAccess"
-#   }
-#   statement {
-#     actions = [
-#       "cloudwatch:PutMetricData",
-#     ]
+    sid = "TableAccess"
+  }
+  statement {
+    actions = [
+      "cloudwatch:PutMetricData",
+    ]
 
-#     resources = [
-#       "*",
-#     ]
+    resources = [
+      "*",
+    ]
 
-#     sid = "CWPutMetrics"
-#   }
-# }
+    sid = "CWPutMetrics"
+  }
+}
 
-# resource "aws_iam_policy" "ui_cognito_pre_authentication" {
-#   description = "IAM permissions required for ui-cognito-pre-authentication lambda"
-#   path        = "/${var.resource_prefix}-lambda/"
-#   name        = "${var.resource_prefix}-ui-cognito-pre-authentication"
-#   policy      = data.aws_iam_policy_document.ui_cognito_pre_authentication.json
-# }
+resource "aws_iam_policy" "ui_cognito_pre_authentication" {
+  description = "IAM permissions required for ui-cognito-pre-authentication lambda"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-ui-cognito-pre-authentication"
+  policy      = data.aws_iam_policy_document.ui_cognito_pre_authentication.json
+}
 
-# module "ui_cognito_pre_authentication" {
-#   description = "Check status and tenant membership pre authentication for UI users"
+module "ui_cognito_pre_authentication" {
+  description = "Check status and tenant membership pre authentication for UI users"
 
-#   environment_variables = {
-#     DYNAMODB_TABLE = module.graph_table.name
-#     ENVIRONMENT    = var.resource_prefix
-#   }
+  environment_variables = {
+    DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.resource_prefix
+  }
 
-#   dead_letter_arn = local.lambda_dead_letter_arn
-#   handler         = "function.handler"
-#   kms_key_arn     = local.lambda_env_vars_kms_key_arn
-#   memory_size     = 1536
-#   name            = "${var.resource_prefix}-ui-cognito-pre-authentication"
+  dead_letter_arn = local.lambda_dead_letter_arn
+  handler         = "function.handler"
+  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  memory_size     = 1536
+  name            = "${var.resource_prefix}-ui-cognito-pre-authentication"
 
-#   policy_arns = [
-#     aws_iam_policy.ui_cognito_pre_authentication.arn,
-#     aws_iam_policy.additional_ddb_policy.arn
-#   ]
+  policy_arns = [
+    aws_iam_policy.ui_cognito_pre_authentication.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
 
-#   runtime       = "python3.8"
-#   s3_bucket     = local.artifacts_bucket
-#   s3_object_key = local.lambda_functions_keys["ui_cognito_pre_authentication"]
-#   source        = "QuiNovas/lambda/aws"
-#   tags          = local.tags
-#   timeout       = 30
-#   version       = "3.0.14"
-# }
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["ui_cognito_pre_authentication"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.14"
+}
 
-# resource "aws_lambda_permission" "ui_cognito_pre_authentication" {
-#   statement_id  = "AllowExecutionFromCognito"
-#   action        = "lambda:InvokeFunction"
-#   function_name = module.ui_cognito_pre_authentication.name
-#   principal     = "cognito-idp.amazonaws.com"
-#   source_arn    = aws_cognito_user_pool.echostream_ui.arn
-# }
+resource "aws_lambda_permission" "ui_cognito_pre_authentication" {
+  statement_id  = "AllowExecutionFromCognito"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ui_cognito_pre_authentication.name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.echostream_ui.arn
+}
 
-# resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_authentication" {
-#   name            = "${var.resource_prefix}-ui-cognito-pre-authentication"
-#   log_group_name  = module.ui_cognito_pre_authentication.log_group_name
-#   filter_pattern  = "ERROR -UserNotAuthorizedError"
-#   destination_arn = module.control_alert_handler.arn
-# }
+resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_authentication" {
+  name            = "${var.resource_prefix}-ui-cognito-pre-authentication"
+  log_group_name  = module.ui_cognito_pre_authentication.log_group_name
+  filter_pattern  = "ERROR -UserNotAuthorizedError"
+  destination_arn = module.control_alert_handler.arn
+}
 
-# #############################
-# ##  ui-cognito-pre-signup  ##
-# #############################
-# data "aws_iam_policy_document" "ui_cognito_pre_signup" {
-#   statement {
-#     actions = [
-#       "dynamodb:DeleteItem",
-#       "dynamodb:GetItem",
-#       "dynamodb:PutItem",
-#       "dynamodb:UpdateItem",
-#     ]
+#############################
+##  ui-cognito-pre-signup  ##
+#############################
+data "aws_iam_policy_document" "ui_cognito_pre_signup" {
+  statement {
+    actions = [
+      "dynamodb:DeleteItem",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:UpdateItem",
+    ]
 
-#     resources = [
-#       module.graph_table.arn,
-#     ]
+    resources = [
+      module.graph_table.arn,
+    ]
 
-#     sid = "TableAccess"
-#   }
-#   statement {
-#     actions = [
-#       "cloudwatch:PutMetricData",
-#     ]
+    sid = "TableAccess"
+  }
+  statement {
+    actions = [
+      "cloudwatch:PutMetricData",
+    ]
 
-#     resources = [
-#       "*",
-#     ]
+    resources = [
+      "*",
+    ]
 
-#     sid = "CWPutMetrics"
-#   }
-# }
+    sid = "CWPutMetrics"
+  }
+}
 
-# resource "aws_iam_policy" "ui_cognito_pre_signup" {
-#   description = "IAM permissions required for ui-cognito-pre-signup lambda"
-#   path        = "/${var.resource_prefix}-lambda/"
-#   name        = "${var.resource_prefix}-ui-cognito-pre-signup"
-#   policy      = data.aws_iam_policy_document.ui_cognito_pre_signup.json
-# }
+resource "aws_iam_policy" "ui_cognito_pre_signup" {
+  description = "IAM permissions required for ui-cognito-pre-signup lambda"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-ui-cognito-pre-signup"
+  policy      = data.aws_iam_policy_document.ui_cognito_pre_signup.json
+}
 
-# module "ui_cognito_pre_signup" {
-#   description = "Validate invitation for new UI user "
+module "ui_cognito_pre_signup" {
+  description = "Validate invitation for new UI user "
 
-#   environment_variables = {
-#     DYNAMODB_TABLE = module.graph_table.name
-#     ENVIRONMENT    = var.resource_prefix
-#   }
+  environment_variables = {
+    DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.resource_prefix
+  }
 
-#   dead_letter_arn = local.lambda_dead_letter_arn
-#   handler         = "function.handler"
-#   kms_key_arn     = local.lambda_env_vars_kms_key_arn
-#   memory_size     = 1536
-#   name            = "${var.resource_prefix}-ui-cognito-pre-signup"
+  dead_letter_arn = local.lambda_dead_letter_arn
+  handler         = "function.handler"
+  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  memory_size     = 1536
+  name            = "${var.resource_prefix}-ui-cognito-pre-signup"
 
-#   policy_arns = [
-#     aws_iam_policy.ui_cognito_pre_signup.arn,
-#     aws_iam_policy.additional_ddb_policy.arn
-#   ]
+  policy_arns = [
+    aws_iam_policy.ui_cognito_pre_signup.arn,
+    aws_iam_policy.additional_ddb_policy.arn
+  ]
 
-#   runtime       = "python3.8"
-#   s3_bucket     = local.artifacts_bucket
-#   s3_object_key = local.lambda_functions_keys["ui_cognito_pre_signup"]
-#   source        = "QuiNovas/lambda/aws"
-#   tags          = local.tags
-#   timeout       = 30
-#   version       = "3.0.14"
-# }
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["ui_cognito_pre_signup"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.14"
+}
 
-# resource "aws_lambda_permission" "ui_cognito_pre_signup" {
-#   statement_id  = "AllowExecutionFromCognito"
-#   action        = "lambda:InvokeFunction"
-#   function_name = module.ui_cognito_pre_signup.name
-#   principal     = "cognito-idp.amazonaws.com"
-#   source_arn    = aws_cognito_user_pool.echostream_ui.arn
-# }
+resource "aws_lambda_permission" "ui_cognito_pre_signup" {
+  statement_id  = "AllowExecutionFromCognito"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ui_cognito_pre_signup.name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.echostream_ui.arn
+}
 
-# resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_signup" {
-#   name            = "${var.resource_prefix}-ui-cognito-pre-signup"
-#   log_group_name  = module.ui_cognito_pre_signup.log_group_name
-#   filter_pattern  = "ERROR -SignupError -InternalError"
-#   destination_arn = module.control_alert_handler.arn
-# }
+resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_signup" {
+  name            = "${var.resource_prefix}-ui-cognito-pre-signup"
+  log_group_name  = module.ui_cognito_pre_signup.log_group_name
+  filter_pattern  = "ERROR -SignupError -InternalError"
+  destination_arn = module.control_alert_handler.arn
+}
 
 # #######################################
 # ##  ui-cognito-pre-token-generation  ##
@@ -1753,93 +1753,93 @@ resource "aws_iam_policy" "additional_ddb_policy" {
 #   destination_arn = module.control_alert_handler.arn
 # }
 
-# ##################################
-# ##  log-retention   ##############
-# ##################################
-# data "aws_iam_policy_document" "log_retention" {
-#   statement {
-#     actions = [
-#       "logs:DescribeLogGroups"
-#     ]
+##################################
+##  log-retention   ##############
+##################################
+data "aws_iam_policy_document" "log_retention" {
+  statement {
+    actions = [
+      "logs:DescribeLogGroups"
+    ]
 
-#     resources = [
-#       "arn:aws:logs:${var.region}:${var.allowed_account_id}:*",
-#     ]
+    resources = [
+      "arn:aws:logs:${var.region}:${var.allowed_account_id}:*",
+    ]
 
-#     sid = "ListLogGroups"
-#   }
+    sid = "ListLogGroups"
+  }
 
-#   statement {
-#     actions = [
-#       "logs:PutRetentionPolicy"
-#     ]
+  statement {
+    actions = [
+      "logs:PutRetentionPolicy"
+    ]
 
-#     resources = [
-#       "arn:aws:logs:${var.region}:${var.allowed_account_id}:log-group:*",
-#     ]
+    resources = [
+      "arn:aws:logs:${var.region}:${var.allowed_account_id}:log-group:*",
+    ]
 
-#     sid = "SetRetention"
-#   }
-# }
+    sid = "SetRetention"
+  }
+}
 
-# resource "aws_iam_policy" "log_retention" {
-#   description = "IAM permissions required for log-retention lambda"
-#   path        = "/${var.resource_prefix}-lambda/"
-#   name        = "${var.resource_prefix}-log-retention"
-#   policy      = data.aws_iam_policy_document.log_retention.json
-# }
+resource "aws_iam_policy" "log_retention" {
+  description = "IAM permissions required for log-retention lambda"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-log-retention"
+  policy      = data.aws_iam_policy_document.log_retention.json
+}
 
-# module "log_retention" {
-#   description     = "set log group retention to 7 days"
-#   dead_letter_arn = local.lambda_dead_letter_arn
-#   environment_variables = {
-#     ENVIRONMENT = var.resource_prefix
-#   }
-#   handler     = "function.handler"
-#   kms_key_arn = local.lambda_env_vars_kms_key_arn
-#   memory_size = 128
-#   name        = "${var.resource_prefix}-log-retention"
+module "log_retention" {
+  description     = "set log group retention to 7 days"
+  dead_letter_arn = local.lambda_dead_letter_arn
+  environment_variables = {
+    ENVIRONMENT = var.resource_prefix
+  }
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  memory_size = 128
+  name        = "${var.resource_prefix}-log-retention"
 
-#   policy_arns = [
-#     aws_iam_policy.log_retention.arn,
-#   ]
+  policy_arns = [
+    aws_iam_policy.log_retention.arn,
+  ]
 
-#   runtime       = "python3.8"
-#   s3_bucket     = local.artifacts_bucket
-#   s3_object_key = local.lambda_functions_keys["log_retention"]
-#   source        = "QuiNovas/lambda/aws"
-#   tags          = local.tags
-#   timeout       = 60
-#   version       = "3.0.14"
-# }
+  runtime       = "python3.8"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["log_retention"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 60
+  version       = "3.0.14"
+}
 
 
-# resource "aws_cloudwatch_event_rule" "log_retention" {
-#   name                = "${var.resource_prefix}-log-retention"
-#   description         = "set log group retention to 7 days daily"
-#   schedule_expression = "cron(0 10 * * ? *)"
-# }
+resource "aws_cloudwatch_event_rule" "log_retention" {
+  name                = "${var.resource_prefix}-log-retention"
+  description         = "set log group retention to 7 days daily"
+  schedule_expression = "cron(0 10 * * ? *)"
+}
 
-# resource "aws_cloudwatch_event_target" "log_retention" {
-#   rule      = aws_cloudwatch_event_rule.log_retention.name
-#   target_id = "${var.resource_prefix}-log-retention"
-#   arn       = module.log_retention.arn
-# }
+resource "aws_cloudwatch_event_target" "log_retention" {
+  rule      = aws_cloudwatch_event_rule.log_retention.name
+  target_id = "${var.resource_prefix}-log-retention"
+  arn       = module.log_retention.arn
+}
 
-# resource "aws_lambda_permission" "log_retention" {
-#   statement_id  = "AllowExecutionFromCloudWatch"
-#   action        = "lambda:InvokeFunction"
-#   function_name = module.log_retention.name
-#   principal     = "events.amazonaws.com"
-#   source_arn    = aws_cloudwatch_event_rule.log_retention.arn
-# }
+resource "aws_lambda_permission" "log_retention" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = module.log_retention.name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.log_retention.arn
+}
 
-# resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
-#   name            = "${var.resource_prefix}-log-retention"
-#   log_group_name  = module.log_retention.log_group_name
-#   filter_pattern  = "ERROR -USERERROR"
-#   destination_arn = module.control_alert_handler.arn
-# }
+resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
+  name            = "${var.resource_prefix}-log-retention"
+  log_group_name  = module.log_retention.log_group_name
+  filter_pattern  = "ERROR -USERERROR"
+  destination_arn = module.control_alert_handler.arn
+}
 
 
 
@@ -2093,9 +2093,9 @@ resource "aws_iam_policy" "additional_ddb_policy" {
 #   destination_arn = module.control_alert_handler.arn
 # }
 
-###########################
-##  appsync--datasource  ##
-###########################
+##########################
+#  appsync--datasource  ##
+##########################
 data "aws_iam_policy_document" "appsync_datasource" {
   statement {
     actions = ["*"
