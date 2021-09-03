@@ -615,3 +615,41 @@ resource "aws_appsync_resolver" "cross_account_app_update" {
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "CrossAccountApp"
 }
+
+## CrossTenantReceivingApp
+
+resource "aws_appsync_resolver" "cross_tenant_receiving_app_nodes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "nodes"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossTenantReceivingApp"
+}
+
+resource "aws_appsync_resolver" "cross_tenant_receiving_app_tenant" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "tenant"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossTenantReceivingApp"
+}
+
+resource "aws_appsync_resolver" "cross_tenant_receiving_app_delete" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossTenantReceivingApp"
+}
+
+resource "aws_appsync_resolver" "cross_tenant_receiving_app_update" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "Update"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossTenantReceivingApp"
+}
