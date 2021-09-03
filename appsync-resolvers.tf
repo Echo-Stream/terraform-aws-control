@@ -653,3 +653,24 @@ resource "aws_appsync_resolver" "cross_tenant_receiving_app_update" {
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "CrossTenantReceivingApp"
 }
+
+## CrossTenantReceivingNode
+
+resource "aws_appsync_resolver" "cross_tenant_receiving_node_app" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "app"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossTenantReceivingNode"
+}
+
+
+resource "aws_appsync_resolver" "cross_tenant_receiving_node_send_edges" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "sendEdges"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossTenantReceivingNode"
+}
