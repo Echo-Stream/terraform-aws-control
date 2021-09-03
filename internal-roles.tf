@@ -77,22 +77,21 @@ resource "aws_iam_role_policy_attachment" "tenant_function_db_access" {
   policy_arn = aws_iam_policy.tenant_function_db_access.arn
 }
 
-############################
-## Validate Functions IAM ##
-############################
-resource "aws_iam_role" "validate_functions_tenant_function" {
-  name               = "${var.resource_prefix}-validate-functions-tenant-function"
+###################
+## Validator IAM ##
+###################
+resource "aws_iam_role" "validator" {
+  name               = "${var.resource_prefix}-validator"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
   tags               = local.tags
 }
 
-resource "aws_iam_role_policy_attachment" "validate_functions_tenant_function_basic" {
-  role       = aws_iam_role.validate_functions_tenant_function.name
+resource "aws_iam_role_policy_attachment" "validator_basic" {
+  role       = aws_iam_role.validator.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-
-resource "aws_iam_role_policy_attachment" "validate_functions_tenant_function_db_access" {
-  role       = aws_iam_role.validate_functions_tenant_function.name
+resource "aws_iam_role_policy_attachment" "validator_db" {
+  role       = aws_iam_role.validator.name
   policy_arn = aws_iam_policy.tenant_function_db_access.arn
 }
