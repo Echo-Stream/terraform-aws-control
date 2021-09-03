@@ -141,7 +141,7 @@ resource "aws_iam_policy" "additional_ddb_policy" {
 #     ]
 
 #     resources = [
-#       aws_sqs_queue.default_tenant_sqs_queue.arn
+#       aws_sqs_queue.system_sqs_queue.arn
 #     ]
 
 #     sid = "DoNotDeleteDefaultTenantQueue"
@@ -533,7 +533,7 @@ resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_token_generat
 #     ]
 
 #     resources = [
-#       aws_sqs_queue.default_tenant_sqs_queue.arn
+#       aws_sqs_queue.system_sqs_queue.arn
 #     ]
 
 #     sid = "DoNotDeleteDefaultTenantQueue"
@@ -1683,7 +1683,7 @@ resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_signup" {
 #     ]
 
 #     resources = [
-#       aws_sqs_queue.default_tenant_sqs_queue.arn
+#       aws_sqs_queue.system_sqs_queue.arn
 #     ]
 
 #     sid = "DoNotDeleteDefaultTenantQueue"

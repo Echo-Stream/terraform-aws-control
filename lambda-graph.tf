@@ -64,7 +64,7 @@ module "graph_table_dynamodb_trigger" {
     ARTIFACTS_BUCKET             = local.artifacts_bucket_prefix
     AUDIT_FIREHOSE               = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
     CONTROL_REGION               = local.current_region
-    SYSTEM_SQS_QUEUE = aws_sqs_queue.default_tenant_sqs_queue.id
+    SYSTEM_SQS_QUEUE = aws_sqs_queue.system_sqs_queue.id
     DYNAMODB_TABLE               = module.graph_table.name
     ENVIRONMENT                  = var.resource_prefix
     ID_TOKEN_KEY                 = local.id_token_key
@@ -227,7 +227,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
 
     resources = [
       "arn:aws:sqs:*:*:*db-stream*.fifo",
-      aws_sqs_queue.default_tenant_sqs_queue.arn
+      aws_sqs_queue.system_sqs_queue.arn
     ]
 
     sid = "PrerequisitesForQueueTrigger"
@@ -440,7 +440,7 @@ module "graph_table_tenant_stream_handler" {
 
 resource "aws_lambda_event_source_mapping" "graph_table_tenant_stream_handler" {
   function_name    = module.graph_table_tenant_stream_handler.arn
-  event_source_arn = aws_sqs_queue.default_tenant_sqs_queue.arn
+  event_source_arn = aws_sqs_queue.system_sqs_queue.arn
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_handler" {
@@ -1146,7 +1146,7 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_han
 #     ]
 
 #     resources = [
-#       aws_sqs_queue.default_tenant_sqs_queue.arn
+#       aws_sqs_queue.system_sqs_queue.arn
 #     ]
 
 #     sid = "DoNotDeleteDefaultTenantQueue"
@@ -1300,7 +1300,7 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_han
 #     ]
 
 #     resources = [
-#       aws_sqs_queue.default_tenant_sqs_queue.arn
+#       aws_sqs_queue.system_sqs_queue.arn
 #     ]
 
 #     sid = "DoNotDeleteDefaultTenantQueue"

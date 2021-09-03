@@ -126,7 +126,7 @@ module "deployment_handler" {
     ARTIFACTS_BUCKET             = local.artifacts_bucket
     CLOUDFRONT_DISTRIBUTION_ID   = aws_cloudfront_distribution.webapp.id
     DEFAULT_TENANT_NAME          = "DEFAULT_TENANT"
-    DEFAULT_TENANT_SQS_QUEUE_URL = aws_sqs_queue.default_tenant_sqs_queue.id
+    system_sqs_queue_URL = aws_sqs_queue.system_sqs_queue.id
     DYNAMODB_TABLE               = module.graph_table.name
     ECHOSTREAM_VERSION           = var.echostream_version
     ENVIRONMENT                  = var.resource_prefix
