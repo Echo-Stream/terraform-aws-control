@@ -122,13 +122,29 @@ module "deployment_handler" {
   description = "Does appropriate deployments by getting notified from Artifacts bucket"
 
   environment_variables = {
+    ALARM_SNS_TOPIC = aws_sns_topic.alarms.arn
+    #INTERNAL_APPSYNC_ROLES   = local.internal_appsync_role_names
     #system_sqs_queue_URL       = aws_sqs_queue.system_sqs_queue.id
+    ALERT_SNS_TOPIC            = aws_sns_topic.alerts.arn
     API_ID                     = aws_appsync_graphql_api.echostream.id
-    #AWS_LAMBDA_LOG_GROUP_NAME = "/aws/lambda/${var.resource_prefix}-deployment-handler"
+    APPSYNC_ENDPOINT           = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
+    ARTIFACTS_BUCKET           = local.artifacts_bucket
+    AUDIT_FIREHOSE             = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
     CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.webapp.id
     CONTROL_REGION             = local.current_region
+    DEFAULT_TENANT_NAME        = "DEFAULT_TENANT"
+    DYNAMODB_TABLE             = module.graph_table.name
     ECHOSTREAM_VERSION         = var.echostream_version
+    ENVIRONMENT                = var.resource_prefix
+    ID_TOKEN_KEY               = local.id_token_key
+    INTERNAL_NODE_CODE         = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
+    REGION                     = var.region
     SNS_TOPIC_ARN              = aws_sns_topic.ci_cd_errors.arn
+    SYSTEM_SQS_QUEUE           = aws_sqs_queue.system_sqs_queue.id
+    TENANT_DB_STREAM_HANDLER   = "echo-dev-graph-table-tenant-stream-handler"
+    UPDATE_CODE_ROLE           = aws_iam_role.update_code.arn
+    VALIDATOR_CODE             = "{\"S3Key\": \"${local.artifacts["lambda"]}/validator.zip\"}"
+    VALIDATOR_ROLE             = aws_iam_role.validator.arn
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
