@@ -95,9 +95,9 @@ module "appsync_datasource" {
 
 
 ##############################
-##  ui-cognito-post-signup  ##
+##  ui-cognito-post-confirmation  ##
 ##############################
-data "aws_iam_policy_document" "ui_cognito_post_signup" {
+data "aws_iam_policy_document" "ui_cognito_post_confirmation" {
   statement {
     actions = [
       "dynamodb:UpdateItem",
@@ -124,14 +124,14 @@ data "aws_iam_policy_document" "ui_cognito_post_signup" {
   }
 }
 
-resource "aws_iam_policy" "ui_cognito_post_signup" {
-  description = "IAM permissions required for ui-cognito-post-signup lambda"
+resource "aws_iam_policy" "ui_cognito_post_confirmation" {
+  description = "IAM permissions required for ui-cognito-post-confirmation lambda"
   path        = "/${var.resource_prefix}-lambda/"
-  name        = "${var.resource_prefix}-ui-cognito-post-signup"
-  policy      = data.aws_iam_policy_document.ui_cognito_post_signup.json
+  name        = "${var.resource_prefix}-ui-cognito-post-confirmation"
+  policy      = data.aws_iam_policy_document.ui_cognito_post_confirmation.json
 }
 
-module "ui_cognito_post_signup" {
+module "ui_cognito_post_confirmation" {
   description = "Set attributes on UI user and validate invitation token post signup "
 
   environment_variables = {
@@ -143,33 +143,33 @@ module "ui_cognito_post_signup" {
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.resource_prefix}-ui-cognito-post-signup"
+  name            = "${var.resource_prefix}-ui-cognito-post-confirmation"
 
   policy_arns = [
-    aws_iam_policy.ui_cognito_post_signup.arn,
+    aws_iam_policy.ui_cognito_post_confirmation.arn,
     aws_iam_policy.additional_ddb_policy.arn
   ]
 
   runtime       = "python3.8"
   s3_bucket     = local.artifacts_bucket
-  s3_object_key = local.lambda_functions_keys["ui_cognito_post_signup"]
+  s3_object_key = local.lambda_functions_keys["ui_cognito_post_confirmation"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
   version       = "3.0.14"
 }
 
-resource "aws_lambda_permission" "ui_cognito_post_signup" {
+resource "aws_lambda_permission" "ui_cognito_post_confirmation" {
   statement_id  = "AllowExecutionFromCognito"
   action        = "lambda:InvokeFunction"
-  function_name = module.ui_cognito_post_signup.name
+  function_name = module.ui_cognito_post_confirmation.name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.echostream_ui.arn
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_post_signup" {
-  name            = "${var.resource_prefix}-ui-cognito-post-signup"
-  log_group_name  = module.ui_cognito_post_signup.log_group_name
+resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_post_confirmation" {
+  name            = "${var.resource_prefix}-ui-cognito-post-confirmation"
+  log_group_name  = module.ui_cognito_post_confirmation.log_group_name
   filter_pattern  = "ERROR -SignupError -InternalError"
   destination_arn = module.control_alert_handler.arn
 }

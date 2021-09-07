@@ -108,7 +108,7 @@ resource "aws_cognito_user_pool" "echostream_ui" {
 
   lambda_config {
     pre_sign_up        = module.ui_cognito_pre_signup.arn
-    post_confirmation  = module.ui_cognito_post_signup.arn
+    post_confirmation  = module.ui_cognito_post_confirmation.arn
     pre_authentication = module.ui_cognito_pre_authentication.arn
     #pre_token_generation = module.ui_cognito_pre_token_generation.arn
   }

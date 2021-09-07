@@ -112,7 +112,7 @@ locals {
     # router_node                              = "${local.artifacts["tenant_lambda"]}/router-node.zip"
     # tenant_alert_publisher                   = "${local.artifacts["tenant_lambda"]}/tenant-alert-publisher.zip"
     # trans_node                               = "${local.artifacts["tenant_lambda"]}/trans-node.zip"
-    ui_cognito_post_signup        = "${local.artifacts["lambda"]}/ui-cognito-post-signup.zip"
+    ui_cognito_post_confirmation  = "${local.artifacts["lambda"]}/ui-cognito-post-confirmation.zip"
     ui_cognito_pre_authentication = "${local.artifacts["lambda"]}/ui-cognito-pre-authentication.zip"
     ui_cognito_pre_signup         = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
     # ui_cognito_pre_token_generation          = "${local.artifacts["lambda"]}/ui-cognito-pre-token-generation.zip"

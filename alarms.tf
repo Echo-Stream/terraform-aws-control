@@ -2,7 +2,7 @@
 #   lambdas = toset([
 #     # module.app_cognito_pre_authentication.name,
 #     # module.app_cognito_pre_token_generation.name,
-#     # module.ui_cognito_post_signup.name,
+#     # module.ui_cognito_post_confirmation.name,
 #     # module.ui_cognito_pre_authentication.name,
 #     # module.ui_cognito_pre_signup.name,
 #     # module.ui_cognito_pre_token_generation.name,
@@ -37,7 +37,7 @@
 #   cognito_trigger_lambdas = toset([
 #     module.app_cognito_pre_authentication.name,
 #     module.app_cognito_pre_token_generation.name,
-#     module.ui_cognito_post_signup.name,
+#     module.ui_cognito_post_confirmation.name,
 #     module.ui_cognito_pre_authentication.name,
 #     module.ui_cognito_pre_signup.name,
 #     module.ui_cognito_pre_token_generation.name,
