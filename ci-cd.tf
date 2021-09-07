@@ -128,7 +128,7 @@ module "deployment_handler" {
     ALERT_SNS_TOPIC            = aws_sns_topic.alerts.arn
     API_ID                     = aws_appsync_graphql_api.echostream.id
     APPSYNC_ENDPOINT           = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
-    ARTIFACTS_BUCKET           = local.artifacts_bucket
+    ARTIFACTS_BUCKET           = local.artifacts_bucket_prefix
     AUDIT_FIREHOSE             = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
     CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.webapp.id
     CONTROL_REGION             = local.current_region
