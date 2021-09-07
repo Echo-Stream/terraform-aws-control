@@ -124,7 +124,7 @@ module "deployment_handler" {
   environment_variables = {
     #system_sqs_queue_URL       = aws_sqs_queue.system_sqs_queue.id
     API_ID                     = aws_appsync_graphql_api.echostream.id
-    AWS_LAMBDA_LOG_GROUP_NAME = "/aws/lambda/${var.resource_prefix}-deployment-handler"
+    #AWS_LAMBDA_LOG_GROUP_NAME = "/aws/lambda/${var.resource_prefix}-deployment-handler"
     CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.webapp.id
     CONTROL_REGION             = local.current_region
     ECHOSTREAM_VERSION         = var.echostream_version
