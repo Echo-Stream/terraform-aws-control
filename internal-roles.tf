@@ -115,7 +115,7 @@ data "aws_iam_policy_document" "update_code" {
       "lambda:GetFunction",
     ]
 
-    resources = [module.graph_table.arn]
+    resources = ["*"]
 
     sid = "UpdateLambda"
   }
