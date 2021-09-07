@@ -1,60 +1,3 @@
-# resource "random_string" "echostream_ui_external_id" {
-#   length  = 36
-#   lower   = true
-#   number  = true
-#   special = false
-#   upper   = true
-# }
-
-# data "aws_iam_policy_document" "cognito_sms_assume_role" {
-#   statement {
-#     actions = [
-#       "sts:AssumeRole",
-#     ]
-
-#     condition {
-#       test = "StringEquals"
-
-#       values = [
-#         random_string.echostream_ui_external_id.result,
-#       ]
-
-#       variable = "sts:ExternalId"
-#     }
-
-#     principals {
-#       identifiers = [
-#         "cognito-idp.amazonaws.com",
-#       ]
-
-#       type = "Service"
-#     }
-#   }
-# }
-
-# resource "aws_iam_role" "cognito_sms" {
-#   assume_role_policy = data.aws_iam_policy_document.cognito_sms_assume_role.json
-#   name               = "${var.resource_prefix}-ui-cognito-sms"
-#   tags               = local.tags
-# }
-
-# data "aws_iam_policy_document" "cognito_sms" {
-#   statement {
-#     actions = [
-#       "sns:Publish",
-#     ]
-
-#     resources = [
-#       "*",
-#     ]
-#   }
-# }
-
-# resource "aws_iam_role_policy" "cognito_sms" {
-#   policy = data.aws_iam_policy_document.cognito_sms.json
-#   role   = aws_iam_role.cognito_sms.id
-# }
-
 resource "aws_cognito_user_pool" "echostream_apps" {
   admin_create_user_config {
     allow_admin_create_user_only = true
@@ -299,4 +242,3 @@ resource "aws_cognito_user_pool_client" "echostream_api_userpool_client" {
     "ALLOW_USER_SRP_AUTH"
   ]
 }
-

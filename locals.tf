@@ -71,8 +71,8 @@ locals {
   lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn
 
   lambda_functions_keys = {
-    api_cognito_pre_authentication     = "${local.artifacts["lambda"]}/api-cognito-pre-authentication.zip"
-    api_cognito_pre_token_generation   = "${local.artifacts["lambda"]}/api-cognito-pre-token-generation.zip"
+    #api_cognito_pre_authentication     = "${local.artifacts["lambda"]}/api-cognito-pre-authentication.zip"
+    #api_cognito_pre_token_generation   = "${local.artifacts["lambda"]}/api-cognito-pre-token-generation.zip"
     app_api_cognito_pre_authentication = "${local.artifacts["lambda"]}/app-api-cognito-pre-authentication.zip"
     app_cognito_pre_token_generation   = "${local.artifacts["lambda"]}/app-cognito-pre-token-generation.zip"
     # appsync_api_user_datasource              = "${local.artifacts["lambda"]}/appsync-api-user-datasource.zip"
@@ -89,8 +89,8 @@ locals {
     # appsync_subscription_datasource          = "${local.artifacts["lambda"]}/appsync-subscription-datasource.zip"
     # appsync_tenant_datasource                = "${local.artifacts["lambda"]}/appsync-tenant-datasource.zip"
     # appsync_validate_function_datasource     = "${local.artifacts["lambda"]}/appsync-validate-function-datasource.zip"
-    control_alert_handler        = "${local.artifacts["lambda"]}/control-alert-handler.zip"
-    control_clickup_integration  = "${local.artifacts["lambda"]}/control-clickup-integration.zip"
+    #control_alert_handler        = "${local.artifacts["lambda"]}/control-alert-handler.zip"
+    #control_clickup_integration  = "${local.artifacts["lambda"]}/control-clickup-integration.zip"
     deployment_handler           = "${local.artifacts["lambda"]}/deployment-handler.zip"
     graph_table_dynamodb_trigger = "${local.artifacts["lambda"]}/graph-table-dynamodb-trigger.zip"
     # graph_table_manage_apps                  = "${local.artifacts["lambda"]}/graph-table-manage-apps.zip"
