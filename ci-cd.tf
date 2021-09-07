@@ -125,13 +125,14 @@ module "deployment_handler" {
     API_ID                     = aws_appsync_graphql_api.echostream.id
     ARTIFACTS_BUCKET           = local.artifacts_bucket
     CLOUDFRONT_DISTRIBUTION_ID = aws_cloudfront_distribution.webapp.id
+    CONTROL_REGION             = local.current_region
     DEFAULT_TENANT_NAME        = "DEFAULT_TENANT"
-    system_sqs_queue_URL       = aws_sqs_queue.system_sqs_queue.id
     DYNAMODB_TABLE             = module.graph_table.name
     ECHOSTREAM_VERSION         = var.echostream_version
     ENVIRONMENT                = var.resource_prefix
     REGION                     = var.region
     SNS_TOPIC_ARN              = aws_sns_topic.ci_cd_errors.arn
+    system_sqs_queue_URL       = aws_sqs_queue.system_sqs_queue.id
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
