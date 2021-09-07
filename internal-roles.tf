@@ -95,3 +95,39 @@ resource "aws_iam_role_policy_attachment" "validator_db" {
   role       = aws_iam_role.validator.name
   policy_arn = aws_iam_policy.tenant_function_db_access.arn
 }
+
+#####################
+## Update-Code IAM ##
+#####################
+resource "aws_iam_role" "update_code" {
+  name               = "${var.resource_prefix}-update-code"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  tags               = local.tags
+}
+
+data "aws_iam_policy_document" "update_code" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "lambda:UpdateFunctionCode",
+      "lambda:ListFunctions",
+      "lambda:GetFunction",
+    ]
+
+    resources = [module.graph_table.arn]
+
+    sid = "UpdateLambda"
+  }
+}
+
+resource "aws_iam_policy" "update_code" {
+  description = "IAM permissions required for internal nodes to update themselves"
+  path        = "/${var.resource_prefix}-lambda/"
+  policy      = data.aws_iam_policy_document.update_code.json
+}
+
+resource "aws_iam_role_policy_attachment" "update_code" {
+  role       = aws_iam_role.update_code.name
+  policy_arn = aws_iam_policy.update_code.arn
+}
