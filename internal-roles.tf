@@ -99,9 +99,32 @@ resource "aws_iam_role_policy_attachment" "validator_db" {
 #####################
 ## Update-Code IAM ##
 #####################
+data "aws_iam_policy_document" "conditional_lambda_assume_role" {
+  statement {
+    actions = [
+      "sts:AssumeRole",
+    ]
+    principals {
+      identifiers = [
+        "lambda.amazonaws.com",
+      ]
+      type = "Service"
+    }
+
+    condition {
+      test = "StringEquals"
+      values = [
+        "1811287156321588255",
+        "8418996027118263142"
+      ]
+      variable = "sts:SourceIdentity"
+    }
+  }
+}
+
 resource "aws_iam_role" "update_code" {
   name               = "${var.resource_prefix}-update-code"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.conditional_lambda_assume_role.json
   tags               = local.tags
 }
 
