@@ -126,6 +126,7 @@ data "aws_iam_policy_document" "deployment_handler" {
       "logs:CreateLogStream",
       "logs:PutLogEvents",
       "logs:CreateLogGroup",
+      "logs:PutRetentionPolicy"
     ]
 
     resources = [
