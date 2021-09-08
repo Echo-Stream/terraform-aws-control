@@ -135,8 +135,10 @@ module "ui_cognito_post_confirmation" {
   description = "Set attributes on UI user and validate invitation token post signup "
 
   environment_variables = {
+
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
+    CONTROL_REGION = local.current_region
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -217,6 +219,7 @@ module "ui_cognito_pre_authentication" {
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
+    CONTROL_REGION = local.current_region
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -298,6 +301,7 @@ module "ui_cognito_pre_signup" {
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
+    CONTROL_REGION = local.current_region
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -459,6 +463,7 @@ module "app_cognito_pre_token_generation" {
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
+    CONTROL_REGION = local.current_region
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
