@@ -143,9 +143,9 @@ resource "aws_cognito_user_pool" "echostream_ui" {
 
   #sms_verification_message = "Your verification code is {####}. "
 
-  username_attributes = [
-    "email",
-  ]
+  # username_attributes = [
+  #   "email",
+  # ]
 
   # user_pool_add_ons {
   #   advanced_security_mode = "ENFORCED"
