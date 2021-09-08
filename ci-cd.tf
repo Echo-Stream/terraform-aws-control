@@ -4,11 +4,12 @@
 data "aws_iam_policy_document" "deployment_handler" {
   statement {
     actions = [
+      "lambda:CreateFunction",
+      "lambda:GetFunction",
+      "lambda:ListFunctions",
       "lambda:PublishLayerVersion",
       "lambda:PublishVersion",
       "lambda:UpdateFunctionCode",
-      "lambda:ListFunctions",
-      "lambda:GetFunction",
     ]
 
     resources = [
@@ -109,7 +110,22 @@ data "aws_iam_policy_document" "deployment_handler" {
 
     sid = "snsPublish"
   }
+
+  statement {
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:CreateLogGroup",
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "AllowWritingErrorEvents"
+  }
 }
+
 
 resource "aws_iam_policy" "deployment_handler" {
   description = "IAM permissions required for deployment-handler lambda"
@@ -122,9 +138,9 @@ module "deployment_handler" {
   description = "Does appropriate deployments by getting notified from Artifacts bucket"
 
   environment_variables = {
-    ALARM_SNS_TOPIC = aws_sns_topic.alarms.arn
     #INTERNAL_APPSYNC_ROLES   = local.internal_appsync_role_names
     #system_sqs_queue_URL       = aws_sqs_queue.system_sqs_queue.id
+    ALARM_SNS_TOPIC            = aws_sns_topic.alarms.arn
     ALERT_SNS_TOPIC            = aws_sns_topic.alerts.arn
     API_ID                     = aws_appsync_graphql_api.echostream.id
     APPSYNC_ENDPOINT           = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
