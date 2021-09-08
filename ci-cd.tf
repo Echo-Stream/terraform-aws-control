@@ -4,6 +4,16 @@
 data "aws_iam_policy_document" "deployment_handler" {
   statement {
     actions = [
+      "iam:CreateRole",
+      "iam:PassRole",
+    ]
+
+    resources = ["*"]
+
+    sid = "IAMPermissions"
+  }
+  statement {
+    actions = [
       "lambda:CreateFunction",
       "lambda:GetFunction",
       "lambda:ListFunctions",
