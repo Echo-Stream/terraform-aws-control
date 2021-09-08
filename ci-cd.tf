@@ -143,7 +143,7 @@ module "deployment_handler" {
     SYSTEM_SQS_QUEUE           = aws_sqs_queue.system_sqs_queue.id
     TENANT_DB_STREAM_HANDLER   = "echo-dev-graph-table-tenant-stream-handler"
     UPDATE_CODE_ROLE           = aws_iam_role.update_code.arn
-    VALIDATOR_CODE             = "{\"S3Key\": \"${local.artifacts["lambda"]}/validator.zip\"}"
+    VALIDATOR_CODE             = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
     VALIDATOR_ROLE             = aws_iam_role.validator.arn
   }
 
