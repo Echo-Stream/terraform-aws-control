@@ -8,25 +8,23 @@ resource "random_string" "for_jwk" {
 locals {
   artifacts_sns_arn = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}_${replace(var.echostream_version, ".", "-")}"
   artifacts = {
-    #hl7_mllp_inbound_node  = "${local.artifacts_account_id}.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-inbound-node"
-    #hl7_mllp_outbound_node = "${local.artifacts_account_id}.dkr.ecr.us-east-1.amazonaws.com/hl7-mllp-outbound-node"
-    appsync  = "${var.echostream_version}/appsync"
-    frontend = "${var.echostream_version}/frontend"
+    appsync   = "${var.echostream_version}/appsync"
+    functions = "${var.echostream_version}/functions"
     glue = {
       audit_records_etl = "${var.echostream_version}/glue/audit-records-etl.py"
     }
     lambda        = "${var.echostream_version}/lambda/control"
     message_types = "${var.echostream_version}/message-types"
+    reactjs       = "${var.echostream_version}/reactjs"
     tenant_lambda = "${var.echostream_version}/lambda/tenant"
   }
 
-  artifacts_account_id    = "226390263822" # echostream-artifacts
-  artifacts_bucket        = "echostream-artifacts-${local.current_region}"
-  artifacts_bucket_prefix = "echostream-artifacts"
+  artifacts_account_id    = "226390263822"                                 # echostream-artifacts
+  artifacts_bucket        = "echostream-artifacts-${local.current_region}" # artifacts bucket name with region
+  artifacts_bucket_prefix = "echostream-artifacts"                         # artifacts bucket name without region
+  current_region          = data.aws_region.current.name                   # current region or control region
 
-  aws_cli_command = "~/bin/aws"
-  current_region  = data.aws_region.current.name
-
+  # Common environment variables for lambdas that use echo-tools library
   common_lambda_environment_variables = {
     ALARM_SNS_TOPIC               = aws_sns_topic.alarms.arn
     ALERT_SNS_TOPIC               = aws_sns_topic.alerts.arn
@@ -84,7 +82,7 @@ locals {
   }
 
   log_bucket = module.log_bucket.id
-  regions    = concat(var.tenant_regions, [var.region])
+  regions    = concat(var.tenant_regions, [var.region]) #combined list of control region and tenant regions
 
   tags = merge({
     app         = "echostream"

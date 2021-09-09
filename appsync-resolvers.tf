@@ -1,67 +1,3 @@
-# # We are using custom local exec resolvers,
-# # as aws_appsync_resolver TF resource is behind.
-# # TF resource doesn't support optional templates yet.
-# # https://github.com/terraform-providers/terraform-provider-aws/issues/15593
-
-# data "template_file" "resolver_sh" {
-#   template = file("${path.module}/scripts/resolvers.sh")
-#   vars = {
-#     api_id                           = aws_appsync_graphql_api.echostream.id
-#     api_user_datasource              = module.api_user_datasource.name
-#     app_datasource                   = module.app_datasource.name
-#     edge_datasource                  = module.appsync_edge_lambda_datasource.name
-#     function_datasource              = module.function_datasource.name
-#     integration_datasource           = module.integration_datasource.name
-#     kms_key_datasource               = module.appsync_kms_key_lambda_datasource.name
-#     large_message_storage_datasource = module.large_message_storage_datasource.name
-#     message_type_datasource          = module.message_type_datasource.name
-#     node_datasource                  = module.node_datasource.name
-#     sub_field_datasource             = module.sub_field_datasource.name
-#     subscription_datasource          = module.subscription_datasource.name
-#     templates_path                   = "${path.module}/files/response-template.vtl"
-#     tenant_datasource                = module.tenant_datasource.name
-#     validate_function_datasource     = module.validate_function_datasource.name
-#   }
-# }
-
-# resource "null_resource" "all_resolvers" {
-#   depends_on = [
-#     data.template_file.resolver_sh,
-#     module.api_user_datasource.name,
-#     module.appsync_edge_lambda_datasource,
-#     module.appsync_kms_key_lambda_datasource,
-#     module.function_datasource,
-#     module.integration_datasource,
-#     module.large_message_storage_datasource,
-#     module.message_type_datasource,
-#     module.node_datasource,
-#     module.sub_field_datasource,
-#     module.subscription_datasource,
-#     module.tenant_datasource,
-#     module.validate_function_datasource,
-#   ]
-
-#   provisioner "local-exec" {
-#     command = "./ ${data.template_file.resolver_sh.rendered}"
-#   }
-#   triggers = {
-#     api_id                           = aws_appsync_graphql_api.echostream.id
-#     api_user_datasource              = module.api_user_datasource.name
-#     app_datasource                   = module.app_datasource.name
-#     deploy                           = data.template_file.resolver_sh.rendered
-#     edge_datasource                  = module.appsync_edge_lambda_datasource.name
-#     function_datasource              = module.function_datasource.name
-#     integration_datasource           = module.integration_datasource.name
-#     large_message_storage_datasource = module.large_message_storage_datasource.name
-#     message_type_datasource          = module.message_type_datasource.name
-#     node_datasource                  = module.node_datasource.name
-#     sub_field_datasource             = module.sub_field_datasource.name
-#     templates_path                   = "${path.module}/files/response-template.vtl"
-#     tenant_datasource                = module.tenant_datasource.name
-#     validate_function_datasource     = module.validate_function_datasource.name
-#   }
-# }
-
 ###############
 ## Mutations ##
 ###############
@@ -654,6 +590,7 @@ resource "aws_appsync_resolver" "cross_tenant_receiving_app_update" {
   type              = "CrossTenantReceivingApp"
 }
 
+## CrossTenantReceivingNode
 resource "aws_appsync_resolver" "cross_tenant_receiving_node_app" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -708,6 +645,7 @@ resource "aws_appsync_resolver" "cross_tenant_receiving_node_update" {
   type              = "CrossTenantReceivingNode"
 }
 
+## CrossTenantSendingApp
 resource "aws_appsync_resolver" "cross_tenant_sending_app_nodes" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -762,6 +700,7 @@ resource "aws_appsync_resolver" "cross_tenant_sending_app_update" {
   type              = "CrossTenantSendingApp"
 }
 
+## CrossTenantSendingNode
 resource "aws_appsync_resolver" "cross_tenant_sending_node_app" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -852,6 +791,7 @@ resource "aws_appsync_resolver" "cross_tenant_sending_node_validate" {
   type              = "CrossTenantSendingNode"
 }
 
+## Edge
 resource "aws_appsync_resolver" "edge_kms_key" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -942,6 +882,7 @@ resource "aws_appsync_resolver" "edge_update" {
   type              = "Edge"
 }
 
+## ExternalApp
 resource "aws_appsync_resolver" "external_app_config" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -996,6 +937,7 @@ resource "aws_appsync_resolver" "external_app_update" {
   type              = "ExternalApp"
 }
 
+## ExternalNode
 resource "aws_appsync_resolver" "external_node_app" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1077,42 +1019,7 @@ resource "aws_appsync_resolver" "external_node_update" {
   type              = "ExternalNode"
 }
 
-# resource "aws_appsync_resolver" "function_argument_message_type" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "argumentMessageType"
-#   request_template  = file("${path.module}/files/batch-invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Function"
-# }
-
-# resource "aws_appsync_resolver" "function_tenant" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "tenant"
-#   request_template  = file("${path.module}/files/batch-invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Function"
-# }
-
-# resource "aws_appsync_resolver" "function_delete" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "Delete"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Function"
-# }
-
-# resource "aws_appsync_resolver" "function_validate" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "Validate"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Function"
-# }
-
+## LogEmitterNode
 resource "aws_appsync_resolver" "log_emitter_node_send_message_type" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1131,6 +1038,7 @@ resource "aws_appsync_resolver" "log_emitter_node_tenant" {
   type              = "LogEmitterNode"
 }
 
+## LoginUser
 resource "aws_appsync_resolver" "login_user_tenant_users" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1140,6 +1048,7 @@ resource "aws_appsync_resolver" "login_user_tenant_users" {
   type              = "LoginUser"
 }
 
+## KmsKey
 resource "aws_appsync_resolver" "kms_key_tenant" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1167,6 +1076,7 @@ resource "aws_appsync_resolver" "kms_key_update" {
   type              = "KmsKey"
 }
 
+## ManagedApp
 resource "aws_appsync_resolver" "managed_app_config" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1239,6 +1149,7 @@ resource "aws_appsync_resolver" "managed_app_update" {
   type              = "ManagedApp"
 }
 
+## ManagedInstance
 resource "aws_appsync_resolver" "managed_instance_last_ping_date_time" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1257,6 +1168,7 @@ resource "aws_appsync_resolver" "managed_instance_ping_status" {
   type              = "ManagedInstance"
 }
 
+## ManagedNode
 resource "aws_appsync_resolver" "managed_node_app" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1356,6 +1268,7 @@ resource "aws_appsync_resolver" "managed_node_update" {
   type              = "ManagedNode"
 }
 
+## ManagedNodeType
 resource "aws_appsync_resolver" "managed_node_type_receive_message_type" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1401,6 +1314,7 @@ resource "aws_appsync_resolver" "managed_node_type_update" {
   type              = "ManagedNodeType"
 }
 
+## MessageType
 resource "aws_appsync_resolver" "message_type_tenant" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1437,366 +1351,7 @@ resource "aws_appsync_resolver" "message_type_validate" {
   type              = "MessageType"
 }
 
-# resource "aws_appsync_resolver" "mutation_create_api_user" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateApiUser"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_bitmapper_function" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateBitmapperFunction"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_change_notification" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateChangeNotification"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_cross_account_app" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateCrossAccountApp"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_cross_tenant_receiving_app" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateCrossTenantReceivingApp"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_cross_tenant_sending_app" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateCrossTenantSendingApp"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_cross_tenant_sending_node" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateCrossTenantSendingNode"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_edge" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateEdge"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_external_app" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateExternalApp"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_external_node" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateExternalNode"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_kms_key" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateKmsKey"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_managed_app" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateManagedApp"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_managed_node" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateManagedNode"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_managed_node_type" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateManagedNodeType"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_message_type" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateMessageType"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_router_node" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateRouterNode"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_tenant" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateTenant"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_transformer_function" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateTransformerFunction"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "mutation_create_transformer_node" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "CreateTransformerNode"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Mutation"
-# }
-
-# resource "aws_appsync_resolver" "query_get_api_user" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "GetApiUser"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_get_app" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "GetApp"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_get_bulk_data_storage" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "GetBulkDataStorage"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_get_edge" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "GetEdge"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_get_function" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "GetFunction"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_get_kms_key" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "GetKmsKey"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_get_managed_node_type" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "GetManagedNodeType"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_get_message_type" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "GetMessageType"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_get_node" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "GetNode"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_get_tenant" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "GetTenant"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_get_tenant_user" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "GetTenantUser"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_get_user" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "GetUser"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_list_api_users" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "ListApiUsers"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_list_apps" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "ListApps"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_list_functions" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "ListFunctions"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_list_keys" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "ListKeys"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_list_nodes" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "ListNodes"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_list_managed_node_types" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "ListManagedNodeTypes"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_list_message_types" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "ListMessageTypes"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_list_tenants" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "ListTenants"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
-# resource "aws_appsync_resolver" "query_list_tenant_users" {
-#   api_id            = aws_appsync_graphql_api.echostream.id
-#   data_source       = module.appsync_datasource_.name
-#   field             = "ListTenantUsers"
-#   request_template  = file("${path.module}/files/invoke.vtl")
-#   response_template = file("${path.module}/files/response-template.vtl")
-#   type              = "Query"
-# }
-
+## RouterNode
 resource "aws_appsync_resolver" "router_node_config" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1896,6 +1451,7 @@ resource "aws_appsync_resolver" "router_node_validate" {
   type              = "RouterNode"
 }
 
+## Subscription
 resource "aws_appsync_resolver" "subscription_on_change" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1905,6 +1461,7 @@ resource "aws_appsync_resolver" "subscription_on_change" {
   type              = "Subscription"
 }
 
+## Tenant
 resource "aws_appsync_resolver" "tenant_config" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1959,6 +1516,7 @@ resource "aws_appsync_resolver" "tenant_update" {
   type              = "Tenant"
 }
 
+## TenantUser
 resource "aws_appsync_resolver" "tenant_user_tenant" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1986,6 +1544,7 @@ resource "aws_appsync_resolver" "tenant_user_update" {
   type              = "TenantUser"
 }
 
+## TransformerFunction
 resource "aws_appsync_resolver" "transformer_function_argument_message_type" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -2040,6 +1599,7 @@ resource "aws_appsync_resolver" "transformer_function_validate" {
   type              = "TransformerFunction"
 }
 
+## TransformerNode
 resource "aws_appsync_resolver" "transformer_node_config" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name

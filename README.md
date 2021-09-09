@@ -22,7 +22,7 @@ Terraform Module for Echo Stream Control Resources
 | tenant_regions | List of regions where tenants exist | `list(string)` | `[]` | no |
 | tags | A mapping of tags to assign to the resources | `map(string)` | `{}` | no |
 
-### Publish Module (Deployment)
+### CI/CD for Publish Module (.github/workflows/publish.yml)
 - To publish the module, merge/checkout changes from `main` to branch named like `vX.X.X`
 - Merging changes into a already existing versioned branch will publish new code on same version.
 
@@ -52,4 +52,3 @@ module "control" {
 ### Notes for Internal team
 - Apps userpool MFA is OFF, Password policy length set to 16 instead of maximum
 - UI Userpool devices: Remember your users devices is set to `always`
-- Resolvers are deployed by shell
