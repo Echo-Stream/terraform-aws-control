@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:*_db-stream_*",
+      "arn:aws:sqs:*:*:db-stream*",
       aws_sqs_queue.system_sqs_queue.arn
     ]
 
