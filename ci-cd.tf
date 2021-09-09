@@ -16,10 +16,12 @@ data "aws_iam_policy_document" "deployment_handler" {
     actions = [
       "lambda:CreateFunction",
       "lambda:GetFunction",
+      "lambda:InvokeFunction",
       "lambda:ListFunctions",
       "lambda:PublishLayerVersion",
       "lambda:PublishVersion",
       "lambda:UpdateFunctionCode",
+      "lambda:UpdateFunctionConfiguration",
     ]
 
     resources = [
