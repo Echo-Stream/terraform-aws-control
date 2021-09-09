@@ -33,8 +33,8 @@ This module is supposed to be used along with pre-control module in the EchoStre
 | ui_user_pool_arn | The ARN of the UI cognito user pool |
 | ui_user_pool_endpoint | Endpoint of the UI cognito user pool |
 | ui_user_pool_client_id | The ID of the UI cognito user pool client |
-| identity_pool_id | The ID of the UI cognito user pool client |
-| identity_pool_arn | The ID of the UI cognito user pool client |
+| identity_pool_id | EchoStream Identity pool ID |
+| identity_pool_arn | The ARN of the EchoStream identity pool |
 | cloudfront_oai_id | The identifier for the EchoStream CloudFront distribution |
 | cloudfront_oai_iam_arn | EchoStream Cloudfront orgin access identity. Pre-generated ARN for use in S3 bucket policies |
 | cloudfront_domain_name | EchoStream CloudFront distribution Domain name |
