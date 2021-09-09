@@ -9,7 +9,8 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:*_db-stream_*"
+      "arn:aws:sqs:*:*:*_db-stream_*",
+      aws_sqs_queue.system_sqs_queue.arn
     ]
 
     sid = "DeliverMessageToQueues"
@@ -33,7 +34,9 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
 
   statement {
     actions = [
+      "dynamodb:Query",
       "dynamodb:PutItem",
+      "dynamodb:GetItem",
     ]
 
     resources = [
