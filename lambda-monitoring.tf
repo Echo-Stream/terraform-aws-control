@@ -52,7 +52,7 @@ module "control_alert_handler" {
     module.control_clickup_integration.invoke_policy_arn
   ]
 
-  runtime       = "python3.8"
+  runtime       = "python3.9"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["control_alert_handler"]
   source        = "QuiNovas/lambda/aws"
@@ -89,7 +89,7 @@ module "control_clickup_integration" {
   kms_key_arn   = local.lambda_env_vars_kms_key_arn
   memory_size   = 1536
   name          = "${var.resource_prefix}-control-clickup-integration"
-  runtime       = "python3.8"
+  runtime       = "python3.9"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["control_clickup_integration"]
   source        = "QuiNovas/lambda/aws"

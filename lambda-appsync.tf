@@ -73,7 +73,7 @@ module "appsync_datasource" {
     aws_iam_policy.appsync_datasource.arn,
   ]
 
-  runtime       = "python3.8"
+  runtime       = "python3.9"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["appsync_datasource"]
   source        = "QuiNovas/lambda/aws"
@@ -140,7 +140,7 @@ module "ui_cognito_post_confirmation" {
     aws_iam_policy.additional_ddb_policy.arn
   ]
 
-  runtime       = "python3.8"
+  runtime       = "python3.9"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["ui_cognito_post_confirmation"]
   source        = "QuiNovas/lambda/aws"
@@ -221,7 +221,7 @@ module "ui_cognito_pre_authentication" {
     aws_iam_policy.additional_ddb_policy.arn
   ]
 
-  runtime       = "python3.8"
+  runtime       = "python3.9"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["ui_cognito_pre_authentication"]
   source        = "QuiNovas/lambda/aws"
@@ -303,7 +303,7 @@ module "ui_cognito_pre_signup" {
     aws_iam_policy.additional_ddb_policy.arn
   ]
 
-  runtime       = "python3.8"
+  runtime       = "python3.9"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["ui_cognito_pre_signup"]
   source        = "QuiNovas/lambda/aws"
@@ -382,7 +382,7 @@ module "app_api_cognito_pre_authentication" {
     aws_iam_policy.additional_ddb_policy.arn
   ]
 
-  runtime       = "python3.8"
+  runtime       = "python3.9"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["app_api_cognito_pre_authentication"]
   source        = "QuiNovas/lambda/aws"
@@ -461,7 +461,7 @@ module "app_cognito_pre_token_generation" {
     aws_iam_policy.additional_ddb_policy.arn
   ]
 
-  runtime       = "python3.8"
+  runtime       = "python3.9"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["app_cognito_pre_token_generation"]
   source        = "QuiNovas/lambda/aws"
@@ -536,7 +536,7 @@ module "log_retention" {
     aws_iam_policy.log_retention.arn,
   ]
 
-  runtime       = "python3.8"
+  runtime       = "python3.9"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["log_retention"]
   source        = "QuiNovas/lambda/aws"
@@ -632,7 +632,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["appsync_kms_key_datasource"]
 #   source        = "QuiNovas/lambda/aws"
@@ -861,7 +861,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["appsync_tenant_datasource"]
 #   source        = "QuiNovas/lambda/aws"
@@ -979,7 +979,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["appsync_edge_datasource"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1052,7 +1052,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["ui_cognito_pre_token_generation"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1115,7 +1115,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.validate_function.arn,
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["validate_function"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1184,7 +1184,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["appsync_message_type_datasource"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1330,7 +1330,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["appsync_app_datasource"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1422,7 +1422,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["appsync_node_datasource"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1485,7 +1485,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["appsync_sub_field_datasource"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1550,7 +1550,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["appsync_large_message_storage_datasource"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1670,7 +1670,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["appsync_validate_function_datasource"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1747,7 +1747,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["appsync_subscription_datasource"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1863,7 +1863,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.purge_tenants.arn,
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["purge_tenants"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1949,7 +1949,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["appsync_function_datasource"]
 #   source        = "QuiNovas/lambda/aws"
@@ -2052,7 +2052,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["appsync_integrations_datasource"]
 #   source        = "QuiNovas/lambda/aws"
@@ -2135,7 +2135,7 @@ resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["appsync_api_user_datasource"]
 #   source        = "QuiNovas/lambda/aws"

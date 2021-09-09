@@ -17,7 +17,7 @@ module "process_audit_record" {
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
   name            = "${var.resource_prefix}-process-audit-record"
-  runtime         = "python3.8"
+  runtime         = "python3.9"
   s3_bucket       = local.artifacts_bucket
   s3_object_key   = local.lambda_functions_keys["process_audit_record"]
   source          = "QuiNovas/lambda/aws"

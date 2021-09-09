@@ -67,7 +67,7 @@ module "graph_table_dynamodb_trigger" {
     aws_iam_policy.additional_ddb_policy.arn
   ]
 
-  runtime       = "python3.8"
+  runtime       = "python3.9"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["graph_table_dynamodb_trigger"]
   source        = "QuiNovas/lambda/aws"
@@ -388,7 +388,7 @@ module "graph_table_tenant_stream_handler" {
     #module.graph_table_manage_kms_keys.invoke_policy_arn
   ]
 
-  runtime       = "python3.8"
+  runtime       = "python3.9"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["graph_table_tenant_stream_handler"]
   source        = "QuiNovas/lambda/aws"
@@ -520,7 +520,7 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_han
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["graph_table_manage_users"]
 #   source        = "QuiNovas/lambda/aws"
@@ -625,7 +625,7 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_han
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["graph_table_manage_resource_policies"]
 #   source        = "QuiNovas/lambda/aws"
@@ -713,7 +713,7 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_han
 #     aws_iam_policy.graph_table_manage_apps.arn,
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["graph_table_manage_apps"]
 #   source        = "QuiNovas/lambda/aws"
@@ -853,7 +853,7 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_han
 #     aws_iam_policy.graph_table_manage_message_types.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["graph_table_manage_message_types"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1005,7 +1005,7 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_han
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["graph_table_manage_nodes"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1218,7 +1218,7 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_han
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["graph_table_manage_tenants"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1333,7 +1333,7 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_han
 #     aws_iam_policy.graph_table_manage_edges.arn,
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["graph_table_manage_edges"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1391,7 +1391,7 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_han
 #     aws_iam_policy.graph_table_manage_kms_keys.arn,
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["graph_table_manage_kms_keys"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1466,7 +1466,7 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_han
 #     aws_iam_policy.additional_ddb_policy.arn,
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["graph_table_manage_functions"]
 #   source        = "QuiNovas/lambda/aws"
@@ -1557,7 +1557,7 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_han
 #     aws_iam_policy.additional_ddb_policy.arn,
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["graph_table_manage_authorizations"]
 #   source        = "QuiNovas/lambda/aws"

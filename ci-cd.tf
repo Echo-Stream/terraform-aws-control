@@ -161,7 +161,7 @@ module "deployment_handler" {
     aws_iam_policy.deployment_handler.arn,
   ]
 
-  runtime       = "python3.8"
+  runtime       = "python3.9"
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["deployment_handler"]
   source        = "QuiNovas/lambda/aws"

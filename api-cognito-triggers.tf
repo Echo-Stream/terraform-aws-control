@@ -68,7 +68,7 @@
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["api_cognito_pre_token_generation"]
 #   source        = "QuiNovas/lambda/aws"
@@ -162,7 +162,7 @@
 #     aws_iam_policy.additional_ddb_policy.arn
 #   ]
 
-#   runtime       = "python3.8"
+#   runtime       = "python3.9"
 #   s3_bucket     = local.artifacts_bucket
 #   s3_object_key = local.lambda_functions_keys["api_cognito_pre_authentication"]
 #   source        = "QuiNovas/lambda/aws"
