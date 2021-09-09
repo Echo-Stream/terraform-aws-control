@@ -20,10 +20,6 @@ locals {
     tenant_lambda = "${var.echostream_version}/lambda/tenant"
   }
 
-  #artifacts_account_id    = "672550935748" # QuiNovas-MSP
-  #artifacts_bucket        = "echostream-artifacts-${local.current_region}"
-  #artifacts_bucket_prefix = "echostream-artifacts"
-
   artifacts_account_id    = "226390263822" # echostream-artifacts
   artifacts_bucket        = "echostream-artifacts-${local.current_region}"
   artifacts_bucket_prefix = "echostream-artifacts"
@@ -42,81 +38,48 @@ locals {
                     }
                   EOT
 
-  # internal_appsync_role_names = jsonencode([
-  #   "${var.resource_prefix}-appsync-app-datasource",
-  #   "${var.resource_prefix}-appsync-edge-datasource",
-  #   "${var.resource_prefix}-appsync-function-datasource",
-  #   "${var.resource_prefix}-appsync-kms-key-datasource",
-  #   "${var.resource_prefix}-appsync-large-message-storage-datasource",
-  #   "${var.resource_prefix}-appsync-message-type-datasource",
-  #   "${var.resource_prefix}-appsync-node-datasource",
-  #   "${var.resource_prefix}-appsync-sub-field-datasource",
-  #   "${var.resource_prefix}-appsync-subscription-datasource",
-  #   "${var.resource_prefix}-appsync-tenant-datasource",
-  #   "${var.resource_prefix}-appsync-validate-function-datasource",
-  #   "${var.resource_prefix}-graph-table-dynamodb-trigger",
-  #   "${var.resource_prefix}-graph-table-manage-apps",
-  #   "${var.resource_prefix}-graph-table-manage-edges",
-  #   "${var.resource_prefix}-graph-table-manage-functions",
-  #   "${var.resource_prefix}-graph-table-manage-kms-keys",
-  #   "${var.resource_prefix}-graph-table-manage-message-types",
-  #   "${var.resource_prefix}-graph-table-manage-nodes",
-  #   "${var.resource_prefix}-graph-table-manage-resource-policies",
-  #   "${var.resource_prefix}-graph-table-manage-tenants",
-  #   "${var.resource_prefix}-graph-table-manage-users",
-  #   "${var.resource_prefix}-graph-table-tenant-stream-handler",
-  # ])
+  common_lambda_environment_variables = {
+    ALARM_SNS_TOPIC               = aws_sns_topic.alarms.arn
+    ALERT_SNS_TOPIC               = aws_sns_topic.alerts.arn
+    API_ID                        = aws_appsync_graphql_api.echostream.id
+    APPSYNC_ENDPOINT              = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
+    ARTIFACTS_BUCKET              = local.artifacts_bucket_prefix
+    AUDIT_FIREHOSE                = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
+    CLOUDFRONT_DISTRIBUTION_ID    = aws_cloudfront_distribution.webapp.id
+    CONTROL_REGION                = local.current_region
+    DYNAMODB_TABLE                = module.graph_table.name
+    ECHOSTREAM_VERSION            = var.echostream_version
+    ENVIRONMENT                   = var.resource_prefix
+    HIGH_THROUGHPUT_QUEUE_REGIONS = ""
+    ID_TOKEN_KEY                  = local.id_token_key
+    INTERNAL_NODE_CODE            = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
+    INTERNAL_NODE_ROLE            = aws_iam_role.tenant_function.name
+    REGION                        = var.region
+    SNS_TOPIC_ARN                 = aws_sns_topic.ci_cd_errors.arn
+    SYSTEM_SQS_QUEUE              = aws_sqs_queue.system_sqs_queue.id
+    TENANT_DB_STREAM_HANDLER      = "${var.resource_prefix}-graph-table-tenant-stream-handler"
+    UPDATE_CODE_ROLE              = aws_iam_role.update_code.arn
+    VALIDATOR_CODE                = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
+    VALIDATOR_ROLE                = aws_iam_role.validator.arn
+  }
 
   lambda_dead_letter_arn      = aws_sns_topic.lambda_dead_letter.arn
   lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn
 
   lambda_functions_keys = {
-    #api_cognito_pre_authentication     = "${local.artifacts["lambda"]}/api-cognito-pre-authentication.zip"
-    #api_cognito_pre_token_generation   = "${local.artifacts["lambda"]}/api-cognito-pre-token-generation.zip"
     app_api_cognito_pre_authentication = "${local.artifacts["lambda"]}/app-api-cognito-pre-authentication.zip"
     app_cognito_pre_token_generation   = "${local.artifacts["lambda"]}/app-cognito-pre-token-generation.zip"
-    # appsync_api_user_datasource              = "${local.artifacts["lambda"]}/appsync-api-user-datasource.zip"
-    # appsync_app_datasource                   = "${local.artifacts["lambda"]}/appsync-app-datasource.zip"
-    appsync_datasource = "${local.artifacts["lambda"]}/appsync-datasource.zip"
-    # appsync_edge_datasource                  = "${local.artifacts["lambda"]}/appsync-edge-datasource.zip"
-    # appsync_function_datasource              = "${local.artifacts["lambda"]}/appsync-function-datasource.zip"
-    # appsync_integrations_datasource          = "${local.artifacts["lambda"]}/appsync-integrations-datasource.zip"
-    # appsync_kms_key_datasource               = "${local.artifacts["lambda"]}/appsync-kms-key-datasource.zip"
-    # appsync_large_message_storage_datasource = "${local.artifacts["lambda"]}/appsync-large-message-storage-datasource.zip"
-    # appsync_message_type_datasource          = "${local.artifacts["lambda"]}/appsync-message-type-datasource.zip"
-    # appsync_node_datasource                  = "${local.artifacts["lambda"]}/appsync-node-datasource.zip"
-    # appsync_sub_field_datasource             = "${local.artifacts["lambda"]}/appsync-sub-field-datasource.zip"
-    # appsync_subscription_datasource          = "${local.artifacts["lambda"]}/appsync-subscription-datasource.zip"
-    # appsync_tenant_datasource                = "${local.artifacts["lambda"]}/appsync-tenant-datasource.zip"
-    # appsync_validate_function_datasource     = "${local.artifacts["lambda"]}/appsync-validate-function-datasource.zip"
-    control_alert_handler        = "${local.artifacts["lambda"]}/control-alert-handler.zip"
-    control_clickup_integration  = "${local.artifacts["lambda"]}/control-clickup-integration.zip"
-    deployment_handler           = "${local.artifacts["lambda"]}/deployment-handler.zip"
-    graph_table_dynamodb_trigger = "${local.artifacts["lambda"]}/graph-table-dynamodb-trigger.zip"
-    # graph_table_manage_apps                  = "${local.artifacts["lambda"]}/graph-table-manage-apps.zip"
-    # graph_table_manage_authorizations        = "${local.artifacts["lambda"]}/graph-table-manage-authorizations.zip"
-    # graph_table_manage_edges                 = "${local.artifacts["lambda"]}/graph-table-manage-edges.zip"
-    # graph_table_manage_functions             = "${local.artifacts["lambda"]}/graph-table-manage-functions.zip"
-    # graph_table_manage_kms_keys              = "${local.artifacts["lambda"]}/graph-table-manage-kms-keys.zip"
-    # graph_table_manage_message_types         = "${local.artifacts["lambda"]}/graph-table-manage-message-types.zip"
-    # graph_table_manage_nodes                 = "${local.artifacts["lambda"]}/graph-table-manage-nodes.zip"
-    # graph_table_manage_resource_policies     = "${local.artifacts["lambda"]}/graph-table-manage-resource-policies.zip"
-    # graph_table_manage_tenants               = "${local.artifacts["lambda"]}/graph-table-manage-tenants.zip"
-    # graph_table_manage_users                 = "${local.artifacts["lambda"]}/graph-table-manage-users.zip"
-    graph_table_tenant_stream_handler = "${local.artifacts["lambda"]}/graph-table-tenant-stream-handler.zip"
-    log_retention                     = "${local.artifacts["lambda"]}/log-retention.zip"
-    # node_error_publisher                     = "${local.artifacts["tenant_lambda"]}/node-error-publisher.zip"
-    process_audit_record = "${local.artifacts["lambda"]}/process-audit-record.zip"
-    # purge_tenants                            = "${local.artifacts["lambda"]}/purge-tenants.zip"
-    # queue_alarm_publisher                    = "${local.artifacts["tenant_lambda"]}/queue-alarm-publisher.zip"
-    # router_node                              = "${local.artifacts["tenant_lambda"]}/router-node.zip"
-    # tenant_alert_publisher                   = "${local.artifacts["tenant_lambda"]}/tenant-alert-publisher.zip"
-    # trans_node                               = "${local.artifacts["tenant_lambda"]}/trans-node.zip"
-    ui_cognito_post_confirmation  = "${local.artifacts["lambda"]}/ui-cognito-post-confirmation.zip"
-    ui_cognito_pre_authentication = "${local.artifacts["lambda"]}/ui-cognito-pre-authentication.zip"
-    ui_cognito_pre_signup         = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
-    # ui_cognito_pre_token_generation          = "${local.artifacts["lambda"]}/ui-cognito-pre-token-generation.zip"
-    # validate_function                        = "${local.artifacts["lambda"]}/validate-function.zip"
+    appsync_datasource                 = "${local.artifacts["lambda"]}/appsync-datasource.zip"
+    control_alert_handler              = "${local.artifacts["lambda"]}/control-alert-handler.zip"
+    control_clickup_integration        = "${local.artifacts["lambda"]}/control-clickup-integration.zip"
+    deployment_handler                 = "${local.artifacts["lambda"]}/deployment-handler.zip"
+    graph_table_dynamodb_trigger       = "${local.artifacts["lambda"]}/graph-table-dynamodb-trigger.zip"
+    graph_table_tenant_stream_handler  = "${local.artifacts["lambda"]}/graph-table-tenant-stream-handler.zip"
+    log_retention                      = "${local.artifacts["lambda"]}/log-retention.zip"
+    process_audit_record               = "${local.artifacts["lambda"]}/process-audit-record.zip"
+    ui_cognito_post_confirmation       = "${local.artifacts["lambda"]}/ui-cognito-post-confirmation.zip"
+    ui_cognito_pre_authentication      = "${local.artifacts["lambda"]}/ui-cognito-pre-authentication.zip"
+    ui_cognito_pre_signup              = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
   }
 
   log_bucket = module.log_bucket.id

@@ -49,31 +49,20 @@ resource "aws_iam_policy" "appsync_datasource" {
 module "appsync_datasource" {
   description     = "The main datasource for the echo-stream API "
   dead_letter_arn = local.lambda_dead_letter_arn
-  environment_variables = {
-    #INTERNAL_APPSYNC_ROLES        = local.internal_appsync_role_names
-    ALARM_SNS_TOPIC               = aws_sns_topic.alerts.arn
-    API_USER_POOL_APP_ID          = aws_cognito_user_pool_client.echostream_api_userpool_client.id
-    API_USER_POOL_ID              = aws_cognito_user_pool.echostream_api.id
-    APPSYNC_ENDPOINT              = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
-    APP_IDENTITY_POOL_ID          = aws_cognito_identity_pool.echostream.id
-    APP_USER_POOL_APP_ID          = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
-    APP_USER_POOL_ID              = aws_cognito_user_pool.echostream_apps.id
-    ARTIFACTS_BUCKET              = local.artifacts_bucket_prefix
-    AUDIT_FIREHOSE                = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
-    CONTROL_REGION                = local.current_region
-    DYNAMODB_TABLE                = module.graph_table.name
-    ENVIRONMENT                   = var.resource_prefix
-    INTERNAL_NODE_CODE            = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
-    MANAGED_APP_CLOUD_INIT_TOPIC  = aws_sns_topic.hl7_app_cloud_init.arn
-    REMOTE_APP_ROLE               = ""
-    SSM_SERVICE_ROLE              = "service-role/${aws_iam_role.manage_apps_ssm_service_role.name}"
-    TENANT_DB_STREAM_HANDLER      = module.graph_table_tenant_stream_handler.name
-    TENANT_DB_STREAM_HANDLER_ROLE = ""
-    UI_USER_POOL_ID               = aws_cognito_user_pool.echostream_ui.id
-    UPDATE_CODE_ROLE              = aws_iam_role.update_code.arn
-    VALIDATOR_CODE                = "{\"S3Key\": \"${local.artifacts["lambda"]}/validator.zip\"}"
-    VALIDATOR_ROLE                = aws_iam_role.validator.arn
-  }
+
+  environment_variables = merge(local.common_lambda_environment_variables,
+    {
+      API_USER_POOL_APP_ID         = aws_cognito_user_pool_client.echostream_api_userpool_client.id
+      API_USER_POOL_ID             = aws_cognito_user_pool.echostream_api.id
+      APP_IDENTITY_POOL_ID         = aws_cognito_identity_pool.echostream.id
+      APP_USER_POOL_APP_ID         = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
+      APP_USER_POOL_ID             = aws_cognito_user_pool.echostream_apps.id
+      MANAGED_APP_CLOUD_INIT_TOPIC = aws_sns_topic.hl7_app_cloud_init.arn
+      REMOTE_APP_ROLE              = ""
+      SSM_SERVICE_ROLE             = "service-role/${aws_iam_role.manage_apps_ssm_service_role.name}"
+      UI_USER_POOL_ID              = aws_cognito_user_pool.echostream_ui.id
+    }
+  )
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
@@ -135,7 +124,6 @@ module "ui_cognito_post_confirmation" {
   description = "Set attributes on UI user and validate invitation token post signup "
 
   environment_variables = {
-
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
     CONTROL_REGION = local.current_region

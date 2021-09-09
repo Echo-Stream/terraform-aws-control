@@ -52,30 +52,9 @@ resource "aws_iam_policy" "graph_table_dynamodb_trigger" {
 }
 
 module "graph_table_dynamodb_trigger" {
-  description     = "Routes Dynamodb Stream events to the correct Lambda Functions"
-  dead_letter_arn = local.lambda_dead_letter_arn
-
-  environment_variables = {
-    #GRAPH_TYPE_HANDLERS          = ""
-    #TYPE_HANDLERS                = file("${path.module}/files/type-handlers-map.json")
-    #TYPE_HANDLERS                = file("${path.module}/files/type-handlers-map.json")
-    ALARM_SNS_TOPIC  = aws_sns_topic.alarms.arn
-    ALERT_SNS_TOPIC  = aws_sns_topic.alerts.arn
-    APPSYNC_ENDPOINT = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
-    ARTIFACTS_BUCKET = local.artifacts_bucket_prefix
-    AUDIT_FIREHOSE   = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
-    CONTROL_REGION   = local.current_region
-    DYNAMODB_TABLE   = module.graph_table.name
-    ENVIRONMENT      = var.resource_prefix
-    ID_TOKEN_KEY     = local.id_token_key
-    #INTERNAL_APPSYNC_ROLES   = local.internal_appsync_role_names
-    INTERNAL_NODE_CODE       = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
-    SYSTEM_SQS_QUEUE         = aws_sqs_queue.system_sqs_queue.id
-    TENANT_DB_STREAM_HANDLER = "echo-dev-graph-table-tenant-stream-handler"
-    UPDATE_CODE_ROLE         = aws_iam_role.update_code.arn
-    VALIDATOR_CODE           = "{\"S3Key\": \"${local.artifacts["lambda"]}/validator.zip\"}"
-    VALIDATOR_ROLE           = aws_iam_role.validator.arn
-  }
+  description           = "Routes Dynamodb Stream events to the correct Lambda Functions"
+  dead_letter_arn       = local.lambda_dead_letter_arn
+  environment_variables = local.common_lambda_environment_variables
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
@@ -388,35 +367,13 @@ resource "aws_iam_policy" "graph_table_tenant_stream_handler" {
 }
 
 module "graph_table_tenant_stream_handler" {
-  description     = "Delegates calls to handling lambda functions in EchoStream Dynamodb Stream"
-  dead_letter_arn = local.lambda_dead_letter_arn
-
-  environment_variables = {
-    #INTERNAL_APPSYNC_ROLES   = local.internal_appsync_role_names
-    #TENANT_DB_STREAM_HANDLER = "echo-dev-graph-table-tenant-stream-handler"
-    #TYPE_HANDLERS            = file("${path.module}/files/type-handlers-map.json")
-    //ALERT_EMITTER_NODE_CODE  = "{\"S3Key\": \"${local.artifacts["lambda"]}/validate-function.zip\"}"
-    ALARM_SNS_TOPIC    = aws_sns_topic.alarms.arn
-    ALERT_SNS_TOPIC    = aws_sns_topic.alerts.arn
-    APPSYNC_ENDPOINT   = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
-    ARTIFACTS_BUCKET   = local.artifacts_bucket_prefix
-    AUDIT_FIREHOSE     = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
-    CONTROL_REGION     = local.current_region
-    DYNAMODB_TABLE     = module.graph_table.name
-    ENVIRONMENT        = var.resource_prefix
-    ID_TOKEN_KEY       = local.id_token_key
-    INTERNAL_NODE_CODE = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
-    INTERNAL_NODE_ROLE = aws_iam_role.tenant_function.name
-    UPDATE_CODE_ROLE   = aws_iam_role.update_code.arn
-    VALIDATOR_CODE     = "{\"S3Key\": \"${local.artifacts["lambda"]}/validator.zip\"}"
-    VALIDATOR_ROLE     = aws_iam_role.validator.arn
-  }
-
-  handler     = "function.handler"
-  kms_key_arn = local.lambda_env_vars_kms_key_arn
-
-  memory_size = 1536
-  name        = "${var.resource_prefix}-graph-table-tenant-stream-handler"
+  description           = "Delegates calls to handling lambda functions in EchoStream Dynamodb Stream"
+  dead_letter_arn       = local.lambda_dead_letter_arn
+  environment_variables = local.common_lambda_environment_variables
+  handler               = "function.handler"
+  kms_key_arn           = local.lambda_env_vars_kms_key_arn
+  memory_size           = 1536
+  name                  = "${var.resource_prefix}-graph-table-tenant-stream-handler"
 
   policy_arns = [
     aws_iam_policy.graph_table_tenant_stream_handler.arn,
