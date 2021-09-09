@@ -26,17 +26,6 @@ locals {
 
   aws_cli_command = "~/bin/aws"
   current_region  = data.aws_region.current.name
-  domain          = "${var.resource_prefix}.${var.domain_name}"
-
-  id_token_key = <<-EOT
-                    {
-                      "kty": "oct",
-                      "kid": "${random_uuid.for_jwk.result}",
-                      "use": "sig",
-                      "alg": "HS256",
-                      "k": "${base64encode(random_string.for_jwk.result)}"
-                    }
-                  EOT
 
   common_lambda_environment_variables = {
     ALARM_SNS_TOPIC               = aws_sns_topic.alarms.arn
@@ -62,6 +51,18 @@ locals {
     VALIDATOR_CODE                = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
     VALIDATOR_ROLE                = aws_iam_role.validator.arn
   }
+
+  domain = "${var.resource_prefix}.${var.domain_name}"
+
+  id_token_key = <<-EOT
+                    {
+                      "kty": "oct",
+                      "kid": "${random_uuid.for_jwk.result}",
+                      "use": "sig",
+                      "alg": "HS256",
+                      "k": "${base64encode(random_string.for_jwk.result)}"
+                    }
+                  EOT
 
   lambda_dead_letter_arn      = aws_sns_topic.lambda_dead_letter.arn
   lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn

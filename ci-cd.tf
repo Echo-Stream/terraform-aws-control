@@ -101,6 +101,7 @@ data "aws_iam_policy_document" "deployment_handler" {
       "dynamodb:PutItem",
       "dynamodb:GetItem",
       "dynamodb:Query",
+      "dynamodb:UpdateItem"
     ]
 
     resources = [

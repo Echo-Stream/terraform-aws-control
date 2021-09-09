@@ -366,13 +366,11 @@ resource "aws_iam_policy" "app_api_cognito_pre_authentication" {
 
 module "app_api_cognito_pre_authentication" {
   description = "Function that gets triggered when cognito user to be authenticated"
-
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
-    INDEX_NAME     = "gsi0"
+    CONTROL_REGION = local.current_region
   }
-
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
@@ -447,13 +445,11 @@ resource "aws_iam_policy" "app_cognito_pre_token_generation" {
 
 module "app_cognito_pre_token_generation" {
   description = "Customizes the claims in the identity token"
-
   environment_variables = {
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
     CONTROL_REGION = local.current_region
   }
-
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
