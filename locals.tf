@@ -40,7 +40,7 @@ locals {
     HIGH_THROUGHPUT_QUEUE_REGIONS = "[\"us-east-1\", \"us-east-2\", \"us-west-2\", \"eu-west-1\"]"
     ID_TOKEN_KEY                  = local.id_token_key
     INTERNAL_NODE_CODE            = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
-    INTERNAL_NODE_ROLE            = aws_iam_role.tenant_function.name
+    INTERNAL_NODE_ROLE            = aws_iam_role.tenant_function.arn
     REGION                        = var.region
     SNS_TOPIC_ARN                 = aws_sns_topic.ci_cd_errors.arn
     SYSTEM_SQS_QUEUE              = aws_sqs_queue.system_sqs_queue.id
