@@ -67,30 +67,30 @@ jobs:
 
     # This step is yet to be finished and tested
     # It runs Echo dev environment
-    - name: Run Terraform (Echo-Dev)
-      run: |
-        workspace_id=`curl \
-        --header "Authorization: Bearer $TOKEN" \
-        --header "Content-Type: application/vnd.api+json" \
-        https://app.terraform.io/api/v2/organizations/EchoStream/workspaces/echo-dev | jq '.data.id'`
-        curl \
-        --header "Authorization: Bearer $TOKEN" \
-        --header "Content-Type: application/vnd.api+json" \
-        --request POST \
-        --data '{
-            "data": {
-              "attributes": {
-                "is-destroy": false,
-                "message": "Ctrl TF is updated, commit id:'$COMMIT_SHA'. Queued by Github actions '$GITHUB_ACTOR'"
-              },
-              "type": "runs",
-              "relationships": {
-                "workspace": {
-                  "data": {
-                    "type": "workspaces",
-                    "id": '$workspace_id'
+      - name: Run Terraform (Echo-Dev)
+        run: |
+          workspace_id=`curl \
+          --header "Authorization: Bearer $TOKEN" \
+          --header "Content-Type: application/vnd.api+json" \
+          https://app.terraform.io/api/v2/organizations/EchoStream/workspaces/echo-dev | jq '.data.id'`
+          curl \
+          --header "Authorization: Bearer $TOKEN" \
+          --header "Content-Type: application/vnd.api+json" \
+          --request POST \
+          --data '{
+              "data": {
+                "attributes": {
+                  "is-destroy": false,
+                  "message": "Ctrl TF is updated, commit id:'$COMMIT_SHA'. Queued by Github actions '$GITHUB_ACTOR'"
+                },
+                "type": "runs",
+                "relationships": {
+                  "workspace": {
+                    "data": {
+                      "type": "workspaces",
+                      "id": '$workspace_id'
+                    }
                   }
                 }
               }
-            }
-          }' https://app.terraform.io/api/v2/runs
+            }' https://app.terraform.io/api/v2/runs
