@@ -1455,7 +1455,7 @@ resource "aws_appsync_resolver" "router_node_validate" {
 resource "aws_appsync_resolver" "subscription_on_app_change" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
-  field             = "CreateAppChangeNotification"
+  field             = "onAppChange"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "Subscription"
@@ -1561,6 +1561,7 @@ resource "aws_appsync_resolver" "tenant_user_last_name" {
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "TenantUser"
 }
+
 ## TransformerFunction
 resource "aws_appsync_resolver" "transformer_function_argument_message_type" {
   api_id            = aws_appsync_graphql_api.echostream.id
