@@ -1544,6 +1544,23 @@ resource "aws_appsync_resolver" "tenant_user_update" {
   type              = "TenantUser"
 }
 
+resource "aws_appsync_resolver" "tenant_user_first_name" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "firstName"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TenantUser"
+}
+
+resource "aws_appsync_resolver" "tenant_user_last_name" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "lastName"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TenantUser"
+}
 ## TransformerFunction
 resource "aws_appsync_resolver" "transformer_function_argument_message_type" {
   api_id            = aws_appsync_graphql_api.echostream.id
