@@ -1,7 +1,6 @@
 #if ($!ctx.result.echo_error)
   $util.error($ctx.result.echo_error, $ctx.result.error_type)
-#elseif ($!ctx.error)
-  $util.error("EchoStream Internal Error. It's not you, it's us...", "InternalError")
 #else
   $util.toJson(${ctx.result})
 #end
+
