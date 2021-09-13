@@ -2,6 +2,26 @@
 ##  Deployment handler  ##
 ##########################
 data "aws_iam_policy_document" "deployment_handler" {
+
+  statement {
+    actions = [
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:BatchGetImage",
+      "ecr:DescribeImages",
+      "ecr:DescribeRepositories",
+      "ecr:GetAuthorizationToken",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:GetRepositoryPolicy",
+      "ecr:ListImages",
+    ]
+
+    resources = [
+      "arn:aws:ecr:${local.current_region}:${local.artifacts_account_id}:repository/*"
+    ]
+
+    sid = "AppCognitoPoolAccess"
+  }
+
   statement {
     actions = [
       "iam:CreateRole",
