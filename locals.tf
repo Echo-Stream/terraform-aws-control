@@ -73,6 +73,7 @@ locals {
     control_clickup_integration        = "${local.artifacts["lambda"]}/control-clickup-integration.zip"
     deployment_handler                 = "${local.artifacts["lambda"]}/deployment-handler.zip"
     graph_table_dynamodb_trigger       = "${local.artifacts["lambda"]}/graph-table-dynamodb-trigger.zip"
+    graph_table_system_stream_handler  = "${local.artifacts["lambda"]}/graph-table-system-stream-handler.zip"
     graph_table_tenant_stream_handler  = "${local.artifacts["lambda"]}/graph-table-tenant-stream-handler.zip"
     log_retention                      = "${local.artifacts["lambda"]}/log-retention.zip"
     process_audit_record               = "${local.artifacts["lambda"]}/process-audit-record.zip"
