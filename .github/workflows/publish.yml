@@ -81,7 +81,7 @@ jobs:
               "data": {
                 "attributes": {
                   "is-destroy": false,
-                  "message": "Ctrl TF is updated, commit id:'$GITHUB_SHA'. Queued by Github actions '$GITHUB_ACTOR'"
+                  "message": "Ctrl TF is updated, commit id:$(echo ${GITHUB_SHA:0:7}). Queued by Github actions '$GITHUB_ACTOR'"
                 },
                 "type": "runs",
                 "relationships": {
