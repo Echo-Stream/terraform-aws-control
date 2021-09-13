@@ -65,11 +65,10 @@ jobs:
           --request PUT \
           --data-binary @module.tar.gz $upload_url | true
 
-    # This step is yet to be finished and tested
     # It runs Echo dev environment with latest version of ctrl and pre ctrl modules
       - name: Run Terraform (Echo-Dev)
         run: |
-          export message="Ctrl TF is updated, commit id:$(echo ${GITHUB_SHA:0:7}). Queued by Github actions '$GITHUB_ACTOR'"
+          COMMIT_ID="$(echo ${GITHUB_SHA:0:7})"
           workspace_id=`curl \
           --header "Authorization: Bearer $TOKEN" \
           --header "Content-Type: application/vnd.api+json" \
@@ -82,7 +81,7 @@ jobs:
               "data": {
                 "attributes": {
                   "is-destroy": false,
-                  "message": "'$message'"
+                  "message": "Ctrl TF is updated, commit id:'$COMMIT_ID'. Queued by Github actions '$GITHUB_ACTOR'"
                 },
                 "type": "runs",
                 "relationships": {
