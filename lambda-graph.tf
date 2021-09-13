@@ -392,11 +392,6 @@ module "graph_table_tenant_stream_handler" {
   version       = "3.0.14"
 }
 
-resource "aws_lambda_event_source_mapping" "graph_table_tenant_stream_handler" {
-  function_name    = module.graph_table_tenant_stream_handler.arn
-  event_source_arn = aws_sqs_queue.system_sqs_queue.arn
-}
-
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_handler" {
   name            = "${var.resource_prefix}-graph-table-tenant-stream-handler"
   log_group_name  = module.graph_table_tenant_stream_handler.log_group_name
