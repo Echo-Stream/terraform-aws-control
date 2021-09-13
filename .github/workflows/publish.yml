@@ -69,6 +69,7 @@ jobs:
     # It runs Echo dev environment with latest version of ctrl and pre ctrl modules
       - name: Run Terraform (Echo-Dev)
         run: |
+          export message="Ctrl TF is updated, commit id:$(echo ${GITHUB_SHA:0:7}). Queued by Github actions '$GITHUB_ACTOR'"
           workspace_id=`curl \
           --header "Authorization: Bearer $TOKEN" \
           --header "Content-Type: application/vnd.api+json" \
@@ -81,7 +82,7 @@ jobs:
               "data": {
                 "attributes": {
                   "is-destroy": false,
-                  "message": "Ctrl TF is updated, commit id:$(echo ${GITHUB_SHA:0:7}). Queued by Github actions '$GITHUB_ACTOR'"
+                  "message": "'$message"
                 },
                 "type": "runs",
                 "relationships": {

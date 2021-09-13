@@ -370,13 +370,14 @@ resource "aws_iam_policy" "graph_table_tenant_stream_handler" {
 }
 
 module "graph_table_tenant_stream_handler" {
-  description           = "Delegates calls to handling lambda functions in EchoStream Dynamodb Stream"
-  dead_letter_arn       = local.lambda_dead_letter_arn
-  environment_variables = local.common_lambda_environment_variables
-  handler               = "function.handler"
-  kms_key_arn           = local.lambda_env_vars_kms_key_arn
-  memory_size           = 1536
-  name                  = "${var.resource_prefix}-graph-table-tenant-stream-handler"
+  description     = "Delegates calls to handling lambda functions in EchoStream Dynamodb Stream"
+  dead_letter_arn = local.lambda_dead_letter_arn
+  environment_variables = merge(local.common_lambda_environment_variables,
+  { LOGGING_LEVEL = "DEBUG" })
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  memory_size = 1536
+  name        = "${var.resource_prefix}-graph-table-tenant-stream-handler"
 
   policy_arns = [
     aws_iam_policy.graph_table_tenant_stream_handler.arn,
@@ -597,13 +598,14 @@ resource "aws_iam_policy" "graph_table_system_stream_handler" {
 }
 
 module "graph_table_system_stream_handler" {
-  description           = "Handles system-related DB changes"
-  dead_letter_arn       = local.lambda_dead_letter_arn
-  environment_variables = local.common_lambda_environment_variables
-  handler               = "function.handler"
-  kms_key_arn           = local.lambda_env_vars_kms_key_arn
-  memory_size           = 1536
-  name                  = "${var.resource_prefix}-graph-table-system-stream-handler"
+  description     = "Handles system-related DB changes"
+  dead_letter_arn = local.lambda_dead_letter_arn
+  environment_variables = merge(local.common_lambda_environment_variables,
+  { LOGGING_LEVEL = "DEBUG" })
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  memory_size = 1536
+  name        = "${var.resource_prefix}-graph-table-system-stream-handler"
 
   policy_arns = [
     aws_iam_policy.graph_table_system_stream_handler.arn,
