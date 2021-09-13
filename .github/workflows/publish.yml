@@ -82,7 +82,7 @@ jobs:
               "data": {
                 "attributes": {
                   "is-destroy": false,
-                  "message": "'$message"
+                  "message": "'$message'"
                 },
                 "type": "runs",
                 "relationships": {
