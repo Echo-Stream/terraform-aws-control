@@ -151,24 +151,27 @@
 # }
 
 ## US-EAST-1
-resource "aws_cloudwatch_event_rule" "alarm_distribution" {
-  name        = "${var.resource_prefix}-alarm-distribution"
-  description = "CloudWatch Alarm State Change"
+module "alarm_distribution_us_east_1" {
+  name                = "${var.resource_prefix}-alarm-distribution"
+  alarm_sns_topic_arn = aws_sns_topic.alarms.arn
+  tags                = local.tags
 
-  event_pattern = <<EOF
-{
-  "detail-type": [
-    "AWS Console Sign In via CloudTrail"
-  ]
-}
-EOF
+  providers = {
+    aws = aws.us-east-1
+  }
 
-  tags     = local.tags
-  provider = aws.us-east-1
+  source = "./_modules/alarm-distributions"
 }
 
-resource "aws_cloudwatch_event_target" "alarm_distribution" {
-  rule      = aws_cloudwatch_event_rule.alarm_distribution.name
-  target_id = "SendToSNS"
-  arn       = aws_sns_topic.alarms.arn
+## US-EAST-2
+module "alarm_distribution_us_east_2" {
+  name                = "${var.resource_prefix}-alarm-distribution"
+  alarm_sns_topic_arn = aws_sns_topic.alarms.arn
+  tags                = local.tags
+
+  providers = {
+    aws = aws.us-east-2
+  }
+
+  source = "./_modules/alarm-distributions"
 }
