@@ -25,10 +25,6 @@ module "graph_table" {
       type = "S"
     },
     {
-      name = "gsi3_sk"
-      type = "S"
-    },
-    {
       name = "lsi0_sk"
       type = "S"
     },
