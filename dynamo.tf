@@ -66,7 +66,7 @@ module "graph_table" {
     },
     {
       hash_key        = "gsi3_pk"
-      range_sk        = "gsi3_sk"
+      range_key        = "gsi3_sk"
       name            = "gsi3"
       projection_type = "ALL",
     },
