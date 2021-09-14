@@ -18,7 +18,7 @@ locals {
     reactjs       = "${var.echostream_version}/reactjs"
     tenant_lambda = "${var.echostream_version}/lambda/tenant"
   }
-
+  
   artifacts_account_id    = "226390263822"                                 # echostream-artifacts
   artifacts_bucket        = "echostream-artifacts-${local.current_region}" # artifacts bucket name with region
   artifacts_bucket_prefix = "echostream-artifacts"                         # artifacts bucket name without region
@@ -27,7 +27,6 @@ locals {
   # Common environment variables for lambdas that use echo-tools library
   common_lambda_environment_variables = {
     ALARM_SNS_TOPIC               = aws_sns_topic.alarms.arn
-    ALERT_SNS_TOPIC               = aws_sns_topic.alerts.arn
     API_ID                        = aws_appsync_graphql_api.echostream.id
     APPSYNC_ENDPOINT              = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
     ARTIFACTS_BUCKET              = local.artifacts_bucket_prefix
