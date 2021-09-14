@@ -5,7 +5,13 @@ resource "aws_cloudwatch_event_rule" "alarm_distribution" {
   event_pattern = <<EOF
 {
   "detail-type": [
-    "AWS Console Sign In via CloudTrail"
+    "CloudWatch Alarm State Change"
+  ],
+    "source": [
+    "aws.cloudwatch"
+  ],
+    "account": [
+    "${var.account_id}"
   ]
 }
 EOF

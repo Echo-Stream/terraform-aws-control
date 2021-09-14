@@ -152,21 +152,22 @@
 
 ## US-EAST-1
 module "alarm_distribution_us_east_1" {
-  name                = "${var.resource_prefix}-alarm-distribution"
+  account_id          = data.aws_caller_identity.current.account_id
   alarm_sns_topic_arn = aws_sns_topic.alarms.arn
+  name                = "${var.resource_prefix}-alarm-distribution"
   tags                = local.tags
 
   providers = {
     aws = aws.us-east-1
   }
-
   source = "./_modules/alarm-distributions"
 }
 
 ## US-EAST-2
 module "alarm_distribution_us_east_2" {
-  name                = "${var.resource_prefix}-alarm-distribution"
+  account_id          = data.aws_caller_identity.current.account_id
   alarm_sns_topic_arn = aws_sns_topic.alarms.arn
+  name                = "${var.resource_prefix}-alarm-distribution"
   tags                = local.tags
 
   providers = {

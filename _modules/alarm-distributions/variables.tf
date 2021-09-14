@@ -13,3 +13,8 @@ variable "alarm_sns_topic_arn" {
   description = "Alarm SNS Topic ARN"
   type        = string
 }
+
+variable "account_id" {
+  description = "Account ID of Control region"
+  type        = string
+}
