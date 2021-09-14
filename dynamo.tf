@@ -21,6 +21,14 @@ module "graph_table" {
       type = "S"
     },
     {
+      name = "gsi3_pk"
+      type = "S"
+    },
+    {
+      name = "gsi3_sk"
+      type = "S"
+    },
+    {
       name = "lsi0_sk"
       type = "S"
     },
@@ -59,7 +67,13 @@ module "graph_table" {
       hash_key        = "gsi2_pk"
       name            = "gsi2"
       projection_type = "ALL",
-    }
+    },
+    {
+      hash_key        = "gsi3_pk"
+      range_sk        = "gsi3_sk"
+      name            = "gsi3"
+      projection_type = "ALL",
+    },
   ]
 
   local_secondary_index = [
