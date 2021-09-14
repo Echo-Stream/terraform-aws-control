@@ -18,7 +18,7 @@ locals {
     reactjs       = "${var.echostream_version}/reactjs"
     tenant_lambda = "${var.echostream_version}/lambda/tenant"
   }
-  
+
   artifacts_account_id    = "226390263822"                                 # echostream-artifacts
   artifacts_bucket        = "echostream-artifacts-${local.current_region}" # artifacts bucket name with region
   artifacts_bucket_prefix = "echostream-artifacts"                         # artifacts bucket name without region

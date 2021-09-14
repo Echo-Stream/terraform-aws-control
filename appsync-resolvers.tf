@@ -311,10 +311,10 @@ resource "aws_appsync_resolver" "list_functions" {
   type              = "Query"
 }
 
-resource "aws_appsync_resolver" "list_keys" {
+resource "aws_appsync_resolver" "list_kms_keys" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
-  field             = "ListKeys"
+  field             = "ListKmsKeys"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "Query"
@@ -1504,7 +1504,7 @@ resource "aws_appsync_resolver" "tenant_list_changes" {
   field             = "ListChanges"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Tenant"
+  type              = "Query"
 }
 
 resource "aws_appsync_resolver" "tenant_update" {
