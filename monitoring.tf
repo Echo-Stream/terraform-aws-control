@@ -1,157 +1,172 @@
-resource "aws_sns_topic" "tenant_usage_executions" {
-  name         = "${var.resource_prefix}-tenant-usage-executions"
-  display_name = "${var.resource_prefix} Tenant Usage Executions"
-  tags         = local.tags
-}
+# ## IAM Roles
+# ## Error Handler ##
+# resource "aws_iam_role" "error_handler_role" {
+#   name               = "${var.resource_prefix}-error-handler"
+#   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+#   tags               = local.tags
+# }
 
-## IAM Roles
-## Error Handler ##
-resource "aws_iam_role" "error_handler_role" {
-  name               = "${var.resource_prefix}-error-handler"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
-  tags               = local.tags
-}
+# resource "aws_iam_role_policy_attachment" "error_handler_role_basic" {
+#   role       = aws_iam_role.error_handler_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+# }
 
-resource "aws_iam_role_policy_attachment" "error_handler_role_basic" {
-  role       = aws_iam_role.error_handler_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
+# data "aws_iam_policy_document" "error_handler_role" {
+#   statement {
+#     effect = "Allow"
 
-data "aws_iam_policy_document" "error_handler_role" {
-  statement {
-    effect = "Allow"
+#     actions = [
+#       "sns:Publish"
+#     ]
 
-    actions = [
-      "sns:Publish"
-    ]
+#     resources = ["*"]
 
-    resources = ["*"]
+#   }
 
+#   statement {
+#     effect = "Allow"
+
+#     actions = [
+#       "kms:Decrypt",
+#       "kms:GenerateDataKey",
+#     ]
+
+#     resources = ["*"]
+#   }
+# }
+
+# resource "aws_iam_policy" "error_handler_role" {
+#   description = "IAM permissions required for Node Error Publisher functions"
+#   path        = "/${var.resource_prefix}-lambda/"
+#   policy      = data.aws_iam_policy_document.error_handler_role.json
+# }
+
+# resource "aws_iam_role_policy_attachment" "error_handler_role" {
+#   role       = aws_iam_role.error_handler_role.name
+#   policy_arn = aws_iam_policy.error_handler_role.arn
+# }
+
+# ## Alert Handler ##
+# resource "aws_iam_role" "alert_handler_role" {
+#   name               = "${var.resource_prefix}-bndler"
+#   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+#   tags               = local.tags
+# }
+
+# resource "aws_iam_role_policy_attachment" "alert_handler_role_basic" {
+#   role       = aws_iam_role.alert_handler_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+# }
+
+# data "aws_iam_policy_document" "alert_handler_role" {
+#   statement {
+#     effect = "Allow"
+
+#     actions = [
+#       "sns:Publish"
+#     ]
+
+#     resources = ["*"]
+
+#   }
+
+#   statement {
+#     effect = "Allow"
+
+#     actions = [
+#       "lambda:GetFunction"
+#     ]
+
+#     resources = ["*"]
+
+#   }
+
+#   statement {
+#     effect = "Allow"
+
+#     actions = [
+#       "kms:Decrypt",
+#       "kms:GenerateDataKey",
+#     ]
+
+#     resources = ["*"]
+#   }
+#   statement {
+#     effect = "Allow"
+
+#     actions = [
+#       "dynamodb:Query"
+#     ]
+
+#     resources = ["*"]
+
+#   }
+# }
+
+# resource "aws_iam_policy" "alert_handler_role" {
+#   description = "IAM permissions required for Node alert Publisher functions"
+#   path        = "/${var.resource_prefix}-lambda/"
+#   policy      = data.aws_iam_policy_document.alert_handler_role.json
+# }
+
+# resource "aws_iam_role_policy_attachment" "alert_handler_role" {
+#   role       = aws_iam_role.alert_handler_role.name
+#   policy_arn = aws_iam_policy.alert_handler_role.arn
+# }
+
+# ## Alarm Handler ##
+# resource "aws_iam_role" "alarm_handler_role" {
+#   name               = "${var.resource_prefix}-alarm-handler"
+#   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+#   tags               = local.tags
+# }
+
+# resource "aws_iam_role_policy_attachment" "alarm_handler_role_basic" {
+#   role       = aws_iam_role.alarm_handler_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+# }
+
+# data "aws_iam_policy_document" "alarm_handler_role" {
+#   statement {
+#     effect = "Allow"
+
+#     actions = [
+#       "lambda:InvokeFunction"
+#     ]
+
+#     resources = ["*"]
+
+#   }
+# }
+
+# resource "aws_iam_policy" "alarm_handler_role" {
+#   description = "IAM permissions required for Node alarm Publisher functions"
+#   path        = "/${var.resource_prefix}-lambda/"
+#   policy      = data.aws_iam_policy_document.alarm_handler_role.json
+# }
+
+# resource "aws_iam_role_policy_attachment" "alarm_handler_role" {
+#   role       = aws_iam_role.alarm_handler_role.name
+#   policy_arn = aws_iam_policy.alarm_handler_role.arn
+# }
+
+## US-EAST-1
+resource "aws_cloudwatch_event_rule" "alarm_distribution" {
+  name        = "${var.resource_prefix}-alarm-distribution"
+  description = "CloudWatch Alarm State Change"
+
+  event_pattern = <<EOF
+{
+  "detail-type": [
+    "CloudWatch Alarm State Change"
+  ],
+  "source": "aws.cloudwatch",
+  "account": "${data.aws_caller_identity.current.account_id}",
+    "detail": {
+    "alarmName": [{"prefix": "TENANT~"}],
   }
-
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "kms:Decrypt",
-      "kms:GenerateDataKey",
-    ]
-
-    resources = ["*"]
-  }
 }
-
-resource "aws_iam_policy" "error_handler_role" {
-  description = "IAM permissions required for Node Error Publisher functions"
-  path        = "/${var.resource_prefix}-lambda/"
-  policy      = data.aws_iam_policy_document.error_handler_role.json
-}
-
-resource "aws_iam_role_policy_attachment" "error_handler_role" {
-  role       = aws_iam_role.error_handler_role.name
-  policy_arn = aws_iam_policy.error_handler_role.arn
-}
-
-## Alert Handler ##
-resource "aws_iam_role" "alert_handler_role" {
-  name               = "${var.resource_prefix}-bndler"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
-  tags               = local.tags
-}
-
-resource "aws_iam_role_policy_attachment" "alert_handler_role_basic" {
-  role       = aws_iam_role.alert_handler_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
-
-data "aws_iam_policy_document" "alert_handler_role" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "sns:Publish"
-    ]
-
-    resources = ["*"]
-
-  }
-
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "lambda:GetFunction"
-    ]
-
-    resources = ["*"]
-
-  }
-
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "kms:Decrypt",
-      "kms:GenerateDataKey",
-    ]
-
-    resources = ["*"]
-  }
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "dynamodb:Query"
-    ]
-
-    resources = ["*"]
-
-  }
-}
-
-resource "aws_iam_policy" "alert_handler_role" {
-  description = "IAM permissions required for Node alert Publisher functions"
-  path        = "/${var.resource_prefix}-lambda/"
-  policy      = data.aws_iam_policy_document.alert_handler_role.json
-}
-
-resource "aws_iam_role_policy_attachment" "alert_handler_role" {
-  role       = aws_iam_role.alert_handler_role.name
-  policy_arn = aws_iam_policy.alert_handler_role.arn
-}
-
-## Alarm Handler ##
-resource "aws_iam_role" "alarm_handler_role" {
-  name               = "${var.resource_prefix}-alarm-handler"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
-  tags               = local.tags
-}
-
-resource "aws_iam_role_policy_attachment" "alarm_handler_role_basic" {
-  role       = aws_iam_role.alarm_handler_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
-
-data "aws_iam_policy_document" "alarm_handler_role" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "lambda:InvokeFunction"
-    ]
-
-    resources = ["*"]
-
-  }
-}
-
-resource "aws_iam_policy" "alarm_handler_role" {
-  description = "IAM permissions required for Node alarm Publisher functions"
-  path        = "/${var.resource_prefix}-lambda/"
-  policy      = data.aws_iam_policy_document.alarm_handler_role.json
-}
-
-resource "aws_iam_role_policy_attachment" "alarm_handler_role" {
-  role       = aws_iam_role.alarm_handler_role.name
-  policy_arn = aws_iam_policy.alarm_handler_role.arn
+EOF
+  tags          = local.tags
+  provider            = aws.us-east-1
 }
