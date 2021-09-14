@@ -158,15 +158,17 @@ resource "aws_cloudwatch_event_rule" "alarm_distribution" {
   event_pattern = <<EOF
 {
   "detail-type": [
-    "CloudWatch Alarm State Change"
-  ],
-  "source": "aws.cloudwatch",
-  "account": "${data.aws_caller_identity.current.account_id}",
-    "detail": [
-    "alarmName": [{"prefix": "TENANT~"}],
+    "AWS Console Sign In via CloudTrail"
   ]
 }
 EOF
-  tags          = local.tags
-  provider      = aws.us-east-1
+
+  tags     = local.tags
+  provider = aws.us-east-1
+}
+
+resource "aws_cloudwatch_event_target" "alarm_distribution" {
+  rule      = aws_cloudwatch_event_rule.alarm_distribution.name
+  target_id = "SendToSNS"
+  arn       = aws_sns_topic.alarms.arn
 }
