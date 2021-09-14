@@ -162,11 +162,11 @@ resource "aws_cloudwatch_event_rule" "alarm_distribution" {
   ],
   "source": "aws.cloudwatch",
   "account": "${data.aws_caller_identity.current.account_id}",
-    "detail": {
+    "detail": [
     "alarmName": [{"prefix": "TENANT~"}],
-  }
+  ]
 }
 EOF
   tags          = local.tags
-  provider            = aws.us-east-1
+  provider      = aws.us-east-1
 }
