@@ -4,19 +4,26 @@ resource "aws_cloudwatch_event_rule" "alarm_distribution" {
 
   event_pattern = <<EOF
 {
-  "detail-type": [
-    "CloudWatch Alarm State Change"
-  ],
-    "source": [
-    "aws.cloudwatch"
-  ],
     "account": [
-    "${var.account_id}"
-  ]
+        "${var.account_id}"
+    ],
+    "detail-type": [
+        "CloudWatch Alarm State Change"
+    ],
+    "source": [
+        "aws.cloudwatch"
+    ],
+    "detail": {
+        "alarmName": [
+            {
+                "prefix": "TENANT~"
+            }
+        ]
+    }
 }
 EOF
 
-  tags     = var.tags
+  tags = var.tags
 }
 
 resource "aws_cloudwatch_event_target" "alarm_distribution" {
