@@ -23,3 +23,22 @@ resource "aws_sns_topic" "alarms" {
   display_name = "${var.resource_prefix} Alarms"
   tags         = local.tags
 }
+
+resource "aws_sns_topic_policy" "alarms" {
+  arn    = aws_sns_topic.alarms.arn
+  policy = data.aws_iam_policy_document.alarms_sns_topic.json
+}
+
+data "aws_iam_policy_document" "alarms_sns_topic" {
+  statement {
+    effect  = "Allow"
+    actions = ["SNS:Publish"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["events.amazonaws.com"]
+    }
+
+    resources = [aws_sns_topic.alarms.arn]
+  }
+}
