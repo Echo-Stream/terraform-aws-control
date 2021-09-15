@@ -18,21 +18,21 @@ provider "aws" {
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "us-east-2"
-  alias               = "us-east-2"
+  alias               = "ohio"
 }
 
 # us-west-1 aws provider
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "us-west-1"
-  alias               = "us-west-1"
+  alias               = "north-california"
 }
 
 # us-west-2 aws provider
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "us-west-2"
-  alias               = "us-west-2"
+  alias               = "oregon"
 }
 
 ########################### Africa ######################################
@@ -40,7 +40,7 @@ provider "aws" {
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "af-south-1"
-  alias               = "af-south-1"
+  alias               = "cape-town"
 }
 
 ########################### Asia Pacific #################################
@@ -48,21 +48,21 @@ provider "aws" {
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "ap-east-1"
-  alias               = "ap-east-1"
+  alias               = "hongkong"
 }
 
 # ap-south-1 aws provider
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "ap-south-1"
-  alias               = "ap-south-1"
+  alias               = "mumbai"
 }
 
 # ap-northeast-2 aws provider
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "ap-northeast-2"
-  alias               = "ap-northeast-2"
+  alias               = "osaka"
 }
 
 # ap-southeast-1 aws provider

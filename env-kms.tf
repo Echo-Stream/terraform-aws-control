@@ -21,7 +21,7 @@ resource "aws_kms_key" "kms_us_east_2" {
   count               = contains(local.regions, "us-east-2") == true ? 1 : 0
   description         = "Encryption key for ${var.resource_prefix}"
   enable_key_rotation = true
-  provider            = aws.us-east-2
+  provider            = aws.ohio
   tags                = local.tags
 }
 
@@ -29,7 +29,7 @@ resource "aws_kms_alias" "kms_us_east_2" {
   count         = contains(local.regions, "us-east-2") == true ? 1 : 0
   name          = "alias/${var.resource_prefix}"
   target_key_id = aws_kms_key.kms_us_east_2.0.key_id
-  provider      = aws.us-east-2
+  provider      = aws.ohio
 }
 
 
@@ -38,7 +38,7 @@ resource "aws_kms_key" "kms_us_west_1" {
   count               = contains(local.regions, "us-west-1") == true ? 1 : 0
   description         = "Encryption key for ${var.resource_prefix}"
   enable_key_rotation = true
-  provider            = aws.us-west-1
+  provider            = aws.north-california
   tags                = local.tags
 }
 
@@ -46,7 +46,7 @@ resource "aws_kms_alias" "kms_us_west_1" {
   count         = contains(local.regions, "us-west-1") == true ? 1 : 0
   name          = "alias/${var.resource_prefix}"
   target_key_id = aws_kms_key.kms_us_west_1.0.key_id
-  provider      = aws.us-west-1
+  provider      = aws.north-california
 }
 
 ## US-WEST-2
@@ -54,7 +54,7 @@ resource "aws_kms_key" "kms_us_west_2" {
   count               = contains(local.regions, "us-west-2") == true ? 1 : 0
   description         = "Encryption key for ${var.resource_prefix}"
   enable_key_rotation = true
-  provider            = aws.us-west-2
+  provider            = aws.oregon
   tags                = local.tags
 }
 
@@ -62,7 +62,7 @@ resource "aws_kms_alias" "kms_us_west_2" {
   count         = contains(local.regions, "us-west-2") == true ? 1 : 0
   name          = "alias/${var.resource_prefix}"
   target_key_id = aws_kms_key.kms_us_west_2.0.key_id
-  provider      = aws.us-west-2
+  provider      = aws.oregon
 }
 
 ## AF-SOUTH-1
@@ -70,7 +70,7 @@ resource "aws_kms_key" "kms_af_south_1" {
   count               = contains(local.regions, "af-south-1") == true ? 1 : 0
   description         = "Encryption key for ${var.resource_prefix}"
   enable_key_rotation = true
-  provider            = aws.af-south-1
+  provider            = aws.cape-town
   tags                = local.tags
 }
 
@@ -78,7 +78,7 @@ resource "aws_kms_alias" "kms_af_south_1" {
   count         = contains(local.regions, "af-south-1") == true ? 1 : 0
   name          = "alias/${var.resource_prefix}"
   target_key_id = aws_kms_key.kms_af_south_1.0.key_id
-  provider      = aws.af-south-1
+  provider      = aws.cape-town
 }
 
 ## AP-EAST-1
@@ -86,7 +86,7 @@ resource "aws_kms_key" "kms_ap_east_1" {
   count               = contains(local.regions, "ap-east-1") == true ? 1 : 0
   description         = "Encryption key for ${var.resource_prefix}"
   enable_key_rotation = true
-  provider            = aws.ap-east-1
+  provider            = aws.hongkong
   tags                = local.tags
 }
 
@@ -94,7 +94,7 @@ resource "aws_kms_alias" "kms_ap_east_1" {
   count         = contains(local.regions, "ap-east-1") == true ? 1 : 0
   name          = "alias/${var.resource_prefix}"
   target_key_id = aws_kms_key.kms_ap_east_1.0.key_id
-  provider      = aws.ap-east-1
+  provider      = aws.hongkong
 }
 
 ## AP-SOUTH-1
@@ -102,7 +102,7 @@ resource "aws_kms_key" "kms_ap_south_1" {
   count               = contains(local.regions, "ap-south-1") == true ? 1 : 0
   description         = "Encryption key for ${var.resource_prefix}"
   enable_key_rotation = true
-  provider            = aws.ap-south-1
+  provider            = aws.mumbai
   tags                = local.tags
 }
 
@@ -110,7 +110,7 @@ resource "aws_kms_alias" "kms_ap_south_1" {
   count         = contains(local.regions, "ap-south-1") == true ? 1 : 0
   name          = "alias/${var.resource_prefix}"
   target_key_id = aws_kms_key.kms_ap_south_1.0.key_id
-  provider      = aws.ap-south-1
+  provider      = aws.mumbai
 }
 
 ## AP-NORTHEAST-2
@@ -118,7 +118,7 @@ resource "aws_kms_key" "kms_ap_northeast_2" {
   count               = contains(local.regions, "ap-northeast-2") == true ? 1 : 0
   description         = "Encryption key for ${var.resource_prefix}"
   enable_key_rotation = true
-  provider            = aws.ap-northeast-2
+  provider            = aws.osaka
   tags                = local.tags
 }
 
@@ -126,7 +126,7 @@ resource "aws_kms_alias" "kms_ap_northeast_2" {
   count         = contains(local.regions, "ap-northeast-2") == true ? 1 : 0
   name          = "alias/${var.resource_prefix}"
   target_key_id = aws_kms_key.kms_ap_northeast_2.0.key_id
-  provider      = aws.ap-northeast-2
+  provider      = aws.osaka
 }
 
 ## AP-SOUTHEAST-1 

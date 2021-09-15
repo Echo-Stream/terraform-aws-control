@@ -44,7 +44,7 @@ module "alarm_distribution_us_east_2" {
   tags                = local.tags
 
   providers = {
-    aws = aws.us-east-2
+    aws = aws.ohio
   }
 
   source = "./_modules/alarm-distributions"
@@ -58,7 +58,7 @@ module "alarm_distribution_" {
   tags                = local.tags
 
   providers = {
-    aws = aws.us-west-1
+    aws = aws.north-california
   }
 
   source = "./_modules/alarm-distributions"

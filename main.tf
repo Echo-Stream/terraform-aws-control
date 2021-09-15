@@ -42,7 +42,7 @@ module "log_bucket_us_east_2" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.us-east-2
+    aws = aws.ohio
   }
 }
 
@@ -53,7 +53,7 @@ module "log_bucket_us_west_1" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.us-west-1
+    aws = aws.north-california
   }
 }
 
@@ -64,7 +64,7 @@ module "log_bucket_us_west_2" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.us-west-2
+    aws = aws.oregon
   }
 }
 
@@ -76,7 +76,7 @@ module "log_bucket_af_south_1" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.af-south-1
+    aws = aws.cape-town
   }
 }
 
@@ -88,7 +88,7 @@ module "log_bucket_ap_east_1" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.ap-east-1
+    aws = aws.hongkong
   }
 }
 
@@ -99,7 +99,7 @@ module "log_bucket_ap_south_1" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.ap-south-1
+    aws = aws.mumbai
   }
 }
 
@@ -110,7 +110,7 @@ module "log_bucket_ap_northeast_2" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.ap-northeast-2
+    aws = aws.osaka
   }
 }
 

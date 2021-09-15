@@ -79,7 +79,7 @@ module "bulk_data_bucket_us_east_2" {
   tags        = local.tags
 
   providers = {
-    aws = aws.us-east-2
+    aws = aws.ohio
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -94,7 +94,7 @@ module "bulk_data_bucket_us_west_1" {
   tags        = local.tags
 
   providers = {
-    aws = aws.us-west-1
+    aws = aws.north-california
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -109,7 +109,7 @@ module "bulk_data_bucket_us_west_2" {
   tags        = local.tags
 
   providers = {
-    aws = aws.us-west-2
+    aws = aws.oregon
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -125,7 +125,7 @@ module "bulk_data_bucket_af_south_1" {
   tags        = local.tags
 
   providers = {
-    aws = aws.af-south-1
+    aws = aws.cape-town
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -142,7 +142,7 @@ module "bulk_data_bucket_ap_east_1" {
   tags        = local.tags
 
   providers = {
-    aws = aws.ap-east-1
+    aws = aws.hongkong
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -158,7 +158,7 @@ module "bulk_data_bucket_ap_south_1" {
   tags        = local.tags
 
   providers = {
-    aws = aws.ap-south-1
+    aws = aws.mumbai
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -175,7 +175,7 @@ module "bulk_data_bucket_ap_northeast_2" {
   tags        = local.tags
 
   providers = {
-    aws = aws.ap-northeast-2
+    aws = aws.osaka
   }
 
   source = "./_modules/bulk-data-buckets"
