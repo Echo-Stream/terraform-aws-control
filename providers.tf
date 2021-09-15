@@ -11,7 +11,7 @@ provider "aws" {
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "us-east-1"
-  alias               = "us-east-1"
+  alias               = "north-virginia"
 }
 
 # us-east-2 aws provider

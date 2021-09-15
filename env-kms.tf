@@ -5,7 +5,7 @@ resource "aws_kms_key" "kms_us_east_1" {
   count               = contains(local.regions, "us-east-1") == true ? 1 : 0
   description         = "Encryption key for ${var.resource_prefix}"
   enable_key_rotation = true
-  provider            = aws.us-east-1
+  provider            = aws.north-virginia
   tags                = local.tags
 }
 
@@ -13,7 +13,7 @@ resource "aws_kms_alias" "kms_us_east_1" {
   count         = contains(local.regions, "us-east-1") == true ? 1 : 0
   name          = "alias/${var.resource_prefix}"
   target_key_id = aws_kms_key.kms_us_east_1.0.key_id
-  provider      = aws.us-east-1
+  provider      = aws.north-virginia
 }
 
 ## US-EAST-2

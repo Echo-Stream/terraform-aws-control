@@ -31,7 +31,7 @@ module "log_bucket_us_east_1" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.us-east-1
+    aws = aws.north-virginia
   }
 }
 

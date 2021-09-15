@@ -64,7 +64,7 @@ module "bulk_data_bucket_us_east_1" {
   tags        = local.tags
 
   providers = {
-    aws = aws.us-east-1
+    aws = aws.north-virginia
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -114,7 +114,6 @@ module "bulk_data_bucket_us_west_2" {
 
   source = "./_modules/bulk-data-buckets"
 }
-
 
 ## AF-SOUTH-1
 
