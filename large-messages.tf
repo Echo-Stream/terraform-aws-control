@@ -192,7 +192,7 @@ module "bulk_data_bucket_ap_southeast_1" {
   tags        = local.tags
 
   providers = {
-    aws = aws.ap-southeast-1
+    aws = aws.singapore
   }
 
   source = "./_modules/bulk-data-buckets"

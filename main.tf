@@ -121,7 +121,7 @@ module "log_bucket_ap_southeast_1" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.ap-southeast-1
+    aws = aws.singapore
   }
 }
 

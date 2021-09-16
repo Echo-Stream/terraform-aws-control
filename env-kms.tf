@@ -135,7 +135,7 @@ resource "aws_kms_key" "kms_ap_southeast_1" {
   count               = contains(local.regions, "ap-southeast-1") == true ? 1 : 0
   description         = "Encryption key for ${var.resource_prefix}"
   enable_key_rotation = true
-  provider            = aws.ap-southeast-1
+  provider            = aws.singapore
   tags                = local.tags
 }
 
@@ -143,7 +143,7 @@ resource "aws_kms_alias" "kms_ap_southeast_1" {
   count         = contains(local.regions, "ap-southeast-1") == true ? 1 : 0
   name          = "alias/${var.resource_prefix}"
   target_key_id = aws_kms_key.kms_ap_southeast_1.0.key_id
-  provider      = aws.ap-southeast-1
+  provider      = aws.singapore
 }
 
 ## AP-SOUTHEAST-2
