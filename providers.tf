@@ -76,14 +76,14 @@ provider "aws" {
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "ap-southeast-2"
-  alias               = "ap-southeast-2"
+  alias               = "sydney"
 }
 
 # ap-northeast-1 aws provider
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "ap-northeast-1"
-  alias               = "ap-northeast-1"
+  alias               = "tokyo"
 }
 
 ########################## Canada ###################################
@@ -91,7 +91,7 @@ provider "aws" {
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "ca-central-1"
-  alias               = "ca-central-1"
+  alias               = "central"
 }
 
 ########################## Europe ################################### 
@@ -99,42 +99,42 @@ provider "aws" {
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "eu-central-1"
-  alias               = "eu-central-1"
+  alias               = "frankfurt"
 }
 
 # eu-west-1 aws provider
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "eu-west-1"
-  alias               = "eu-west-1"
+  alias               = "ireland"
 }
 
 # eu-west-2 aws provider
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "eu-west-2"
-  alias               = "eu-west-2"
+  alias               = "london"
 }
 
 # eu-south-1 aws provider
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "eu-south-1"
-  alias               = "eu-south-1"
+  alias               = "milan"
 }
 
 # eu-west-3 aws provider
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "eu-west-3"
-  alias               = "eu-west-3"
+  alias               = "paris"
 }
 
 # eu-north-1 aws provider
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "eu-north-1"
-  alias               = "eu-north-1"
+  alias               = "stockholm"
 }
 
 ########################## Middle East ################################### 
@@ -142,7 +142,7 @@ provider "aws" {
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "me-south-1"
-  alias               = "me-south-1"
+  alias               = "bahrain"
 }
 
 ########################## South America #################################
@@ -150,5 +150,5 @@ provider "aws" {
 provider "aws" {
   allowed_account_ids = [var.allowed_account_id]
   region              = "sa-east-1"
-  alias               = "sa-east-1"
+  alias               = "sao-paulo"
 }
