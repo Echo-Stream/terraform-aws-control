@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "internal_node_sts_assume" {
 
     resources = [aws_iam_role.update_code.arn]
 
-    sid = "Set_AWSUserName_as_SourceIdentity"
+    sid = "SetSourceIdentity"
 
     condition {
       test = "StringLike"
