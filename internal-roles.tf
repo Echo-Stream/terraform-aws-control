@@ -89,21 +89,6 @@ data "aws_iam_policy_document" "internal_node_validator_common_access" {
 
     sid = "GraphTableAccess"
   }
-
-  statement {
-    actions = [
-      "s3:GetObject*",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${var.echostream_version}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${var.echostream_version}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${var.echostream_version}/*",
-
-    ]
-
-    sid = "GetArtifacts"
-  }
 }
 
 resource "aws_iam_policy" "internal_node" {
@@ -195,6 +180,11 @@ resource "aws_iam_role" "update_code" {
   name               = "${var.resource_prefix}-update-code"
   assume_role_policy = data.aws_iam_policy_document.conditional_lambda_assume_role.json
   tags               = local.tags
+}
+
+resource "aws_iam_role_policy_attachment" "update_code_basic" {
+  role       = aws_iam_role.update_code.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 data "aws_iam_policy_document" "update_code" {
