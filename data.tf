@@ -77,3 +77,19 @@ data "aws_iam_policy_document" "aws_glue_assume_role" {
     }
   }
 }
+
+data "aws_iam_policy_document" "state_machine_assume_role" {
+  statement {
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    principals {
+      identifiers = [
+        "states.amazonaws.com",
+      ]
+
+      type = "Service"
+    }
+  }
+}

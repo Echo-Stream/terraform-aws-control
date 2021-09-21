@@ -292,3 +292,33 @@ module "rebuild_notifications" {
   timeout       = 600
   version       = "3.0.14"
 }
+
+resource "aws_sqs_queue" "rebuild_notifications" {
+  name                      = "${var.resource_prefix}-rebuild-notifications"
+  delay_seconds             = 90
+  max_message_size          = 2048
+  message_retention_seconds = 1209600
+  receive_wait_time_seconds = 10
+  tags                      = local.tags
+}
+
+resource "aws_iam_role" "rebuild_notifications_state_machine" {
+  assume_role_policy = data.aws_iam_policy_document.state_machine_assume_role.json
+  name               = "${var.resource_prefix}-rebuild-notifications"
+  tags               = local.tags
+}
+
+data "template_file" "rebuild_notifications_state_machine" {
+  template = file("${path.module}/files/rebuild-notifications-state-machine.json")
+
+  vars = {
+    function_arn = module.rebuild_notifications.arn
+  }
+}
+
+resource "aws_sfn_state_machine" "rebuild_notifications" {
+  definition = data.template_file.rebuild_notifications_state_machine.rendered
+  name       = "${var.resource_prefix}-rebuild-notifications"
+  role_arn   = aws_iam_role.rebuild_notifications_state_machine.arn
+  tags       = local.tags
+}
