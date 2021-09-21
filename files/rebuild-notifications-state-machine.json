@@ -1,14 +1,15 @@
 {
-    "Comment": "Reads Echo Items on the SQS queue and rebuilds the respective AWS resources",
-    "StartAt": "CheckEchoItemToProcess",
-    "States": {
-      "CheckEchoItemToProcess": {
-        "Type": "Task",
-        "Resource": "${function_arn}",
-        "Parameters": {
-            "QueueArn" : "${queue_arn}"
-        },
-        "End": true
-      }
+  "Comment": "Reads Echo Items on the SQS queue and rebuilds the respective AWS resources",
+  "StartAt": "CheckEchoItemToProcess",
+  "States": {
+    "CheckSQS": {
+      "Type": "Task",
+      "Resource": "${function_arn}",
+      "Parameters": {
+        "TaskName": "CheckSQS",
+        "QueueUrl": "${queue_url}"
+      },
+      "End": true
     }
   }
+}

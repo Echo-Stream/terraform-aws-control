@@ -311,6 +311,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
       "lambda:ListFunctions",
       "lambda:PublishLayerVersion",
       "lambda:UpdateFunctionConfiguration",
+      "lambda:Invoke",
     ]
 
     resources = [
@@ -539,6 +540,7 @@ data "aws_iam_policy_document" "graph_table_system_stream_handler" {
       "lambda:ListFunctions",
       "lambda:PublishLayerVersion",
       "lambda:UpdateFunctionConfiguration",
+      "lambda:Invoke",
     ]
 
     resources = [

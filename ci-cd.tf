@@ -326,7 +326,7 @@ data "template_file" "rebuild_notifications_state_machine" {
 
   vars = {
     function_arn = module.rebuild_notifications.arn
-    queue_arn    = aws_sqs_queue.rebuild_notifications.arn
+    queue_url   = aws_sqs_queue.rebuild_notifications.url
   }
 }
 
