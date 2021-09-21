@@ -344,7 +344,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
 
     resources = [
-      aws_iam_role.tenant_function.arn
+      aws_iam_role.internal_node.arn
     ]
 
     sid = "TenantFunctionRoleIAM"
@@ -572,7 +572,7 @@ data "aws_iam_policy_document" "graph_table_system_stream_handler" {
     ]
 
     resources = [
-      aws_iam_role.tenant_function.arn
+      aws_iam_role.internal_node.arn
     ]
 
     sid = "TenantFunctionRoleIAM"

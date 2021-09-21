@@ -1,18 +1,18 @@
 ############################
 ## Internal Functions IAM ##
 ############################
-resource "aws_iam_role" "tenant_function" {
-  name               = "${var.resource_prefix}-tenant-functions"
+resource "aws_iam_role" "internal_node" {
+  name               = "${var.resource_prefix}-internal-node"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
   tags               = local.tags
 }
 
-resource "aws_iam_role_policy_attachment" "tenant_function_basic" {
-  role       = aws_iam_role.tenant_function.name
+resource "aws_iam_role_policy_attachment" "internal_node_basic" {
+  role       = aws_iam_role.internal_node.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-data "aws_iam_policy_document" "tenant_function" {
+data "aws_iam_policy_document" "internal_node" {
   statement {
     effect = "Allow"
 
@@ -40,7 +40,7 @@ data "aws_iam_policy_document" "tenant_function" {
   }
 }
 
-data "aws_iam_policy_document" "tenant_function_db_access" {
+data "aws_iam_policy_document" "internal_node_db_access" {
   statement {
     effect = "Allow"
 
@@ -55,26 +55,26 @@ data "aws_iam_policy_document" "tenant_function_db_access" {
   }
 }
 
-resource "aws_iam_policy" "tenant_function" {
+resource "aws_iam_policy" "internal_node" {
   description = "IAM permissions required for tenant functions"
   path        = "/${var.resource_prefix}-lambda/"
-  policy      = data.aws_iam_policy_document.tenant_function.json
+  policy      = data.aws_iam_policy_document.internal_node.json
 }
 
-resource "aws_iam_role_policy_attachment" "tenant_function" {
-  role       = aws_iam_role.tenant_function.name
-  policy_arn = aws_iam_policy.tenant_function.arn
+resource "aws_iam_role_policy_attachment" "internal_node" {
+  role       = aws_iam_role.internal_node.name
+  policy_arn = aws_iam_policy.internal_node.arn
 }
 
-resource "aws_iam_policy" "tenant_function_db_access" {
+resource "aws_iam_policy" "internal_node_db_access" {
   description = "IAM permissions required for tenant functions to touch DB"
   path        = "/${var.resource_prefix}-lambda/"
-  policy      = data.aws_iam_policy_document.tenant_function_db_access.json
+  policy      = data.aws_iam_policy_document.internal_node_db_access.json
 }
 
-resource "aws_iam_role_policy_attachment" "tenant_function_db_access" {
-  role       = aws_iam_role.tenant_function.name
-  policy_arn = aws_iam_policy.tenant_function_db_access.arn
+resource "aws_iam_role_policy_attachment" "internal_node_db_access" {
+  role       = aws_iam_role.internal_node.name
+  policy_arn = aws_iam_policy.internal_node_db_access.arn
 }
 
 ###################
@@ -93,7 +93,7 @@ resource "aws_iam_role_policy_attachment" "validator_basic" {
 
 resource "aws_iam_role_policy_attachment" "validator_db" {
   role       = aws_iam_role.validator.name
-  policy_arn = aws_iam_policy.tenant_function_db_access.arn
+  policy_arn = aws_iam_policy.internal_node_db_access.arn
 }
 
 #####################
@@ -105,10 +105,15 @@ data "aws_iam_policy_document" "conditional_lambda_assume_role" {
       "sts:AssumeRole",
     ]
     principals {
+      # identifiers = [
+      #   "lambda.amazonaws.com",
+      # ]
+      # type = "Service"
       identifiers = [
-        "lambda.amazonaws.com",
+        aws_iam_role.internal_node.arn,
+        aws_iam_role.validator.arn,
       ]
-      type = "Service"
+      type = "AWS"
     }
 
     condition {
