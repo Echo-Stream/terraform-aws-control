@@ -40,6 +40,41 @@ data "aws_iam_policy_document" "internal_node" {
   }
 }
 
+data "aws_iam_policy_document" "internal_node_sts_assume" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    resources = [aws_iam_role.update_code.arn]
+
+    sid = "AssumeRole"
+  }
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sts:SetSourceIdentity",
+    ]
+
+    resources = [aws_iam_role.update_code.arn]
+
+    sid = "Set_AWSUserName_as_SourceIdentity"
+
+    condition {
+      test = "StringLike"
+      values = [
+        "518849732",
+        "296027047"
+      ]
+      variable = "sts:SourceIdentity"
+    }
+  }
+}
+
+
 data "aws_iam_policy_document" "internal_node_db_access" {
   statement {
     effect = "Allow"
@@ -64,6 +99,17 @@ resource "aws_iam_policy" "internal_node" {
 resource "aws_iam_role_policy_attachment" "internal_node" {
   role       = aws_iam_role.internal_node.name
   policy_arn = aws_iam_policy.internal_node.arn
+}
+
+resource "aws_iam_policy" "internal_node_sts_assume" {
+  description = "IAM permissions required for internal nodes to assume update code role"
+  path        = "/${var.resource_prefix}-lambda/"
+  policy      = data.aws_iam_policy_document.internal_node_sts_assume.json
+}
+
+resource "aws_iam_role_policy_attachment" "internal_node_sts_assume" {
+  role       = aws_iam_role.internal_node.name
+  policy_arn = aws_iam_policy.internal_node_sts_assume.arn
 }
 
 resource "aws_iam_policy" "internal_node_db_access" {
@@ -96,6 +142,10 @@ resource "aws_iam_role_policy_attachment" "validator_db" {
   policy_arn = aws_iam_policy.internal_node_db_access.arn
 }
 
+resource "aws_iam_role_policy_attachment" "validator_sts_assume" {
+  role       = aws_iam_role.validator.name
+  policy_arn = aws_iam_policy.internal_node_sts_assume.arn
+}
 #####################
 ## Update-Code IAM ##
 #####################
