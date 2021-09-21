@@ -304,7 +304,7 @@ resource "aws_sqs_queue" "rebuild_notifications" {
 
 resource "aws_iam_role" "rebuild_notifications_state_machine" {
   assume_role_policy = data.aws_iam_policy_document.state_machine_assume_role.json
-  name               = "${var.resource_prefix}-rebuild-notifications"
+  name               = "${var.resource_prefix}-rebuild-notifications-state-machine"
   tags               = local.tags
 }
 
