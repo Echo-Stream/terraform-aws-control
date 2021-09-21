@@ -208,7 +208,7 @@ module "bulk_data_bucket_ap_southeast_2" {
   tags        = local.tags
 
   providers = {
-    aws = aws.ap-southeast-2
+    aws = aws.sydney
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -224,7 +224,7 @@ module "bulk_data_bucket_ap_northeast_1" {
   tags        = local.tags
 
   providers = {
-    aws = aws.ap-northeast-1
+    aws = aws.tokyo
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -240,7 +240,7 @@ module "bulk_data_bucket_ca_central_1" {
   tags        = local.tags
 
   providers = {
-    aws = aws.ca-central-1
+    aws = aws.central
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -256,7 +256,7 @@ module "bulk_data_bucket_eu_central_1" {
   tags        = local.tags
 
   providers = {
-    aws = aws.eu-central-1
+    aws = aws.frankfurt
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -273,7 +273,7 @@ module "bulk_data_bucket_eu_west_1" {
   tags        = local.tags
 
   providers = {
-    aws = aws.eu-west-1
+    aws = aws.ireland
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -289,7 +289,7 @@ module "bulk_data_bucket_eu_west_2" {
   tags        = local.tags
 
   providers = {
-    aws = aws.eu-west-2
+    aws = aws.london
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -306,7 +306,7 @@ module "bulk_data_bucket_eu_south_1" {
   tags        = local.tags
 
   providers = {
-    aws = aws.eu-south-1
+    aws = aws.milan
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -323,7 +323,7 @@ module "bulk_data_bucket_eu_west_3" {
   tags        = local.tags
 
   providers = {
-    aws = aws.eu-west-3
+    aws = aws.paris
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -340,7 +340,7 @@ module "bulk_data_bucket_eu_north_1" {
   tags        = local.tags
 
   providers = {
-    aws = aws.eu-north-1
+    aws = aws.stockholm
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -357,7 +357,7 @@ module "bulk_data_bucket_me_south_1" {
   tags        = local.tags
 
   providers = {
-    aws = aws.me-south-1
+    aws = aws.bahrain
   }
 
   source = "./_modules/bulk-data-buckets"
@@ -374,7 +374,7 @@ module "bulk_data_bucket_sa_east_1" {
   tags        = local.tags
 
   providers = {
-    aws = aws.sa-east-1
+    aws = aws.sao-paulo
   }
 
   source = "./_modules/bulk-data-buckets"

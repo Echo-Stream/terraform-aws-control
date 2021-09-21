@@ -132,7 +132,7 @@ module "log_bucket_ap_southeast_2" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.ap-southeast-2
+    aws = aws.sydney
   }
 }
 
@@ -143,7 +143,7 @@ module "log_bucket_ap_northeast_1" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.ap-northeast-1
+    aws = aws.tokyo
   }
 }
 
@@ -155,7 +155,7 @@ module "log_bucket_ca_central_1" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.ca-central-1
+    aws = aws.central
   }
 }
 
@@ -167,7 +167,7 @@ module "log_bucket_eu_central_1" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.eu-central-1
+    aws = aws.frankfurt
   }
 }
 
@@ -178,7 +178,7 @@ module "log_bucket_eu_west_1" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.eu-west-1
+    aws = aws.ireland
   }
 }
 
@@ -189,7 +189,7 @@ module "log_bucket_eu_west_2" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.eu-west-2
+    aws = aws.london
   }
 }
 
@@ -200,7 +200,7 @@ module "log_bucket_eu_south_1" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.eu-south-1
+    aws = aws.milan
   }
 }
 
@@ -211,7 +211,7 @@ module "log_bucket_eu_west_3" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.eu-west-3
+    aws = aws.paris
   }
 }
 
@@ -222,7 +222,7 @@ module "log_bucket_eu_north_1" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.eu-north-1
+    aws = aws.stockholm
   }
 }
 
@@ -234,7 +234,7 @@ module "log_bucket_me_south_1" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.me-south-1
+    aws = aws.bahrain
   }
 }
 
@@ -246,7 +246,7 @@ module "log_bucket_sa_east_1" {
   version     = "3.0.2"
 
   providers = {
-    aws = aws.sa-east-1
+    aws = aws.sao-paulo
   }
 }
 
