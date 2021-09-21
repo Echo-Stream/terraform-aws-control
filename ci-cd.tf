@@ -209,3 +209,86 @@ resource "aws_sns_topic_subscription" "artifacts" {
   protocol  = "lambda"
   endpoint  = module.deployment_handler.arn
 }
+
+#############################
+##  Rebuild Notifications  ##
+#############################
+data "aws_iam_policy_document" "rebuild_notifications" {
+  statement {
+    actions = [
+      "lambda:CreateFunction",
+      "lambda:GetFunction",
+      "lambda:InvokeFunction",
+      "lambda:ListFunctions",
+      "lambda:PublishLayerVersion",
+      "lambda:PublishVersion",
+      "lambda:UpdateFunctionCode",
+      "lambda:UpdateFunctionConfiguration",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "LambdaDeployAccess"
+  }
+
+  statement {
+    actions = [
+      "s3:ListBucket",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2",
+    ]
+
+    sid = "ListArtifactsBucket"
+  }
+
+  statement {
+    actions = [
+      "s3:GetObject*",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${var.echostream_version}/*",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${var.echostream_version}/*",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${var.echostream_version}/*",
+
+    ]
+
+    sid = "GetArtifacts"
+  }
+}
+
+
+resource "aws_iam_policy" "rebuild_notifications" {
+  description = "IAM permissions required for deployment-handler lambda"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-deployment-handler"
+  policy      = data.aws_iam_policy_document.deployment_handler.json
+}
+
+module "rebuild_notifications" {
+  description           = "Rebuilds"
+  environment_variables = local.common_lambda_environment_variables
+  dead_letter_arn       = local.lambda_dead_letter_arn
+  handler               = "function.handler"
+  kms_key_arn           = local.lambda_env_vars_kms_key_arn
+  memory_size           = 256
+  name                  = "${var.resource_prefix}-deployment-handler"
+
+  policy_arns = [
+    aws_iam_policy.rebuild_notifications.arn,
+  ]
+
+  runtime       = "python3.9"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["rebuild_notifications"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 600
+  version       = "3.0.14"
+}
