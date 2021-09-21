@@ -114,8 +114,8 @@ data "aws_iam_policy_document" "conditional_lambda_assume_role" {
     condition {
       test = "StringEquals"
       values = [
-        "1811287156321588255",
-        "8418996027118263142"
+        "518849732",
+        "296027047"
       ]
       variable = "sts:SourceIdentity"
     }
