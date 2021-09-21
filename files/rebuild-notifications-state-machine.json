@@ -1,6 +1,6 @@
 {
   "Comment": "Reads Echo Items on the SQS queue and rebuilds the respective AWS resources",
-  "StartAt": "CheckEchoItemToProcess",
+  "StartAt": "CheckSQS",
   "States": {
     "CheckSQS": {
       "Type": "Task",
