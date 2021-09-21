@@ -267,7 +267,7 @@ data "aws_iam_policy_document" "rebuild_notifications" {
 resource "aws_iam_policy" "rebuild_notifications" {
   description = "IAM permissions required for deployment-handler lambda"
   path        = "/${var.resource_prefix}-lambda/"
-  name        = "${var.resource_prefix}-deployment-handler"
+  name        = "${var.resource_prefix}-rebuild-notifications"
   policy      = data.aws_iam_policy_document.deployment_handler.json
 }
 
@@ -278,7 +278,7 @@ module "rebuild_notifications" {
   handler               = "function.handler"
   kms_key_arn           = local.lambda_env_vars_kms_key_arn
   memory_size           = 256
-  name                  = "${var.resource_prefix}-deployment-handler"
+  name                  = "${var.resource_prefix}-rebuild-notifications"
 
   policy_arns = [
     aws_iam_policy.rebuild_notifications.arn,
