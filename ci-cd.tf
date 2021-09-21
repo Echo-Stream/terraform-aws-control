@@ -344,8 +344,8 @@ data "aws_iam_policy_document" "rebuild_notifications_state_machine" {
 }
 
 resource "aws_iam_role_policy" "rebuild_notifications_state_machine" {
-  policy = data.aws_iam_policy_document.unauthenticated_id_pool_policy.json
-  role   = aws_iam_role.unauthenticated.id
+  policy = data.aws_iam_policy_document.rebuild_notifications_state_machine.json
+  role   = aws_iam_role.rebuild_notifications_state_machine.id
 }
 
 resource "aws_sfn_state_machine" "rebuild_notifications" {
