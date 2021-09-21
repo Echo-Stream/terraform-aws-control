@@ -211,6 +211,21 @@ data "aws_iam_policy_document" "update_code" {
 
     sid = "UpdateLambda"
   }
+
+  statement {
+    actions = [
+      "s3:GetObject*",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${var.echostream_version}/*",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${var.echostream_version}/*",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${var.echostream_version}/*",
+
+    ]
+
+    sid = "GetArtifacts"
+  }
 }
 
 resource "aws_iam_policy" "update_code" {
