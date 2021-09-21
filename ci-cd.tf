@@ -282,7 +282,7 @@ resource "aws_iam_policy" "rebuild_notifications" {
   description = "IAM permissions required for deployment-handler lambda"
   path        = "/${var.resource_prefix}-lambda/"
   name        = "${var.resource_prefix}-rebuild-notifications"
-  policy      = data.aws_iam_policy_document.deployment_handler.json
+  policy      = data.aws_iam_policy_document.rebuild_notifications.json
 }
 
 module "rebuild_notifications" {
