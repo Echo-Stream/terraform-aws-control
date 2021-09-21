@@ -308,12 +308,11 @@ module "rebuild_notifications" {
 }
 
 resource "aws_sqs_queue" "rebuild_notifications" {
-  name                      = "${var.resource_prefix}-rebuild-notifications"
-  delay_seconds             = 90
-  max_message_size          = 2048
-  message_retention_seconds = 1209600
-  receive_wait_time_seconds = 10
-  tags                      = local.tags
+  content_based_deduplication = "true"
+  fifo_queue                  = true
+  name                        = "${var.resource_prefix}-rebuild-notifications"
+  tags                        = local.tags
+  visibility_timeout_seconds  = 3600
 }
 
 resource "aws_iam_role" "rebuild_notifications_state_machine" {
