@@ -152,7 +152,8 @@ resource "aws_iam_role_policy_attachment" "validator_sts_assume" {
 data "aws_iam_policy_document" "conditional_lambda_assume_role" {
   statement {
     actions = [
-      "sts:AssumeRole",
+        "sts:AssumeRole",
+        "sts:SetSourceIdentity"
     ]
     principals {
       # identifiers = [
