@@ -1,10 +1,13 @@
 {
-    "Comment": "A Hello World example of the Amazon States Language using an AWS Lambda Function",
-    "StartAt": "HelloWorld",
+    "Comment": "Reads Echo Items on the SQS queue and rebuilds the respective AWS resources",
+    "StartAt": "CheckEchoItemToProcess",
     "States": {
-      "HelloWorld": {
+      "CheckEchoItemToProcess": {
         "Type": "Task",
         "Resource": "${function_arn}",
+        "Parameters": {
+            "QueueArn" : "${queue_arn}"
+        },
         "End": true
       }
     }

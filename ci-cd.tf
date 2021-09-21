@@ -261,6 +261,20 @@ data "aws_iam_policy_document" "rebuild_notifications" {
 
     sid = "GetArtifacts"
   }
+
+    statement {
+    effect = "Allow"
+
+    actions = [
+      "sqs:ReceiveMessage*",
+      "sqs:DeleteMessage*",
+      "sqs:GetQueueAttributes"
+    ]
+
+    resources = [aws_sqs_queue.rebuild_notifications.arn]
+
+    sid = "EdgeQueuesAccess"
+  }
 }
 
 
@@ -313,6 +327,7 @@ data "template_file" "rebuild_notifications_state_machine" {
 
   vars = {
     function_arn = module.rebuild_notifications.arn
+    queue_arn = aws_sqs_queue.rebuild_notifications.arn
   }
 }
 
