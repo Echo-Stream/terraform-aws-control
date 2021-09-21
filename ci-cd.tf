@@ -262,7 +262,7 @@ data "aws_iam_policy_document" "rebuild_notifications" {
     sid = "GetArtifacts"
   }
 
-    statement {
+  statement {
     effect = "Allow"
 
     actions = [
@@ -327,8 +327,25 @@ data "template_file" "rebuild_notifications_state_machine" {
 
   vars = {
     function_arn = module.rebuild_notifications.arn
-    queue_arn = aws_sqs_queue.rebuild_notifications.arn
+    queue_arn    = aws_sqs_queue.rebuild_notifications.arn
   }
+}
+
+data "aws_iam_policy_document" "rebuild_notifications_state_machine" {
+  statement {
+
+    effect = "Allow"
+    actions = [
+      "lambda:InvokeFunction",
+    ]
+    resources = [module.rebuild_notifications.arn]
+    sid       = "InvokeLambda"
+  }
+}
+
+resource "aws_iam_role_policy" "rebuild_notifications_state_machine" {
+  policy = data.aws_iam_policy_document.unauthenticated_id_pool_policy.json
+  role   = aws_iam_role.unauthenticated.id
 }
 
 resource "aws_sfn_state_machine" "rebuild_notifications" {
