@@ -26,7 +26,7 @@
     },
     "Sleep": {
       "Type": "Wait",
-      "Seconds": "${sleep_time_in_seconds}",
+      "Seconds": 60,
       "Next": "RestartStateMachine"
     },
     "RestartStateMachine": {
