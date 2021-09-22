@@ -7,7 +7,7 @@
       "Type": "Task",
       "Resource": "${function_arn}",
       "Parameters": {
-        "TaskName": "CheckForMessages",
+        "TaskName": "CheckForMessages"
       },
       "Retry": [
         {
