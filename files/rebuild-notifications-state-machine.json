@@ -3,13 +3,39 @@
   "StartAt": "CheckSQS",
   "States": {
     "CheckSQS": {
+      "Comment": "Checks any New messages on the queue and processes it",
       "Type": "Task",
       "Resource": "${function_arn}",
       "Parameters": {
         "TaskName": "CheckSQS",
         "QueueUrl": "${queue_url}"
       },
-      "End": true
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "Sleep"
+    },
+    "Sleep": {
+      "Type": "Wait",
+      "Seconds": "${sleep_time_in_seconds}",
+      "Next": "RestartStateMachine"
+    },
+    "RestartStateMachine": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::states:startExecution",
+      "Parameters":{  
+        "StateMachineArn":"${my_arn}"
+       },
+       "End": true
     }
   }
 }
