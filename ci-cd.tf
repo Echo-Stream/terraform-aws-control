@@ -275,18 +275,6 @@ data "aws_iam_policy_document" "rebuild_notifications" {
 
     sid = "EdgeQueuesAccess"
   }
-
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "states:StartExecution",
-    ]
-
-    resources = ["arn:aws:states:${local.current_region}:${data.aws_caller_identity.current.account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"]
-
-    sid = "StateMachineAccess"
-  }
 }
 
 
@@ -353,6 +341,19 @@ data "aws_iam_policy_document" "rebuild_notifications_state_machine" {
     ]
     resources = [module.rebuild_notifications.arn]
     sid       = "InvokeLambda"
+  }
+
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "states:StartExecution",
+    ]
+
+    resources = ["arn:aws:states:${local.current_region}:${data.aws_caller_identity.current.account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"]
+
+    sid = "StateMachineAccess"
   }
 }
 
