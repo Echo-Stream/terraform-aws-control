@@ -40,6 +40,7 @@ locals {
     ID_TOKEN_KEY                  = local.id_token_key
     INTERNAL_NODE_CODE            = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
     INTERNAL_NODE_ROLE            = aws_iam_role.internal_node.arn
+    REBUILD_NOTIFICATION_QUEUE    = aws_sqs_queue.rebuild_notifications.url
     REGION                        = var.region
     SNS_TOPIC_ARN                 = aws_sns_topic.ci_cd_errors.arn
     SYSTEM_SQS_QUEUE              = aws_sqs_queue.system_sqs_queue.id

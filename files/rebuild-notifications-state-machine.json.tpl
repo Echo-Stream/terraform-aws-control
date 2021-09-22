@@ -6,10 +6,8 @@
       "Comment": "Check for any New messages on the queue and process it, if not go to sleep",
       "Type": "Task",
       "Resource": "${function_arn}",
-      "InputPath": "$",
       "Parameters": {
         "TaskName": "CheckForMessages",
-        "QueueUrl": "${queue_url}"
       },
       "Retry": [
         {
@@ -23,6 +21,12 @@
           "BackoffRate": 2
         }
       ],
+      "Next": "Process"
+    },
+    "Process": {
+      "Comment": "Process if any new messages",
+      "Type": "Task",
+      "Resource": "${function_arn}",
       "Next": "Sleep"
     },
     "Sleep": {
