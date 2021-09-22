@@ -3,7 +3,7 @@
   "StartAt": "CheckSQS",
   "States": {
     "CheckSQS": {
-      "Comment": "Checks any New messages on the queue and processes it",
+      "Comment": "Check for any New messages on the queue and process it, if not go to sleep",
       "Type": "Task",
       "Resource": "${function_arn}",
       "Parameters": {

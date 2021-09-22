@@ -285,7 +285,7 @@ data "aws_iam_policy_document" "rebuild_notifications" {
 
     resources = ["arn:aws:states:${local.current_region}:${data.aws_caller_identity.current.account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"]
 
-    sid = "EdgeQueuesAccess"
+    sid = "StateMachineAccess"
   }
 }
 
