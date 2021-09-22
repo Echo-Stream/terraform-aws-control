@@ -76,7 +76,7 @@ data "aws_iam_policy_document" "internal_node_sts_assume" {
 }
 
 
-data "aws_iam_policy_document" "internal_node_validator_common_access" {
+data "aws_iam_policy_document" "common_db_access" {
   statement {
     effect = "Allow"
 
@@ -113,15 +113,15 @@ resource "aws_iam_role_policy_attachment" "internal_node_sts_assume" {
   policy_arn = aws_iam_policy.internal_node_sts_assume.arn
 }
 
-resource "aws_iam_policy" "internal_node_validator_common_access" {
+resource "aws_iam_policy" "common_db_access" {
   description = "IAM permissions required for tenant functions to touch DB"
   path        = "/${var.resource_prefix}-lambda/"
-  policy      = data.aws_iam_policy_document.internal_node_validator_common_access.json
+  policy      = data.aws_iam_policy_document.common_db_access.json
 }
 
-resource "aws_iam_role_policy_attachment" "internal_node_validator_common_access" {
+resource "aws_iam_role_policy_attachment" "common_db_access" {
   role       = aws_iam_role.internal_node.name
-  policy_arn = aws_iam_policy.internal_node_validator_common_access.arn
+  policy_arn = aws_iam_policy.common_db_access.arn
 }
 
 ###################
@@ -140,7 +140,7 @@ resource "aws_iam_role_policy_attachment" "validator_basic" {
 
 resource "aws_iam_role_policy_attachment" "validator_db" {
   role       = aws_iam_role.validator.name
-  policy_arn = aws_iam_policy.internal_node_validator_common_access.arn
+  policy_arn = aws_iam_policy.common_db_access.arn
 }
 
 resource "aws_iam_role_policy_attachment" "validator_sts_assume" {
@@ -227,4 +227,9 @@ resource "aws_iam_policy" "update_code" {
 resource "aws_iam_role_policy_attachment" "update_code" {
   role       = aws_iam_role.update_code.name
   policy_arn = aws_iam_policy.update_code.arn
+}
+
+resource "aws_iam_role_policy_attachment" "update_code_db_access" {
+  role       = aws_iam_role.update_code.name
+  policy_arn = aws_iam_policy.common_db_access.arn
 }
