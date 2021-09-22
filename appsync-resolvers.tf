@@ -1352,6 +1352,15 @@ resource "aws_appsync_resolver" "message_type_validate" {
 }
 
 ## RouterNode
+resource "aws_appsync_resolver" "router_node_route_table" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "routeTable"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "RouterNode"
+}
+
 resource "aws_appsync_resolver" "router_node_config" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
