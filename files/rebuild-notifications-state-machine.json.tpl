@@ -1,13 +1,13 @@
 {
   "Comment": "Reads Echo Items on the SQS queue and rebuilds the respective AWS resources",
-  "StartAt": "CheckSQS",
+  "StartAt": "CheckForMessages",
   "States": {
-    "CheckSQS": {
+    "CheckForMessages": {
       "Comment": "Check for any New messages on the queue and process it, if not go to sleep",
       "Type": "Task",
       "Resource": "${function_arn}",
       "Parameters": {
-        "TaskName": "CheckSQS",
+        "TaskName": "CheckForMessages",
         "QueueUrl": "${queue_url}"
       },
       "Retry": [
