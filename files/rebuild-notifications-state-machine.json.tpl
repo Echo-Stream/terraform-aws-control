@@ -6,6 +6,7 @@
       "Comment": "Check for any New messages on the queue and process it, if not go to sleep",
       "Type": "Task",
       "Resource": "${function_arn}",
+      "InputPath": "$",
       "Parameters": {
         "TaskName": "CheckForMessages",
         "QueueUrl": "${queue_url}"
@@ -33,6 +34,7 @@
     "ReinvokeMyself": {
       "Type": "Task",
       "Resource": "arn:aws:states:::states:startExecution",
+      "InputPath": "$.lambda",
       "Parameters":{  
         "StateMachineArn":"${my_arn}"
        },
