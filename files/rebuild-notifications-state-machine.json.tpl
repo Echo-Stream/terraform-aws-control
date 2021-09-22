@@ -25,11 +25,12 @@
       "Next": "Sleep"
     },
     "Sleep": {
+      "Comment": "Sleep for ${sleep_time_in_seconds} seconds",
       "Type": "Wait",
-      "Seconds": 60,
-      "Next": "RestartStateMachine"
+      "Seconds": ${sleep_time_in_seconds},
+      "Next": "ReinvokeMyself"
     },
-    "RestartStateMachine": {
+    "ReinvokeMyself": {
       "Type": "Task",
       "Resource": "arn:aws:states:::states:startExecution",
       "Parameters":{  

@@ -334,12 +334,12 @@ resource "aws_iam_role" "rebuild_notifications_state_machine" {
 }
 
 data "template_file" "rebuild_notifications_state_machine" {
-  template = file("${path.module}/files/rebuild-notifications-state-machine.json")
+  template = file("${path.module}/files/rebuild-notifications-state-machine.json.tpl")
 
   vars = {
     function_arn          = module.rebuild_notifications.arn
     queue_url             = aws_sqs_queue.rebuild_notifications.url
-    sleep_time_in_seconds = "60"
+    sleep_time_in_seconds = 60
     my_arn                = "arn:aws:states:${local.current_region}:${data.aws_caller_identity.current.account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"
   }
 }
