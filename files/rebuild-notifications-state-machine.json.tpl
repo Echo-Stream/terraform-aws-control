@@ -21,9 +21,9 @@
 					"BackoffRate": 2
 				}
 			],
-			"Next": "Choice"
+			"Next": "ProcessOrSleep"
 		},
-		"Choice": {
+		"ProcessOrSleep": {
 			"Comment": "Conditional step to process message or go to sleep",
 			"Type": "Choice",
 			"Choices": [
