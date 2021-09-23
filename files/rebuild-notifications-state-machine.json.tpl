@@ -3,7 +3,7 @@
 	"StartAt": "CheckForMessages",
 	"States": {
 		"CheckForMessages": {
-			"Comment": "Check for any New messages on the queue and process it, if not go to sleep",
+			"Comment": "Check for any New message on the queue and process it, if not go to sleep",
 			"Type": "Task",
 			"Resource": "${function_arn}",
 			"Parameters": {
@@ -21,16 +21,16 @@
 					"BackoffRate": 2
 				}
 			],
-			"Next": "ProcessOrSleep"
+			"Next": "NotifyOrSleep"
 		},
-		"ProcessOrSleep": {
-			"Comment": "Conditional step to process message or go to sleep",
+		"NotifyOrSleep": {
+			"Comment": "Conditional step to process the message or go to sleep",
 			"Type": "Choice",
 			"Choices": [
 				{
 					"Variable": "$.new_messages",
 					"BooleanEquals": true,
-					"Next": "Process"
+					"Next": "Notify"
 				},
 				{
 					"Variable": "$.new_messages",
@@ -39,11 +39,11 @@
 				}
 			]
 		},
-		"Process": {
-			"Comment": "Process if any new messages",
+		"Notify": {
+			"Comment": "Notify if any new messages",
 			"Type": "Task",
       "Parameters": {
-				"task_name": "Process",
+				"task_name": "notify",
         "payload.$": "$.payload"
 			},
 			"Resource": "${function_arn}",
