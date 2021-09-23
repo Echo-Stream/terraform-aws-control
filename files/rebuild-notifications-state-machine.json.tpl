@@ -44,7 +44,7 @@
 			"Type": "Task",
       "Parameters": {
 				"task_name": "Process",
-        "Payload.$": "$.payload"
+        "payload.$": "$.payload"
 			},
 			"Resource": "${function_arn}",
 			"Next": "Sleep"
