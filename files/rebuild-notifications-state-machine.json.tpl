@@ -43,7 +43,7 @@
 			"Comment": "Process if any new messages",
 			"Type": "Task",
       "Parameters": {
-				"TaskName": "Process"
+				"TaskName": "Process",
         "Payload": "$.payload"
 			},
 			"Resource": "${function_arn}",
