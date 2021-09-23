@@ -7,7 +7,7 @@
 			"Type": "Task",
 			"Resource": "${function_arn}",
 			"Parameters": {
-				"TaskName": "CheckForMessages"
+				"task_name": "CheckForMessages"
 			},
 			"Retry": [
 				{
@@ -42,6 +42,10 @@
 		"Process": {
 			"Comment": "Process if any new messages",
 			"Type": "Task",
+      "Parameters": {
+				"TaskName": "Process"
+        "Payload": "$.payload"
+			},
 			"Resource": "${function_arn}",
 			"Next": "Sleep"
 		},
