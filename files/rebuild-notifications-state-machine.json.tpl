@@ -28,6 +28,19 @@
 			"Type": "Choice",
 			"Choices": [
 				{
+					"Or": [
+						{
+							"Variable": "$.new_messages",
+							"BooleanEquals": true
+						},
+						{
+							"Variable": "$.pagination_token",
+							"IsPresent": true
+						}
+					],
+					"Next": "Notify"
+				},
+				{
 					"Variable": "$.new_messages",
 					"BooleanEquals": true,
 					"Next": "Notify"
@@ -42,9 +55,10 @@
 		"Notify": {
 			"Comment": "Notify if any new messages",
 			"Type": "Task",
-      "Parameters": {
+			"Parameters": {
 				"task_name": "notify",
-        "payload.$": "$.payload"
+				"payload.$": "$.payload",
+				"pagination_token.$": "$.pagination_token"
 			},
 			"Resource": "${function_arn}",
 			"Next": "Sleep"
