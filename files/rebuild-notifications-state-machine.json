@@ -28,8 +28,7 @@
 			"Type": "Task",
 			"Parameters": {
 				"task_name": "notify",
-				"payload.$": "$.payload",
-				"pagination_token.$": "$.pagination_token"
+				"payload.$": "$.payload"
 			},
 			"Resource": "${function_arn}",
 			"Next": "NotifyNextSetOrReinvokeMyself"
@@ -39,7 +38,7 @@
 			"Type": "Choice",
 			"Choices": [
 				{
-					"Variable": "$.pagination_token",
+					"Variable": "$.payload.pagination_token",
 					"IsNull": false,
 					"Next": "Sleep"
 				}
