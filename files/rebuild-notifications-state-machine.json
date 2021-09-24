@@ -39,10 +39,8 @@
 			"Type": "Choice",
 			"Choices": [
 				{
-					"Not": {
-						"Variable": "$.pagination_token",
-						"StringEquals": "None"
-					},
+					"Variable": "$.pagination_token",
+					"IsNull": false,
 					"Next": "Sleep"
 				}
 			],
