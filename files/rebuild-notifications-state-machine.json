@@ -21,39 +21,22 @@
 					"BackoffRate": 2
 				}
 			],
-			"Next": "NotifyOrSleep"
+			"Next": "NotifyOrHibernate"
 		},
-		"NotifyOrSleep": {
-			"Comment": "Conditional step to process the message or go to sleep",
+		"NotifyOrHibernate": {
+			"Comment": "Conditional step to process the message or go for a short hibernation",
 			"Type": "Choice",
 			"Choices": [
-				{
-					"Or": [
-						{
-							"Variable": "$.new_messages",
-							"BooleanEquals": true
-						},
-						{
-							"Variable": "$.pagination_token",
-							"IsPresent": true
-						}
-					],
-					"Next": "Notify"
-				},
 				{
 					"Variable": "$.new_messages",
 					"BooleanEquals": true,
 					"Next": "Notify"
-				},
-				{
-					"Variable": "$.new_messages",
-					"BooleanEquals": false,
-					"Next": "Sleep"
 				}
-			]
+			],
+			"Default": "Hibernate"
 		},
 		"Notify": {
-			"Comment": "Notify if any new messages",
+			"Comment": "Notify 15 or less resources if there is a new message",
 			"Type": "Task",
 			"Parameters": {
 				"task_name": "notify",
@@ -61,13 +44,32 @@
 				"pagination_token.$": "$.pagination_token"
 			},
 			"Resource": "${function_arn}",
-			"Next": "Sleep"
+			"Next": "NotifyNextSetChoice"
+		},
+		"NotifyNextSetChoice": {
+			"Comment": "Conditional step to notify next 15 resources",
+			"Type": "Choice",
+			"Choices": [
+				{
+					"Variable": "$.pagination_token",
+					"IsNull": false,
+					"Next": "Sleep"
+				}
+			],
+			"Default": "ReinvokeMyself"
+		},
+		"Hibernate": {
+			"Comment": "Sleep for ${sleep_time_in_seconds} seconds",
+			"Type": "Wait",
+			"Seconds": ${sleep_time_in_seconds
+			},
+			"Next": "ReinvokeMyself"
 		},
 		"Sleep": {
 			"Comment": "Sleep for ${sleep_time_in_seconds} seconds",
 			"Type": "Wait",
-			"Seconds": ${sleep_time_in_seconds},
-			"Next": "ReinvokeMyself"
+			"Seconds": 1,
+			"Next": "Notify"
 		},
 		"ReinvokeMyself": {
 			"Type": "Task",

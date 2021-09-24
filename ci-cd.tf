@@ -322,7 +322,7 @@ resource "aws_iam_role" "rebuild_notifications_state_machine" {
 }
 
 data "template_file" "rebuild_notifications_state_machine" {
-  template = file("${path.module}/files/rebuild-notifications-state-machine.json.tpl")
+  template = file("${path.module}/files/rebuild-notifications-state-machine.json")
 
   vars = {
     function_arn          = module.rebuild_notifications.arn
