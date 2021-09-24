@@ -9,18 +9,6 @@
 			"Parameters": {
 				"task_name": "CheckForMessages"
 			},
-			"Retry": [
-				{
-					"ErrorEquals": [
-						"Lambda.ServiceException",
-						"Lambda.AWSLambdaException",
-						"Lambda.SdkClientException"
-					],
-					"IntervalSeconds": 2,
-					"MaxAttempts": 6,
-					"BackoffRate": 2
-				}
-			],
 			"Next": "NotifyOrHibernate"
 		},
 		"NotifyOrHibernate": {
@@ -61,8 +49,7 @@
 		"Hibernate": {
 			"Comment": "Sleep for ${sleep_time_in_seconds} seconds",
 			"Type": "Wait",
-			"Seconds": ${sleep_time_in_seconds
-			},
+			"Seconds": ${sleep_time_in_seconds},
 			"Next": "ReinvokeMyself"
 		},
 		"Sleep": {
