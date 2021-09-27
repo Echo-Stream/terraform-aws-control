@@ -25,20 +25,20 @@ output "appsync_url" {
   value       = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
 }
 
-output "apps_user_pool_id" {
-  description = "The ID of the apps cognito user pool"
-  value       = aws_cognito_user_pool.echostream_apps.id
-}
+# output "apps_user_pool_id" {
+#   description = "The ID of the apps cognito user pool"
+#   value       = aws_cognito_user_pool.echostream_apps.id
+# }
 
-output "apps_user_pool_arn" {
-  description = "The ARN of the apps cognito user pool"
-  value       = aws_cognito_user_pool.echostream_apps.arn
-}
+# output "apps_user_pool_arn" {
+#   description = "The ARN of the apps cognito user pool"
+#   value       = aws_cognito_user_pool.echostream_apps.arn
+# }
 
-output "apps_user_pool_endpoint" {
-  description = "Endpoint of the apps cognito user pool"
-  value       = aws_cognito_user_pool.echostream_apps.endpoint
-}
+# output "apps_user_pool_endpoint" {
+#   description = "Endpoint of the apps cognito user pool"
+#   value       = aws_cognito_user_pool.echostream_apps.endpoint
+# }
 
 output "apps_user_pool_client_id" {
   description = "The ID of the apps cognito user pool client"
@@ -66,15 +66,15 @@ output "ui_user_pool_client_id" {
   value       = aws_cognito_user_pool_client.echostream_ui_userpool_client.id
 }
 
-output "identity_pool_id" {
-  description = "EchoStream Identity pool ID"
-  value       = aws_cognito_identity_pool.echostream.id
-}
+# output "identity_pool_id" {
+#   description = "EchoStream Identity pool ID"
+#   value       = aws_cognito_identity_pool.echostream.id
+# }
 
-output "identity_pool_arn" {
-  description = "The ARN of the EchoStream identity pool"
-  value       = aws_cognito_identity_pool.echostream.arn
-}
+# output "identity_pool_arn" {
+#   description = "The ARN of the EchoStream identity pool"
+#   value       = aws_cognito_identity_pool.echostream.arn
+# }
 
 ## Cloudfront
 output "cloudfront_oai_id" {

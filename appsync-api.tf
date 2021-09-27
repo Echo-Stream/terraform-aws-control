@@ -17,7 +17,7 @@ resource "aws_appsync_graphql_api" "echostream" {
 
   user_pool_config {
     default_action = "ALLOW"
-    user_pool_id   = aws_cognito_user_pool.echostream_apps.id
+    user_pool_id   = aws_cognito_user_pool.echostream_api.id
   }
 
   additional_authentication_provider {

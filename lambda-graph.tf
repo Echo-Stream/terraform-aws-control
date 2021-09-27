@@ -255,7 +255,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
       "cognito-idp:ListUsers",
     ]
 
-    resources = [aws_cognito_user_pool.echostream_apps.arn,
+    resources = [aws_cognito_user_pool.echostream_api.arn,
       aws_cognito_user_pool.echostream_ui.arn,
     aws_cognito_user_pool.echostream_api.arn]
 

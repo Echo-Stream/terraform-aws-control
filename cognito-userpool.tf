@@ -1,61 +1,61 @@
-resource "aws_cognito_user_pool" "echostream_apps" {
-  admin_create_user_config {
-    allow_admin_create_user_only = true
+# resource "aws_cognito_user_pool" "echostream_apps" {
+#   admin_create_user_config {
+#     allow_admin_create_user_only = true
 
-    invite_message_template {
-      email_message = "Your username is {username} and temporary password is {####}. "
-      email_subject = "Your temporary password"
-      sms_message   = "Your username is {username} and temporary password is {####}. "
-    }
-  }
+#     invite_message_template {
+#       email_message = "Your username is {username} and temporary password is {####}. "
+#       email_subject = "Your temporary password"
+#       sms_message   = "Your username is {username} and temporary password is {####}. "
+#     }
+#   }
 
-  email_verification_message = "Your verification code is {####}. "
-  email_verification_subject = "Your verification code"
+#   email_verification_message = "Your verification code is {####}. "
+#   email_verification_subject = "Your verification code"
 
-  lifecycle {
-    ignore_changes = [
-      schema,
-      device_configuration,
-      account_recovery_setting
-    ]
+#   lifecycle {
+#     ignore_changes = [
+#       schema,
+#       device_configuration,
+#       account_recovery_setting
+#     ]
 
-    # prevent_destroy = true
-  }
+#     # prevent_destroy = true
+#   }
 
-  name = "${var.resource_prefix}-apps"
+#   name = "${var.resource_prefix}-apps"
 
-  lambda_config {
-    pre_authentication   = module.app_api_cognito_pre_authentication.arn
-    pre_token_generation = module.app_cognito_pre_token_generation.arn
-  }
+#   lambda_config {
+#     pre_authentication   = module.app_api_cognito_pre_authentication.arn
+#     pre_token_generation = module.app_cognito_pre_token_generation.arn
+#   }
 
-  password_policy {
-    minimum_length                   = 16
-    require_lowercase                = true
-    require_numbers                  = true
-    require_symbols                  = false
-    require_uppercase                = true
-    temporary_password_validity_days = 90
-  }
+#   password_policy {
+#     minimum_length                   = 16
+#     require_lowercase                = true
+#     require_numbers                  = true
+#     require_symbols                  = false
+#     require_uppercase                = true
+#     temporary_password_validity_days = 90
+#   }
 
-  tags = local.tags
-}
+#   tags = local.tags
+# }
 
-resource "aws_cognito_user_pool_client" "echostream_apps_userpool_client" {
-  name                   = "${var.resource_prefix}-apps"
-  refresh_token_validity = 30
+# resource "aws_cognito_user_pool_client" "echostream_apps_userpool_client" {
+#   name                   = "${var.resource_prefix}-apps"
+#   refresh_token_validity = 30
 
-  supported_identity_providers = [
-    "COGNITO",
-  ]
+#   supported_identity_providers = [
+#     "COGNITO",
+#   ]
 
-  user_pool_id = aws_cognito_user_pool.echostream_apps.id
+#   user_pool_id = aws_cognito_user_pool.echostream_apps.id
 
-  explicit_auth_flows = [
-    "ALLOW_REFRESH_TOKEN_AUTH",
-    "ALLOW_USER_SRP_AUTH"
-  ]
-}
+#   explicit_auth_flows = [
+#     "ALLOW_REFRESH_TOKEN_AUTH",
+#     "ALLOW_USER_SRP_AUTH"
+#   ]
+# }
 
 ### echostream-ui cognito pool
 resource "aws_cognito_user_pool" "echostream_ui" {

@@ -311,7 +311,7 @@ resource "aws_lambda_permission" "app_api_cognito_pre_authentication" {
   action        = "lambda:InvokeFunction"
   function_name = module.app_api_cognito_pre_authentication.name
   principal     = "cognito-idp.amazonaws.com"
-  source_arn    = aws_cognito_user_pool.echostream_apps.arn
+  source_arn    = aws_cognito_user_pool.echostream_api.arn
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "app_api_cognito_pre_authentication" {
