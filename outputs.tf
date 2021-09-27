@@ -40,10 +40,10 @@ output "appsync_url" {
 #   value       = aws_cognito_user_pool.echostream_apps.endpoint
 # }
 
-output "apps_user_pool_client_id" {
-  description = "The ID of the apps cognito user pool client"
-  value       = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
-}
+# output "apps_user_pool_client_id" {
+#   description = "The ID of the apps cognito user pool client"
+#   value       = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
+# }
 
 
 output "ui_user_pool_id" {

@@ -321,81 +321,81 @@ resource "aws_cloudwatch_log_subscription_filter" "app_api_cognito_pre_authentic
   destination_arn = module.control_alert_handler.arn
 }
 
-########################################
-##  app-cognito-pre-token-generation  ##
-########################################
-data "aws_iam_policy_document" "app_cognito_pre_token_generation" {
-  statement {
-    actions = [
-      "dynamodb:DescribeTable",
-      "dynamodb:GetItem",
-    ]
+# ########################################
+# ##  app-cognito-pre-token-generation  ##
+# ########################################
+# data "aws_iam_policy_document" "app_cognito_pre_token_generation" {
+#   statement {
+#     actions = [
+#       "dynamodb:DescribeTable",
+#       "dynamodb:GetItem",
+#     ]
 
-    resources = [
-      module.graph_table.arn,
-    ]
+#     resources = [
+#       module.graph_table.arn,
+#     ]
 
-    sid = "TableAccess"
-  }
+#     sid = "TableAccess"
+#   }
 
-  statement {
-    actions = [
-      "cloudwatch:PutMetricData",
-    ]
+#   statement {
+#     actions = [
+#       "cloudwatch:PutMetricData",
+#     ]
 
-    resources = [
-      "*",
-    ]
+#     resources = [
+#       "*",
+#     ]
 
-    sid = "CWPutMetrics"
-  }
-}
+#     sid = "CWPutMetrics"
+#   }
+# }
 
-resource "aws_iam_policy" "app_cognito_pre_token_generation" {
-  description = "IAM permissions required for app-cognito-pre-token-generation lambda"
-  path        = "/${var.resource_prefix}-lambda/"
-  name        = "${var.resource_prefix}-app-cognito-pre-token-generation"
-  policy      = data.aws_iam_policy_document.app_cognito_pre_token_generation.json
-}
+# resource "aws_iam_policy" "app_cognito_pre_token_generation" {
+#   description = "IAM permissions required for app-cognito-pre-token-generation lambda"
+#   path        = "/${var.resource_prefix}-lambda/"
+#   name        = "${var.resource_prefix}-app-cognito-pre-token-generation"
+#   policy      = data.aws_iam_policy_document.app_cognito_pre_token_generation.json
+# }
 
-module "app_cognito_pre_token_generation" {
-  description = "Customizes the claims in the identity token"
-  environment_variables = {
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.resource_prefix
-    CONTROL_REGION = local.current_region
-  }
-  dead_letter_arn = local.lambda_dead_letter_arn
-  handler         = "function.handler"
-  kms_key_arn     = local.lambda_env_vars_kms_key_arn
-  memory_size     = 1536
-  name            = "${var.resource_prefix}-app-cognito-pre-token-generation"
+# module "app_cognito_pre_token_generation" {
+#   description = "Customizes the claims in the identity token"
+#   environment_variables = {
+#     DYNAMODB_TABLE = module.graph_table.name
+#     ENVIRONMENT    = var.resource_prefix
+#     CONTROL_REGION = local.current_region
+#   }
+#   dead_letter_arn = local.lambda_dead_letter_arn
+#   handler         = "function.handler"
+#   kms_key_arn     = local.lambda_env_vars_kms_key_arn
+#   memory_size     = 1536
+#   name            = "${var.resource_prefix}-app-cognito-pre-token-generation"
 
-  policy_arns = [
-    aws_iam_policy.app_cognito_pre_token_generation.arn,
-    aws_iam_policy.additional_ddb_policy.arn
-  ]
+#   policy_arns = [
+#     aws_iam_policy.app_cognito_pre_token_generation.arn,
+#     aws_iam_policy.additional_ddb_policy.arn
+#   ]
 
-  runtime       = "python3.9"
-  s3_bucket     = local.artifacts_bucket
-  s3_object_key = local.lambda_functions_keys["app_cognito_pre_token_generation"]
-  source        = "QuiNovas/lambda/aws"
-  tags          = local.tags
-  timeout       = 30
-  version       = "3.0.14"
-}
+#   runtime       = "python3.9"
+#   s3_bucket     = local.artifacts_bucket
+#   s3_object_key = local.lambda_functions_keys["app_cognito_pre_token_generation"]
+#   source        = "QuiNovas/lambda/aws"
+#   tags          = local.tags
+#   timeout       = 30
+#   version       = "3.0.14"
+# }
 
-resource "aws_lambda_permission" "app_cognito_pre_token_generation" {
-  statement_id  = "AllowExecutionFromCognito"
-  action        = "lambda:InvokeFunction"
-  function_name = module.app_cognito_pre_token_generation.name
-  principal     = "cognito-idp.amazonaws.com"
-  source_arn    = aws_cognito_user_pool.echostream_apps.arn
-}
+# resource "aws_lambda_permission" "app_cognito_pre_token_generation" {
+#   statement_id  = "AllowExecutionFromCognito"
+#   action        = "lambda:InvokeFunction"
+#   function_name = module.app_cognito_pre_token_generation.name
+#   principal     = "cognito-idp.amazonaws.com"
+#   source_arn    = aws_cognito_user_pool.echostream_apps.arn
+# }
 
-resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_token_generation" {
-  name            = "${var.resource_prefix}-app-cognito-pre-token-generation"
-  log_group_name  = module.app_cognito_pre_token_generation.log_group_name
-  filter_pattern  = "ERROR -AppNotAuthorizedError"
-  destination_arn = module.control_alert_handler.arn
-}
+# resource "aws_cloudwatch_log_subscription_filter" "app_cognito_pre_token_generation" {
+#   name            = "${var.resource_prefix}-app-cognito-pre-token-generation"
+#   log_group_name  = module.app_cognito_pre_token_generation.log_group_name
+#   filter_pattern  = "ERROR -AppNotAuthorizedError"
+#   destination_arn = module.control_alert_handler.arn
+# }
