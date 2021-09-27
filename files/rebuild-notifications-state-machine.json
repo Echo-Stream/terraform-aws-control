@@ -38,8 +38,8 @@
 			"Type": "Choice",
 			"Choices": [
 				{
-					"Variable": "$.payload.pagination_token",
-					"IsNull": false,
+					"Variable": "$.payload.deployed",
+					"BooleanEquals": true,
 					"Next": "Sleep"
 				}
 			],
