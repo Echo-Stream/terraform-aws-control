@@ -937,6 +937,14 @@ resource "aws_appsync_resolver" "external_app_update" {
   type              = "ExternalApp"
 }
 
+resource "aws_appsync_resolver" "external_app_get_credentials" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "GetCredentials"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ExternalApp"
+}
 ## ExternalNode
 resource "aws_appsync_resolver" "external_node_app" {
   api_id            = aws_appsync_graphql_api.echostream.id
@@ -1014,6 +1022,15 @@ resource "aws_appsync_resolver" "external_node_update" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Update"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ExternalNode"
+}
+
+resource "aws_appsync_resolver" "external_node_create_audit_records" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateAuditRecords"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ExternalNode"
@@ -1149,6 +1166,15 @@ resource "aws_appsync_resolver" "managed_app_update" {
   type              = "ManagedApp"
 }
 
+resource "aws_appsync_resolver" "managed_app_get_credentials" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "GetCredentials"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ManagedApp"
+}
+
 ## ManagedInstance
 resource "aws_appsync_resolver" "managed_instance_last_ping_date_time" {
   api_id            = aws_appsync_graphql_api.echostream.id
@@ -1263,6 +1289,15 @@ resource "aws_appsync_resolver" "managed_node_update" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Update"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ManagedNode"
+}
+
+resource "aws_appsync_resolver" "managed_node_create_audit_records" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateAuditRecords"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ManagedNode"
