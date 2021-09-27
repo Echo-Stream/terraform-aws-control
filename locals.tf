@@ -37,30 +37,30 @@ locals {
     ECHOSTREAM_VERSION            = var.echostream_version
     ENVIRONMENT                   = var.resource_prefix
     HIGH_THROUGHPUT_QUEUE_REGIONS = "[\"us-east-1\", \"us-east-2\", \"us-west-2\", \"eu-west-1\"]"
-    ID_TOKEN_KEY                  = local.id_token_key
-    INTERNAL_NODE_CODE            = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
-    INTERNAL_NODE_ROLE            = aws_iam_role.internal_node.arn
-    REBUILD_NOTIFICATION_QUEUE    = aws_sqs_queue.rebuild_notifications.url
-    REGION                        = var.region
-    SNS_TOPIC_ARN                 = aws_sns_topic.ci_cd_errors.arn
-    SYSTEM_SQS_QUEUE              = aws_sqs_queue.system_sqs_queue.id
-    TENANT_DB_STREAM_HANDLER      = "${var.resource_prefix}-graph-table-tenant-stream-handler"
-    UPDATE_CODE_ROLE              = aws_iam_role.update_code.arn
-    VALIDATOR_CODE                = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
-    VALIDATOR_ROLE                = aws_iam_role.validator.arn
+    #ID_TOKEN_KEY                  = local.id_token_key
+    INTERNAL_NODE_CODE         = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
+    INTERNAL_NODE_ROLE         = aws_iam_role.internal_node.arn
+    REBUILD_NOTIFICATION_QUEUE = aws_sqs_queue.rebuild_notifications.url
+    REGION                     = var.region
+    SNS_TOPIC_ARN              = aws_sns_topic.ci_cd_errors.arn
+    SYSTEM_SQS_QUEUE           = aws_sqs_queue.system_sqs_queue.id
+    TENANT_DB_STREAM_HANDLER   = "${var.resource_prefix}-graph-table-tenant-stream-handler"
+    UPDATE_CODE_ROLE           = aws_iam_role.update_code.arn
+    VALIDATOR_CODE             = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
+    VALIDATOR_ROLE             = aws_iam_role.validator.arn
   }
 
   domain = "${var.resource_prefix}.${var.domain_name}"
 
-  id_token_key = <<-EOT
-                    {
-                      "kty": "oct",
-                      "kid": "${random_uuid.for_jwk.result}",
-                      "use": "sig",
-                      "alg": "HS256",
-                      "k": "${base64encode(random_string.for_jwk.result)}"
-                    }
-                  EOT
+  # id_token_key = <<-EOT
+  #                   {
+  #                     "kty": "oct",
+  #                     "kid": "${random_uuid.for_jwk.result}",
+  #                     "use": "sig",
+  #                     "alg": "HS256",
+  #                     "k": "${base64encode(random_string.for_jwk.result)}"
+  #                   }
+  #                 EOT
 
   lambda_dead_letter_arn      = aws_sns_topic.lambda_dead_letter.arn
   lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn
@@ -76,11 +76,11 @@ locals {
     graph_table_system_stream_handler  = "${local.artifacts["lambda"]}/graph-table-system-stream-handler.zip"
     graph_table_tenant_stream_handler  = "${local.artifacts["lambda"]}/graph-table-tenant-stream-handler.zip"
     log_retention                      = "${local.artifacts["lambda"]}/log-retention.zip"
-    process_audit_record               = "${local.artifacts["lambda"]}/process-audit-record.zip"
-    ui_cognito_post_confirmation       = "${local.artifacts["lambda"]}/ui-cognito-post-confirmation.zip"
-    ui_cognito_pre_authentication      = "${local.artifacts["lambda"]}/ui-cognito-pre-authentication.zip"
-    ui_cognito_pre_signup              = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
-    rebuild_notifications              = "${local.artifacts["lambda"]}/rebuild-notifications.zip"
+    #process_audit_record               = "${local.artifacts["lambda"]}/process-audit-record.zip"
+    ui_cognito_post_confirmation  = "${local.artifacts["lambda"]}/ui-cognito-post-confirmation.zip"
+    ui_cognito_pre_authentication = "${local.artifacts["lambda"]}/ui-cognito-pre-authentication.zip"
+    ui_cognito_pre_signup         = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
+    rebuild_notifications         = "${local.artifacts["lambda"]}/rebuild-notifications.zip"
   }
 
   log_bucket = module.log_bucket.id

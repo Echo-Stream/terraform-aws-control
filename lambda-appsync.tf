@@ -53,7 +53,7 @@ module "appsync_datasource" {
   environment_variables = merge(local.common_lambda_environment_variables,
     {
       API_USER_POOL_CLIENT_ID = aws_cognito_user_pool_client.echostream_api_userpool_client.id
-      API_USER_POOL_ID     = aws_cognito_user_pool.echostream_api.id
+      API_USER_POOL_ID        = aws_cognito_user_pool.echostream_api.id
       #APP_IDENTITY_POOL_ID         = aws_cognito_identity_pool.echostream.id
       # APP_USER_POOL_APP_ID         = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
       # APP_USER_POOL_ID             = aws_cognito_user_pool.echostream_apps.id
