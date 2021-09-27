@@ -58,7 +58,7 @@ module "appsync_datasource" {
       # APP_USER_POOL_APP_ID         = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
       # APP_USER_POOL_ID             = aws_cognito_user_pool.echostream_apps.id
       MANAGED_APP_CLOUD_INIT_TOPIC = aws_sns_topic.managed_app_cloud_init.arn
-      REMOTE_APP_ROLE              = ""
+      REMOTE_APP_ROLE              = aws_iam_role.remote_app.arn
       SSM_SERVICE_ROLE             = "service-role/${aws_iam_role.manage_apps_ssm_service_role.name}"
       UI_USER_POOL_ID              = aws_cognito_user_pool.echostream_ui.id
     }

@@ -1,4 +1,13 @@
 ############################
+## Remote APP IAM ##
+############################
+resource "aws_iam_role" "remote_app" {
+  name               = "${var.resource_prefix}-remote-app"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  tags               = local.tags
+}
+
+############################
 ## Internal Functions IAM ##
 ############################
 resource "aws_iam_role" "internal_node" {
