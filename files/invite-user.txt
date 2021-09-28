@@ -1,0 +1,1 @@
+You've been invited by {{caller}} to participate in the Tenant {{tenant}} in an {{role}} role. Please go to http://echo.stream and register.
