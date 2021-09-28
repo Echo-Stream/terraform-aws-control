@@ -26,6 +26,7 @@ locals {
 
   # Common environment variables for lambdas that use echo-tools library
   common_lambda_environment_variables = {
+    #ID_TOKEN_KEY                  = local.id_token_key
     ALARM_SNS_TOPIC               = aws_sns_topic.alarms.arn
     API_ID                        = aws_appsync_graphql_api.echostream.id
     APPSYNC_ENDPOINT              = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
@@ -37,17 +38,20 @@ locals {
     ECHOSTREAM_VERSION            = var.echostream_version
     ENVIRONMENT                   = var.resource_prefix
     HIGH_THROUGHPUT_QUEUE_REGIONS = "[\"us-east-1\", \"us-east-2\", \"us-west-2\", \"eu-west-1\"]"
-    #ID_TOKEN_KEY                  = local.id_token_key
-    INTERNAL_NODE_CODE         = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
-    INTERNAL_NODE_ROLE         = aws_iam_role.internal_node.arn
-    REBUILD_NOTIFICATION_QUEUE = aws_sqs_queue.rebuild_notifications.url
-    REGION                     = var.region
-    SNS_TOPIC_ARN              = aws_sns_topic.ci_cd_errors.arn
-    SYSTEM_SQS_QUEUE           = aws_sqs_queue.system_sqs_queue.id
-    TENANT_DB_STREAM_HANDLER   = "${var.resource_prefix}-graph-table-tenant-stream-handler"
-    UPDATE_CODE_ROLE           = aws_iam_role.update_code.arn
-    VALIDATOR_CODE             = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
-    VALIDATOR_ROLE             = aws_iam_role.validator.arn
+    INTERNAL_NODE_CODE            = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
+    INTERNAL_NODE_ROLE            = aws_iam_role.internal_node.arn
+    INVITE_USER_SES_TEMPLATE      = aws_ses_template.invite_user.arn
+    NOTIFY_USER_SES_TEMPLATE      = aws_ses_template.notify_user.arn
+    REBUILD_NOTIFICATION_QUEUE    = aws_sqs_queue.rebuild_notifications.url
+    REGION                        = var.region
+    REMOVE_USER_SES_TEMPLATE      = aws_ses_template.remove_user.arn
+    SNS_TOPIC_ARN                 = aws_sns_topic.ci_cd_errors.arn
+    SYSTEM_SES_EMAIL              = aws_ses_email_identity.support.arn
+    SYSTEM_SQS_QUEUE              = aws_sqs_queue.system_sqs_queue.id
+    TENANT_DB_STREAM_HANDLER      = "${var.resource_prefix}-graph-table-tenant-stream-handler"
+    UPDATE_CODE_ROLE              = aws_iam_role.update_code.arn
+    VALIDATOR_CODE                = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
+    VALIDATOR_ROLE                = aws_iam_role.validator.arn
   }
 
   domain = "${var.resource_prefix}.${var.domain_name}"
