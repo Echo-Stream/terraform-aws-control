@@ -220,7 +220,7 @@ data "aws_iam_policy_document" "rebuild_notifications" {
     ]
 
     resources = [
-      "${module.graph_table.arn}/*",
+      "${module.graph_table.arn}",
     ]
 
     sid = "TableAccess"
@@ -297,7 +297,7 @@ resource "aws_iam_policy" "rebuild_notifications" {
 }
 
 module "rebuild_notifications" {
-  description           = "Rebuilds"
+  description           = "Notify Echo Objects"
   environment_variables = local.common_lambda_environment_variables
   dead_letter_arn       = local.lambda_dead_letter_arn
   handler               = "function.handler"
