@@ -216,6 +216,17 @@ resource "aws_sns_topic_subscription" "artifacts" {
 data "aws_iam_policy_document" "rebuild_notifications" {
   statement {
     actions = [
+      "dynamodb:Query",
+    ]
+
+    resources = [
+      "${module.graph_table.arn}/*",
+    ]
+
+    sid = "TableAccess"
+  }
+  statement {
+    actions = [
       "lambda:CreateFunction",
       "lambda:GetFunction",
       "lambda:InvokeFunction",
