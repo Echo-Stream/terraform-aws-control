@@ -46,7 +46,7 @@ locals {
     REGION                        = var.region
     REMOVE_USER_SES_TEMPLATE      = aws_ses_template.remove_user.arn
     SNS_TOPIC_ARN                 = aws_sns_topic.ci_cd_errors.arn
-    SYSTEM_SES_EMAIL              = aws_ses_email_identity.support.arn
+    SYSTEM_SES_EMAIL              = var.ses_email_address
     SYSTEM_SQS_QUEUE              = aws_sqs_queue.system_sqs_queue.id
     TENANT_DB_STREAM_HANDLER      = "${var.resource_prefix}-graph-table-tenant-stream-handler"
     UPDATE_CODE_ROLE              = aws_iam_role.update_code.arn
