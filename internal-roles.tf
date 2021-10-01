@@ -43,7 +43,9 @@ data "aws_iam_policy_document" "internal_node" {
       "sqs:GetQueueAttributes"
     ]
 
-    resources = ["arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:_edge_*.fifo"]
+    resources = ["arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:edge*.fifo",
+      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:dead-letter*.fifo"
+    ]
 
     sid = "EdgeQueuesAccess"
   }

@@ -366,6 +366,15 @@ resource "aws_appsync_resolver" "list_tenant_users" {
 }
 
 ## Alert Emitter Node
+resource "aws_appsync_resolver" "alert_emitter_node_sendedges" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "sendEdges"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "AlertEmitterNode"
+}
+
 resource "aws_appsync_resolver" "alert_emitter_node_sendmessagetype" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -469,6 +478,15 @@ resource "aws_appsync_resolver" "bitmapper_function_validate" {
 }
 
 ## ChangeEmitterNode
+resource "aws_appsync_resolver" "change_emitter_node_sendedges" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "sendEdges"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ChangeEmitterNode"
+}
+
 resource "aws_appsync_resolver" "change_emitter_node_sendMessageType" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -791,6 +809,34 @@ resource "aws_appsync_resolver" "cross_tenant_sending_node_validate" {
   type              = "CrossTenantSendingNode"
 }
 
+## DeadLetterEmitterNode
+resource "aws_appsync_resolver" "dead_letter_emitter_node_sendedges" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "sendEdges"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "DeadLetterEmitterNode"
+}
+
+resource "aws_appsync_resolver" "dead_letter_emitter_node_send_message_type" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "sendMessageType"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "DeadLetterEmitterNode"
+}
+
+resource "aws_appsync_resolver" "dead_letter_emitter_node_tenant" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "tenant"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "DeadLetterEmitterNode"
+}
+
 ## Edge
 resource "aws_appsync_resolver" "edge_kms_key" {
   api_id            = aws_appsync_graphql_api.echostream.id
@@ -1037,6 +1083,15 @@ resource "aws_appsync_resolver" "external_node_create_audit_records" {
 }
 
 ## LogEmitterNode
+resource "aws_appsync_resolver" "log_emitter_node_sendedges" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "sendEdges"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "LogEmitterNode"
+}
+
 resource "aws_appsync_resolver" "log_emitter_node_send_message_type" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
