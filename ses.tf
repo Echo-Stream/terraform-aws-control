@@ -26,7 +26,7 @@ resource "aws_ses_event_destination" "email_errors" {
   configuration_set_name = aws_ses_configuration_set.email_errors.name
   enabled                = true
   matching_types         = ["bounce", "reject", "renderingFailure", "complaint"]
-  name                   = "{var.resource_prefix}-email-errors-sns"
+  name                   = "${var.resource_prefix}-email-errors-sns"
 
   sns_destination {
     topic_arn = aws_sns_topic.email_error_events.arn
