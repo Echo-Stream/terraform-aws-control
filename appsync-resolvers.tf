@@ -1019,14 +1019,6 @@ resource "aws_appsync_resolver" "external_app_update" {
   type              = "ExternalApp"
 }
 
-resource "aws_appsync_resolver" "external_app_get_aws_credentials" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "GetAwsCredentials"
-  request_template  = file("${path.module}/files/invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "ExternalApp"
-}
 ## ExternalNode
 resource "aws_appsync_resolver" "external_node_app" {
   api_id            = aws_appsync_graphql_api.echostream.id
@@ -1239,19 +1231,19 @@ resource "aws_appsync_resolver" "managed_app_delete" {
   type              = "ManagedApp"
 }
 
-resource "aws_appsync_resolver" "managed_app_get_aws_credentials" {
+resource "aws_appsync_resolver" "managed_app_deregister_managed_instance" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
-  field             = "GetAwsCredentials"
+  field             = "DeregisterManagedInstance"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ManagedApp"
 }
 
-resource "aws_appsync_resolver" "managed_app_deregister_managed_instance" {
+resource "aws_appsync_resolver" "managed_app_get_aws_credentials" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
-  field             = "DeregisterManagedInstance"
+  field             = "GetAwsCredentials"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ManagedApp"
@@ -1270,15 +1262,6 @@ resource "aws_appsync_resolver" "managed_app_update" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Update"
-  request_template  = file("${path.module}/files/invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "ManagedApp"
-}
-
-resource "aws_appsync_resolver" "managed_app_get_aws_credentials" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "GetAwsCredentials"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ManagedApp"
