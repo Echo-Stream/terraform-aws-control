@@ -1793,7 +1793,7 @@ resource "aws_appsync_resolver" "tenant_list_changes" {
   field             = "ListChanges"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Query"
+  type              = "Tenant"
 }
 
 resource "aws_appsync_resolver" "tenant_update" {
