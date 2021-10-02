@@ -302,6 +302,15 @@ resource "aws_appsync_resolver" "list_apps" {
   type              = "Query"
 }
 
+resource "aws_appsync_resolver" "list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Query"
+}
+
 resource "aws_appsync_resolver" "list_functions" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -421,6 +430,15 @@ resource "aws_appsync_resolver" "api_user_delete" {
   type              = "ApiUser"
 }
 
+resource "aws_appsync_resolver" "api_user_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ApiUser"
+}
+
 resource "aws_appsync_resolver" "api_user_reset_password" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -463,6 +481,15 @@ resource "aws_appsync_resolver" "bitmapper_function_delete" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "BitmapperFunction"
+}
+
+resource "aws_appsync_resolver" "bitmapper_function_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "BitmapperFunction"
@@ -570,6 +597,15 @@ resource "aws_appsync_resolver" "cross_account_app_delete" {
   type              = "CrossAccountApp"
 }
 
+resource "aws_appsync_resolver" "cross_account_app_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossAccountApp"
+}
+
 resource "aws_appsync_resolver" "cross_account_app_reset_password" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -612,6 +648,15 @@ resource "aws_appsync_resolver" "cross_tenant_receiving_app_delete" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossTenantReceivingApp"
+}
+
+resource "aws_appsync_resolver" "cross_tenant_receiving_app_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "CrossTenantReceivingApp"
@@ -672,6 +717,15 @@ resource "aws_appsync_resolver" "cross_tenant_receiving_node_delete" {
   type              = "CrossTenantReceivingNode"
 }
 
+resource "aws_appsync_resolver" "cross_tenant_receiving_node_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossTenantReceivingNode"
+}
+
 resource "aws_appsync_resolver" "cross_tenant_receiving_node_update" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -722,6 +776,15 @@ resource "aws_appsync_resolver" "cross_tenant_sending_app_delete" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossTenantSendingApp"
+}
+
+resource "aws_appsync_resolver" "cross_tenant_sending_app_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "CrossTenantSendingApp"
@@ -795,6 +858,15 @@ resource "aws_appsync_resolver" "cross_tenant_sending_node_delete" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossTenantSendingNode"
+}
+
+resource "aws_appsync_resolver" "cross_tenant_sending_node_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "CrossTenantSendingNode"
@@ -919,6 +991,15 @@ resource "aws_appsync_resolver" "edge_delete" {
   type              = "Edge"
 }
 
+resource "aws_appsync_resolver" "edge_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Edge"
+}
+
 resource "aws_appsync_resolver" "edge_move" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -987,6 +1068,15 @@ resource "aws_appsync_resolver" "external_app_delete" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ExternalApp"
+}
+
+resource "aws_appsync_resolver" "external_app_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ExternalApp"
@@ -1083,6 +1173,15 @@ resource "aws_appsync_resolver" "external_node_tenant" {
   type              = "ExternalNode"
 }
 
+resource "aws_appsync_resolver" "external_node_create_audit_records" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateAuditRecords"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ExternalNode"
+}
+
 resource "aws_appsync_resolver" "external_node_delete" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1092,19 +1191,19 @@ resource "aws_appsync_resolver" "external_node_delete" {
   type              = "ExternalNode"
 }
 
-resource "aws_appsync_resolver" "external_node_update" {
+resource "aws_appsync_resolver" "external_node_list_changes" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
-  field             = "Update"
+  field             = "ListChanges"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ExternalNode"
 }
 
-resource "aws_appsync_resolver" "external_node_create_audit_records" {
+resource "aws_appsync_resolver" "external_node_update" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
-  field             = "CreateAuditRecords"
+  field             = "Update"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ExternalNode"
@@ -1162,6 +1261,15 @@ resource "aws_appsync_resolver" "kms_key_delete" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "KmsKey"
+}
+
+resource "aws_appsync_resolver" "kms_key_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "KmsKey"
@@ -1244,6 +1352,15 @@ resource "aws_appsync_resolver" "managed_app_get_aws_credentials" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "GetAwsCredentials"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ManagedApp"
+}
+
+resource "aws_appsync_resolver" "managed_app_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ManagedApp"
@@ -1368,6 +1485,15 @@ resource "aws_appsync_resolver" "managed_node_delete" {
   type              = "ManagedNode"
 }
 
+resource "aws_appsync_resolver" "managed_node_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ManagedNode"
+}
+
 resource "aws_appsync_resolver" "managed_node_list_log_events" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1432,6 +1558,15 @@ resource "aws_appsync_resolver" "managed_node_type_delete" {
   type              = "ManagedNodeType"
 }
 
+resource "aws_appsync_resolver" "managed_node_type_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ManagedNodeType"
+}
+
 resource "aws_appsync_resolver" "managed_node_type_update" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1455,6 +1590,15 @@ resource "aws_appsync_resolver" "message_type_delete" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "MessageType"
+}
+
+resource "aws_appsync_resolver" "message_type_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "MessageType"
@@ -1560,6 +1704,15 @@ resource "aws_appsync_resolver" "router_node_delete" {
   type              = "RouterNode"
 }
 
+resource "aws_appsync_resolver" "router_node_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "RouterNode"
+}
+
 resource "aws_appsync_resolver" "router_node_list_log_events" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1653,6 +1806,24 @@ resource "aws_appsync_resolver" "tenant_update" {
 }
 
 ## TenantUser
+resource "aws_appsync_resolver" "tenant_user_first_name" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "firstName"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TenantUser"
+}
+
+resource "aws_appsync_resolver" "tenant_user_last_name" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "lastName"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TenantUser"
+}
+
 resource "aws_appsync_resolver" "tenant_user_tenant" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1671,29 +1842,20 @@ resource "aws_appsync_resolver" "tenant_user_delete" {
   type              = "TenantUser"
 }
 
-resource "aws_appsync_resolver" "tenant_user_update" {
+resource "aws_appsync_resolver" "tenant_user_list_changes" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
-  field             = "Update"
+  field             = "ListChanges"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "TenantUser"
 }
 
-resource "aws_appsync_resolver" "tenant_user_first_name" {
+resource "aws_appsync_resolver" "tenant_user_update" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
-  field             = "firstName"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "TenantUser"
-}
-
-resource "aws_appsync_resolver" "tenant_user_last_name" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "lastName"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  field             = "Update"
+  request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "TenantUser"
 }
@@ -1730,6 +1892,15 @@ resource "aws_appsync_resolver" "transformer_function_delete" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TransformerFunction"
+}
+
+resource "aws_appsync_resolver" "transformer_function_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "TransformerFunction"
@@ -1821,6 +1992,15 @@ resource "aws_appsync_resolver" "transformer_node_delete" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TransformerNode"
+}
+
+resource "aws_appsync_resolver" "transformer_node_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "TransformerNode"
