@@ -1860,6 +1860,61 @@ resource "aws_appsync_resolver" "tenant_user_update" {
   type              = "TenantUser"
 }
 
+## TimerNode
+resource "aws_appsync_resolver" "timer_node_sendedges" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "sendEdges"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TimerNode"
+}
+
+resource "aws_appsync_resolver" "timer_node_sendmessagetype" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "sendMessageType"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TimerNode"
+}
+
+resource "aws_appsync_resolver" "timer_node_tenant" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "tenant"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TimerNode"
+}
+
+resource "aws_appsync_resolver" "timer_node_delete" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TimerNode"
+}
+
+resource "aws_appsync_resolver" "timer_node_list_changes" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ListChanges"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TimerNode"
+}
+
+resource "aws_appsync_resolver" "timer_node_update" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "Update"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TimerNode"
+}
+
 ## TransformerFunction
 resource "aws_appsync_resolver" "transformer_function_argument_message_type" {
   api_id            = aws_appsync_graphql_api.echostream.id
