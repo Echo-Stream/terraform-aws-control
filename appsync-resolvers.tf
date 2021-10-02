@@ -154,6 +154,15 @@ resource "aws_appsync_resolver" "create_tenant" {
   type              = "Mutation"
 }
 
+resource "aws_appsync_resolver" "create_timer_node" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "CreateTimerNode"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Mutation"
+}
+
 resource "aws_appsync_resolver" "create_transformer_function" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
