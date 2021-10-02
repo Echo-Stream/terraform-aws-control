@@ -393,11 +393,11 @@ resource "aws_appsync_resolver" "alert_emitter_node_tenant" {
   type              = "AlertEmitterNode"
 }
 
-## api user
-resource "aws_appsync_resolver" "api_user_config" {
+## ApiUser
+resource "aws_appsync_resolver" "api_user_credentials" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
-  field             = "config"
+  field             = "credentials"
   request_template  = file("${path.module}/files/batch-invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ApiUser"
@@ -416,6 +416,15 @@ resource "aws_appsync_resolver" "api_user_delete" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ApiUser"
+}
+
+resource "aws_appsync_resolver" "api_user_reset_password" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "ResetPassword"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ApiUser"
@@ -520,6 +529,15 @@ resource "aws_appsync_resolver" "cross_account_app_config" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "config"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossAccountApp"
+}
+
+resource "aws_appsync_resolver" "cross_account_app_credentials" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "credentials"
   request_template  = file("${path.module}/files/batch-invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "CrossAccountApp"
@@ -938,6 +956,15 @@ resource "aws_appsync_resolver" "external_app_config" {
   type              = "ExternalApp"
 }
 
+resource "aws_appsync_resolver" "external_app_credentials" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "credentials"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ExternalApp"
+}
+
 resource "aws_appsync_resolver" "external_app_nodes" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -960,6 +987,15 @@ resource "aws_appsync_resolver" "external_app_delete" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ExternalApp"
+}
+
+resource "aws_appsync_resolver" "external_app_get_aws_credentials" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "GetAwsCredentials"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ExternalApp"
@@ -1158,6 +1194,15 @@ resource "aws_appsync_resolver" "managed_app_config" {
   type              = "ManagedApp"
 }
 
+resource "aws_appsync_resolver" "managed_app_credentials" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "credentials"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ManagedApp"
+}
+
 resource "aws_appsync_resolver" "managed_app_managed_instances" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1189,6 +1234,15 @@ resource "aws_appsync_resolver" "managed_app_delete" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "Delete"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "ManagedApp"
+}
+
+resource "aws_appsync_resolver" "managed_app_get_aws_credentials" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "GetAwsCredentials"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ManagedApp"
