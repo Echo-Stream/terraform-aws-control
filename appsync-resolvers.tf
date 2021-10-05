@@ -1851,10 +1851,28 @@ resource "aws_appsync_resolver" "tenant_user_delete" {
   type              = "TenantUser"
 }
 
+resource "aws_appsync_resolver" "tenant_user_delete_graph_layout" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "DeleteGraphLayout"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TenantUser"
+}
+
 resource "aws_appsync_resolver" "tenant_user_list_changes" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "ListChanges"
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TenantUser"
+}
+
+resource "aws_appsync_resolver" "tenant_user_save_graph_layout" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "SaveGraphLayout"
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "TenantUser"
