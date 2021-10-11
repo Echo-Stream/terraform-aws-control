@@ -39,7 +39,7 @@
 			"Choices": [
 				{
 					"Variable": "$.payload.deployed",
-					"BooleanEquals": true,
+					"BooleanEquals": false,
 					"Next": "Sleep"
 				}
 			],
