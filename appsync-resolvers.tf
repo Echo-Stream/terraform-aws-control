@@ -937,6 +937,15 @@ resource "aws_appsync_resolver" "dead_letter_emitter_node_tenant" {
 }
 
 ## Edge
+resource "aws_appsync_resolver" "edge_draining" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "draining"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Edge"
+}
+
 resource "aws_appsync_resolver" "edge_kms_key" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
