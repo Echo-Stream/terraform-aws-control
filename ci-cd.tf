@@ -221,7 +221,7 @@ data "aws_iam_policy_document" "rebuild_notifications" {
     ]
 
     resources = [
-      "${module.graph_table.arn}",
+      "${module.graph_table.arn}/*",
     ]
 
     sid = "TableAccess"
