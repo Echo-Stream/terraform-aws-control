@@ -522,6 +522,25 @@ resource "aws_appsync_resolver" "bitmapper_function_validate" {
   type              = "BitmapperFunction"
 }
 
+## Change
+resource "aws_appsync_resolver" "change_old" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "old"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Change"
+}
+
+resource "aws_appsync_resolver" "change_new" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "new"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "Change"
+}
+
 ## ChangeEmitterNode
 resource "aws_appsync_resolver" "change_emitter_node_sendedges" {
   api_id            = aws_appsync_graphql_api.echostream.id
