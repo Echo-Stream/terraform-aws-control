@@ -177,6 +177,18 @@ resource "aws_iam_role_policy_attachment" "manage_apps_ssm_directory_role" {
 data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
   statement {
     actions = [
+      "sqs:SendMessage",
+      "sqs:GetQueueUrl",
+    ]
+
+    resources = [
+      aws_sqs_queue.rebuild_notifications.arn
+    ]
+
+    sid = "SendMessageToRebuildNotificationQueue"
+  }
+  statement {
+    actions = [
       "dynamodb:*",
     ]
 
@@ -590,6 +602,19 @@ data "aws_iam_policy_document" "graph_table_system_stream_handler" {
     resources = [
       "*"
     ]
+  }
+
+  statement {
+    actions = [
+      "sqs:SendMessage",
+      "sqs:GetQueueUrl",
+    ]
+
+    resources = [
+      aws_sqs_queue.rebuild_notifications.arn
+    ]
+
+    sid = "SendMessageToRebuildNotificationQueue"
   }
 }
 
