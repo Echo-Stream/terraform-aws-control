@@ -158,6 +158,19 @@ data "aws_iam_policy_document" "deployment_handler" {
 
     sid = "AllowWritingErrorEvents"
   }
+
+  statement {
+    actions = [
+      "sqs:SendMessage",
+      "sqs:GetQueueUrl",
+    ]
+
+    resources = [
+      aws_sqs_queue.rebuild_notifications.arn
+    ]
+
+    sid = "SendMessageToRebuildNotificationQueue"
+  }
 }
 
 
