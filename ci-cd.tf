@@ -337,6 +337,7 @@ module "rebuild_notifications" {
 resource "aws_sqs_queue" "rebuild_notifications" {
   content_based_deduplication = "true"
   fifo_queue                  = true
+  kms_master_key_id           = "alias/aws/sqs"
   name                        = "${var.resource_prefix}-rebuild-notifications.fifo"
   tags                        = local.tags
   visibility_timeout_seconds  = 3600
