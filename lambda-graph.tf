@@ -94,15 +94,15 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_dynamodb_trigger"
 }
 
 
-resource "aws_iam_role" "manage_apps_ssm_service_role" {
+resource "aws_iam_role" "managed_app" {
   description        = "Enable AWS Systems Manager service core functionality"
-  name               = "${var.resource_prefix}-manage-apps-ssm-role"
+  name               = "${var.resource_prefix}-managed-app"
   path               = "/service-role/"
-  assume_role_policy = data.aws_iam_policy_document.manage_apps_ssm_service_role.json
+  assume_role_policy = data.aws_iam_policy_document.managed_app.json
   tags               = local.tags
 }
 
-data "aws_iam_policy_document" "manage_apps_ssm_service_role" {
+data "aws_iam_policy_document" "managed_app" {
   statement {
     actions = [
       "sts:AssumeRole",
@@ -116,7 +116,7 @@ data "aws_iam_policy_document" "manage_apps_ssm_service_role" {
   }
 }
 
-data "aws_iam_policy_document" "manage_apps_ssm_service_role_customer_policy" {
+data "aws_iam_policy_document" "managed_app_customer_policy" {
   statement {
     actions = [
       "ecr:BatchCheckLayerAvailability",
@@ -130,10 +130,10 @@ data "aws_iam_policy_document" "manage_apps_ssm_service_role_customer_policy" {
     ]
 
     resources = [
-      "arn:aws:ecr:${local.current_region}:${local.artifacts_account_id}:repository/*"
+      "arn:aws:ecr:*:*:repository/*"
     ]
 
-    sid = "AppCognitoPoolAccess"
+    sid = "EcrAccess"
   }
 
   statement {
@@ -148,27 +148,39 @@ data "aws_iam_policy_document" "manage_apps_ssm_service_role_customer_policy" {
 
     sid = "LogsAccess"
   }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sns:Publish"
+    ]
+
+    resources = [aws_sns_topic.managed_app_cloud_init.arn]
+
+    sid       = "PublishToSNS"
+  }
 }
 
-resource "aws_iam_policy" "manage_apps_ssm_service_role_customer_policy" {
+resource "aws_iam_policy" "managed_app_customer_policy" {
   description = "IAM permissions required for manage apps ssm"
   path        = "/${var.resource_prefix}-lambda/"
-  policy      = data.aws_iam_policy_document.manage_apps_ssm_service_role_customer_policy.json
+  policy      = data.aws_iam_policy_document.managed_app_customer_policy.json
 }
 
-resource "aws_iam_role_policy_attachment" "manage_apps_ssm_service_role_customer_policy" {
-  policy_arn = aws_iam_policy.manage_apps_ssm_service_role_customer_policy.arn
-  role       = aws_iam_role.manage_apps_ssm_service_role.name
+resource "aws_iam_role_policy_attachment" "managed_app_customer_policy" {
+  policy_arn = aws_iam_policy.managed_app_customer_policy.arn
+  role       = aws_iam_role.managed_app.name
 }
 
-resource "aws_iam_role_policy_attachment" "manage_apps_ssm_service_role" {
+resource "aws_iam_role_policy_attachment" "managed_app" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-  role       = aws_iam_role.manage_apps_ssm_service_role.name
+  role       = aws_iam_role.managed_app.name
 }
 
 resource "aws_iam_role_policy_attachment" "manage_apps_ssm_directory_role" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMDirectoryServiceAccess"
-  role       = aws_iam_role.manage_apps_ssm_service_role.name
+  role       = aws_iam_role.managed_app.name
 }
 
 #######################################
