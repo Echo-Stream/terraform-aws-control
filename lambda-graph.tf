@@ -158,7 +158,7 @@ data "aws_iam_policy_document" "managed_app_customer_policy" {
 
     resources = [aws_sns_topic.managed_app_cloud_init.arn]
 
-    sid       = "PublishToSNS"
+    sid = "PublishToSNS"
   }
 }
 
@@ -187,6 +187,19 @@ resource "aws_iam_role_policy_attachment" "manage_apps_ssm_directory_role" {
 ## graph-table-tenant-stream-handler ##
 #######################################
 data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
+  statement {
+    actions = [
+      "sqs:DeleteQueue",
+      "sqs:GetQueueUrl",
+    ]
+
+    resources = [
+      "arn:aws:sqs:*:data.aws_caller_identity.current.account_id:edge*.fifo"
+    ]
+
+    sid = "DeleteQueue"
+  }
+
   statement {
     actions = [
       "sqs:SendMessage",
