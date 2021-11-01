@@ -142,7 +142,7 @@ data "aws_iam_policy_document" "deployment_handler" {
       "${module.graph_table.arn}/*"
     ]
 
-    sid = "GraphTableUpdatePermissions"
+    sid = "GraphTableQueryIndex"
   }
   statement {
     actions = [
