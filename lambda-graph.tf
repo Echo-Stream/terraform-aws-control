@@ -441,7 +441,7 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_han
 ## graph-table-system-stream-handler ##
 #######################################
 data "aws_iam_policy_document" "graph_table_system_stream_handler" {
-    statement {
+  statement {
     actions = [
       "sqs:DeleteQueue",
     ]

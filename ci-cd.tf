@@ -132,6 +132,18 @@ data "aws_iam_policy_document" "deployment_handler" {
 
     sid = "GraphTableUpdatePermissions"
   }
+
+  statement {
+    actions = [
+      "dynamodb:Query",
+    ]
+
+    resources = [
+      "${module.graph_table.arn}/*"
+    ]
+
+    sid = "GraphTableUpdatePermissions"
+  }
   statement {
     actions = [
       "sns:Publish"
