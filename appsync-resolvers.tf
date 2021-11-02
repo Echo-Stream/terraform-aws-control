@@ -19,15 +19,6 @@ resource "aws_appsync_resolver" "create_bitmapper_function" {
   type              = "Mutation"
 }
 
-resource "aws_appsync_resolver" "create_app_change_notification" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "CreateAppChangeNotification"
-  request_template  = file("${path.module}/files/invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
-}
-
 resource "aws_appsync_resolver" "create_cross_account_app" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -567,16 +558,6 @@ resource "aws_appsync_resolver" "change_emitter_node_tenant" {
   request_template  = file("${path.module}/files/batch-invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "ChangeEmitterNode"
-}
-
-# AppChangeNotification
-resource "aws_appsync_resolver" "app_change_notification_tenant" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "tenant"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "AppChangeNotification"
 }
 
 ## CrossAccountApp
@@ -1784,16 +1765,6 @@ resource "aws_appsync_resolver" "router_node_validate" {
   request_template  = file("${path.module}/files/invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "RouterNode"
-}
-
-## Subscription
-resource "aws_appsync_resolver" "subscription_on_app_change" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "onAppChange"
-  request_template  = file("${path.module}/files/invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Subscription"
 }
 
 ## Tenant
