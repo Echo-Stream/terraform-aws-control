@@ -37,9 +37,9 @@ resource "aws_appsync_graphql_api" "echostream" {
   # }
 
 
-  additional_authentication_provider {
-    authentication_type = "AWS_IAM"
-  }
+  # additional_authentication_provider {
+  #   authentication_type = "AWS_IAM"
+  # }
 
   schema = data.aws_s3_bucket_object.graphql_schema.body
 
