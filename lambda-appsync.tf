@@ -52,15 +52,16 @@ module "appsync_datasource" {
 
   environment_variables = merge(local.common_lambda_environment_variables,
     {
-      API_USER_POOL_CLIENT_ID = aws_cognito_user_pool_client.echostream_api_userpool_client.id
-      API_USER_POOL_ID        = aws_cognito_user_pool.echostream_api.id
-      #APP_IDENTITY_POOL_ID         = aws_cognito_identity_pool.echostream.id
       # APP_USER_POOL_APP_ID         = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
       # APP_USER_POOL_ID             = aws_cognito_user_pool.echostream_apps.id
-      MANAGED_APP_CLOUD_INIT_TOPIC = aws_sns_topic.managed_app_cloud_init.arn
-      REMOTE_APP_ROLE              = aws_iam_role.remote_app.arn
-      SSM_SERVICE_ROLE             = "service-role/${aws_iam_role.managed_app.name}"
-      UI_USER_POOL_ID              = aws_cognito_user_pool.echostream_ui.id
+      #APP_IDENTITY_POOL_ID         = aws_cognito_identity_pool.echostream.id
+      API_USER_POOL_CLIENT_ID       = aws_cognito_user_pool_client.echostream_api_userpool_client.id
+      API_USER_POOL_ID              = aws_cognito_user_pool.echostream_api.id
+      MANAGED_APP_CLOUD_INIT_TOPIC  = aws_sns_topic.managed_app_cloud_init.arn
+      REMOTE_APP_ROLE               = aws_iam_role.remote_app.arn
+      SSM_SERVICE_ROLE              = "service-role/${aws_iam_role.managed_app.name}"
+      TENANT_DB_STREAM_HANDLER_ROLE = module.graph_table_tenant_stream_handler.role_arn
+      UI_USER_POOL_ID               = aws_cognito_user_pool.echostream_ui.id
     }
   )
 

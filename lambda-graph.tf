@@ -427,7 +427,7 @@ module "graph_table_tenant_stream_handler" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.14"
+  version       = "3.0.15"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_handler" {
