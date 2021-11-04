@@ -397,14 +397,18 @@ data "aws_iam_policy_document" "rebuild_notifications_state_machine" {
 
   statement {
     actions = [
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-      "logs:CreateLogGroup",
-      "logs:PutRetentionPolicy"
+      "logs:CreateLogDelivery",
+      "logs:GetLogDelivery",
+      "logs:UpdateLogDelivery",
+      "logs:DeleteLogDelivery",
+      "logs:ListLogDeliveries",
+      "logs:PutResourcePolicy",
+      "logs:DescribeResourcePolicies",
+      "logs:DescribeLogGroups"
     ]
 
     resources = [
-      aws_cloudwatch_log_group.rebuild_notifications_state_machine.arn,
+      "*"
     ]
 
     sid = "AllowWritingErrorEvents"
