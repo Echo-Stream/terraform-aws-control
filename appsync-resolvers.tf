@@ -468,6 +468,15 @@ resource "aws_appsync_resolver" "bitmapper_function_argumentMessageType" {
   type              = "BitmapperFunction"
 }
 
+resource "aws_appsync_resolver" "bitmapper_function_requirements" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "requirements"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "BitmapperFunction"
+}
+
 resource "aws_appsync_resolver" "bitmapper_function_tenant" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -849,6 +858,15 @@ resource "aws_appsync_resolver" "cross_tenant_sending_node_receive_message_type"
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "receiveMessageType"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "CrossTenantSendingNode"
+}
+
+resource "aws_appsync_resolver" "cross_tenant_sending_node_requirements" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "requirements"
   request_template  = file("${path.module}/files/batch-invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "CrossTenantSendingNode"
@@ -1696,6 +1714,15 @@ resource "aws_appsync_resolver" "managed_node_type_update" {
 }
 
 ## MessageType
+resource "aws_appsync_resolver" "message_type_requirements" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "requirements"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "MessageType"
+}
+
 resource "aws_appsync_resolver" "message_type_tenant" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -1782,6 +1809,15 @@ resource "aws_appsync_resolver" "router_node_receive_message_type" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "receiveMessageType"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "RouterNode"
+}
+
+resource "aws_appsync_resolver" "router_node_requirements" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "requirements"
   request_template  = file("${path.module}/files/batch-invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "RouterNode"
@@ -2061,6 +2097,15 @@ resource "aws_appsync_resolver" "transformer_function_argument_message_type" {
   type              = "TransformerFunction"
 }
 
+resource "aws_appsync_resolver" "transformer_function_requirements" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "requirements"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TransformerFunction"
+}
+
 resource "aws_appsync_resolver" "transformer_function_result_message_type" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
@@ -2147,6 +2192,15 @@ resource "aws_appsync_resolver" "transformer_node_receive_message_type" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = "receiveMessageType"
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = "TransformerNode"
+}
+
+resource "aws_appsync_resolver" "transformer_node_requirements" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = "requirements"
   request_template  = file("${path.module}/files/batch-invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = "TransformerNode"
