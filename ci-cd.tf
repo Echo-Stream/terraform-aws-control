@@ -404,7 +404,7 @@ data "aws_iam_policy_document" "rebuild_notifications_state_machine" {
     ]
 
     resources = [
-      aws_cloudwatch_log_stream.rebuild_notifications_state_machine.arn,
+      aws_cloudwatch_log_group.rebuild_notifications_state_machine.arn,
     ]
 
     sid = "AllowWritingErrorEvents"
