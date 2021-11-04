@@ -397,7 +397,10 @@ data "aws_iam_policy_document" "rebuild_notifications_state_machine" {
 
   statement {
     actions = [
+      "logs:CreateLogStream",
       "logs:PutLogEvents",
+      "logs:CreateLogGroup",
+      "logs:PutRetentionPolicy"
     ]
 
     resources = [
