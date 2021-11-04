@@ -432,7 +432,7 @@ resource "aws_sfn_state_machine" "rebuild_notifications" {
   role_arn   = aws_iam_role.rebuild_notifications_state_machine.arn
   logging_configuration {
     level           = "ERROR"
-    log_destination = aws_cloudwatch_log_group.rebuild_notifications_state_machine.arn
+    log_destination = "${aws_cloudwatch_log_group.rebuild_notifications_state_machine.arn}:*"
   }
   tags = local.tags
 }
