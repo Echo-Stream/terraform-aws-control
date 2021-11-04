@@ -394,6 +394,18 @@ data "aws_iam_policy_document" "rebuild_notifications_state_machine" {
 
     sid = "StateMachineAccess"
   }
+
+  statement {
+    actions = [
+      "logs:PutLogEvents",
+    ]
+
+    resources = [
+      aws_cloudwatch_log_stream.rebuild_notifications_state_machine.arn,
+    ]
+
+    sid = "AllowWritingErrorEvents"
+  }
 }
 
 resource "aws_iam_role_policy" "rebuild_notifications_state_machine" {
@@ -401,9 +413,24 @@ resource "aws_iam_role_policy" "rebuild_notifications_state_machine" {
   role   = aws_iam_role.rebuild_notifications_state_machine.id
 }
 
+resource "aws_cloudwatch_log_group" "rebuild_notifications_state_machine" {
+  name              = "/aws/statemachine/${var.resource_prefix}-rebuild-notifications"
+  retention_in_days = 7
+  tags              = local.tags
+}
+
+resource "aws_cloudwatch_log_stream" "rebuild_notifications_state_machine" {
+  log_group_name = aws_cloudwatch_log_group.rebuild_notifications_state_machine.name
+  name           = "S3Delivery"
+}
+
 resource "aws_sfn_state_machine" "rebuild_notifications" {
   definition = data.template_file.rebuild_notifications_state_machine.rendered
   name       = "${var.resource_prefix}-rebuild-notifications"
   role_arn   = aws_iam_role.rebuild_notifications_state_machine.arn
-  tags       = local.tags
+  logging_configuration {
+    level           = "ERROR"
+    log_destination = aws_cloudwatch_log_group.rebuild_notifications_state_machine.name
+  }
+  tags = local.tags
 }
