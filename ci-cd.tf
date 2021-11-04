@@ -422,11 +422,6 @@ resource "aws_cloudwatch_log_group" "rebuild_notifications_state_machine" {
   tags              = local.tags
 }
 
-resource "aws_cloudwatch_log_stream" "rebuild_notifications_state_machine" {
-  log_group_name = aws_cloudwatch_log_group.rebuild_notifications_state_machine.name
-  name           = "S3Delivery"
-}
-
 resource "aws_sfn_state_machine" "rebuild_notifications" {
   definition = data.template_file.rebuild_notifications_state_machine.rendered
   name       = "${var.resource_prefix}-rebuild-notifications"
