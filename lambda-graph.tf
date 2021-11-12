@@ -397,6 +397,18 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
       "*"
     ]
   }
+
+    statement {
+    actions = [
+      "firehose:PutRecordBatch",
+    ]
+
+    resources = [
+      aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.arn
+    ]
+
+    sid = "PutRecordBatch"
+  }
 }
 
 resource "aws_iam_policy" "graph_table_tenant_stream_handler" {
