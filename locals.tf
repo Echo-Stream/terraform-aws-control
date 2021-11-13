@@ -40,11 +40,11 @@ locals {
     HIGH_THROUGHPUT_QUEUE_REGIONS = "[\"us-east-1\", \"us-east-2\", \"us-west-2\", \"eu-west-1\"]"
     INTERNAL_NODE_CODE            = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
     INTERNAL_NODE_ROLE            = aws_iam_role.internal_node.arn
-    INVITE_USER_SES_TEMPLATE      = aws_ses_template.invite_user.arn
-    NOTIFY_USER_SES_TEMPLATE      = aws_ses_template.notify_user.arn
+    INVITE_USER_SES_TEMPLATE      = aws_ses_template.invite_user.name
+    NOTIFY_USER_SES_TEMPLATE      = aws_ses_template.notify_user.name
     REBUILD_NOTIFICATION_QUEUE    = aws_sqs_queue.rebuild_notifications.url
     REGION                        = var.region
-    REMOVE_USER_SES_TEMPLATE      = aws_ses_template.remove_user.arn
+    REMOVE_USER_SES_TEMPLATE      = aws_ses_template.remove_user.name
     SNS_TOPIC_ARN                 = aws_sns_topic.ci_cd_errors.arn
     SYSTEM_SES_EMAIL              = var.ses_email_address
     SYSTEM_SQS_QUEUE              = aws_sqs_queue.system_sqs_queue.id

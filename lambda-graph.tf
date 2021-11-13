@@ -398,7 +398,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
   }
 
-    statement {
+  statement {
     actions = [
       "firehose:PutRecordBatch",
     ]
