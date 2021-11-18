@@ -62,7 +62,7 @@ module "ui_cognito_post_confirmation" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.14"
+  version       = "3.0.17"
 }
 
 resource "aws_lambda_permission" "ui_cognito_post_confirmation" {
@@ -144,7 +144,7 @@ module "ui_cognito_pre_authentication" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.14"
+  version       = "3.0.17"
 }
 
 resource "aws_lambda_permission" "ui_cognito_pre_authentication" {
@@ -227,7 +227,7 @@ module "ui_cognito_pre_signup" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.14"
+  version       = "3.0.17"
 }
 
 resource "aws_lambda_permission" "ui_cognito_pre_signup" {
@@ -307,7 +307,7 @@ module "app_api_cognito_pre_authentication" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.14"
+  version       = "3.0.17"
 }
 
 resource "aws_lambda_permission" "app_api_cognito_pre_authentication" {
@@ -386,7 +386,7 @@ resource "aws_cloudwatch_log_subscription_filter" "app_api_cognito_pre_authentic
 #   source        = "QuiNovas/lambda/aws"
 #   tags          = local.tags
 #   timeout       = 30
-#   version       = "3.0.14"
+#   version       = "3.0.17"
 # }
 
 # resource "aws_lambda_permission" "app_cognito_pre_token_generation" {

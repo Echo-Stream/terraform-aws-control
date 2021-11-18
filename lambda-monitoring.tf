@@ -59,7 +59,7 @@ module "control_alert_handler" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.14"
+  version       = "3.0.17"
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch" {
@@ -96,5 +96,5 @@ module "control_clickup_integration" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.14"
+  version       = "3.0.17"
 }

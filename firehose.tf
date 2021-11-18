@@ -23,7 +23,7 @@
 #   source          = "QuiNovas/lambda/aws"
 #   tags            = local.tags
 #   timeout         = 300
-#   version         = "3.0.14"
+#   version         = "3.0.17"
 # }
 
 # resource "aws_cloudwatch_log_subscription_filter" "process_audit_record" {
