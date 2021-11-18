@@ -89,7 +89,7 @@ locals {
   }
 
   log_bucket = module.log_bucket.id
-  regions    = concat(var.tenant_regions, [var.region]) #combined list of control region and tenant regions
+  regions    = concat(jsonencode(var.tenant_regions), [var.region]) #combined list of control region and tenant regions
 
   tags = merge({
     app         = "echostream"
