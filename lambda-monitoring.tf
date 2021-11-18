@@ -37,9 +37,10 @@ module "control_alert_handler" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    ALERT_TOPIC  = aws_sns_topic.alarms.arn
-    ENVIRONMENT  = var.resource_prefix
-    INTEGRATIONS = "[\"${module.control_clickup_integration.arn}\"]"
+    ALERT_TOPIC    = aws_sns_topic.alarms.arn
+    ENVIRONMENT    = var.resource_prefix
+    INTEGRATIONS   = "[\"${module.control_clickup_integration.arn}\"]"
+    TENANT_REGIONS = var.tenant_regions
   }
 
   handler     = "function.handler"

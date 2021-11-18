@@ -39,9 +39,10 @@ module "ui_cognito_post_confirmation" {
   description = "Set attributes on UI user and validate invitation token post signup "
 
   environment_variables = {
+    CONTROL_REGION = local.current_region
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
-    CONTROL_REGION = local.current_region
+    TENANT_REGIONS = var.tenant_regions
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -120,9 +121,10 @@ module "ui_cognito_pre_authentication" {
   description = "Check status and tenant membership pre authentication for UI users"
 
   environment_variables = {
+    CONTROL_REGION = local.current_region
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
-    CONTROL_REGION = local.current_region
+    TENANT_REGIONS = var.tenant_regions
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -202,9 +204,10 @@ module "ui_cognito_pre_signup" {
   description = "Validate invitation for new UI user "
 
   environment_variables = {
+    CONTROL_REGION = local.current_region
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
-    CONTROL_REGION = local.current_region
+    TENANT_REGIONS = var.tenant_regions
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -282,9 +285,10 @@ resource "aws_iam_policy" "app_api_cognito_pre_authentication" {
 module "app_api_cognito_pre_authentication" {
   description = "Function that gets triggered when cognito user to be authenticated"
   environment_variables = {
+    CONTROL_REGION = local.current_region
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
-    CONTROL_REGION = local.current_region
+    TENANT_REGIONS = var.tenant_regions
   }
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"

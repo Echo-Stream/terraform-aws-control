@@ -49,6 +49,7 @@ locals {
     SYSTEM_SES_EMAIL              = var.ses_email_address
     SYSTEM_SQS_QUEUE              = aws_sqs_queue.system_sqs_queue.id
     TENANT_DB_STREAM_HANDLER      = "${var.resource_prefix}-graph-table-tenant-stream-handler"
+    TENANT_REGIONS                = var.tenant_regions
     UPDATE_CODE_ROLE              = aws_iam_role.update_code.arn
     VALIDATOR_CODE                = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
     VALIDATOR_ROLE                = aws_iam_role.validator.arn
