@@ -763,24 +763,6 @@ resource "aws_appsync_resolver" "cross_tenant_sending_app_nodes" {
   type              = "CrossTenantSendingApp"
 }
 
-resource "aws_appsync_resolver" "cross_tenant_sending_app_receiving_app" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "receivingApp"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "CrossTenantSendingApp"
-}
-
-resource "aws_appsync_resolver" "cross_tenant_sending_app_receiving_tenant" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "receivingTenant"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "CrossTenantSendingApp"
-}
-
 resource "aws_appsync_resolver" "cross_tenant_sending_app_tenant" {
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
