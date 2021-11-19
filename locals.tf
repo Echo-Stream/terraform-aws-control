@@ -89,7 +89,7 @@ locals {
   }
 
   log_bucket = module.log_bucket.id
-  regions    = concat(var.tenant_regions, [var.region]) #combined list of control region and tenant regions
+  regions    = setunion(var.tenant_regions, [var.region]) #combined list of control region and tenant regions
   #regions = concat(["us-east-2"], [var.region])
 
   tags = merge({
