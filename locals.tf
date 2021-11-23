@@ -88,10 +88,10 @@ locals {
     rebuild_notifications         = "${local.artifacts["lambda"]}/rebuild-notifications.zip"
   }
 
-  log_bucket = module.log_bucket.id
+  log_bucket     = module.log_bucket.id
   tenant_regions = split(",", var.tenant_regions)
   #regions    = setunion(var.tenant_regions, [var.region]) #combined list of control region and tenant regions
-  regions    = concat(local.tenant_regions, [var.region])
+  regions = concat(local.tenant_regions, [var.region])
 
   tags = merge({
     app         = "echostream"

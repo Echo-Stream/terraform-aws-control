@@ -193,7 +193,8 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:edge*.fifo"
+      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:edge*.fifo",
+      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:db-stream*.fifo"
     ]
 
     sid = "DeleteQueue"
@@ -453,17 +454,7 @@ resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_han
 ## graph-table-system-stream-handler ##
 #######################################
 data "aws_iam_policy_document" "graph_table_system_stream_handler" {
-  statement {
-    actions = [
-      "sqs:DeleteQueue",
-    ]
 
-    resources = [
-      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:db-stream*.fifo"
-    ]
-
-    sid = "DeleteQueue"
-  }
   statement {
     actions = [
       "dynamodb:*",
