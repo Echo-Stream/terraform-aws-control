@@ -50,6 +50,18 @@ data "aws_iam_policy_document" "internal_node" {
     sid = "EdgeQueuesAccess"
   }
 
+  statement {
+    actions = [
+      "dynamodb:Query",
+    ]
+
+    resources = [
+      "${module.graph_table.arn}/*",
+    ]
+
+    sid = "QueryAllIndexes"
+  }
+
 }
 
 data "aws_iam_policy_document" "internal_node_sts_assume" {
