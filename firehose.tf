@@ -149,7 +149,7 @@ resource "aws_kinesis_firehose_delivery_stream" "process_audit_record_firehose" 
 
   server_side_encryption {
     enabled  = true
-    key_type = AWS_OWNED_CMK
+    key_type = "AWS_OWNED_CMK"
   }
   tags = local.tags
 }
