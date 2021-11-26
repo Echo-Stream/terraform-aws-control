@@ -143,6 +143,11 @@ resource "aws_kinesis_firehose_delivery_stream" "process_audit_record_firehose" 
     #   }
     # }
 
+    server_side_encryption {
+      enabled  = true
+      key_type = AWS_OWNED_CMK
+    }
+
     compression_format = "GZIP"
     role_arn           = aws_iam_role.process_audit_record_firehose.arn
   }
