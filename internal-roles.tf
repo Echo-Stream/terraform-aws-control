@@ -3,8 +3,35 @@
 ############################
 resource "aws_iam_role" "remote_app" {
   name               = "${var.resource_prefix}-remote-app"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.remote_app_assume_role.json
   tags               = local.tags
+}
+
+data "aws_iam_policy_document" "remote_app_assume_role" {
+  statement {
+    actions = [
+      "sts:AssumeRole",
+      "sts:SetSourceIdentity"
+    ]
+    principals {
+      identifiers = [
+        module.appsync_datasource.role_arn
+      ]
+      type = "AWS"
+    }
+
+    # condition {
+    #   test = "StringEquals"
+    #   values = [
+    #   ]
+    #   variable = "sts:SourceIdentity"
+    # }
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "remote_app_basic" {
+  role       = aws_iam_role.remote_app.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 ############################
