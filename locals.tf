@@ -26,13 +26,13 @@ locals {
 
   # Common environment variables for lambdas that use echo-tools library
   common_lambda_environment_variables = {
-    AUDIT_FIREHOSE                = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
+    #AUDIT_FIREHOSE                = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
     #ID_TOKEN_KEY                  = local.id_token_key
     #ALARM_SNS_TOPIC               = aws_sns_topic.alarms.arn
     API_ID                        = aws_appsync_graphql_api.echostream.id
     APPSYNC_ENDPOINT              = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
     ARTIFACTS_BUCKET              = local.artifacts_bucket_prefix
-    #AUDIT_FIREHOSE                = "${var.resource_prefix}-audit-records"
+    AUDIT_FIREHOSE                = "${var.resource_prefix}-audit-records"
     CLOUDFRONT_DISTRIBUTION_ID    = aws_cloudfront_distribution.webapp.id
     CONTROL_REGION                = local.current_region
     DYNAMODB_TABLE                = module.graph_table.name
@@ -83,10 +83,10 @@ locals {
     graph_table_system_stream_handler  = "${local.artifacts["lambda"]}/graph-table-system-stream-handler.zip"
     graph_table_tenant_stream_handler  = "${local.artifacts["lambda"]}/graph-table-tenant-stream-handler.zip"
     log_retention                      = "${local.artifacts["lambda"]}/log-retention.zip"
-    rebuild_notifications         = "${local.artifacts["lambda"]}/rebuild-notifications.zip"
-    ui_cognito_post_confirmation  = "${local.artifacts["lambda"]}/ui-cognito-post-confirmation.zip"
-    ui_cognito_pre_authentication = "${local.artifacts["lambda"]}/ui-cognito-pre-authentication.zip"
-    ui_cognito_pre_signup         = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
+    rebuild_notifications              = "${local.artifacts["lambda"]}/rebuild-notifications.zip"
+    ui_cognito_post_confirmation       = "${local.artifacts["lambda"]}/ui-cognito-post-confirmation.zip"
+    ui_cognito_pre_authentication      = "${local.artifacts["lambda"]}/ui-cognito-pre-authentication.zip"
+    ui_cognito_pre_signup              = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
   }
 
   log_bucket     = module.log_bucket.id
