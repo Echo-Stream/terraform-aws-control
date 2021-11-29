@@ -91,3 +91,18 @@ resource "aws_kinesis_firehose_delivery_stream" "audit_records" {
   }
   tags = var.tags
 }
+
+# SNS
+resource "aws_sns_topic" "audit_records" {
+  display_name      = "Audit Records"
+  kms_master_key_id = "alias/aws/sns"
+  name              = "${var.resource_prefix}-audit-records"
+  tags              = var.tags
+}
+
+resource "aws_sns_topic_subscription" "audit_records" {
+  endpoint             = aws_kinesis_firehose_delivery_stream.audit_records.arn
+  protocol             = "firehose"
+  raw_message_delivery = true
+  topic_arn            = aws_sns_topic.audit_records.arn
+}
