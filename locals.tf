@@ -26,9 +26,8 @@ locals {
 
   # Common environment variables for lambdas that use echo-tools library
   common_lambda_environment_variables = {
-    #AUDIT_FIREHOSE                = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
+    AUDIT_FIREHOSE                = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
     #ID_TOKEN_KEY                  = local.id_token_key
-    #ALARM_SNS_TOPIC               = aws_sns_topic.alarms.arn
     API_ID           = aws_appsync_graphql_api.echostream.id
     APPSYNC_ENDPOINT = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
     ARTIFACTS_BUCKET = local.artifacts_bucket_prefix
