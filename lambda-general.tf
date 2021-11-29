@@ -78,10 +78,3 @@ resource "aws_lambda_permission" "log_retention" {
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.log_retention.arn
 }
-
-resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
-  name            = "${var.resource_prefix}-log-retention"
-  log_group_name  = module.log_retention.log_group_name
-  filter_pattern  = "ERROR -USERERROR"
-  destination_arn = module.control_alert_handler.arn
-}

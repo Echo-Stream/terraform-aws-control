@@ -26,13 +26,13 @@ locals {
 
   # Common environment variables for lambdas that use echo-tools library
   common_lambda_environment_variables = {
-    #AUDIT_FIREHOSE                = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
+    AUDIT_FIREHOSE                = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
     #ID_TOKEN_KEY                  = local.id_token_key
     #ALARM_SNS_TOPIC               = aws_sns_topic.alarms.arn
     API_ID                        = aws_appsync_graphql_api.echostream.id
     APPSYNC_ENDPOINT              = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
     ARTIFACTS_BUCKET              = local.artifacts_bucket_prefix
-    AUDIT_FIREHOSE                = "${var.resource_prefix}-audit-records"
+    #AUDIT_FIREHOSE                = "${var.resource_prefix}-audit-records"
     CLOUDFRONT_DISTRIBUTION_ID    = aws_cloudfront_distribution.webapp.id
     CONTROL_REGION                = local.current_region
     DYNAMODB_TABLE                = module.graph_table.name
@@ -72,21 +72,21 @@ locals {
   lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn
 
   lambda_functions_keys = {
+    #control_alert_handler              = "${local.artifacts["lambda"]}/control-alert-handler.zip"
+    #process_audit_record               = "${local.artifacts["lambda"]}/process-audit-record.zip"
     app_api_cognito_pre_authentication = "${local.artifacts["lambda"]}/app-api-cognito-pre-authentication.zip"
     app_cognito_pre_token_generation   = "${local.artifacts["lambda"]}/app-cognito-pre-token-generation.zip"
     appsync_datasource                 = "${local.artifacts["lambda"]}/appsync-datasource.zip"
-    control_alert_handler              = "${local.artifacts["lambda"]}/control-alert-handler.zip"
     control_clickup_integration        = "${local.artifacts["lambda"]}/control-clickup-integration.zip"
     deployment_handler                 = "${local.artifacts["lambda"]}/deployment-handler.zip"
     graph_table_dynamodb_trigger       = "${local.artifacts["lambda"]}/graph-table-dynamodb-trigger.zip"
     graph_table_system_stream_handler  = "${local.artifacts["lambda"]}/graph-table-system-stream-handler.zip"
     graph_table_tenant_stream_handler  = "${local.artifacts["lambda"]}/graph-table-tenant-stream-handler.zip"
     log_retention                      = "${local.artifacts["lambda"]}/log-retention.zip"
-    #process_audit_record               = "${local.artifacts["lambda"]}/process-audit-record.zip"
+    rebuild_notifications         = "${local.artifacts["lambda"]}/rebuild-notifications.zip"
     ui_cognito_post_confirmation  = "${local.artifacts["lambda"]}/ui-cognito-post-confirmation.zip"
     ui_cognito_pre_authentication = "${local.artifacts["lambda"]}/ui-cognito-pre-authentication.zip"
     ui_cognito_pre_signup         = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
-    rebuild_notifications         = "${local.artifacts["lambda"]}/rebuild-notifications.zip"
   }
 
   log_bucket     = module.log_bucket.id

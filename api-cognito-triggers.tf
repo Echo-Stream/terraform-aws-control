@@ -73,13 +73,6 @@ resource "aws_lambda_permission" "ui_cognito_post_confirmation" {
   source_arn    = aws_cognito_user_pool.echostream_ui.arn
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_post_confirmation" {
-  name            = "${var.resource_prefix}-ui-cognito-post-confirmation"
-  log_group_name  = module.ui_cognito_post_confirmation.log_group_name
-  filter_pattern  = "ERROR -SignupError -InternalError"
-  destination_arn = module.control_alert_handler.arn
-}
-
 #####################################
 ##  ui-cognito-pre-authentication  ##
 #####################################
@@ -153,13 +146,6 @@ resource "aws_lambda_permission" "ui_cognito_pre_authentication" {
   function_name = module.ui_cognito_pre_authentication.name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.echostream_ui.arn
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_authentication" {
-  name            = "${var.resource_prefix}-ui-cognito-pre-authentication"
-  log_group_name  = module.ui_cognito_pre_authentication.log_group_name
-  filter_pattern  = "ERROR -UserNotAuthorizedError"
-  destination_arn = module.control_alert_handler.arn
 }
 
 #############################
@@ -238,14 +224,6 @@ resource "aws_lambda_permission" "ui_cognito_pre_signup" {
   source_arn    = aws_cognito_user_pool.echostream_ui.arn
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "ui_cognito_pre_signup" {
-  name            = "${var.resource_prefix}-ui-cognito-pre-signup"
-  log_group_name  = module.ui_cognito_pre_signup.log_group_name
-  filter_pattern  = "ERROR -SignupError -InternalError"
-  destination_arn = module.control_alert_handler.arn
-}
-
-
 ##########################################
 ##  app-api-cognito-pre-authentication  ##
 ##########################################
@@ -316,13 +294,6 @@ resource "aws_lambda_permission" "app_api_cognito_pre_authentication" {
   function_name = module.app_api_cognito_pre_authentication.name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.echostream_api.arn
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "app_api_cognito_pre_authentication" {
-  name            = "${var.resource_prefix}-app-api-cognito-pre-authentication"
-  log_group_name  = module.app_api_cognito_pre_authentication.log_group_name
-  filter_pattern  = "ERROR -AppNotAuthorizedError"
-  destination_arn = module.control_alert_handler.arn
 }
 
 # ########################################
