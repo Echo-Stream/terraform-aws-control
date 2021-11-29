@@ -164,7 +164,7 @@ module "audit_firehose_us_east_1" {
   source          = "./_modules/audit-firehose"
 
   providers = {
-    aws = aws.ohio
+    aws = aws.north-virginia
   }
 }
 
