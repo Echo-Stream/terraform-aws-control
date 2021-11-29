@@ -31,7 +31,7 @@ locals {
     API_ID           = aws_appsync_graphql_api.echostream.id
     APPSYNC_ENDPOINT = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
     ARTIFACTS_BUCKET = local.artifacts_bucket_prefix
-    AUDIT_FIREHOSE                = "${var.resource_prefix}-audit-records"
+    AUDIT_FIREHOSE   = "${var.resource_prefix}-audit-records"
     #AUDIT_RECORDS_TOPIC           = "${var.resource_prefix}-audit-records"
     CLOUDFRONT_DISTRIBUTION_ID    = aws_cloudfront_distribution.webapp.id
     CONTROL_REGION                = local.current_region

@@ -53,3 +53,17 @@ module "audit_firehose_us_west_2" {
     aws = aws.oregon
   }
 }
+
+## EU-WEST-1
+module "audit_firehose_eu_west_1" {
+  count           = contains(local.regions, "eu-west-1") == true ? 1 : 0
+  log_bucket      = module.log_bucket_eu_west_1.0.id
+  region          = "eu-west-1"
+  resource_prefix = var.resource_prefix
+  tags            = local.tags
+  source          = "./_modules/audit-firehose"
+
+  providers = {
+    aws = aws.ireland
+  }
+}
