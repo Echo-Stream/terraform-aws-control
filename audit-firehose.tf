@@ -153,3 +153,17 @@ resource "aws_kinesis_firehose_delivery_stream" "process_audit_record_firehose" 
   }
   tags = local.tags
 }
+
+## US-EAST-2
+module "audit_firehose_us_east_2" {
+  count           = contains(local.regions, "us-east-2") == true ? 1 : 0
+  log_bucket      = module.log_bucket_us_east_2.0.id
+  region          = "us-east-2"
+  resource_prefix = var.resource_prefix
+  tags            = local.tags
+  source          = "./_modules/audit-firehose"
+
+  providers = {
+    aws = aws.ohio
+  }
+}
