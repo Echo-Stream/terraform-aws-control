@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "audit_records" {
   acl    = "private"
-  bucket = "${var.resource_prefix}-audit-records-${var-region}"
+  bucket = "${var.resource_prefix}-audit-records-${var.region}"
 
   lifecycle_rule {
     id      = "archive"
