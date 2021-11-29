@@ -29,10 +29,11 @@ locals {
     #AUDIT_FIREHOSE                = aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.name
     #ID_TOKEN_KEY                  = local.id_token_key
     #ALARM_SNS_TOPIC               = aws_sns_topic.alarms.arn
-    API_ID                        = aws_appsync_graphql_api.echostream.id
-    APPSYNC_ENDPOINT              = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
-    ARTIFACTS_BUCKET              = local.artifacts_bucket_prefix
-    AUDIT_FIREHOSE                = "${var.resource_prefix}-audit-records"
+    API_ID           = aws_appsync_graphql_api.echostream.id
+    APPSYNC_ENDPOINT = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
+    ARTIFACTS_BUCKET = local.artifacts_bucket_prefix
+    #AUDIT_FIREHOSE                = "${var.resource_prefix}-audit-records"
+    AUDIT_RECORDS_TOPIC           = "${var.resource_prefix}-audit-records"
     CLOUDFRONT_DISTRIBUTION_ID    = aws_cloudfront_distribution.webapp.id
     CONTROL_REGION                = local.current_region
     DYNAMODB_TABLE                = module.graph_table.name
@@ -54,6 +55,7 @@ locals {
     UPDATE_CODE_ROLE              = aws_iam_role.update_code.arn
     VALIDATOR_CODE                = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
     VALIDATOR_ROLE                = aws_iam_role.validator.arn
+
   }
 
   domain = "${var.resource_prefix}.${var.domain_name}"

@@ -49,18 +49,32 @@ resource "aws_iam_role_policy_attachment" "internal_node_basic" {
 }
 
 data "aws_iam_policy_document" "internal_node" {
+  # statement {
+  #   effect = "Allow"
+
+  #   actions = [
+  #     "firehose:PutRecord*"
+  #   ]
+
+  #   resources = [aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.arn,
+  #     "arn:aws:firehose:*:${data.aws_caller_identity.current.account_id}:deliverystream/${var.resource_prefix}-audit-records"
+  #   ]
+
+  #   sid = "WriteToFirehose"
+  # }
+
   statement {
     effect = "Allow"
 
     actions = [
-      "firehose:PutRecord*"
+      "sns:Publish"
     ]
 
-    resources = [aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.arn,
-      "arn:aws:firehose:*:${data.aws_caller_identity.current.account_id}:deliverystream/${var.resource_prefix}-audit-records"
+    resources = [
+      "arn:aws:sns:*:${data.aws_caller_identity.current.account_id}:${var.resource_prefix}-audit-records"
     ]
 
-    sid = "WriteToFirehose"
+    sid = "WriteToAuditRecordsSNSTopic"
   }
 
   statement {

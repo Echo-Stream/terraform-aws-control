@@ -93,6 +93,37 @@ resource "aws_kinesis_firehose_delivery_stream" "audit_records" {
 }
 
 # SNS
+resource "aws_iam_role" "audit_records_subscription" {
+  description        = "Allows Audit records SNS topic to be subscribed to Audit records Firehose"
+  assume_role_policy = data.aws_iam_policy_document.firehose_assume_role.json
+  name               = "${var.resource_prefix}-audit-records-subscription-${var.region}"
+  tags               = var.tags
+}
+
+data "aws_iam_policy_document" "audit_records_subscription" {
+  statement {
+    actions = [
+      "firehose:DescribeDeliveryStream",
+      "firehose:ListDeliveryStreams",
+      "firehose:ListTagsForDeliveryStream",
+      "firehose:PutRecord",
+      "firehose:PutRecordBatch"
+    ]
+
+    resources = [
+      aws_kinesis_firehose_delivery_stream.audit_records.arn
+    ]
+
+    sid = "AllowSNSSubsctiption"
+  }
+}
+
+resource "aws_iam_role_policy" "audit_records_subscription" {
+  name   = "${var.resource_prefix}-audit-records-subscription-${var.region}"
+  policy = data.aws_iam_policy_document.audit_records_subscription.json
+  role   = aws_iam_role.audit_records_subscription.id
+}
+
 resource "aws_sns_topic" "audit_records" {
   display_name      = "Audit Records"
   kms_master_key_id = "alias/aws/sns"
@@ -100,9 +131,11 @@ resource "aws_sns_topic" "audit_records" {
   tags              = var.tags
 }
 
+
 resource "aws_sns_topic_subscription" "audit_records" {
-  endpoint             = aws_kinesis_firehose_delivery_stream.audit_records.arn
-  protocol             = "firehose"
-  raw_message_delivery = true
-  topic_arn            = aws_sns_topic.audit_records.arn
+  endpoint              = aws_kinesis_firehose_delivery_stream.audit_records.arn
+  subscription_role_arn = aws_iam_role.audit_records_subscription.arn
+  protocol              = "firehose"
+  raw_message_delivery  = true
+  topic_arn             = aws_sns_topic.audit_records.arn
 }
