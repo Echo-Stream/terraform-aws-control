@@ -12,7 +12,7 @@ resource "aws_cloudwatch_log_stream" "audit_records" {
 resource "aws_iam_role" "audit_records" {
   description        = "Write Transformed audit records into the bucket"
   assume_role_policy = data.aws_iam_policy_document.firehose_assume_role.json
-  name               = "${var.resource_prefix}-audit-records"
+  name               = "${var.resource_prefix}-audit-records-${var.region}"
   tags               = var.tags
 }
 
@@ -59,7 +59,7 @@ data "aws_iam_policy_document" "audit_records" {
 }
 
 resource "aws_iam_role_policy" "audit_records" {
-  name   = "${var.resource_prefix}-audit-records-access"
+  name   = "${var.resource_prefix}-audit-records-${var.region}"
   policy = data.aws_iam_policy_document.audit_records.json
   role   = aws_iam_role.audit_records.id
 }
