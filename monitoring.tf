@@ -1,68 +1,68 @@
-resource "aws_sns_topic" "alarms" {
-  name         = "${var.resource_prefix}-alarms"
-  display_name = "${var.resource_prefix} Alarms"
-  tags         = local.tags
-}
+# resource "aws_sns_topic" "alarms" {
+#   name         = "${var.resource_prefix}-alarms"
+#   display_name = "${var.resource_prefix} Alarms"
+#   tags         = local.tags
+# }
 
-resource "aws_sns_topic_policy" "alarms" {
-  arn    = aws_sns_topic.alarms.arn
-  policy = data.aws_iam_policy_document.alarms_sns_topic.json
-}
+# resource "aws_sns_topic_policy" "alarms" {
+#   arn    = aws_sns_topic.alarms.arn
+#   policy = data.aws_iam_policy_document.alarms_sns_topic.json
+# }
 
-data "aws_iam_policy_document" "alarms_sns_topic" {
-  statement {
-    effect  = "Allow"
-    actions = ["SNS:Publish"]
+# data "aws_iam_policy_document" "alarms_sns_topic" {
+#   statement {
+#     effect  = "Allow"
+#     actions = ["SNS:Publish"]
 
-    principals {
-      type        = "Service"
-      identifiers = ["events.amazonaws.com"]
-    }
+#     principals {
+#       type        = "Service"
+#       identifiers = ["events.amazonaws.com"]
+#     }
 
-    resources = [aws_sns_topic.alarms.arn]
-  }
-}
+#     resources = [aws_sns_topic.alarms.arn]
+#   }
+# }
 
-## US-EAST-1
-module "alarm_distribution_us_east_1" {
-  account_id          = data.aws_caller_identity.current.account_id
-  alarm_sns_topic_arn = aws_sns_topic.alarms.arn
-  name                = "${var.resource_prefix}-alarm-distribution"
-  tags                = local.tags
+# ## US-EAST-1
+# module "alarm_distribution_us_east_1" {
+#   account_id          = data.aws_caller_identity.current.account_id
+#   alarm_sns_topic_arn = aws_sns_topic.alarms.arn
+#   name                = "${var.resource_prefix}-alarm-distribution"
+#   tags                = local.tags
 
-  providers = {
-    aws = aws.north-virginia
-  }
-  source = "./_modules/alarm-distributions"
-}
+#   providers = {
+#     aws = aws.north-virginia
+#   }
+#   source = "./_modules/alarm-distributions"
+# }
 
-## US-EAST-2
-module "alarm_distribution_us_east_2" {
-  account_id          = data.aws_caller_identity.current.account_id
-  alarm_sns_topic_arn = aws_sns_topic.alarms.arn
-  name                = "${var.resource_prefix}-alarm-distribution"
-  tags                = local.tags
+# ## US-EAST-2
+# module "alarm_distribution_us_east_2" {
+#   account_id          = data.aws_caller_identity.current.account_id
+#   alarm_sns_topic_arn = aws_sns_topic.alarms.arn
+#   name                = "${var.resource_prefix}-alarm-distribution"
+#   tags                = local.tags
 
-  providers = {
-    aws = aws.ohio
-  }
+#   providers = {
+#     aws = aws.ohio
+#   }
 
-  source = "./_modules/alarm-distributions"
-}
+#   source = "./_modules/alarm-distributions"
+# }
 
-## US-WEST-1
-module "alarm_distribution_" {
-  account_id          = data.aws_caller_identity.current.account_id
-  alarm_sns_topic_arn = aws_sns_topic.alarms.arn
-  name                = "${var.resource_prefix}-alarm-distribution"
-  tags                = local.tags
+# ## US-WEST-1
+# module "alarm_distribution_" {
+#   account_id          = data.aws_caller_identity.current.account_id
+#   alarm_sns_topic_arn = aws_sns_topic.alarms.arn
+#   name                = "${var.resource_prefix}-alarm-distribution"
+#   tags                = local.tags
 
-  providers = {
-    aws = aws.north-california
-  }
+#   providers = {
+#     aws = aws.north-california
+#   }
 
-  source = "./_modules/alarm-distributions"
-}
+#   source = "./_modules/alarm-distributions"
+# }
 ## ^ Should be done for supported regions
 
 # ## IAM Roles
