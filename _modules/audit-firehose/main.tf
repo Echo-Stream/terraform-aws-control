@@ -95,7 +95,7 @@ resource "aws_kinesis_firehose_delivery_stream" "audit_records" {
 # SNS
 resource "aws_iam_role" "audit_records_subscription" {
   description        = "Allows Audit records SNS topic to be subscribed to Audit records Firehose"
-  assume_role_policy = data.aws_iam_policy_document.firehose_assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.sns_assume_role.json
   name               = "${var.resource_prefix}-audit-records-subscription-${var.region}"
   tags               = var.tags
 }
