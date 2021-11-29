@@ -397,26 +397,26 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
 
     resources = [
-      aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.arn,
+      #aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.arn,
       "arn:aws:firehose:*:${data.aws_caller_identity.current.account_id}:deliverystream/${var.resource_prefix}-audit-records"
     ]
 
     sid = "PutRecordBatch"
   }
 
-  statement {
-    effect = "Allow"
+  # statement {
+  #   effect = "Allow"
 
-    actions = [
-      "sns:Publish"
-    ]
+  #   actions = [
+  #     "sns:Publish"
+  #   ]
 
-    resources = [
-      "arn:aws:sns:*:${data.aws_caller_identity.current.account_id}:${var.resource_prefix}-audit-records"
-    ]
+  #   resources = [
+  #     "arn:aws:sns:*:${data.aws_caller_identity.current.account_id}:${var.resource_prefix}-audit-records"
+  #   ]
 
-    sid = "WriteToAuditRecordsSNSTopic"
-  }
+  #   sid = "WriteToAuditRecordsSNSTopic"
+  # }
 }
 
 resource "aws_iam_policy" "graph_table_tenant_stream_handler" {
