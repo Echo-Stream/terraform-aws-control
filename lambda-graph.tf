@@ -86,14 +86,6 @@ resource "aws_lambda_event_source_mapping" "graph_table_dynamodb_trigger" {
   starting_position = "LATEST"
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "graph_table_dynamodb_trigger" {
-  name            = "${var.resource_prefix}-graph-table-dynamodb-trigger"
-  log_group_name  = module.graph_table_dynamodb_trigger.log_group_name
-  filter_pattern  = "ERROR -USERERROR"
-  destination_arn = module.control_alert_handler.arn
-}
-
-
 resource "aws_iam_role" "managed_app" {
   description        = "Enable AWS Systems Manager service core functionality"
   name               = "${var.resource_prefix}-managed-app"
