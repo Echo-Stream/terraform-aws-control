@@ -55,7 +55,7 @@ module "log_retention" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 60
-  version       = "3.0.17"
+  version       = "3.0.18"
 }
 
 
