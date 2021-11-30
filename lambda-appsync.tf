@@ -47,6 +47,7 @@ resource "aws_iam_policy" "appsync_datasource" {
 }
 
 module "appsync_datasource" {
+  architectures   = ["arm64"]
   description     = "The main datasource for the echo-stream API "
   dead_letter_arn = local.lambda_dead_letter_arn
 
