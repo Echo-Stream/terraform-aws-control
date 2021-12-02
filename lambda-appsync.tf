@@ -47,15 +47,11 @@ resource "aws_iam_policy" "appsync_datasource" {
 }
 
 module "appsync_datasource" {
-  #architectures   = ["arm64"]
   description     = "The main datasource for the echo-stream API "
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = merge(local.common_lambda_environment_variables,
     {
-      # APP_USER_POOL_APP_ID         = aws_cognito_user_pool_client.echostream_apps_userpool_client.id
-      # APP_USER_POOL_ID             = aws_cognito_user_pool.echostream_apps.id
-      #APP_IDENTITY_POOL_ID         = aws_cognito_identity_pool.echostream.id
       API_USER_POOL_CLIENT_ID         = aws_cognito_user_pool_client.echostream_api_userpool_client.id
       API_USER_POOL_ID                = aws_cognito_user_pool.echostream_api.id
       BULK_DATA_AWS_ACCESS_KEY_ID     = aws_iam_access_key.presign_bulk_data.id
