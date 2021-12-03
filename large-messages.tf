@@ -7,44 +7,44 @@ resource "aws_iam_user" "presign_bulk_data" {
   })
 }
 
-data "aws_iam_policy_document" "presign_bulk_data" {
-  statement {
-    actions = [
-      "s3:GetObject*",
-      "s3:PutObject*",
-    ]
+# data "aws_iam_policy_document" "presign_bulk_data" {
+#   statement {
+#     actions = [
+#       "s3:GetObject*",
+#       "s3:PutObject*",
+#     ]
 
-    resources = flatten([
-      [for lmb in module.bulk_data_bucket_us_east_1 : "${lmb.arn}/*"],
-      [for lmb in module.bulk_data_bucket_us_east_2 : "${lmb.arn}/*"],
-      [for lmb in module.bulk_data_bucket_us_west_2 : "${lmb.arn}/*"]
-    ])
+#     resources = flatten([
+#       [for lmb in module.bulk_data_bucket_us_east_1 : "${lmb.arn}/*"],
+#       [for lmb in module.bulk_data_bucket_us_east_2 : "${lmb.arn}/*"],
+#       [for lmb in module.bulk_data_bucket_us_west_2 : "${lmb.arn}/*"]
+#     ])
 
-    sid = "LargeMessagesBucketsAccess"
-  }
+#     sid = "LargeMessagesBucketsAccess"
+#   }
 
-  statement {
-    actions = [
-      "kms:Decrypt",
-      "kms:Encrypt",
-      "kms:GenerateDataKey",
-    ]
+#   statement {
+#     actions = [
+#       "kms:Decrypt",
+#       "kms:Encrypt",
+#       "kms:GenerateDataKey",
+#     ]
 
-    resources = flatten([
-      aws_kms_key.kms_us_east_1[*].arn,
-      aws_kms_key.kms_us_east_2[*].arn,
-      aws_kms_key.kms_us_west_2[*].arn
-    ])
+#     resources = flatten([
+#       aws_kms_key.kms_us_east_1[*].arn,
+#       aws_kms_key.kms_us_east_2[*].arn,
+#       aws_kms_key.kms_us_west_2[*].arn
+#     ])
 
-    sid = "EncryptDecryptEnvKMSKeys"
-  }
-}
+#     sid = "EncryptDecryptEnvKMSKeys"
+#   }
+# }
 
 
-resource "aws_iam_user_policy" "presign_bulk_data" {
-  user   = aws_iam_user.presign_bulk_data.name
-  policy = data.aws_iam_policy_document.presign_bulk_data.json
-}
+# resource "aws_iam_user_policy" "presign_bulk_data" {
+#   user   = aws_iam_user.presign_bulk_data.name
+#   policy = data.aws_iam_policy_document.presign_bulk_data.json
+# }
 
 resource "aws_iam_access_key" "presign_bulk_data" {
   user = aws_iam_user.presign_bulk_data.name

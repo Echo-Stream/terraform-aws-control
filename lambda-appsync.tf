@@ -56,6 +56,7 @@ module "appsync_datasource" {
       API_USER_POOL_ID                = aws_cognito_user_pool.echostream_api.id
       BULK_DATA_AWS_ACCESS_KEY_ID     = aws_iam_access_key.presign_bulk_data.id
       BULK_DATA_AWS_SECRET_ACCESS_KEY = aws_iam_access_key.presign_bulk_data.secret
+      BULK_DATA_IAM_USER              = aws_iam_user.presign_bulk_data.arn
       MANAGED_APP_CLOUD_INIT_TOPIC    = aws_sns_topic.managed_app_cloud_init.arn
       REMOTE_APP_ROLE                 = aws_iam_role.remote_app.arn
       SSM_SERVICE_ROLE                = "service-role/${aws_iam_role.managed_app.name}"
