@@ -11,9 +11,3 @@ module "managed_app_cloud_init_subscription" {
   source          = "QuiNovas/sns-email-subscription/aws"
   version         = "0.0.2"
 }
-
-# resource "aws_sns_topic" "alerts" {
-#   name         = "${var.resource_prefix}-alerts"
-#   display_name = "${var.resource_prefix} Alerts"
-#   tags         = local.tags
-# }
