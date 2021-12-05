@@ -56,26 +56,12 @@ data "aws_iam_policy_document" "internal_node" {
       "firehose:PutRecord*"
     ]
 
-    resources = [ #aws_kinesis_firehose_delivery_stream.process_audit_record_firehose.arn,
-      "arn:aws:firehose:*:${data.aws_caller_identity.current.account_id}:deliverystream/${var.resource_prefix}-audit-records"
+    resources = [
+      "arn:aws:firehose:*:${data.aws_caller_identity.current.account_id}:deliverystream/${var.resource_prefix}-tenant-*"
     ]
 
-    sid = "WriteToFirehose"
+    sid = "WriteAuditRecords"
   }
-
-  # statement {
-  #   effect = "Allow"
-
-  #   actions = [
-  #     "sns:Publish"
-  #   ]
-
-  #   resources = [
-  #     "arn:aws:sns:*:${data.aws_caller_identity.current.account_id}:${var.resource_prefix}-audit-records"
-  #   ]
-
-  #   sid = "WriteToAuditRecordsSNSTopic"
-  # }
 
   statement {
     effect = "Allow"
@@ -86,7 +72,8 @@ data "aws_iam_policy_document" "internal_node" {
       "sqs:GetQueueAttributes"
     ]
 
-    resources = ["arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:edge*.fifo",
+    resources = [
+      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:edge*.fifo",
       "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:dead-letter*.fifo"
     ]
 
