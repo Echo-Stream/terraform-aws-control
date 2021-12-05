@@ -19,17 +19,17 @@ locals {
     tenant_lambda = "${var.echostream_version}/lambda/tenant"
   }
 
-  artifacts_account_id    = "226390263822"                                 # echostream-artifacts
-  artifacts_bucket        = "echostream-artifacts-${local.current_region}" # artifacts bucket name with region
-  artifacts_bucket_prefix = "echostream-artifacts"                         # artifacts bucket name without region
-  current_region          = data.aws_region.current.name                   # current region or control region
+  artifacts_account_id     = "226390263822"                                 # echostream-artifacts
+  artifacts_bucket         = "echostream-artifacts-${local.current_region}" # artifacts bucket name with region
+  artifacts_bucket_prefix  = "echostream-artifacts"                         # artifacts bucket name without region
+  audit_firehose_log_group = "/aws/kinesisfirehose/${var.resource_prefix}-audit-firehose" # log group name for audit-firehose
+  current_region           = data.aws_region.current.name                   # current region or control region
 
   # Common environment variables for lambdas that use echo-tools library
   common_lambda_environment_variables = {
     API_ID                        = aws_appsync_graphql_api.echostream.id
     APPSYNC_ENDPOINT              = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
     ARTIFACTS_BUCKET              = local.artifacts_bucket_prefix
-    AUDIT_FIREHOSE                = "${var.resource_prefix}-audit-records"
     CLOUDFRONT_DISTRIBUTION_ID    = aws_cloudfront_distribution.webapp.id
     CONTROL_REGION                = local.current_region
     DYNAMODB_TABLE                = module.graph_table.name
