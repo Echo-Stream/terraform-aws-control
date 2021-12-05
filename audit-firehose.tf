@@ -1,69 +1,93 @@
-## US-EAST-1
-module "audit_firehose_us_east_1" {
-  count           = contains(local.regions, "us-east-1") == true ? 1 : 0
-  log_bucket      = module.log_bucket_us_east_1.0.id
-  region          = "us-east-1"
-  resource_prefix = var.resource_prefix
-  tags            = local.tags
-  source          = "./_modules/audit-firehose"
+resource "aws_iam_role" "audit_firehose" {
+  name               = "${var.resource_prefix}-audit-firehose"
+  assume_role_policy = data.aws_iam_policy_document.firehose_assume_role.json
+  tags               = local.tags
+}
 
-  providers = {
-    aws = aws.north-virginia
+data "aws_iam_policy_document" "audit_firehose" {
+  statement {
+    actions = [
+      "s3:AbortMultipartUpload",
+      "s3:GetObject",
+      "s3:PutObject",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.resource_prefix}-tenant-*/audit-records/*",
+    ]
+
+    sid = "AllowIntermediateBucketAccess"
+  }
+
+  statement {
+    actions = [
+      "s3:GetBucketLocation",
+      "s3:ListBucket",
+      "s3:ListBucketMultipartUploads",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.resource_prefix}-tenant-*",
+    ]
+
+    sid = "AllowBucketOperations"
+  }
+
+  statement {
+    actions = [
+      "logs:PutLogEvents",
+    ]
+
+    resources = [
+      "arn:aws:logs:*:${data.aws_caller_identity.current.account_id}:log-group:${local.audit_firehose_log_group}:log-stream:${var.resource_prefix}-tenant-*",
+    ]
+
+    sid = "AllowWritingErrorEvents"
   }
 }
 
-## US-EAST-2
-module "audit_firehose_us_east_2" {
-  count           = contains(local.regions, "us-east-2") == true ? 1 : 0
-  log_bucket      = module.log_bucket_us_east_2.0.id
-  region          = "us-east-2"
-  resource_prefix = var.resource_prefix
-  tags            = local.tags
-  source          = "./_modules/audit-firehose"
-
-  providers = {
-    aws = aws.ohio
-  }
+resource "aws_iam_role_policy" "audit_firehose" {
+  name   = "${var.resource_prefix}-audit-firehose"
+  policy = data.aws_iam_policy_document.audit_firehose.json
+  role   = aws_iam_role.audit_firehose.id
 }
 
-## US-WEST-1
-module "audit_firehose_us_west_1" {
-  count           = contains(local.regions, "us-west-1") == true ? 1 : 0
-  log_bucket      = module.log_bucket_us_west_2.0.id
-  region          = "us-west-1"
-  resource_prefix = var.resource_prefix
-  tags            = local.tags
-  source          = "./_modules/audit-firehose"
+####################################
+# Create log groups in each region #
+####################################
 
-  providers = {
-    aws = aws.north-california
-  }
+resource "aws_cloudwatch_log_group" "audit_firehose_us_east_1" {
+  name              = local.audit_firehose_log_group
+  retention_in_days = 7
+  tags              = var.tags
+  provider          = aws.north-virginia
 }
 
-## US-WEST-2
-module "audit_firehose_us_west_2" {
-  count           = contains(local.regions, "us-west-2") == true ? 1 : 0
-  log_bucket      = module.log_bucket_us_west_2.0.id
-  region          = "us-west-2"
-  resource_prefix = var.resource_prefix
-  tags            = local.tags
-  source          = "./_modules/audit-firehose"
-
-  providers = {
-    aws = aws.oregon
-  }
+resource "aws_cloudwatch_log_group" "audit_firehose_us_east_2" {
+  name              = local.audit_firehose_log_group
+  retention_in_days = 7
+  tags              = var.tags
+  provider          = aws.ohio
 }
 
-## EU-WEST-1
-module "audit_firehose_eu_west_1" {
-  count           = contains(local.regions, "eu-west-1") == true ? 1 : 0
-  log_bucket      = module.log_bucket_eu_west_1.0.id
-  region          = "eu-west-1"
-  resource_prefix = var.resource_prefix
-  tags            = local.tags
-  source          = "./_modules/audit-firehose"
-
-  providers = {
-    aws = aws.ireland
-  }
+resource "aws_cloudwatch_log_group" "audit_firehose_us_west_1" {
+  name              = local.audit_firehose_log_group
+  retention_in_days = 7
+  tags              = var.tags
+  provider          = aws.north-california
 }
+
+resource "aws_cloudwatch_log_group" "audit_firehose_us_west_2" {
+  name              = local.audit_firehose_log_group
+  retention_in_days = 7
+  tags              = var.tags
+  provider          = aws.oregon
+}
+
+resource "aws_cloudwatch_log_group" "audit_firehose_eu_west_1" {
+  name              = local.audit_firehose_log_group
+  retention_in_days = 7
+  tags              = var.tags
+  provider          = aws.ireland
+}
+
