@@ -433,7 +433,7 @@ module "graph_table_tenant_stream_handler" {
   s3_object_key = local.lambda_functions_keys["graph_table_tenant_stream_handler"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
-  timeout       = 300
+  timeout       = 900
   version       = "3.0.15"
 }
 
@@ -670,7 +670,7 @@ module "graph_table_system_stream_handler" {
   s3_object_key = local.lambda_functions_keys["graph_table_system_stream_handler"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
-  timeout       = 300
+  timeout       = 900
   version       = "3.0.18"
 }
 
