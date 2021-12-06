@@ -81,6 +81,6 @@ module "appsync_datasource" {
   s3_object_key = local.lambda_functions_keys["appsync_datasource"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
-  timeout       = 120
+  timeout       = 30
   version       = "3.0.18"
 }
