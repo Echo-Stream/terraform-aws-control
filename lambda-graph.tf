@@ -295,6 +295,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
   statement {
     actions = [
       "kms:CreateGrant",
+      "kms:DeleteAlias",
       "kms:DescribeKey",
       "kms:ListGrants",
       "kms:ListResourceGrants",
@@ -393,6 +394,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
 
   statement {
     actions = [
+      "firehose:DeleteDeliveryStream",
       "firehose:PutRecord*",
     ]
 
@@ -400,7 +402,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
       "arn:aws:firehose:*:${data.aws_caller_identity.current.account_id}:deliverystream/${var.resource_prefix}-tenant-*"
     ]
 
-    sid = "WriteAuditRecords"
+    sid = "FirehosePermissions"
   }
 }
 
