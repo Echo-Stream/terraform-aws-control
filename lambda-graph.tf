@@ -504,7 +504,7 @@ data "aws_iam_policy_document" "graph_table_system_stream_handler" {
       "logs:CreateLogStream",
       "logs:DeleteLogGroup",
       "logs:DeleteSubscriptionFilter",
-      "logs:DescribeLogGroups",
+      "logs:Describe*",
       "logs:PutLogEvents",
       "logs:PutRetentionPolicy",
       "logs:PutSubscriptionFilter",
