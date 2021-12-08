@@ -218,6 +218,18 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
 
   statement {
     actions = [
+      "dynamodb:DeleteTable"
+    ]
+
+    resources = [
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-tenant-*"      
+    ]
+
+    sid = "DeleteTenantTables"
+  }
+
+  statement {
+    actions = [
       "appsync:GraphQL",
       "appsync:GetGraphqlApi"
     ]
@@ -452,18 +464,6 @@ data "aws_iam_policy_document" "graph_table_system_stream_handler" {
     ]
 
     sid = "TableAccess"
-  }
-
-  statement {
-    actions = [
-      "dynamodb:DeleteTable"
-    ]
-
-    resources = [
-      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-tenant-*"      
-    ]
-
-    sid = "DeleteTenantTables"
   }
 
   statement {
