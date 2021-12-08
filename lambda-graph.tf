@@ -448,11 +448,22 @@ data "aws_iam_policy_document" "graph_table_system_stream_handler" {
     ]
 
     resources = [
-      module.graph_table.arn,
-      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-tenant-*"
+      module.graph_table.arn
     ]
 
     sid = "TableAccess"
+  }
+
+  statement {
+    actions = [
+      "dynamodb:DeleteTable"
+    ]
+
+    resources = [
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-tenant-*"      
+    ]
+
+    sid = "DeleteTenantTables"
   }
 
   statement {
