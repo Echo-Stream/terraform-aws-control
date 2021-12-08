@@ -81,15 +81,21 @@ data "aws_iam_policy_document" "internal_node" {
   }
 
   statement {
+    effect = "Allow"
+
     actions = [
-      "dynamodb:Query",
+      "dynamodb:DeleteItem",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:Query".
+      "dynamodb:UpdateItem"
     ]
 
     resources = [
-      "${module.graph_table.arn}/*",
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-tenant-*"
     ]
 
-    sid = "QueryAllIndexes"
+    sid = "TenantTableAccess"
   }
 
 }
@@ -141,6 +147,18 @@ data "aws_iam_policy_document" "common_db_access" {
     resources = [module.graph_table.arn]
 
     sid = "GraphTableAccess"
+  }
+ 
+  statement {
+    actions = [
+      "dynamodb:Query",
+    ]
+
+    resources = [
+      "${module.graph_table.arn}/*",
+    ]
+
+    sid = "QueryAllIndexes"
   }
 }
 
