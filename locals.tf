@@ -1,12 +1,6 @@
-resource "random_uuid" "for_jwk" {}
-
-resource "random_string" "for_jwk" {
-  length  = 64
-  special = true
-}
-
 locals {
   artifacts_sns_arn = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}_${replace(var.echostream_version, ".", "-")}"
+
   artifacts = {
     appsync   = "${var.echostream_version}/appsync"
     functions = "${var.echostream_version}/functions"
@@ -51,7 +45,6 @@ locals {
     UPDATE_CODE_ROLE              = aws_iam_role.update_code.arn
     VALIDATOR_CODE                = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
     VALIDATOR_ROLE                = aws_iam_role.validator.arn
-
   }
 
   domain                      = "${var.resource_prefix}.${var.domain_name}"
@@ -73,10 +66,10 @@ locals {
     ui_cognito_pre_signup              = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
   }
 
-  log_bucket     = module.log_bucket.id
-  tenant_regions = split(",", var.tenant_regions)
-  #regions    = setunion(var.tenant_regions, [var.region]) #combined list of control region and tenant regions
-  regions = concat(local.tenant_regions, [var.region])
+  log_bucket             = module.log_bucket.id
+  module_release_version = "v0.0.3"                                   # this is used in workflows/publish.yml to release terraform module
+  regions                = concat(local.tenant_regions, [var.region]) # Tenant + Control Regions
+  tenant_regions         = split(",", var.tenant_regions)             # only Tenant regions
 
   tags = merge({
     app         = "echostream"
