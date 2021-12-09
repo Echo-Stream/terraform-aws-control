@@ -39,7 +39,7 @@ module "log_bucket_us_east_1" {
 module "log_bucket_us_east_2" {
   count        = contains(local.regions, "us-east-2") == true ? 1 : 0
   name_prefix  = var.resource_prefix
-  name_postfix = "us-east-1"
+  name_postfix = "us-east-2"
   source       = "QuiNovas/log-bucket/aws"
   version      = "3.0.5"
 
