@@ -25,10 +25,11 @@ resource "aws_kms_alias" "lambda_environment_variables" {
 
 ## Regional Log buckets
 module "log_bucket_us_east_1" {
-  count       = contains(local.regions, "us-east-1") == true ? 1 : 0
-  name_prefix = "${var.resource_prefix}-us-east-1"
-  source      = "QuiNovas/log-bucket/aws"
-  version     = "3.0.2"
+  count        = contains(local.regions, "us-east-1") == true ? 1 : 0
+  name_prefix  = var.resource_prefix
+  name_postfix = "us-east-1"
+  source       = "QuiNovas/log-bucket/aws"
+  version      = "3.0.5"
 
   providers = {
     aws = aws.north-virginia
