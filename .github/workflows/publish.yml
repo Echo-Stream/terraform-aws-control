@@ -47,7 +47,7 @@ jobs:
       - name: Publish and Upload
         run: |
           echo $VERSION
-          sleep 10
+          sleep 4
           response=`curl \
           --header "Authorization: Bearer $TOKEN" \
           --header "Content-Type: application/vnd.api+json" \
