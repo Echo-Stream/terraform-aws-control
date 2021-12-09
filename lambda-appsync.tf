@@ -1,28 +1,3 @@
-## additional-ddb-policy ##
-data "aws_iam_policy_document" "additional_ddb_policy" {
-  statement {
-    actions = [
-      "dynamodb:DescribeTable",
-      "dynamodb:GetItem",
-      "dynamodb:Query"
-    ]
-
-    resources = [
-      module.graph_table.arn,
-      "${module.graph_table.arn}/index/*"
-    ]
-
-    sid = "TableAccess"
-  }
-}
-
-resource "aws_iam_policy" "additional_ddb_policy" {
-  description = "IAM permissions to read graph-table-dynamodb-trigger"
-  path        = "/${var.resource_prefix}-lambda/"
-  name        = "${var.resource_prefix}-additional-ddb-policy"
-  policy      = data.aws_iam_policy_document.additional_ddb_policy.json
-}
-
 ###########################
 ##  appsync--datasource  ##
 ###########################

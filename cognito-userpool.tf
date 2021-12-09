@@ -69,23 +69,6 @@ resource "aws_cognito_user_pool" "echostream_ui" {
     required            = true
   }
 
-  # sms_authentication_message = "Your authentication code is {####}. "
-
-  # sms_configuration {
-  #   external_id    = random_string.echostream_ui_external_id.result
-  #   sns_caller_arn = aws_iam_role.cognito_sms.arn
-  # }
-
-  #sms_verification_message = "Your verification code is {####}. "
-
-  # username_attributes = [
-  #   "email",
-  # ]
-
-  # user_pool_add_ons {
-  #   advanced_security_mode = "ENFORCED"
-  # }
-
   software_token_mfa_configuration {
     enabled = true
   }

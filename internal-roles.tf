@@ -27,35 +27,9 @@ resource "aws_iam_role_policy_attachment" "remote_app_basic" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-data "aws_iam_policy_document" "remote_app" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "dynamodb:DeleteItem",
-      "dynamodb:GetItem",
-      "dynamodb:PutItem",
-      "dynamodb:Query",
-      "dynamodb:UpdateItem"
-    ]
-
-    resources = [
-      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-tenant-*"
-    ]
-
-    sid = "TenantTableAccess"
-  }
-}
-
-resource "aws_iam_policy" "remote_app" {
-  description = "IAM permissions required for Remote Apps"
-  path        = "/${var.resource_prefix}-lambda/"
-  policy      = data.aws_iam_policy_document.remote_app.json
-}
-
-resource "aws_iam_role_policy_attachment" "remote_app" {
+resource "aws_iam_role_policy_attachment" "remote_app_tenant_table_read_write" {
   role       = aws_iam_role.remote_app.name
-  policy_arn = aws_iam_policy.remote_app.arn
+  policy_arn = aws_iam_policy.tenant_table_read_write.arn
 }
 
 ############################
@@ -103,25 +77,6 @@ data "aws_iam_policy_document" "internal_node" {
 
     sid = "EdgeQueuesAccess"
   }
-
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "dynamodb:DeleteItem",
-      "dynamodb:GetItem",
-      "dynamodb:PutItem",
-      "dynamodb:Query",
-      "dynamodb:UpdateItem"
-    ]
-
-    resources = [
-      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-tenant-*"
-    ]
-
-    sid = "TenantTableAccess"
-  }
-
 }
 
 data "aws_iam_policy_document" "internal_node_sts_assume" {
@@ -158,34 +113,6 @@ data "aws_iam_policy_document" "internal_node_sts_assume" {
   }
 }
 
-
-data "aws_iam_policy_document" "common_db_access" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "dynamodb:GetItem",
-      "dynamodb:Query"
-    ]
-
-    resources = [module.graph_table.arn]
-
-    sid = "GraphTableAccess"
-  }
-
-  statement {
-    actions = [
-      "dynamodb:Query",
-    ]
-
-    resources = [
-      "${module.graph_table.arn}/*",
-    ]
-
-    sid = "QueryAllIndexes"
-  }
-}
-
 resource "aws_iam_policy" "internal_node" {
   description = "IAM permissions required for tenant functions"
   path        = "/${var.resource_prefix}-lambda/"
@@ -208,15 +135,14 @@ resource "aws_iam_role_policy_attachment" "internal_node_sts_assume" {
   policy_arn = aws_iam_policy.internal_node_sts_assume.arn
 }
 
-resource "aws_iam_policy" "common_db_access" {
-  description = "IAM permissions required for tenant functions to touch DB"
-  path        = "/${var.resource_prefix}-lambda/"
-  policy      = data.aws_iam_policy_document.common_db_access.json
+resource "aws_iam_role_policy_attachment" "internal_node_graph_ddb_read" {
+  role       = aws_iam_role.internal_node.name
+  policy_arn = aws_iam_policy.graph_ddb_read.arn
 }
 
-resource "aws_iam_role_policy_attachment" "common_db_access" {
+resource "aws_iam_role_policy_attachment" "internal_node_tenant_table_read_write" {
   role       = aws_iam_role.internal_node.name
-  policy_arn = aws_iam_policy.common_db_access.arn
+  policy_arn = aws_iam_policy.tenant_table_read_write.arn
 }
 
 ###################
@@ -235,7 +161,7 @@ resource "aws_iam_role_policy_attachment" "validator_basic" {
 
 resource "aws_iam_role_policy_attachment" "validator_db" {
   role       = aws_iam_role.validator.name
-  policy_arn = aws_iam_policy.common_db_access.arn
+  policy_arn = aws_iam_policy.graph_ddb_read.arn
 }
 
 resource "aws_iam_role_policy_attachment" "validator_sts_assume" {
@@ -296,21 +222,6 @@ data "aws_iam_policy_document" "update_code" {
 
     sid = "UpdateLambda"
   }
-
-  statement {
-    actions = [
-      "s3:GetObject*",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${var.echostream_version}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${var.echostream_version}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${var.echostream_version}/*",
-
-    ]
-
-    sid = "GetArtifacts"
-  }
 }
 
 resource "aws_iam_policy" "update_code" {
@@ -324,7 +235,14 @@ resource "aws_iam_role_policy_attachment" "update_code" {
   policy_arn = aws_iam_policy.update_code.arn
 }
 
-resource "aws_iam_role_policy_attachment" "update_code_db_access" {
+
+resource "aws_iam_role_policy_attachment" "update_code_artifacts_read" {
   role       = aws_iam_role.update_code.name
-  policy_arn = aws_iam_policy.common_db_access.arn
+  policy_arn = aws_iam_policy.artifacts_bucket_read.arn
+}
+
+
+resource "aws_iam_role_policy_attachment" "update_code_graph_ddb_access" {
+  role       = aws_iam_role.update_code.name
+  policy_arn = aws_iam_policy.graph_ddb_read.arn
 }

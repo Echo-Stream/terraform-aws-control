@@ -53,7 +53,7 @@ module "ui_cognito_post_confirmation" {
 
   policy_arns = [
     aws_iam_policy.ui_cognito_post_confirmation.arn,
-    aws_iam_policy.additional_ddb_policy.arn
+    aws_iam_policy.graph_ddb_read.arn
   ]
 
   runtime       = "python3.9"
@@ -128,7 +128,7 @@ module "ui_cognito_pre_authentication" {
 
   policy_arns = [
     aws_iam_policy.ui_cognito_pre_authentication.arn,
-    aws_iam_policy.additional_ddb_policy.arn
+    aws_iam_policy.graph_ddb_read.arn
   ]
 
   runtime       = "python3.9"
@@ -204,7 +204,7 @@ module "ui_cognito_pre_signup" {
 
   policy_arns = [
     aws_iam_policy.ui_cognito_pre_signup.arn,
-    aws_iam_policy.additional_ddb_policy.arn
+    aws_iam_policy.graph_ddb_read.arn
   ]
 
   runtime       = "python3.9"
@@ -276,7 +276,7 @@ module "app_api_cognito_pre_authentication" {
 
   policy_arns = [
     aws_iam_policy.app_api_cognito_pre_authentication.arn,
-    aws_iam_policy.additional_ddb_policy.arn
+    aws_iam_policy.graph_ddb_read.arn
   ]
 
   runtime       = "python3.9"

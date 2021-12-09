@@ -2,7 +2,6 @@
 ##  Deployment handler  ##
 ##########################
 data "aws_iam_policy_document" "deployment_handler" {
-
   statement {
     actions = [
       "ecr:BatchCheckLayerAvailability",
@@ -79,35 +78,6 @@ data "aws_iam_policy_document" "deployment_handler" {
 
   statement {
     actions = [
-      "s3:ListBucket",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2",
-    ]
-
-    sid = "ListArtifactsBucket"
-  }
-
-  statement {
-    actions = [
-      "s3:GetObject*",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${var.echostream_version}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${var.echostream_version}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${var.echostream_version}/*",
-
-    ]
-
-    sid = "GetArtifacts"
-  }
-
-  statement {
-    actions = [
       "cloudfront:CreateInvalidation"
     ]
 
@@ -116,33 +86,6 @@ data "aws_iam_policy_document" "deployment_handler" {
     ]
 
     sid = "InvalidateWebappObjects"
-  }
-
-  statement {
-    actions = [
-      "dynamodb:PutItem",
-      "dynamodb:GetItem",
-      "dynamodb:Query",
-      "dynamodb:UpdateItem"
-    ]
-
-    resources = [
-      module.graph_table.arn
-    ]
-
-    sid = "GraphTableUpdatePermissions"
-  }
-
-  statement {
-    actions = [
-      "dynamodb:Query",
-    ]
-
-    resources = [
-      "${module.graph_table.arn}/*"
-    ]
-
-    sid = "GraphTableQueryIndex"
   }
   statement {
     actions = [
@@ -204,6 +147,8 @@ module "deployment_handler" {
 
   policy_arns = [
     aws_iam_policy.deployment_handler.arn,
+    aws_iam_policy.graph_ddb_write.arn,
+    aws_iam_policy.graph_ddb_read.arn,
   ]
 
   runtime       = "python3.9"
@@ -241,18 +186,16 @@ resource "aws_sns_topic_subscription" "artifacts" {
 data "aws_iam_policy_document" "rebuild_notifications" {
   statement {
     actions = [
-      "dynamodb:Query",
-      "dynamodb:GetItem",
       "dynamodb:Scan",
     ]
 
     resources = [
       "${module.graph_table.arn}",
-      "${module.graph_table.arn}/*",
     ]
 
-    sid = "TableAccess"
+    sid = "TableScanAccess"
   }
+
   statement {
     actions = [
       "lambda:CreateFunction",
@@ -270,35 +213,6 @@ data "aws_iam_policy_document" "rebuild_notifications" {
     ]
 
     sid = "LambdaDeployAccess"
-  }
-
-  statement {
-    actions = [
-      "s3:ListBucket",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2",
-    ]
-
-    sid = "ListArtifactsBucket"
-  }
-
-  statement {
-    actions = [
-      "s3:GetObject*",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${var.echostream_version}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${var.echostream_version}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${var.echostream_version}/*",
-
-    ]
-
-    sid = "GetArtifacts"
   }
 
   statement {
@@ -334,6 +248,8 @@ module "rebuild_notifications" {
   name                  = "${var.resource_prefix}-rebuild-notifications"
 
   policy_arns = [
+    aws_iam_policy.artifacts_bucket_read.arn,
+    aws_iam_policy.graph_ddb_read.arn,
     aws_iam_policy.rebuild_notifications.arn,
   ]
 
@@ -355,6 +271,9 @@ resource "aws_sqs_queue" "rebuild_notifications" {
   visibility_timeout_seconds  = 3600
 }
 
+##########################################
+##  Rebuild Notifications State Machine ##
+##########################################
 resource "aws_iam_role" "rebuild_notifications_state_machine" {
   assume_role_policy = data.aws_iam_policy_document.state_machine_assume_role.json
   name               = "${var.resource_prefix}-rebuild-notifications-state-machine"
@@ -398,13 +317,13 @@ data "aws_iam_policy_document" "rebuild_notifications_state_machine" {
   statement {
     actions = [
       "logs:CreateLogDelivery",
-      "logs:GetLogDelivery",
-      "logs:UpdateLogDelivery",
       "logs:DeleteLogDelivery",
+      "logs:DescribeLogGroups",
+      "logs:DescribeResourcePolicies",
+      "logs:GetLogDelivery",
       "logs:ListLogDeliveries",
       "logs:PutResourcePolicy",
-      "logs:DescribeResourcePolicies",
-      "logs:DescribeLogGroups"
+      "logs:UpdateLogDelivery",
     ]
 
     resources = [

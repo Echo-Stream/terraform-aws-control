@@ -67,7 +67,7 @@ module "graph_table_dynamodb_trigger" {
 
   policy_arns = [
     aws_iam_policy.graph_table_dynamodb_trigger.arn,
-    aws_iam_policy.additional_ddb_policy.arn
+    aws_iam_policy.graph_ddb_read.arn
   ]
 
   runtime       = "python3.9"
@@ -438,7 +438,7 @@ module "graph_table_tenant_stream_handler" {
 
   policy_arns = [
     aws_iam_policy.graph_table_tenant_stream_handler.arn,
-    aws_iam_policy.additional_ddb_policy.arn,
+    aws_iam_policy.graph_ddb_read.arn,
   ]
 
   runtime       = "python3.9"
@@ -675,7 +675,7 @@ module "graph_table_system_stream_handler" {
 
   policy_arns = [
     aws_iam_policy.graph_table_system_stream_handler.arn,
-    aws_iam_policy.additional_ddb_policy.arn,
+    aws_iam_policy.graph_ddb_read.arn,
   ]
 
   runtime       = "python3.9"
