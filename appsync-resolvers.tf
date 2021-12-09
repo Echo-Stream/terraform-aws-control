@@ -1,7 +1,3 @@
-###############
-## Mutations ##
-###############
-
 locals {
   invoke_resolvers = {
     create_api_user = {
