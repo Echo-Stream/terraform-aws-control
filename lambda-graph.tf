@@ -222,7 +222,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
 
     resources = [
-      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-tenant-*"      
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-tenant-*"
     ]
 
     sid = "DeleteTenantTables"

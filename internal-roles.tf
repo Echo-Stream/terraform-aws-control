@@ -1,6 +1,6 @@
-############################
+#####################
 ## Remote APP IAM ##
-############################
+####################
 resource "aws_iam_role" "remote_app" {
   name               = "${var.resource_prefix}-remote-app"
   assume_role_policy = data.aws_iam_policy_document.remote_app_assume_role.json
@@ -19,19 +19,43 @@ data "aws_iam_policy_document" "remote_app_assume_role" {
       ]
       type = "AWS"
     }
-
-    # condition {
-    #   test = "StringEquals"
-    #   values = [
-    #   ]
-    #   variable = "sts:SourceIdentity"
-    # }
   }
 }
 
 resource "aws_iam_role_policy_attachment" "remote_app_basic" {
   role       = aws_iam_role.remote_app.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+data "aws_iam_policy_document" "remote_app" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "dynamodb:DeleteItem",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:Query",
+      "dynamodb:UpdateItem"
+    ]
+
+    resources = [
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-tenant-*"
+    ]
+
+    sid = "TenantTableAccess"
+  }
+}
+
+resource "aws_iam_policy" "remote_app" {
+  description = "IAM permissions required for Remote Apps"
+  path        = "/${var.resource_prefix}-lambda/"
+  policy      = data.aws_iam_policy_document.remote_app.json
+}
+
+resource "aws_iam_role_policy_attachment" "remote_app" {
+  role       = aws_iam_role.remote_app.name
+  policy_arn = aws_iam_policy.remote_app.arn
 }
 
 ############################
@@ -148,7 +172,7 @@ data "aws_iam_policy_document" "common_db_access" {
 
     sid = "GraphTableAccess"
   }
- 
+
   statement {
     actions = [
       "dynamodb:Query",
