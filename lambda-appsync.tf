@@ -47,6 +47,8 @@ module "appsync_datasource" {
 
   policy_arns = [
     aws_iam_policy.appsync_datasource.arn,
+    aws_iam_policy.graph_ddb_read.arn,
+    aws_iam_policy.graph_ddb_write.arn,
   ]
 
   runtime       = "python3.9"

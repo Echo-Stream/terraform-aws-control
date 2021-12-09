@@ -1,6 +1,5 @@
 ## echostream-ui cognito pool
 resource "aws_cognito_user_pool" "echostream_ui" {
-
   account_recovery_setting {
     recovery_mechanism {
       name     = "verified_email"
