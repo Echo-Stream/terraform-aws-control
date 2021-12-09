@@ -1,6 +1,4 @@
-
-
-# additional-ddb-policy ##
+## additional-ddb-policy ##
 data "aws_iam_policy_document" "additional_ddb_policy" {
   statement {
     actions = [
