@@ -98,25 +98,6 @@ data "aws_iam_policy_document" "managed_app" {
 data "aws_iam_policy_document" "managed_app_customer_policy" {
   statement {
     actions = [
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:BatchGetImage",
-      "ecr:DescribeImages",
-      "ecr:DescribeRepositories",
-      "ecr:GetAuthorizationToken",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:GetRepositoryPolicy",
-      "ecr:ListImages",
-    ]
-
-    resources = [
-      "arn:aws:ecr:*:*:repository/*"
-    ]
-
-    sid = "EcrAccess"
-  }
-
-  statement {
-    actions = [
       "logs:CreateLogStream",
       "logs:PutLogEvents",
     ]
@@ -149,6 +130,11 @@ resource "aws_iam_policy" "managed_app_customer_policy" {
 
 resource "aws_iam_role_policy_attachment" "managed_app_customer_policy" {
   policy_arn = aws_iam_policy.managed_app_customer_policy.arn
+  role       = aws_iam_role.managed_app.name
+}
+
+resource "aws_iam_role_policy_attachment" "managed_app_ecr_read" {
+  policy_arn = aws_iam_policy.ecr_read.arn
   role       = aws_iam_role.managed_app.name
 }
 
@@ -299,26 +285,6 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
 
     sid = "KMSPermissions"
   }
-
-  statement {
-    actions = [
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:BatchGetImage",
-      "ecr:DescribeImages",
-      "ecr:DescribeRepositories",
-      "ecr:GetAuthorizationToken",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:GetRepositoryPolicy",
-      "ecr:ListImages",
-    ]
-
-    resources = [
-      "arn:aws:ecr:${local.current_region}:${local.artifacts_account_id}:repository/*"
-    ]
-
-    sid = "ECRAccess"
-  }
-
   statement {
     actions = [
       "lambda:CreateFunction",
@@ -399,6 +365,7 @@ module "graph_table_tenant_stream_handler" {
   name        = "${var.resource_prefix}-graph-table-tenant-stream-handler"
 
   policy_arns = [
+    aws_iam_policy.ecr_read.arn,
     aws_iam_policy.graph_ddb_read.arn,
     aws_iam_policy.graph_ddb_write.arn,
     aws_iam_policy.graph_table_tenant_stream_handler.arn,
@@ -486,7 +453,7 @@ data "aws_iam_policy_document" "graph_table_system_stream_handler" {
 
     resources = [
       aws_cognito_user_pool.echostream_ui.arn,
-    aws_cognito_user_pool.echostream_api.arn
+      aws_cognito_user_pool.echostream_api.arn
     ]
 
     sid = "AdminGetUser"
@@ -507,25 +474,6 @@ data "aws_iam_policy_document" "graph_table_system_stream_handler" {
     resources = ["*"]
 
     sid = "KMSPermissions"
-  }
-
-  statement {
-    actions = [
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:BatchGetImage",
-      "ecr:DescribeImages",
-      "ecr:DescribeRepositories",
-      "ecr:GetAuthorizationToken",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:GetRepositoryPolicy",
-      "ecr:ListImages",
-    ]
-
-    resources = [
-      "arn:aws:ecr:${local.current_region}:${local.artifacts_account_id}:repository/*"
-    ]
-
-    sid = "ECRAccess"
   }
 
   statement {
@@ -608,6 +556,7 @@ module "graph_table_system_stream_handler" {
   name        = "${var.resource_prefix}-graph-table-system-stream-handler"
 
   policy_arns = [
+    aws_iam_policy.ecr_read.arn,
     aws_iam_policy.graph_ddb_read.arn,
     aws_iam_policy.graph_ddb_write.arn,
     aws_iam_policy.graph_table_system_stream_handler.arn,

@@ -4,25 +4,6 @@
 data "aws_iam_policy_document" "deployment_handler" {
   statement {
     actions = [
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:BatchGetImage",
-      "ecr:DescribeImages",
-      "ecr:DescribeRepositories",
-      "ecr:GetAuthorizationToken",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:GetRepositoryPolicy",
-      "ecr:ListImages",
-    ]
-
-    resources = [
-      "arn:aws:ecr:${local.current_region}:${local.artifacts_account_id}:repository/*"
-    ]
-
-    sid = "AppCognitoPoolAccess"
-  }
-
-  statement {
-    actions = [
       "iam:CreateRole",
       "iam:PassRole",
     ]
@@ -147,8 +128,9 @@ module "deployment_handler" {
 
   policy_arns = [
     aws_iam_policy.deployment_handler.arn,
-    aws_iam_policy.graph_ddb_write.arn,
+    aws_iam_policy.ecr_read.arn,
     aws_iam_policy.graph_ddb_read.arn,
+    aws_iam_policy.graph_ddb_write.arn,
   ]
 
   runtime       = "python3.9"

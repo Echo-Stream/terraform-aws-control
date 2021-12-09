@@ -130,3 +130,35 @@ resource "aws_iam_policy" "tenant_table_read_write" {
   name        = "${var.resource_prefix}-tenant-table-read-write"
   policy      = data.aws_iam_policy_document.tenant_table_read_write.json
 }
+
+
+###############
+## ECR- Read ##
+###############
+data "aws_iam_policy_document" "ecr_read" {
+  statement {
+    actions = [
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:BatchGetImage",
+      "ecr:DescribeImages",
+      "ecr:DescribeRepositories",
+      "ecr:GetAuthorizationToken",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:GetRepositoryPolicy",
+      "ecr:ListImages",
+    ]
+
+    resources = [
+      "arn:aws:ecr:${local.current_region}:${local.artifacts_account_id}:repository/*"
+    ]
+
+    sid = "ECRAccess"
+  }
+}
+
+resource "aws_iam_policy" "ecr_read" {
+  description = "IAM permissions to get ECR images"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-ecr-read"
+  policy      = data.aws_iam_policy_document.ecr_read.json
+}
