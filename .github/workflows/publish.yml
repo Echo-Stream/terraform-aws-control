@@ -23,8 +23,8 @@ jobs:
           curl \
           --header "Authorization:Bearer $TOKEN" \
           --header "Content-Type:application/vnd.api+json" \
-          --request POST \
-          https://app.terraform.io/api/v2/registry-modules/actions/delete/EchoStream/control/aws/$VERSION
+          --request DELETE \
+          https://app.terraform.io/api/v2/organizations/EchoStream/registry-modules/private/EchoStream/control/aws/$VERSION
       - name: Create the Module
         run: |
           curl \
@@ -36,7 +36,8 @@ jobs:
               "type": "registry-modules",
                 "attributes": {
                   "name":"control",
-                  "provider": "aws"
+                  "provider": "aws",
+                  "registry-name": "private"
                   }
                 }
               }' https://app.terraform.io/api/v2/organizations/EchoStream/registry-modules
@@ -56,7 +57,7 @@ jobs:
                 "version": "'$VERSION'"
                 }
               } 
-            }' https://app.terraform.io/api/v2/registry-modules/EchoStream/control/aws/versions`
+            }' https://app.terraform.io/api/v2/organizations/EchoStream/registry-modules/private/EchoStream/control/aws/versions`
 
           echo $response
 
