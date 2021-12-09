@@ -152,24 +152,6 @@ data "aws_iam_policy_document" "managed_app_customer_policy" {
 
     sid = "PublishToSNS"
   }
-  
-  statement {
-      effect = "Allow"
-
-      actions = [
-        "dynamodb:DeleteItem",
-        "dynamodb:GetItem",
-        "dynamodb:PutItem",
-        "dynamodb:Query".
-        "dynamodb:UpdateItem"
-      ]
-
-      resources = [
-        "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-tenant-*"
-      ]
-
-      sid = "TenantTableAccess"
-    }
 }
 
 resource "aws_iam_policy" "managed_app_customer_policy" {
