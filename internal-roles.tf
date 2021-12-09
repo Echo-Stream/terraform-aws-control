@@ -87,7 +87,7 @@ data "aws_iam_policy_document" "internal_node" {
       "dynamodb:DeleteItem",
       "dynamodb:GetItem",
       "dynamodb:PutItem",
-      "dynamodb:Query".
+      "dynamodb:Query",
       "dynamodb:UpdateItem"
     ]
 
