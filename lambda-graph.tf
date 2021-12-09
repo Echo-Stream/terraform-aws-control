@@ -169,9 +169,7 @@ data "aws_iam_policy_document" "graph_table_tenant_system_handler" {
   statement {
     actions = [
       "ses:GetTemplate",
-      "ses:ListTemplates",
-      "ses:SendEmail",
-      "ses:SendTemplatedEmail",
+      "ses:ListTemplates"
     ]
 
     resources = [
