@@ -1411,97 +1411,97 @@ resource "aws_appsync_resolver" "managed_app_update" {
   type              = "ManagedApp"
 }
 
-## ManagedAppChangeReceiverNode
-resource "aws_appsync_resolver" "managed_app_change_receiver_node_app" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "app"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "ManagedAppChangeReceiverNode"
-}
+# ## ManagedAppChangeReceiverNode
+# resource "aws_appsync_resolver" "managed_app_change_receiver_node_app" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "app"
+#   request_template  = file("${path.module}/files/batch-invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "ManagedAppChangeReceiverNode"
+# }
 
-resource "aws_appsync_resolver" "managed_app_change_receiver_node_receive_edge" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "receiveEdge"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "ManagedAppChangeReceiverNode"
-}
+# resource "aws_appsync_resolver" "managed_app_change_receiver_node_receive_edge" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "receiveEdge"
+#   request_template  = file("${path.module}/files/batch-invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "ManagedAppChangeReceiverNode"
+# }
 
-resource "aws_appsync_resolver" "managed_app_change_receiver_node_receive_message_type" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "receiveMessageType"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "ManagedAppChangeReceiverNode"
-}
+# resource "aws_appsync_resolver" "managed_app_change_receiver_node_receive_message_type" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "receiveMessageType"
+#   request_template  = file("${path.module}/files/batch-invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "ManagedAppChangeReceiverNode"
+# }
 
-resource "aws_appsync_resolver" "managed_app_change_receiver_node_tenant" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "tenant"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "ManagedAppChangeReceiverNode"
-}
+# resource "aws_appsync_resolver" "managed_app_change_receiver_node_tenant" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "tenant"
+#   request_template  = file("${path.module}/files/batch-invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "ManagedAppChangeReceiverNode"
+# }
 
-resource "aws_appsync_resolver" "managed_app_change_receiver_node_create_audit_records" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "CreateAuditRecords"
-  request_template  = file("${path.module}/files/invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "ManagedAppChangeReceiverNode"
-}
+# resource "aws_appsync_resolver" "managed_app_change_receiver_node_create_audit_records" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "CreateAuditRecords"
+#   request_template  = file("${path.module}/files/invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "ManagedAppChangeReceiverNode"
+# }
 
 ## ManagedAppChangeRouterNode
-resource "aws_appsync_resolver" "managed_app_change_router_node_receive_edge" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "receiveEdge"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "ManagedAppChangeRouterNode"
-}
+# resource "aws_appsync_resolver" "managed_app_change_router_node_receive_edge" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "receiveEdge"
+#   request_template  = file("${path.module}/files/batch-invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "ManagedAppChangeRouterNode"
+# }
 
-resource "aws_appsync_resolver" "managed_app_change_router_node_receive_message_type" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "receiveMessageType"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "ManagedAppChangeRouterNode"
-}
+# resource "aws_appsync_resolver" "managed_app_change_router_node_receive_message_type" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "receiveMessageType"
+#   request_template  = file("${path.module}/files/batch-invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "ManagedAppChangeRouterNode"
+# }
 
-resource "aws_appsync_resolver" "managed_app_change_router_node_send_edges" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "sendEdges"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "ManagedAppChangeRouterNode"
-}
+# resource "aws_appsync_resolver" "managed_app_change_router_node_send_edges" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "sendEdges"
+#   request_template  = file("${path.module}/files/batch-invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "ManagedAppChangeRouterNode"
+# }
 
-resource "aws_appsync_resolver" "managed_app_change_router_node_send_message_type" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "sendMessageType"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "ManagedAppChangeRouterNode"
-}
+# resource "aws_appsync_resolver" "managed_app_change_router_node_send_message_type" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "sendMessageType"
+#   request_template  = file("${path.module}/files/batch-invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "ManagedAppChangeRouterNode"
+# }
 
-resource "aws_appsync_resolver" "managed_app_change_router_node_tenant" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "tenant"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "ManagedAppChangeRouterNode"
-}
+# resource "aws_appsync_resolver" "managed_app_change_router_node_tenant" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "tenant"
+#   request_template  = file("${path.module}/files/batch-invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "ManagedAppChangeRouterNode"
+# }
 
 ## ManagedInstance
 resource "aws_appsync_resolver" "managed_instance_last_ping_date_time" {
