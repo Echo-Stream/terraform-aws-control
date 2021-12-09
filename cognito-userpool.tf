@@ -145,6 +145,8 @@ resource "aws_cognito_user_pool" "echostream_api" {
 }
 
 resource "aws_cognito_user_pool_client" "echostream_api_userpool_client" {
+  access_token_validity  = 60
+  id_token_validity      = 60
   name                   = "${var.resource_prefix}-api"
   refresh_token_validity = 30
 
