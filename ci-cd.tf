@@ -127,6 +127,7 @@ module "deployment_handler" {
   name                  = "${var.resource_prefix}-deployment-handler"
 
   policy_arns = [
+    aws_iam_policy.artifacts_bucket_read.arn,
     aws_iam_policy.deployment_handler.arn,
     aws_iam_policy.ecr_read.arn,
     aws_iam_policy.graph_ddb_read.arn,
