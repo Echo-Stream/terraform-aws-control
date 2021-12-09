@@ -3,6 +3,7 @@ name: Terraform Publish Module
 on:
   push:
     branches:
+      - "main"
       - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
@@ -14,6 +15,9 @@ jobs:
         run: |
           echo "TOKEN=${{ secrets.TERRAFORM_API_KEY }}" >> $GITHUB_ENV
           echo "VERSION=${GITHUB_REF##*/v}" >> $GITHUB_ENV
+      - name: Testing
+        run: |
+          cat locals.tf
       - name: Delete the version if already exists
         run: |
           curl \
