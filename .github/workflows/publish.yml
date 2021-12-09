@@ -14,7 +14,7 @@ jobs:
       - name: Set env vars
         run: |
           echo "TOKEN=${{ secrets.TERRAFORM_API_KEY }}" >> $GITHUB_ENV
-          VERSION=`grep module_release_version locals.tf | awk -F "=" '{print $2}'`
+          VERSION=`grep module_release_version locals.tf | awk '{print $3}'`
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           #echo "VERSION=${GITHUB_REF##*/v}" >> $GITHUB_ENV
       - name: Delete the version if already exists
