@@ -160,4 +160,10 @@ resource "aws_cognito_user_pool_client" "echostream_api_userpool_client" {
     "ALLOW_REFRESH_TOKEN_AUTH",
     "ALLOW_USER_SRP_AUTH"
   ]
+
+  lifecycle {
+    ignore_changes = [
+      token_validity_units
+    ]
+  }
 }
