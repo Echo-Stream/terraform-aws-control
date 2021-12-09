@@ -12,6 +12,21 @@ locals {
       field = "CreateBitmapperFunction"
       type  = "Mutation"
     }
+    create_cross_account_app = {
+      field = "CreateCrossAccountApp"
+      type  = "Mutation"
+    }
+  }
+
+  batch_invoke_resolvers = {
+    alert_emitter_node_send_edges = {
+      field = "sendEdges"
+      type  = "AlertEmitterNode"
+    }
+    alert_emitter_node_sendmessagetype = {
+      field = "sendMessageType"
+      type  = "AlertEmitterNode"
+    }
   }
 }
 
@@ -21,6 +36,16 @@ resource "aws_appsync_resolver" "invoke_resolvers" {
   data_source       = module.appsync_datasource_.name
   field             = each.value["field"]
   request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = each.value["type"]
+}
+
+resource "aws_appsync_resolver" "batch_invoke_resolvers" {
+  for_each          = local.batch_invoke_resolvers
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = each.value["field"]
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
   response_template = file("${path.module}/files/response-template.vtl")
   type              = each.value["type"]
 }
@@ -43,14 +68,14 @@ resource "aws_appsync_resolver" "invoke_resolvers" {
 #   type              = "Mutation"
 # }
 
-resource "aws_appsync_resolver" "create_cross_account_app" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "CreateCrossAccountApp"
-  request_template  = file("${path.module}/files/invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "Mutation"
-}
+# resource "aws_appsync_resolver" "create_cross_account_app" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "CreateCrossAccountApp"
+#   request_template  = file("${path.module}/files/invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "Mutation"
+# }
 
 resource "aws_appsync_resolver" "create_cross_tenant_receiving_app" {
   api_id            = aws_appsync_graphql_api.echostream.id
@@ -399,23 +424,23 @@ resource "aws_appsync_resolver" "list_tenant_users" {
 }
 
 ## Alert Emitter Node
-resource "aws_appsync_resolver" "alert_emitter_node_sendedges" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "sendEdges"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "AlertEmitterNode"
-}
+# resource "aws_appsync_resolver" "alert_emitter_node_sendedges" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "sendEdges"
+#   request_template  = file("${path.module}/files/batch-invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "AlertEmitterNode"
+# }
 
-resource "aws_appsync_resolver" "alert_emitter_node_sendmessagetype" {
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = "sendMessageType"
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = "AlertEmitterNode"
-}
+# resource "aws_appsync_resolver" "alert_emitter_node_sendmessagetype" {
+#   api_id            = aws_appsync_graphql_api.echostream.id
+#   data_source       = module.appsync_datasource_.name
+#   field             = "sendMessageType"
+#   request_template  = file("${path.module}/files/batch-invoke.vtl")
+#   response_template = file("${path.module}/files/response-template.vtl")
+#   type              = "AlertEmitterNode"
+# }
 
 resource "aws_appsync_resolver" "alert_emitter_node_tenant" {
   api_id            = aws_appsync_graphql_api.echostream.id
