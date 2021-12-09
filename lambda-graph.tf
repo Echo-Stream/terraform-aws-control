@@ -31,20 +31,6 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
 
     sid = "AllowReadingFromStreams"
   }
-
-  statement {
-    actions = [
-      "dynamodb:Query",
-      "dynamodb:PutItem",
-      "dynamodb:GetItem",
-    ]
-
-    resources = [
-      module.graph_table.arn,
-    ]
-
-    sid = "WriteAccesstoTable"
-  }
 }
 
 resource "aws_iam_policy" "graph_table_dynamodb_trigger" {
@@ -66,8 +52,9 @@ module "graph_table_dynamodb_trigger" {
   name        = "${var.resource_prefix}-graph-table-dynamodb-trigger"
 
   policy_arns = [
+    aws_iam_policy.graph_ddb_read.arn,
+    aws_iam_policy.graph_ddb_write.arn,
     aws_iam_policy.graph_table_dynamodb_trigger.arn,
-    aws_iam_policy.graph_ddb_read.arn
   ]
 
   runtime       = "python3.9"
@@ -204,17 +191,6 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
 
     sid = "SendMessageToRebuildNotificationQueue"
   }
-  statement {
-    actions = [
-      "dynamodb:*",
-    ]
-
-    resources = [
-      module.graph_table.arn,
-    ]
-
-    sid = "TableAccess"
-  }
 
   statement {
     actions = [
@@ -243,10 +219,10 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
 
   statement {
     actions = [
-      "sqs:ReceiveMessage",
       "sqs:DeleteMessage",
       "sqs:GetQueueAttributes",
       "sqs:GetQueueUrl",
+      "sqs:ReceiveMessage",
     ]
 
     resources = [
@@ -297,9 +273,11 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
       "cognito-idp:ListUsers",
     ]
 
-    resources = [aws_cognito_user_pool.echostream_api.arn,
+    resources = [
+      aws_cognito_user_pool.echostream_api.arn,
       aws_cognito_user_pool.echostream_ui.arn,
-    aws_cognito_user_pool.echostream_api.arn]
+      aws_cognito_user_pool.echostream_api.arn
+    ]
 
     sid = "AdminGetUser"
   }
@@ -343,18 +321,18 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
 
   statement {
     actions = [
-      "lambda:DeleteEventSourceMapping",
       "lambda:CreateFunction",
+      "lambda:DeleteEventSourceMapping",
       "lambda:DeleteFunction",
       "lambda:DeleteLayerVersion",
       "lambda:GetFunction",
       "lambda:GetFunctionConfiguration",
       "lambda:GetLayerVersion",
+      "lambda:Invoke",
       "lambda:ListEventSourceMappings",
       "lambda:ListFunctions",
       "lambda:PublishLayerVersion",
       "lambda:UpdateFunctionConfiguration",
-      "lambda:Invoke",
     ]
 
     resources = [
@@ -362,24 +340,6 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
 
     sid = "LambdaAllAccess"
-  }
-
-
-  statement {
-    actions = [
-      "s3:GetObject*",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${local.artifacts["lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${local.artifacts["lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${local.artifacts["lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${local.artifacts["tenant_lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${local.artifacts["tenant_lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${local.artifacts["tenant_lambda"]}/*",
-    ]
-
-    sid = "GetArtifacts"
   }
 
   statement {
@@ -429,16 +389,19 @@ resource "aws_iam_policy" "graph_table_tenant_stream_handler" {
 module "graph_table_tenant_stream_handler" {
   description     = "Delegates calls to handling lambda functions in EchoStream Dynamodb Stream"
   dead_letter_arn = local.lambda_dead_letter_arn
+
   environment_variables = merge(local.common_lambda_environment_variables,
   { LOGGING_LEVEL = "DEBUG" })
+
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
   memory_size = 1536
   name        = "${var.resource_prefix}-graph-table-tenant-stream-handler"
 
   policy_arns = [
-    aws_iam_policy.graph_table_tenant_stream_handler.arn,
     aws_iam_policy.graph_ddb_read.arn,
+    aws_iam_policy.graph_ddb_write.arn,
+    aws_iam_policy.graph_table_tenant_stream_handler.arn,
   ]
 
   runtime       = "python3.9"
@@ -454,19 +417,6 @@ module "graph_table_tenant_stream_handler" {
 ## graph-table-system-stream-handler ##
 #######################################
 data "aws_iam_policy_document" "graph_table_system_stream_handler" {
-
-  statement {
-    actions = [
-      "dynamodb:*",
-    ]
-
-    resources = [
-      module.graph_table.arn
-    ]
-
-    sid = "TableAccess"
-  }
-
   statement {
     actions = [
       "appsync:GraphQL",
@@ -482,10 +432,10 @@ data "aws_iam_policy_document" "graph_table_system_stream_handler" {
 
   statement {
     actions = [
-      "sqs:ReceiveMessage",
       "sqs:DeleteMessage",
       "sqs:GetQueueAttributes",
       "sqs:GetQueueUrl",
+      "sqs:ReceiveMessage",
     ]
 
     resources = [
@@ -535,9 +485,9 @@ data "aws_iam_policy_document" "graph_table_system_stream_handler" {
     ]
 
     resources = [
-      #aws_cognito_user_pool.echostream_apps.arn,
       aws_cognito_user_pool.echostream_ui.arn,
-    aws_cognito_user_pool.echostream_api.arn]
+    aws_cognito_user_pool.echostream_api.arn
+    ]
 
     sid = "AdminGetUser"
   }
@@ -601,24 +551,6 @@ data "aws_iam_policy_document" "graph_table_system_stream_handler" {
     sid = "LambdaAllAccess"
   }
 
-
-  statement {
-    actions = [
-      "s3:GetObject*",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${local.artifacts["lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${local.artifacts["lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${local.artifacts["lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${local.artifacts["tenant_lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${local.artifacts["tenant_lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${local.artifacts["tenant_lambda"]}/*",
-    ]
-
-    sid = "GetArtifacts"
-  }
-
   statement {
     actions = [
       "iam:PassRole",
@@ -666,16 +598,19 @@ resource "aws_iam_policy" "graph_table_system_stream_handler" {
 module "graph_table_system_stream_handler" {
   description     = "Handles system-related DB changes"
   dead_letter_arn = local.lambda_dead_letter_arn
+
   environment_variables = merge(local.common_lambda_environment_variables,
   { LOGGING_LEVEL = "DEBUG" })
+
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
   memory_size = 1536
   name        = "${var.resource_prefix}-graph-table-system-stream-handler"
 
   policy_arns = [
-    aws_iam_policy.graph_table_system_stream_handler.arn,
     aws_iam_policy.graph_ddb_read.arn,
+    aws_iam_policy.graph_ddb_write.arn,
+    aws_iam_policy.graph_table_system_stream_handler.arn,
   ]
 
   runtime       = "python3.9"
