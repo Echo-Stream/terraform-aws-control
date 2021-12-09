@@ -178,9 +178,38 @@ data "aws_iam_policy_document" "graph_table_tenant_system_handler" {
       "*"
     ]
 
-    sid = "SESAccess"
+    sid = "SESRead"
   }
 
+
+  statement {
+    actions = [
+      "ses:SendEmail",
+    ]
+
+    resources = [
+      aws_ses_configuration_set.email_errors.arn,
+      aws_ses_email_identity.support.arn,
+    ]
+
+    sid = "SESSendEmail"
+  }
+
+  statement {
+    actions = [
+      "ses:SendTemplatedEmail",
+    ]
+
+    resources = [
+      aws_ses_configuration_set.email_errors.arn,
+      aws_ses_email_identity.support.arn,
+      aws_ses_template.invite_user.arn,
+      aws_ses_template.notify_user.arn,
+      aws_ses_template.remove_user.arn,
+    ]
+
+    sid = "SESSendTemplatedEmail"
+  }
 
   statement {
     actions = [
@@ -252,7 +281,6 @@ data "aws_iam_policy_document" "graph_table_tenant_system_handler" {
     resources = [
       aws_cognito_user_pool.echostream_api.arn,
       aws_cognito_user_pool.echostream_ui.arn,
-      aws_cognito_user_pool.echostream_api.arn
     ]
 
     sid = "AdminGetUser"
