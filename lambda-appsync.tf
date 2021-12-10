@@ -63,6 +63,43 @@ data "aws_iam_policy_document" "appsync_datasource" {
 
     sid = "LambdaEventSourceMappingAccess"
   }
+
+  statement {
+    actions = [
+      "lambda:CreateEventSourceMapping",
+      "lambda:DeleteEventSourceMapping",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "CreateLambdaEventSourceMapping"
+  }
+
+  statement {
+    actions = [
+      "iam:PassRole",
+    ]
+
+    resources = [
+      module.graph_table_system_stream_handler.role_arn
+    ]
+
+    sid = "TenantFunctionRoleIAM"
+  }
+
+  statement {
+    actions = [
+      "lambda:DeleteEventSourceMapping",
+    ]
+
+    resources = [
+      "arn:aws:lambda:*:${local.current_account_id}:event-source-mapping:*"
+    ]
+
+    sid = "DeleteLambdaEventSourceMapping"
+  }
 }
 
 resource "aws_iam_policy" "appsync_datasource" {
