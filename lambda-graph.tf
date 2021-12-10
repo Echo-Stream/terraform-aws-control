@@ -40,15 +40,13 @@ resource "aws_iam_policy" "graph_table_dynamodb_trigger" {
 }
 
 module "graph_table_dynamodb_trigger" {
-  description           = "Routes Dynamodb Stream events to the correct Lambda Functions"
   dead_letter_arn       = local.lambda_dead_letter_arn
+  description           = "Routes Dynamodb Stream events to the correct Lambda Functions"
   environment_variables = local.common_lambda_environment_variables
-
-  handler     = "function.handler"
-  kms_key_arn = local.lambda_env_vars_kms_key_arn
-
-  memory_size = 1536
-  name        = "${var.resource_prefix}-graph-table-dynamodb-trigger"
+  handler               = "function.handler"
+  kms_key_arn           = local.lambda_env_vars_kms_key_arn
+  memory_size           = 1536
+  name                  = "${var.resource_prefix}-graph-table-dynamodb-trigger"
 
   policy_arns = [
     aws_iam_policy.graph_ddb_read.arn,
@@ -217,7 +215,7 @@ data "aws_iam_policy_document" "graph_table_handler" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:*db-stream*.fifo",
+      "arn:aws:sqs:*:*:db-stream*.fifo",
       aws_sqs_queue.system_sqs_queue.arn
     ]
 
@@ -438,7 +436,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     sid = "FirehosePermissions"
   }
 
-    statement {
+  statement {
     actions = [
       "dynamodb:DeleteItem",
     ]
@@ -491,7 +489,7 @@ module "graph_table_tenant_stream_handler" {
 ## graph-table-system-stream-handler ##
 #######################################
 data "aws_iam_policy_document" "graph_table_system_stream_handler" {
-    statement {
+  statement {
     actions = [
       "dynamodb:DeleteItem",
     ]
