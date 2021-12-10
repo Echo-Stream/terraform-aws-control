@@ -489,165 +489,26 @@ module "graph_table_tenant_stream_handler" {
 #######################################
 ## graph-table-system-stream-handler ##
 #######################################
-# data "aws_iam_policy_document" "graph_table_system_stream_handler" {
-#   statement {
-#     actions = [
-#       "appsync:GraphQL",
-#       "appsync:GetGraphqlApi"
-#     ]
+data "aws_iam_policy_document" "graph_table_system_stream_handler" {
+    statement {
+    actions = [
+      "dynamodb:DeleteItem",
+    ]
 
-#     resources = [
-#       aws_appsync_graphql_api.echostream.arn,
-#     ]
+    resources = [
+      module.graph_table.arn,
+    ]
 
-#     sid = "AppsyncAccess"
-#   }
+    sid = "DeleteItem"
+  }
+}
 
-#   statement {
-#     actions = [
-#       "sqs:DeleteMessage",
-#       "sqs:GetQueueAttributes",
-#       "sqs:GetQueueUrl",
-#       "sqs:ReceiveMessage",
-#     ]
-
-#     resources = [
-#       aws_sqs_queue.system_sqs_queue.arn
-#     ]
-
-#     sid = "PrerequisitesForQueueTrigger"
-#   }
-
-#   statement {
-#     actions = [
-#       "ses:GetTemplate",
-#       "ses:ListTemplates",
-#       "ses:SendEmail",
-#       "ses:SendTemplatedEmail",
-#     ]
-
-#     resources = [
-#       "*"
-#     ]
-
-#     sid = "SESAccess"
-#   }
-
-#   statement {
-#     actions = [
-#       "logs:CreateLogGroup",
-#       "logs:CreateLogStream",
-#       "logs:DeleteLogGroup",
-#       "logs:DeleteSubscriptionFilter",
-#       "logs:PutLogEvents",
-#       "logs:PutRetentionPolicy",
-#       "logs:PutSubscriptionFilter",
-#     ]
-
-#     resources = [
-#       "*"
-#     ]
-#   }
-
-#   statement {
-#     actions = [
-#       "cognito-idp:AdminDeleteUser",
-#       "cognito-idp:AdminGetUser",
-#       "cognito-idp:AdminUserGlobalSignOut",
-#       "cognito-idp:ListUsers",
-#     ]
-
-#     resources = [
-#       aws_cognito_user_pool.echostream_ui.arn,
-#       aws_cognito_user_pool.echostream_api.arn
-#     ]
-
-#     sid = "AdminGetUser"
-#   }
-
-
-#   statement {
-#     actions = [
-#       "kms:CreateGrant",
-#       "kms:DescribeKey",
-#       "kms:ListGrants",
-#       "kms:ListResourceGrants",
-#       "kms:RetireGrant",
-#       "kms:RevokeGrant",
-#       "kms:ScheduleKeyDeletion",
-#     ]
-
-#     resources = ["*"]
-
-#     sid = "KMSPermissions"
-#   }
-
-#   statement {
-#     actions = [
-#       "lambda:DeleteEventSourceMapping",
-#       "lambda:CreateFunction",
-#       "lambda:DeleteFunction",
-#       "lambda:DeleteLayerVersion",
-#       "lambda:GetFunction",
-#       "lambda:GetFunctionConfiguration",
-#       "lambda:GetLayerVersion",
-#       "lambda:ListEventSourceMappings",
-#       "lambda:ListFunctions",
-#       "lambda:PublishLayerVersion",
-#       "lambda:UpdateFunctionConfiguration",
-#       "lambda:Invoke",
-#     ]
-
-#     resources = [
-#       "*"
-#     ]
-
-#     sid = "LambdaAllAccess"
-#   }
-
-#   statement {
-#     actions = [
-#       "iam:PassRole",
-#     ]
-
-#     resources = [
-#       aws_iam_role.internal_node.arn
-#     ]
-
-#     sid = "TenantFunctionRoleIAM"
-#   }
-
-#   statement {
-#     actions = [
-#       "cloudwatch:PutMetricAlarm",
-#       "cloudwatch:DeleteAlarms",
-#     ]
-
-#     resources = [
-#       "*"
-#     ]
-#   }
-
-#   statement {
-#     actions = [
-#       "sqs:SendMessage",
-#       "sqs:GetQueueUrl",
-#     ]
-
-#     resources = [
-#       aws_sqs_queue.rebuild_notifications.arn
-#     ]
-
-#     sid = "SendMessageToRebuildNotificationQueue"
-#   }
-# }
-
-# resource "aws_iam_policy" "graph_table_system_stream_handler" {
-#   description = "IAM permissions required for graph-table-system-stream-handler"
-#   path        = "/${var.resource_prefix}-lambda/"
-#   name        = "${var.resource_prefix}-graph-table-system-stream-handler"
-#   policy      = data.aws_iam_policy_document.graph_table_system_stream_handler.json
-# }
+resource "aws_iam_policy" "graph_table_system_stream_handler" {
+  description = "IAM permissions required for graph-table-system-stream-handler"
+  path        = "/${var.resource_prefix}-lambda/"
+  name        = "${var.resource_prefix}-graph-table-system-stream-handler"
+  policy      = data.aws_iam_policy_document.graph_table_system_stream_handler.json
+}
 
 module "graph_table_system_stream_handler" {
   description     = "Handles system-related DB changes"
@@ -666,6 +527,7 @@ module "graph_table_system_stream_handler" {
     aws_iam_policy.graph_ddb_read.arn,
     aws_iam_policy.graph_ddb_write.arn,
     aws_iam_policy.graph_table_handler.arn,
+    aws_iam_policy.graph_table_system_stream_handler.arn,
   ]
 
   runtime       = "python3.9"
