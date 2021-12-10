@@ -6,6 +6,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
     actions = [
       "sqs:CreateQueue",
       "sqs:DeleteQueue",
+      "sqs:TagQueue",
     ]
 
     resources = [
