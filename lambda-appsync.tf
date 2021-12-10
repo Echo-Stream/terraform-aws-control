@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
       "arn:aws:sqs:*:${local.current_account_id}:edge*.fifo",
     ]
 
-    sid = "CreateQeueue"
+    sid = "CreateDeleteQueue"
   }
 
   statement {
@@ -50,6 +50,19 @@ data "aws_iam_policy_document" "appsync_datasource" {
     sid = "S3Access"
   }
 
+
+  statement {
+    actions = [
+      "lambda:CreateEventSourceMapping",
+      "lambda:DeleteEventSourceMapping",
+    ]
+
+    resources = [
+      "arn:aws:lambda:*:${local.current_account_id}:event-source-mapping:*"
+    ]
+
+    sid = "LambdaEventSourceMappingAccess"
+  }
 }
 
 resource "aws_iam_policy" "appsync_datasource" {
