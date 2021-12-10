@@ -235,7 +235,7 @@ data "aws_iam_policy_document" "graph_table_handler" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:db-stream*.fifo",
+      "arn:aws:sqs:*:${local.current_account_id}:db-stream*.fifo",
       aws_sqs_queue.system_sqs_queue.arn
     ]
 

@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
     resources = [
       "arn:aws:sqs:*:${local.current_account_id}:edge*.fifo",
       "arn:aws:sqs:*:${local.current_account_id}:dead-letter*.fifo",
-      "arn:aws:sqs:*:*:db-stream*",
+      "arn:aws:sqs:*:${local.current_account_id}:db-stream*",
     ]
 
     sid = "CreateQeueue"
