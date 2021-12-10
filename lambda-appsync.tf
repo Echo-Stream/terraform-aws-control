@@ -67,7 +67,6 @@ data "aws_iam_policy_document" "appsync_datasource" {
   statement {
     actions = [
       "lambda:CreateEventSourceMapping",
-      "lambda:DeleteEventSourceMapping",
     ]
 
     resources = [
@@ -86,7 +85,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
       module.graph_table_system_stream_handler.role_arn
     ]
 
-    sid = "TenantFunctionRoleIAM"
+    sid = "PassRoleToSystemStreamHandler"
   }
 
   statement {
