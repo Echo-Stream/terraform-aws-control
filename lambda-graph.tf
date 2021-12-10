@@ -151,7 +151,7 @@ resource "aws_iam_role_policy_attachment" "manage_apps_ssm_directory_role" {
 #######################################
 ## graph-table-tenant-stream-handler ##
 #######################################
-data "aws_iam_policy_document" "graph_table_tenant_system_handler" {
+data "aws_iam_policy_document" "graph_table_handler" {
   statement {
     actions = [
       "appsync:GraphQL",
@@ -231,8 +231,8 @@ data "aws_iam_policy_document" "graph_table_tenant_system_handler" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:edge*.fifo",
-      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:db-stream*.fifo"
+      "arn:aws:sqs:*:${local.current_account_id}:edge*.fifo",
+      "arn:aws:sqs:*:${local.current_account_id}:db-stream*.fifo"
     ]
 
     sid = "DeleteQueue"
@@ -257,16 +257,41 @@ data "aws_iam_policy_document" "graph_table_tenant_system_handler" {
       "logs:CreateLogStream",
       "logs:DeleteLogGroup",
       "logs:DeleteSubscriptionFilter",
-      "logs:Describe*",
-      "logs:PutLogEvents",
       "logs:PutRetentionPolicy",
       "logs:PutSubscriptionFilter",
     ]
 
     resources = [
+      "arn:aws:logs:*:${local.current_account_id}:log-group:*"
+    ]
+
+    sid = "LogsAccess"
+  }
+
+  statement {
+    actions = [
+      "logs:Describe*",
+    ]
+
+    resources = [
       "*"
     ]
+
+    sid = "LogsReadAccess"
   }
+
+  statement {
+    actions = [
+      "logs:PutLogEvents",
+    ]
+
+    resources = [
+      "arn:aws:logs:*:${local.current_account_id}:log-group:*:log-stream:*"
+    ]
+
+    sid = "LogsEventsAccess"
+  }
+
 
   statement {
     actions = [
@@ -288,40 +313,69 @@ data "aws_iam_policy_document" "graph_table_tenant_system_handler" {
   statement {
     actions = [
       "kms:CreateGrant",
-      "kms:DeleteAlias",
       "kms:DescribeKey",
       "kms:ListGrants",
-      "kms:ListResourceGrants",
       "kms:RetireGrant",
       "kms:RevokeGrant",
       "kms:ScheduleKeyDeletion",
     ]
 
-    resources = ["*"]
+    resources = ["arn:aws:kms:*:${local.current_account_id}:key/*"]
 
     sid = "KMSPermissions"
   }
+
+  statement {
+    actions = [
+      "kms:DeleteAlias",
+    ]
+
+    resources = ["arn:aws:kms:*:${local.current_account_id}:alias/*"]
+
+    sid = "DeleteKMSAlias"
+  }
+
   statement {
     actions = [
       "lambda:CreateFunction",
-      "lambda:DeleteEventSourceMapping",
       "lambda:DeleteFunction",
-      "lambda:DeleteLayerVersion",
       "lambda:GetFunction",
       "lambda:GetFunctionConfiguration",
-      "lambda:GetLayerVersion",
-      "lambda:Invoke",
+      "lambda:InvokeFunction",
+      "lambda:UpdateFunctionConfiguration",
+    ]
+
+    resources = [
+      "arn:aws:lambda:*:${local.current_account_id}:function:*Node*",
+      "arn:aws:lambda:*:${local.current_account_id}:function:Validator*"
+    ]
+
+    sid = "LambdaAllAccess"
+  }
+
+  statement {
+    actions = [
+      "lambda:DeleteEventSourceMapping",
+    ]
+
+    resources = [
+      "arn:aws:lambda:*:${local.current_account_id}:event-source-mapping:*"
+    ]
+
+    sid = "LambdaEventSourceMappings"
+  }
+
+  statement {
+    actions = [
       "lambda:ListEventSourceMappings",
       "lambda:ListFunctions",
-      "lambda:PublishLayerVersion",
-      "lambda:UpdateFunctionConfiguration",
     ]
 
     resources = [
       "*"
     ]
 
-    sid = "LambdaAllAccess"
+    sid = "LambdaListAccess"
   }
 
   statement {
@@ -343,18 +397,18 @@ data "aws_iam_policy_document" "graph_table_tenant_system_handler" {
     ]
 
     resources = [
-      "arn:aws:cloudwatch:*:${data.aws_caller_identity.current.account_id}:alarm:TENANT~*"
+      "arn:aws:cloudwatch:*:${local.current_account_id}:alarm:TENANT~*"
     ]
 
     sid = "AccessTenantAlarms"
   }
 }
 
-resource "aws_iam_policy" "graph_table_tenant_system_handler" {
+resource "aws_iam_policy" "graph_table_handler" {
   description = "IAM permissions required for both graph table tenant and system handlers"
   path        = "/${var.resource_prefix}-lambda/"
   name        = "${var.resource_prefix}-graph-table-tenant-system-handler"
-  policy      = data.aws_iam_policy_document.graph_table_tenant_system_handler.json
+  policy      = data.aws_iam_policy_document.graph_table_handler.json
 }
 
 data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
@@ -364,7 +418,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
 
     resources = [
-      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-tenant-*"
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-tenant-*"
     ]
 
     sid = "DeleteTenantTables"
@@ -377,7 +431,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     ]
 
     resources = [
-      "arn:aws:firehose:*:${data.aws_caller_identity.current.account_id}:deliverystream/${var.resource_prefix}-tenant-*"
+      "arn:aws:firehose:*:${local.current_account_id}:deliverystream/${var.resource_prefix}-tenant-*"
     ]
 
     sid = "FirehosePermissions"
@@ -408,7 +462,7 @@ module "graph_table_tenant_stream_handler" {
     aws_iam_policy.graph_ddb_read.arn,
     aws_iam_policy.graph_ddb_write.arn,
     aws_iam_policy.graph_table_tenant_stream_handler.arn,
-    aws_iam_policy.graph_table_tenant_system_handler.arn,
+    aws_iam_policy.graph_table_handler.arn,
   ]
 
   runtime       = "python3.9"
@@ -599,7 +653,7 @@ module "graph_table_system_stream_handler" {
     aws_iam_policy.ecr_read.arn,
     aws_iam_policy.graph_ddb_read.arn,
     aws_iam_policy.graph_ddb_write.arn,
-    aws_iam_policy.graph_table_tenant_system_handler.arn,
+    aws_iam_policy.graph_table_handler.arn,
   ]
 
   runtime       = "python3.9"

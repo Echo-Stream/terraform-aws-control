@@ -117,7 +117,7 @@ data "aws_iam_policy_document" "tenant_table_read_write" {
     ]
 
     resources = [
-      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-tenant-*"
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-tenant-*"
     ]
 
     sid = "TenantTableAccess"

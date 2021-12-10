@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "audit_firehose" {
     ]
 
     resources = [
-      "arn:aws:logs:*:${data.aws_caller_identity.current.account_id}:log-group:${local.audit_firehose_log_group}:log-stream:${var.resource_prefix}-tenant-*",
+      "arn:aws:logs:*:${local.current_account_id}:log-group:${local.audit_firehose_log_group}:log-stream:${var.resource_prefix}-tenant-*",
     ]
 
     sid = "AllowWritingErrorEvents"

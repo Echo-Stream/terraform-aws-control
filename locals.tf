@@ -17,6 +17,7 @@ locals {
   artifacts_bucket         = "echostream-artifacts-${local.current_region}"               # artifacts bucket name with region
   artifacts_bucket_prefix  = "echostream-artifacts"                                       # artifacts bucket name without region
   audit_firehose_log_group = "/aws/kinesisfirehose/${var.resource_prefix}-audit-firehose" # log group name for audit-firehose
+  current_account_id       = data.aws_caller_identity.current.account_id                  # current or control account_id
   current_region           = data.aws_region.current.name                                 # current region or control region
 
   # Common environment variables for lambdas that use echo-tools library

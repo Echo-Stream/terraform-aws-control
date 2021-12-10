@@ -55,7 +55,7 @@ data "aws_iam_policy_document" "internal_node" {
     ]
 
     resources = [
-      "arn:aws:firehose:*:${data.aws_caller_identity.current.account_id}:deliverystream/${var.resource_prefix}-tenant-*"
+      "arn:aws:firehose:*:${local.current_account_id}:deliverystream/${var.resource_prefix}-tenant-*"
     ]
 
     sid = "WriteAuditRecords"
@@ -71,8 +71,8 @@ data "aws_iam_policy_document" "internal_node" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:edge*.fifo",
-      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:dead-letter*.fifo"
+      "arn:aws:sqs:*:${local.current_account_id}:edge*.fifo",
+      "arn:aws:sqs:*:${local.current_account_id}:dead-letter*.fifo"
     ]
 
     sid = "EdgeQueuesAccess"
