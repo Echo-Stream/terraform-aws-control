@@ -436,6 +436,18 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
 
     sid = "FirehosePermissions"
   }
+
+    statement {
+    actions = [
+      "dynamodb:DeleteItem",
+    ]
+
+    resources = [
+      module.graph_table.arn,
+    ]
+
+    sid = "DeleteItem"
+  }
 }
 
 resource "aws_iam_policy" "graph_table_tenant_stream_handler" {
