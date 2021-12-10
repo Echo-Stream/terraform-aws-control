@@ -1029,23 +1029,3 @@ locals {
     }
   }
 }
-
-resource "aws_appsync_resolver" "invoke_resolvers" {
-  for_each          = local.invoke_resolvers
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = each.value["field"]
-  request_template  = file("${path.module}/files/invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = each.value["type"]
-}
-
-resource "aws_appsync_resolver" "batch_invoke_resolvers" {
-  for_each          = local.batch_invoke_resolvers
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
-  field             = each.value["field"]
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
-  type              = each.value["type"]
-}
