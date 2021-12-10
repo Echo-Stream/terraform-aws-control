@@ -99,6 +99,35 @@ data "aws_iam_policy_document" "appsync_datasource" {
 
     sid = "DeleteLambdaEventSourceMapping"
   }
+
+    statement {
+    actions = [
+      "ses:SendEmail",
+    ]
+
+    resources = [
+      aws_ses_configuration_set.email_errors.arn,
+      aws_ses_email_identity.support.arn,
+    ]
+
+    sid = "SESSendEmail"
+  }
+
+  statement {
+    actions = [
+      "ses:SendTemplatedEmail",
+    ]
+
+    resources = [
+      aws_ses_configuration_set.email_errors.arn,
+      aws_ses_email_identity.support.arn,
+      aws_ses_template.invite_user.arn,
+      aws_ses_template.notify_user.arn,
+      aws_ses_template.remove_user.arn,
+    ]
+
+    sid = "SESSendTemplatedEmail"
+  }
 }
 
 resource "aws_iam_policy" "appsync_datasource" {
