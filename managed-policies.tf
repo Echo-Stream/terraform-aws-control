@@ -21,6 +21,7 @@ data "aws_iam_policy_document" "graph_ddb_read" {
     ]
 
     resources = [
+      module.graph_table.arn,
       "${module.graph_table.arn}/index/*"
     ]
 
