@@ -535,6 +535,18 @@ locals {
       field = "tenant"
       type  = "ApiUser"
     }
+    audit_emitter_node_sendedges = {
+      field = "sendEdges"
+      type  = "AuditEmitterNode"
+    }
+    audit_emitter_node_sendmessagetype = {
+      field = "sendMessageType"
+      type  = "AuditEmitterNode"
+    }
+    audit_emitter_node_tenant = {
+      field = "tenant"
+      type  = "AuditEmitterNode"
+    }
     bitmapper_function_argumentMessageType = {
       field = "argumentMessageType"
       type  = "BitmapperFunction"
