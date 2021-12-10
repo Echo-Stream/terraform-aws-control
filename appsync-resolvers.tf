@@ -1,5 +1,61 @@
+resource "aws_appsync_resolver" "invoke_resolvers" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = each.value["field"]
+  for_each          = local.invoke_resolvers
+  request_template  = file("${path.module}/files/invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = each.value["type"]
+}
+
+resource "aws_appsync_resolver" "batch_invoke_resolvers" {
+  api_id            = aws_appsync_graphql_api.echostream.id
+  data_source       = module.appsync_datasource_.name
+  field             = each.value["field"]
+  for_each          = local.batch_invoke_resolvers
+  request_template  = file("${path.module}/files/batch-invoke.vtl")
+  response_template = file("${path.module}/files/response-template.vtl")
+  type              = each.value["type"]
+}
+
 locals {
   invoke_resolvers = {
+    api_user_delete = {
+      field = "Delete"
+      type  = "ApiUser"
+    }
+    api_user_list_changes = {
+      field = "ListChanges"
+      type  = "ApiUser"
+    }
+    api_user_reset_password = {
+      field = "ResetPassword"
+      type  = "ApiUser"
+    }
+    api_user_update = {
+      field = "Update"
+      type  = "ApiUser"
+    }
+    app_change_receiver_node_create_audit_records = {
+      field = "CreateAuditRecords"
+      type  = "AppChangeReceiverNode"
+    }
+    bitmapper_function_delete = {
+      field = "Delete"
+      type  = "BitmapperFunction"
+    }
+    bitmapper_function_list_changes = {
+      field = "ListChanges"
+      type  = "BitmapperFunction"
+    }
+    bitmapper_function_update = {
+      field = "Update"
+      type  = "BitmapperFunction"
+    }
+    bitmapper_function_validate = {
+      field = "Validate"
+      type  = "BitmapperFunction"
+    }
     create_api_user = {
       field = "CreateApiUser"
       type  = "Mutation"
@@ -75,126 +131,6 @@ locals {
     create_transformer_node = {
       field = "CreateTransformerNode"
       type  = "Mutation"
-    }
-    get_api_user = {
-      field = "GetApiUser"
-      type  = "Query"
-    }
-    get_app = {
-      field = "GetApp"
-      type  = "Query"
-    }
-    get_bulk_data_storage = {
-      field = "GetBulkDataStorage"
-      type  = "Query"
-    }
-    get_edge = {
-      field = "GetEdge"
-      type  = "Query"
-    }
-    get_function = {
-      field = "GetFunction"
-      type  = "Query"
-    }
-    get_kms_key = {
-      field = "GetKmsKey"
-      type  = "Query"
-    }
-    get_managed_node_type = {
-      field = "GetManagedNodeType"
-      type  = "Query"
-    }
-    get_message_type = {
-      field = "GetMessageType"
-      type  = "Query"
-    }
-    get_node = {
-      field = "GetNode"
-      type  = "Query"
-    }
-    get_tenant = {
-      field = "GetTenant"
-      type  = "Query"
-    }
-    get_tenant_user = {
-      field = "GetTenantUser"
-      type  = "Query"
-    }
-    get_user = {
-      field = "GetUser"
-      type  = "Query"
-    }
-    list_api_users = {
-      field = "ListApiUsers"
-      type  = "Query"
-    }
-    list_apps = {
-      field = "ListApps"
-      type  = "Query"
-    }
-    list_changes = {
-      field = "ListChanges"
-      type  = "Query"
-    }
-    list_functions = {
-      field = "ListFunctions"
-      type  = "Query"
-    }
-    list_kms_keys = {
-      field = "ListKmsKeys"
-      type  = "Query"
-    }
-    list_nodes = {
-      field = "ListNodes"
-      type  = "Query"
-    }
-    list_managed_node_types = {
-      field = "ListManagedNodeTypes"
-      type  = "Query"
-    }
-    list_message_types = {
-      field = "ListMessageTypes"
-      type  = "Query"
-    }
-    list_tenants = {
-      field = "ListTenants"
-      type  = "Query"
-    }
-    list_tenant_users = {
-      field = "ListTenantUsers"
-      type  = "Query"
-    }
-    api_user_delete = {
-      field = "Delete"
-      type  = "ApiUser"
-    }
-    api_user_list_changes = {
-      field = "ListChanges"
-      type  = "ApiUser"
-    }
-    api_user_reset_password = {
-      field = "ResetPassword"
-      type  = "ApiUser"
-    }
-    api_user_update = {
-      field = "Update"
-      type  = "ApiUser"
-    }
-    bitmapper_function_delete = {
-      field = "Delete"
-      type  = "BitmapperFunction"
-    }
-    bitmapper_function_list_changes = {
-      field = "ListChanges"
-      type  = "BitmapperFunction"
-    }
-    bitmapper_function_update = {
-      field = "Update"
-      type  = "BitmapperFunction"
-    }
-    bitmapper_function_validate = {
-      field = "Validate"
-      type  = "BitmapperFunction"
     }
     cross_account_app_delete = {
       field = "Delete"
@@ -288,12 +224,12 @@ locals {
       field = "Delete"
       type  = "ExternalApp"
     }
-    external_app_list_changes = {
-      field = "ListChanges"
-      type  = "ExternalApp"
-    }
     external_app_get_aws_credentials = {
       field = "GetAwsCredentials"
+      type  = "ExternalApp"
+    }
+    external_app_list_changes = {
+      field = "ListChanges"
       type  = "ExternalApp"
     }
     external_app_reset_password = {
@@ -320,6 +256,54 @@ locals {
       field = "Update"
       type  = "ExternalNode"
     }
+    get_api_user = {
+      field = "GetApiUser"
+      type  = "Query"
+    }
+    get_app = {
+      field = "GetApp"
+      type  = "Query"
+    }
+    get_bulk_data_storage = {
+      field = "GetBulkDataStorage"
+      type  = "Query"
+    }
+    get_edge = {
+      field = "GetEdge"
+      type  = "Query"
+    }
+    get_function = {
+      field = "GetFunction"
+      type  = "Query"
+    }
+    get_kms_key = {
+      field = "GetKmsKey"
+      type  = "Query"
+    }
+    get_managed_node_type = {
+      field = "GetManagedNodeType"
+      type  = "Query"
+    }
+    get_message_type = {
+      field = "GetMessageType"
+      type  = "Query"
+    }
+    get_node = {
+      field = "GetNode"
+      type  = "Query"
+    }
+    get_tenant = {
+      field = "GetTenant"
+      type  = "Query"
+    }
+    get_tenant_user = {
+      field = "GetTenantUser"
+      type  = "Query"
+    }
+    get_user = {
+      field = "GetUser"
+      type  = "Query"
+    }
     kms_key_delete = {
       field = "Delete"
       type  = "KmsKey"
@@ -331,6 +315,46 @@ locals {
     kms_key_update = {
       field = "Update"
       type  = "KmsKey"
+    }
+    list_api_users = {
+      field = "ListApiUsers"
+      type  = "Query"
+    }
+    list_apps = {
+      field = "ListApps"
+      type  = "Query"
+    }
+    list_changes = {
+      field = "ListChanges"
+      type  = "Query"
+    }
+    list_functions = {
+      field = "ListFunctions"
+      type  = "Query"
+    }
+    list_kms_keys = {
+      field = "ListKmsKeys"
+      type  = "Query"
+    }
+    list_managed_node_types = {
+      field = "ListManagedNodeTypes"
+      type  = "Query"
+    }
+    list_message_types = {
+      field = "ListMessageTypes"
+      type  = "Query"
+    }
+    list_nodes = {
+      field = "ListNodes"
+      type  = "Query"
+    }
+    list_tenant_users = {
+      field = "ListTenantUsers"
+      type  = "Query"
+    }
+    list_tenants = {
+      field = "ListTenants"
+      type  = "Query"
     }
     managed_app_delete = {
       field = "Delete"
@@ -356,9 +380,9 @@ locals {
       field = "Update"
       type  = "ManagedApp"
     }
-    app_change_receiver_node_create_audit_records = {
+    managed_node_create_audit_records = {
       field = "CreateAuditRecords"
-      type  = "AppChangeReceiverNode"
+      type  = "ManagedNode"
     }
     managed_node_delete = {
       field = "Delete"
@@ -372,14 +396,6 @@ locals {
       field = "ListLogEvents"
       type  = "ManagedNode"
     }
-    managed_node_update = {
-      field = "Update"
-      type  = "ManagedNode"
-    }
-    managed_node_create_audit_records = {
-      field = "CreateAuditRecords"
-      type  = "ManagedNode"
-    }
     managed_node_type_delete = {
       field = "Delete"
       type  = "ManagedNodeType"
@@ -391,6 +407,10 @@ locals {
     managed_node_type_update = {
       field = "Update"
       type  = "ManagedNodeType"
+    }
+    managed_node_update = {
+      field = "Update"
+      type  = "ManagedNode"
     }
     message_type_delete = {
       field = "Delete"
@@ -513,6 +533,10 @@ locals {
       type  = "TransformerNode"
     }
   }
+
+  #######################################################
+  ############### Batch Invoke Resolvers ################
+  #######################################################
 
   batch_invoke_resolvers = {
     alert_emitter_node_sendedges = {
