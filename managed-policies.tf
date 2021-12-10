@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "graph_ddb_read" {
       module.graph_table.arn,
     ]
 
-    sid = "TableAccessQuery"
+    sid = "TableAccessRead"
   }
 
   statement {
@@ -24,7 +24,7 @@ data "aws_iam_policy_document" "graph_ddb_read" {
       "${module.graph_table.arn}/index/*"
     ]
 
-    sid = "TableAccessRead"
+    sid = "TableAccessQuery"
   }
 }
 
