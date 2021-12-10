@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
 
 resource "aws_iam_policy" "appsync_datasource" {
   description = "IAM permissions required for appsync-datasource lambda"
-  path        = "/${var.resource_prefix}-lambda/"
+  path        = "/lambda/control/"
   name        = "${var.resource_prefix}-appsync-datasource"
   policy      = data.aws_iam_policy_document.appsync_datasource.json
 }

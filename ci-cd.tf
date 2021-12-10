@@ -112,7 +112,7 @@ data "aws_iam_policy_document" "deployment_handler" {
 
 resource "aws_iam_policy" "deployment_handler" {
   description = "IAM permissions required for deployment-handler lambda"
-  path        = "/${var.resource_prefix}-lambda/"
+  path        = "/lambda/control/"
   name        = "${var.resource_prefix}-deployment-handler"
   policy      = data.aws_iam_policy_document.deployment_handler.json
 }
@@ -216,7 +216,7 @@ data "aws_iam_policy_document" "rebuild_notifications" {
 
 resource "aws_iam_policy" "rebuild_notifications" {
   description = "IAM permissions required for deployment-handler lambda"
-  path        = "/${var.resource_prefix}-lambda/"
+  path        = "/lambda/control/"
   name        = "${var.resource_prefix}-rebuild-notifications"
   policy      = data.aws_iam_policy_document.rebuild_notifications.json
 }

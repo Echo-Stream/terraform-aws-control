@@ -115,7 +115,7 @@ data "aws_iam_policy_document" "internal_node_sts_assume" {
 
 resource "aws_iam_policy" "internal_node" {
   description = "IAM permissions required for tenant functions"
-  path        = "/${var.resource_prefix}-lambda/"
+  path        = "/lambda/control/"
   policy      = data.aws_iam_policy_document.internal_node.json
 }
 
@@ -126,7 +126,7 @@ resource "aws_iam_role_policy_attachment" "internal_node" {
 
 resource "aws_iam_policy" "internal_node_sts_assume" {
   description = "IAM permissions required for internal nodes to assume update code role"
-  path        = "/${var.resource_prefix}-lambda/"
+  path        = "/lambda/control/"
   policy      = data.aws_iam_policy_document.internal_node_sts_assume.json
 }
 
@@ -199,6 +199,7 @@ data "aws_iam_policy_document" "conditional_lambda_assume_role" {
 
 resource "aws_iam_role" "update_code" {
   name               = "${var.resource_prefix}-update-code"
+  path               = "/lambda/tenant/"
   assume_role_policy = data.aws_iam_policy_document.conditional_lambda_assume_role.json
   tags               = local.tags
 }
@@ -226,7 +227,7 @@ data "aws_iam_policy_document" "update_code" {
 
 resource "aws_iam_policy" "update_code" {
   description = "IAM permissions required for internal nodes to update themselves"
-  path        = "/${var.resource_prefix}-lambda/"
+  path        = "/lambda/tenant/"
   policy      = data.aws_iam_policy_document.update_code.json
 }
 

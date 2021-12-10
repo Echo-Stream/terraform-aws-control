@@ -1,6 +1,6 @@
 resource "aws_iam_user" "presign_bulk_data" {
   name = "${var.resource_prefix}-presign-bulk-data"
-  path = "/lambda/"
+  path = "/lambda/control/"
   tags = local.tags
 }
 

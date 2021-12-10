@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "ui_cognito_post_confirmation" {
 
 resource "aws_iam_policy" "ui_cognito_post_confirmation" {
   description = "IAM permissions required for ui-cognito-post-confirmation lambda"
-  path        = "/${var.resource_prefix}-lambda/"
+  path        = "/lambda/control/"
   name        = "${var.resource_prefix}-ui-cognito-post-confirmation"
   policy      = data.aws_iam_policy_document.ui_cognito_post_confirmation.json
 }
@@ -105,7 +105,7 @@ data "aws_iam_policy_document" "ui_cognito_pre_authentication" {
 
 resource "aws_iam_policy" "ui_cognito_pre_authentication" {
   description = "IAM permissions required for ui-cognito-pre-authentication lambda"
-  path        = "/${var.resource_prefix}-lambda/"
+  path        = "/lambda/control/"
   name        = "${var.resource_prefix}-ui-cognito-pre-authentication"
   policy      = data.aws_iam_policy_document.ui_cognito_pre_authentication.json
 }
@@ -181,7 +181,7 @@ data "aws_iam_policy_document" "ui_cognito_pre_signup" {
 
 resource "aws_iam_policy" "ui_cognito_pre_signup" {
   description = "IAM permissions required for ui-cognito-pre-signup lambda"
-  path        = "/${var.resource_prefix}-lambda/"
+  path        = "/lambda/control/"
   name        = "${var.resource_prefix}-ui-cognito-pre-signup"
   policy      = data.aws_iam_policy_document.ui_cognito_pre_signup.json
 }
@@ -234,6 +234,7 @@ data "aws_iam_policy_document" "app_api_cognito_pre_authentication" {
     ]
 
     resources = [
+      module.graph_table.arn,
       "${module.graph_table.arn}/*",
     ]
 
@@ -255,19 +256,21 @@ data "aws_iam_policy_document" "app_api_cognito_pre_authentication" {
 
 resource "aws_iam_policy" "app_api_cognito_pre_authentication" {
   description = "IAM permissions required for app-api-cognito-pre-authentication lambda"
-  path        = "/${var.resource_prefix}-lambda/"
+  path        = "/lambda/control/"
   name        = "${var.resource_prefix}-app-api-cognito-pre-authentication"
   policy      = data.aws_iam_policy_document.app_api_cognito_pre_authentication.json
 }
 
 module "app_api_cognito_pre_authentication" {
   description = "Function that gets triggered when cognito user to be authenticated"
+
   environment_variables = {
     CONTROL_REGION = local.current_region
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
     TENANT_REGIONS = jsonencode(local.tenant_regions)
   }
+
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
