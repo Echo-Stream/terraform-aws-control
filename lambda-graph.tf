@@ -414,7 +414,9 @@ resource "aws_iam_policy" "graph_table_handler" {
 data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
   statement {
     actions = [
-      "dynamodb:DeleteTable"
+      "dynamodb:DeleteTable",
+      "dynamodb:DescribeTable",
+      "dynamodb:UpdateTimeToLive",
     ]
 
     resources = [
