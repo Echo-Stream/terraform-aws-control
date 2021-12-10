@@ -3,13 +3,51 @@
 ###########################
 data "aws_iam_policy_document" "appsync_datasource" {
   statement {
-    actions = ["*"
+    actions = [
+      "sqs:CreateQueue",
+      "sqs:DeleteQueue",
     ]
 
-    resources = ["*"]
+    resources = [
+      "arn:aws:sqs:*:${local.current_account_id}:edge*.fifo",
+      "arn:aws:sqs:*:${local.current_account_id}:dead-letter*.fifo",
+      "arn:aws:sqs:*:*:db-stream*",
+    ]
 
-    sid = "AdminLevel"
+    sid = "CreateQeueue"
   }
+
+  statement {
+    actions = [
+      "sns:CreateTopic",
+      "sns:DeleteTopic"
+    ]
+
+    resources = [
+      "arn:aws:sns:*:${local.current_account_id}:alert*"
+    ]
+
+    sid = "ReadWriteTopics"
+  }
+
+  statement {
+    actions = [
+      "s3:CreateBucket",
+      "s3:DeleteBucket",
+      "s3:PutBucketLogging",
+      "s3:PutBucketPolicy",
+      "s3:PutBucketPublicAccessBlock",
+      "s3:PutBucketTagging",
+      "s3:PutLifecycleConfiguration",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.resource_prefix}-tenant-*",
+    ]
+
+    sid = "S3Access"
+  }
+
 }
 
 resource "aws_iam_policy" "appsync_datasource" {
