@@ -167,7 +167,7 @@ module "appsync_datasource" {
     aws_iam_policy.appsync_datasource.arn,
     aws_iam_policy.graph_ddb_read.arn,
     aws_iam_policy.graph_ddb_write.arn,
-    "arn:aws:iam::aws:policy/AdministratorAccess"
+    #"arn:aws:iam::aws:policy/AdministratorAccess"
   ]
 
   runtime       = "python3.9"
