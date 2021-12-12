@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
       "arn:aws:sqs:*:${local.current_account_id}:edge*.fifo",
     ]
 
-    sid = "ManageTags"
+    sid = "ManageQueues"
   }
 
   statement {
@@ -289,7 +289,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
       aws_cognito_user_pool.echostream_api.arn
     ]
 
-    sid = "TenantDDB"
+    sid = "CognitoIDPAccess"
   }
 }
 
