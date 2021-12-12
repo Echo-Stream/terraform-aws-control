@@ -6,6 +6,8 @@ data "aws_iam_policy_document" "appsync_datasource" {
     actions = [
       "sqs:CreateQueue",
       "sqs:DeleteQueue",
+      "sqs:GetQueueAttributes",
+      "sqs:SetQueueAttributes",
       "sqs:TagQueue",
     ]
 
@@ -15,31 +17,37 @@ data "aws_iam_policy_document" "appsync_datasource" {
       "arn:aws:sqs:*:${local.current_account_id}:edge*.fifo",
     ]
 
-    sid = "CreateDeleteQueue"
+    sid = "ManageTags"
   }
 
   statement {
     actions = [
       "sns:CreateTopic",
       "sns:DeleteTopic",
-      "sns:TagResource"
+      "sns:Subscribe",
+      "sns:TagResource",
+      "sns:UnSubscribe"
     ]
 
     resources = [
-      "arn:aws:sns:*:${local.current_account_id}:alert*"
+      "arn:aws:sns:*:${local.current_account_id}:alert*",
+      "arn:aws:sns:*:${local.current_account_id}:timer*"
     ]
 
-    sid = "ReadWriteTopics"
+    sid = "ManageSNSTopics"
   }
 
   statement {
     actions = [
       "s3:CreateBucket",
       "s3:DeleteBucket",
+      "s3:GetBucketNotification",
       "s3:PutBucketLogging",
+      "s3:PutBucketNotification",
       "s3:PutBucketPolicy",
       "s3:PutBucketPublicAccessBlock",
       "s3:PutBucketTagging",
+      "s3:PutEncryptionConfiguration",
       "s3:PutLifecycleConfiguration",
     ]
 
@@ -82,10 +90,10 @@ data "aws_iam_policy_document" "appsync_datasource" {
     ]
 
     resources = [
-      module.graph_table_system_stream_handler.role_arn
+      "*"
     ]
 
-    sid = "PassRoleToSystemStreamHandler"
+    sid = "PassRoleAll"
   }
 
   statement {
@@ -128,6 +136,161 @@ data "aws_iam_policy_document" "appsync_datasource" {
 
     sid = "SESSendTemplatedEmail"
   }
+
+  statement {
+    actions = [
+      "kms:CreateAlias",
+      "kms:CreateGrant",
+      "kms:CreateKey",
+      "kms:Decrypt",
+      "kms:DeleteAlias",
+      "kms:DescribeKey",
+      "kms:Encrypt",
+      "kms:GenerateDataKey*",
+      "kms:GetKeyPolicy",
+      "kms:PutKeyPolicy",
+      "kms:RetireGrant",
+      "kms:ScheduleKeyDeletion",
+      "kms:TagResource"
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "ManageKMS"
+  }
+
+  statement {
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:DeleteLogGroup",
+      "logs:PutRetentionPolicy",
+      "logs:PutSubscriptionFilter"
+    ]
+
+    resources = [
+      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/lambda/*"
+    ]
+
+    sid = "ManageCWLogs"
+  }
+
+  statement {
+    actions = [
+      "logs:CreateLogStream",
+      "logs:DeleteLogStream"
+    ]
+
+    resources = [
+      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/kinesisfirehose/echo-dev-audit-firehose:log-stream:*"
+    ]
+
+    sid = "ManageLogStreams"
+  }
+
+  statement {
+    actions = [
+      "firehose:CreateDeliveryStream",
+      "firehose:DeleteDeliveryStream"
+    ]
+
+    resources = [
+      "arn:aws:firehose:*:${local.current_account_id}:deliverystream/echo-dev-tenant-*"
+    ]
+
+    sid = "ManageFirehoseStreams"
+  }
+
+  statement {
+    actions = [
+      "cloudwatch:DeleteAlarms",
+      "cloudwatch:PutMetricAlarm"
+    ]
+
+    resources = [
+      "arn:aws:cloudwatch:*:${local.current_account_id}:alarm:TENANT~*"
+    ]
+
+    sid = "ManageAlarms"
+  }
+
+  statement {
+    actions = [
+      "lambda:*",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "FullAccessLambda"
+  }
+
+  statement {
+    effect = "Deny"
+    actions = [
+      "lambda:*",
+    ]
+
+    resources = [
+      aws_lambda_function.edge_config.arn,
+      module.appsync_datasource.arn,
+      module.deployment_handler.arn,
+      module.graph_table_dynamodb_trigger.arn,
+      module.graph_table_system_stream_handler.arn,
+      module.log_retention.arn,
+      module.rebuild_notifications.arn,
+      module.ui_cognito_post_confirmation.arn,
+      module.ui_cognito_pre_authentication.arn,
+      module.ui_cognito_pre_signup.arn,
+    ]
+
+    sid = "AllowOnlyTenantStreamHandlerAccess"
+  }
+
+  statement {
+    actions = [
+      "dynamodb:CreateTable",
+      "dynamodb:TagResource"
+    ]
+
+    resources = [
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/echo-dev-tenant-*"
+    ]
+
+    sid = "TenantDDB"
+  }
+
+  statement {
+    actions = [
+      "events:TagResource",
+      "events:PutRule",
+      "events:DeleteRule",
+      "events:PutTargets",
+      "events:RemoveTargets"
+    ]
+
+    resources = [
+      "arn:aws:events:*:${local.current_account_id}:rule/timer*"
+    ]
+
+    sid = "EventsAccess"
+  }
+
+  statement {
+    actions = [
+      "cognito-idp:AdminCreateUser",
+      "cognito-idp:AdminDeleteUser",
+      "cognito-idp:AdminSetUserPassword"
+    ]
+
+    resources = [
+      aws_cognito_user_pool.echostream_api.arn
+    ]
+
+    sid = "TenantDDB"
+  }
 }
 
 resource "aws_iam_policy" "appsync_datasource" {
@@ -167,7 +330,8 @@ module "appsync_datasource" {
     aws_iam_policy.appsync_datasource.arn,
     aws_iam_policy.graph_ddb_read.arn,
     aws_iam_policy.graph_ddb_write.arn,
-    #"arn:aws:iam::aws:policy/AdministratorAccess"
+    aws_iam_policy.artifacts_bucket_read.arn,
+    "arn:aws:iam::aws:policy/AdministratorAccess"
   ]
 
   runtime       = "python3.9"

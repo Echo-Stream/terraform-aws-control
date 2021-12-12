@@ -187,6 +187,18 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
 
     sid = "DeleteItem"
   }
+
+  statement {
+    actions = [
+      "logs:DeleteLogStream"
+    ]
+
+    resources = [
+      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/kinesisfirehose/${var.resource_prefix}-audit-firehose:log-stream:*"
+    ]
+
+    sid = "DeleteLogStream"
+  }
 }
 
 resource "aws_iam_policy" "graph_table_tenant_stream_handler" {
