@@ -42,7 +42,7 @@ resource "aws_cognito_user_pool" "echostream_ui" {
   name              = "${var.resource_prefix}-ui"
 
   lambda_config {
-    pre_sign_up        = module.ui_cognito_preview_pre_signup.arn
+    pre_sign_up        = module.ui_cognito_pre_signup.arn
     post_confirmation  = module.ui_cognito_post_confirmation.arn
     pre_authentication = module.ui_cognito_pre_authentication.arn
   }
