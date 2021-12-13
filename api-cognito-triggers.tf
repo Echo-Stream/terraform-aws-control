@@ -341,7 +341,7 @@ module "ui_cognito_preview_pre_signup" {
   description = "Validate invitation for new UI user "
 
   environment_variables = {
-    AUTHORIZED_DOMAINS = ["preview@echo.stream"]
+    AUTHORIZED_DOMAINS = "['preview@echo.stream']"
     CONTROL_REGION     = local.current_region
     DYNAMODB_TABLE     = module.graph_table.name
     ENVIRONMENT        = var.resource_prefix
