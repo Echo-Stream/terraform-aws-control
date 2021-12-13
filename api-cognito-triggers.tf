@@ -307,10 +307,10 @@ module "ui_cognito_preview_pre_signup" {
 
   environment_variables = {
     AUTHORIZED_DOMAINS = jsonencode(["echo.stream"])
-    CONTROL_REGION     = local.current_region
-    DYNAMODB_TABLE     = module.graph_table.name
+    #CONTROL_REGION     = local.current_region
+    #DYNAMODB_TABLE     = module.graph_table.name
     ENVIRONMENT        = var.resource_prefix
-    TENANT_REGIONS     = jsonencode(local.tenant_regions)
+    #TENANT_REGIONS     = jsonencode(local.tenant_regions)
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
