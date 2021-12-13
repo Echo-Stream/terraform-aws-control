@@ -302,41 +302,6 @@ resource "aws_lambda_permission" "app_api_cognito_pre_authentication" {
 ####################################
 ##  ui-cognito-preview-pre-signup ##
 ####################################
-data "aws_iam_policy_document" "ui_cognito_preview_pre_signup" {
-  statement {
-    actions = [
-      "dynamodb:DeleteItem",
-      "dynamodb:GetItem",
-      "dynamodb:PutItem",
-      "dynamodb:UpdateItem",
-    ]
-
-    resources = [
-      module.graph_table.arn,
-    ]
-
-    sid = "TableAccess"
-  }
-  statement {
-    actions = [
-      "cloudwatch:PutMetricData",
-    ]
-
-    resources = [
-      "*",
-    ]
-
-    sid = "CWPutMetrics"
-  }
-}
-
-resource "aws_iam_policy" "ui_cognito_preview_pre_signup" {
-  description = "IAM permissions required for ui-cognito-preview-pre-signuplambda"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-ui-cognito-pre-signup"
-  policy      = data.aws_iam_policy_document.ui_cognito_preview_pre_signup.json
-}
-
 module "ui_cognito_preview_pre_signup" {
   description = "Validate invitation for new UI user "
 
@@ -352,10 +317,10 @@ module "ui_cognito_preview_pre_signup" {
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.resource_prefix}-ui-cognito-pre-signup"
+  name            = "${var.resource_prefix}-ui-cognito-preview-pre-signup"
 
   policy_arns = [
-    aws_iam_policy.ui_cognito_preview_pre_signup.arn,
+    aws_iam_policy.ui_cognito_pre_signup.arn,
     aws_iam_policy.graph_ddb_read.arn
   ]
 
