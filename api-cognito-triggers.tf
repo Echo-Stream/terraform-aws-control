@@ -298,3 +298,80 @@ resource "aws_lambda_permission" "app_api_cognito_pre_authentication" {
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.echostream_api.arn
 }
+
+####################################
+##  ui-cognito-preview-pre-signup ##
+####################################
+data "aws_iam_policy_document" "ui_cognito_preview_pre_signup" {
+  statement {
+    actions = [
+      "dynamodb:DeleteItem",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:UpdateItem",
+    ]
+
+    resources = [
+      module.graph_table.arn,
+    ]
+
+    sid = "TableAccess"
+  }
+  statement {
+    actions = [
+      "cloudwatch:PutMetricData",
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "CWPutMetrics"
+  }
+}
+
+resource "aws_iam_policy" "ui_cognito_preview_pre_signup" {
+  description = "IAM permissions required for ui-cognito-preview-pre-signuplambda"
+  path        = "/lambda/control/"
+  name        = "${var.resource_prefix}-ui-cognito-pre-signup"
+  policy      = data.aws_iam_policy_document.ui_cognito_preview_pre_signup.json
+}
+
+module "ui_cognito_preview_pre_signup" {
+  description = "Validate invitation for new UI user "
+
+  environment_variables = {
+    AUTHORIZED_DOMAINS = ["preview@echo.stream"]
+    CONTROL_REGION     = local.current_region
+    DYNAMODB_TABLE     = module.graph_table.name
+    ENVIRONMENT        = var.resource_prefix
+    TENANT_REGIONS     = jsonencode(local.tenant_regions)
+  }
+
+  dead_letter_arn = local.lambda_dead_letter_arn
+  handler         = "function.handler"
+  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  memory_size     = 1536
+  name            = "${var.resource_prefix}-ui-cognito-pre-signup"
+
+  policy_arns = [
+    aws_iam_policy.ui_cognito_preview_pre_signup.arn,
+    aws_iam_policy.graph_ddb_read.arn
+  ]
+
+  runtime       = "python3.9"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["ui_cognito_preview_pre_signup"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "3.0.18"
+}
+
+resource "aws_lambda_permission" "ui_cognito_preview_pre_signup" {
+  statement_id  = "AllowExecutionFromCognito"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ui_cognito_preview_pre_signup.name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.echostream_ui.arn
+}
