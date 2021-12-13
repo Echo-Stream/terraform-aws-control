@@ -65,7 +65,7 @@ locals {
     ui_cognito_post_confirmation       = "${local.artifacts["lambda"]}/ui-cognito-post-confirmation.zip"
     ui_cognito_pre_authentication      = "${local.artifacts["lambda"]}/ui-cognito-pre-authentication.zip"
     ui_cognito_pre_signup              = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
-    ui_cognito_preview_pre_signup = = "${local.artifacts["lambda"]}/ui-cognito-preview-pre-signup.zip"
+    ui_cognito_preview_pre_signup      = "${local.artifacts["lambda"]}/ui-cognito-preview-pre-signup.zip"
   }
 
   log_bucket             = module.log_bucket.id
