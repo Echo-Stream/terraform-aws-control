@@ -24,7 +24,7 @@ resource "aws_appsync_graphql_api" "echostream" {
     authentication_type = "AMAZON_COGNITO_USER_POOLS"
 
     user_pool_config {
-      user_pool_id   = aws_cognito_user_pool.echostream_ui.id
+      user_pool_id = aws_cognito_user_pool.echostream_ui.id
     }
   }
 
