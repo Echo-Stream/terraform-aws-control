@@ -170,7 +170,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
       "*",
     ]
 
-    sid = "ManageCWLogs"
+    sid = "DescribeAllLogGroups"
   }
 
   statement {
