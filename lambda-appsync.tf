@@ -368,7 +368,6 @@ module "appsync_datasource" {
   name        = "${var.resource_prefix}-appsync-datasource"
 
   policy_arns = [
-    "arn:aws:iam::aws:policy/AdministratorAccess",
     aws_iam_policy.appsync_datasource.arn,
     aws_iam_policy.artifacts_bucket_read.arn,
     aws_iam_policy.graph_ddb_read.arn,
