@@ -24,14 +24,16 @@ resource "aws_appsync_graphql_api" "echostream" {
     authentication_type = "AMAZON_COGNITO_USER_POOLS"
 
     user_pool_config {
-      user_pool_id = aws_cognito_user_pool.echostream_ui.id
+      default_action = "ALLOW"
+      user_pool_id   = aws_cognito_user_pool.echostream_ui.id
     }
   }
 
   schema = data.aws_s3_bucket_object.graphql_schema.body
 
-  name = "${var.resource_prefix}-api"
-  tags = local.tags
+  xray_enabled = false
+  name         = "${var.resource_prefix}-api"
+  tags         = local.tags
 }
 
 resource "aws_iam_role" "echostream_appsync" {
