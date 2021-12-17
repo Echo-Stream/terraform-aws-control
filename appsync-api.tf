@@ -24,7 +24,6 @@ resource "aws_appsync_graphql_api" "echostream" {
     authentication_type = "AMAZON_COGNITO_USER_POOLS"
 
     user_pool_config {
-      default_action = "ALLOW"
       user_pool_id   = aws_cognito_user_pool.echostream_ui.id
     }
   }
