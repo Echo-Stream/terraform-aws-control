@@ -424,6 +424,6 @@ data "aws_iam_policy_document" "graph_table_handler" {
 resource "aws_iam_policy" "graph_table_handler" {
   description = "IAM permissions required for both graph table tenant and system handlers"
   path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-graph-table-tenant-system-handler"
+  name        = "${var.resource_prefix}-graph-table-handler"
   policy      = data.aws_iam_policy_document.graph_table_handler.json
 }

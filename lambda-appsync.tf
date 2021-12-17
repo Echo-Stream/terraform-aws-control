@@ -291,6 +291,47 @@ data "aws_iam_policy_document" "appsync_datasource" {
 
     sid = "CognitoIDPAccess"
   }
+
+  statement {
+    actions = [
+      "ecr:DescribeImages"
+    ]
+
+    resources = [
+      "arn:aws:ecr:*:*:repository/*"
+    ]
+
+    sid = "ECRDescribeAll"
+  }
+
+  statement {
+    actions = [
+      "ssm:AddTagsToResource",
+      "ssm:DeregisterManagedInstance",
+      "ssm:DescribeInstance*"
+    ]
+
+    resources = [
+      "arn:aws:ssm:*:${local.current_account_id}:*"
+    ]
+
+    sid = "SSM"
+  }
+
+  statement {
+    actions = [
+      "ssm:CreateActivation",
+      "ssm:AddTagsToResource"
+    ]
+
+    resources = [
+      aws_iam_role.managed_app.arn
+    ]
+
+    sid = "SSM2"
+  }
+
+
 }
 
 resource "aws_iam_policy" "appsync_datasource" {

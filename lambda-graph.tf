@@ -213,7 +213,8 @@ module "graph_table_tenant_stream_handler" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = merge(local.common_lambda_environment_variables,
-  { LOGGING_LEVEL = "DEBUG" })
+    { LOGGING_LEVEL = "DEBUG"
+  AUDIT_FIREHOSE_LOG_GROUP = local.audit_firehose_log_group })
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
