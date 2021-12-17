@@ -11,7 +11,6 @@ This module is supposed to be used along with pre-control module in the EchoStre
 | allowed\_account\_id | The Account Id which hosts the environment | `string` | n/a | yes |
 | domain_name | Environment Sub Domain (output from pre-control TF), used for Cloudfront custom domain, may be used for SES domain Identity and Cognito custom domain | `string` | n/a | yes |
 | echostream\_version | `Major.Minor` Version to fetch artifacts from right location | `string` | n/a | yes |
-| manual_deployment_trigger | Toggle for deployment of all echo tenant and system types, appsync, cloudfront etc. Changing the previous existing value acts as a trigger | `string` | `foobar` | no |
 | region | AWS Region for the environment | `string` | n/a | yes |
 | resource_prefix | Environment Prefix for naming resources, a Unique name that could differentiate whole environment. `lower case` only, `No periods`, `No Special Char` except `-`. Length less than 15 char | `string` | n/a | yes |
 | ses_email_address | Preferred Email Address that SES uses for communication with tenants | `string` | n/a | yes |
@@ -52,7 +51,6 @@ module "control" {
   domain_name               = module.pre_control.subdomain
   domain_zone_id            = module.pre_control.subdomain_zone_id
   echostream_version        = var.echostream_version
-  manual_deployment_trigger = var.manual_deployment_trigger
   region                    = var.region
   resource_prefix           = "${var.resource_prefix}-${var.environment}"
   ses_email_address         = var.ses_email_address
