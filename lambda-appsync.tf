@@ -163,6 +163,18 @@ data "aws_iam_policy_document" "appsync_datasource" {
 
   statement {
     actions = [
+      "logs:DescribeLogGroups"
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "ManageCWLogs"
+  }
+
+  statement {
+    actions = [
       "logs:CreateLogGroup",
       "logs:DeleteLogGroup",
       "logs:PutRetentionPolicy",
@@ -170,7 +182,8 @@ data "aws_iam_policy_document" "appsync_datasource" {
     ]
 
     resources = [
-      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/lambda/*"
+      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/lambda/*",
+      "arn:aws:logs:*:412530347624:log-group:echostream/managed-app/*:log-stream:*"
     ]
 
     sid = "ManageCWLogs"
