@@ -1,5 +1,42 @@
+/*
+ Notifications
+
+Amazon SES can send you detailed notifications about your bounces, complaints, and deliveries.
+Bounce and complaint notifications are available by email or through Amazon Simple Notification Service (Amazon SNS). By default, these notifications are sent to you via email by a feature called email feedback forwarding.
+Delivery notifications, which are sent when Amazon SES successfully delivers one of your emails to a recipient's mail server, are optional and only available through Amazon SNS.
+
+
+
+Current notification configuration:
+Email Feedback Forwarding: 	enabled
+Bounce Notifications SNS Topic: 	none	
+Complaint Notifications SNS Topic: 	none
+Delivery Notifications SNS Topic: 	none
+Include Original Headers: 	disabled
+*/
 resource "aws_ses_email_identity" "support" {
   email = var.ses_email_address
+}
+
+resource "aws_ses_configuration_set" "email_errors" {
+  name = "${var.resource_prefix}-email-errors"
+}
+
+resource "aws_ses_event_destination" "email_errors" {
+  configuration_set_name = aws_ses_configuration_set.email_errors.name
+  enabled                = true
+  matching_types         = ["bounce", "reject", "renderingFailure", "complaint"]
+  name                   = "${var.resource_prefix}-email-errors-sns"
+
+  sns_destination {
+    topic_arn = aws_sns_topic.email_error_events.arn
+  }
+}
+
+resource "aws_sns_topic" "email_error_events" {
+  name         = "${var.resource_prefix}-email-error-events"
+  display_name = "Email error sending events (bounces, complaints and rejected emails) "
+  tags         = local.tags
 }
 
 resource "aws_ses_template" "invite_user" {

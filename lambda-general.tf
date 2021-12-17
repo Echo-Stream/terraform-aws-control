@@ -29,7 +29,7 @@ data "aws_iam_policy_document" "log_retention" {
 
 resource "aws_iam_policy" "log_retention" {
   description = "IAM permissions required for log-retention lambda"
-  path        = "/${var.resource_prefix}-lambda/"
+  path        = "/lambda/control/"
   name        = "${var.resource_prefix}-log-retention"
   policy      = data.aws_iam_policy_document.log_retention.json
 }
@@ -55,7 +55,7 @@ module "log_retention" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 60
-  version       = "3.0.14"
+  version       = "3.0.18"
 }
 
 
@@ -77,11 +77,4 @@ resource "aws_lambda_permission" "log_retention" {
   function_name = module.log_retention.name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.log_retention.arn
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "log_retention" {
-  name            = "${var.resource_prefix}-log-retention"
-  log_group_name  = module.log_retention.log_group_name
-  filter_pattern  = "ERROR -USERERROR"
-  destination_arn = module.control_alert_handler.arn
 }

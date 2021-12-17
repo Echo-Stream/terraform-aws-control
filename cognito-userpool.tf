@@ -1,75 +1,10 @@
-resource "aws_cognito_user_pool" "echostream_apps" {
-  admin_create_user_config {
-    allow_admin_create_user_only = true
-
-    invite_message_template {
-      email_message = "Your username is {username} and temporary password is {####}. "
-      email_subject = "Your temporary password"
-      sms_message   = "Your username is {username} and temporary password is {####}. "
-    }
-  }
-
-  email_verification_message = "Your verification code is {####}. "
-  email_verification_subject = "Your verification code"
-
-  lifecycle {
-    ignore_changes = [
-      schema,
-      device_configuration,
-      account_recovery_setting
-    ]
-
-    # prevent_destroy = true
-  }
-
-  name = "${var.resource_prefix}-apps"
-
-  lambda_config {
-    pre_authentication   = module.app_api_cognito_pre_authentication.arn
-    pre_token_generation = module.app_cognito_pre_token_generation.arn
-  }
-
-  password_policy {
-    minimum_length                   = 16
-    require_lowercase                = true
-    require_numbers                  = true
-    require_symbols                  = false
-    require_uppercase                = true
-    temporary_password_validity_days = 90
-  }
-
-  tags = local.tags
-}
-
-resource "aws_cognito_user_pool_client" "echostream_apps_userpool_client" {
-  name                   = "${var.resource_prefix}-apps"
-  refresh_token_validity = 30
-
-  supported_identity_providers = [
-    "COGNITO",
-  ]
-
-  user_pool_id = aws_cognito_user_pool.echostream_apps.id
-
-  explicit_auth_flows = [
-    "ALLOW_REFRESH_TOKEN_AUTH",
-    "ALLOW_USER_SRP_AUTH"
-  ]
-}
-
-### echostream-ui cognito pool
+## echostream-ui cognito pool
 resource "aws_cognito_user_pool" "echostream_ui" {
-
   account_recovery_setting {
     recovery_mechanism {
       name     = "verified_email"
       priority = 1
     }
-
-    # recovery_mechanism {
-    #   name     = "verified_phone_number"
-    #   priority = 2
-    # }
   }
 
   admin_create_user_config {
@@ -110,7 +45,6 @@ resource "aws_cognito_user_pool" "echostream_ui" {
     pre_sign_up        = module.ui_cognito_pre_signup.arn
     post_confirmation  = module.ui_cognito_post_confirmation.arn
     pre_authentication = module.ui_cognito_pre_authentication.arn
-    #pre_token_generation = module.ui_cognito_pre_token_generation.arn
   }
 
   password_policy {
@@ -133,23 +67,6 @@ resource "aws_cognito_user_pool" "echostream_ui" {
     name                = "family_name"
     required            = true
   }
-
-  # sms_authentication_message = "Your authentication code is {####}. "
-
-  # sms_configuration {
-  #   external_id    = random_string.echostream_ui_external_id.result
-  #   sns_caller_arn = aws_iam_role.cognito_sms.arn
-  # }
-
-  #sms_verification_message = "Your verification code is {####}. "
-
-  # username_attributes = [
-  #   "email",
-  # ]
-
-  # user_pool_add_ons {
-  #   advanced_security_mode = "ENFORCED"
-  # }
 
   software_token_mfa_configuration {
     enabled = true
@@ -212,7 +129,6 @@ resource "aws_cognito_user_pool" "echostream_api" {
 
   lambda_config {
     pre_authentication = module.app_api_cognito_pre_authentication.arn
-    #pre_token_generation = module.api_cognito_pre_token_generation.arn
   }
 
   password_policy {
@@ -228,6 +144,8 @@ resource "aws_cognito_user_pool" "echostream_api" {
 }
 
 resource "aws_cognito_user_pool_client" "echostream_api_userpool_client" {
+  access_token_validity  = 60
+  id_token_validity      = 60
   name                   = "${var.resource_prefix}-api"
   refresh_token_validity = 30
 
@@ -241,4 +159,10 @@ resource "aws_cognito_user_pool_client" "echostream_api_userpool_client" {
     "ALLOW_REFRESH_TOKEN_AUTH",
     "ALLOW_USER_SRP_AUTH"
   ]
+
+  lifecycle {
+    ignore_changes = [
+      token_validity_units
+    ]
+  }
 }

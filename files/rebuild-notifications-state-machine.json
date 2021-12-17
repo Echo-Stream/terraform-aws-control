@@ -1,0 +1,70 @@
+{
+	"Comment": "Reads Echo Items on the SQS queue and rebuilds the respective AWS resources",
+	"StartAt": "CheckForMessages",
+	"States": {
+		"CheckForMessages": {
+			"Comment": "Check for any New message on the queue and process it, if not go to sleep",
+			"Type": "Task",
+			"Resource": "${function_arn}",
+			"Parameters": {
+				"task_name": "CheckForMessages"
+			},
+			"Next": "NotifyOrHibernate"
+		},
+		"NotifyOrHibernate": {
+			"Comment": "Conditional step to process the message or go for a short hibernation",
+			"Type": "Choice",
+			"Choices": [
+				{
+					"Variable": "$.new_messages",
+					"BooleanEquals": true,
+					"Next": "Notify"
+				}
+			],
+			"Default": "Hibernate"
+		},
+		"Notify": {
+			"Comment": "Notify 15 or less resources if there is a new message",
+			"Type": "Task",
+			"Parameters": {
+				"task_name": "notify",
+				"payload.$": "$.payload"
+			},
+			"Resource": "${function_arn}",
+			"Next": "NotifyNextSetOrReinvokeMyself"
+		},
+		"NotifyNextSetOrReinvokeMyself": {
+			"Comment": "Conditional step to notify next 15 resources",
+			"Type": "Choice",
+			"Choices": [
+				{
+					"Variable": "$.payload.deployed",
+					"BooleanEquals": false,
+					"Next": "Sleep"
+				}
+			],
+			"Default": "ReinvokeMyself"
+		},
+		"Hibernate": {
+			"Comment": "Sleep for ${sleep_time_in_seconds} seconds",
+			"Type": "Wait",
+			"Seconds": ${sleep_time_in_seconds
+			},
+			"Next": "ReinvokeMyself"
+		},
+		"Sleep": {
+			"Comment": "Sleep for ${sleep_time_in_seconds} seconds",
+			"Type": "Wait",
+			"Seconds": 1,
+			"Next": "Notify"
+		},
+		"ReinvokeMyself": {
+			"Type": "Task",
+			"Resource": "arn:aws:states:::states:startExecution",
+			"Parameters": {
+				"StateMachineArn": "${my_arn}"
+			},
+			"End": true
+		}
+	}
+}

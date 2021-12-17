@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:*:db-stream*",
+      "arn:aws:sqs:*:${local.current_account_id}:db-stream*",
       aws_sqs_queue.system_sqs_queue.arn
     ]
 
@@ -22,7 +22,6 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
       "dynamodb:GetRecords",
       "dynamodb:GetShardIterator",
       "dynamodb:ListStreams",
-      "dynamodb:PutItem"
     ]
 
     resources = [
@@ -31,43 +30,28 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
 
     sid = "AllowReadingFromStreams"
   }
-
-  statement {
-    actions = [
-      "dynamodb:Query",
-      "dynamodb:PutItem",
-      "dynamodb:GetItem",
-    ]
-
-    resources = [
-      module.graph_table.arn,
-    ]
-
-    sid = "WriteAccesstoTable"
-  }
 }
 
 resource "aws_iam_policy" "graph_table_dynamodb_trigger" {
   description = "IAM permissions required for graph-table-dynamodb-trigger"
-  path        = "/${var.resource_prefix}-lambda/"
+  path        = "/lambda/control/"
   name        = "${var.resource_prefix}-graph-table-dynamodb-trigger"
   policy      = data.aws_iam_policy_document.graph_table_dynamodb_trigger.json
 }
 
 module "graph_table_dynamodb_trigger" {
-  description           = "Routes Dynamodb Stream events to the correct Lambda Functions"
   dead_letter_arn       = local.lambda_dead_letter_arn
+  description           = "Routes Dynamodb Stream events to the correct Lambda Functions"
   environment_variables = local.common_lambda_environment_variables
-
-  handler     = "function.handler"
-  kms_key_arn = local.lambda_env_vars_kms_key_arn
-
-  memory_size = 1536
-  name        = "${var.resource_prefix}-graph-table-dynamodb-trigger"
+  handler               = "function.handler"
+  kms_key_arn           = local.lambda_env_vars_kms_key_arn
+  memory_size           = 1536
+  name                  = "${var.resource_prefix}-graph-table-dynamodb-trigger"
 
   policy_arns = [
+    aws_iam_policy.graph_ddb_read.arn,
+    aws_iam_policy.graph_ddb_write.arn,
     aws_iam_policy.graph_table_dynamodb_trigger.arn,
-    aws_iam_policy.additional_ddb_policy.arn
   ]
 
   runtime       = "python3.9"
@@ -76,7 +60,7 @@ module "graph_table_dynamodb_trigger" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.14"
+  version       = "3.0.18"
 }
 
 resource "aws_lambda_event_source_mapping" "graph_table_dynamodb_trigger" {
@@ -86,23 +70,15 @@ resource "aws_lambda_event_source_mapping" "graph_table_dynamodb_trigger" {
   starting_position = "LATEST"
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "graph_table_dynamodb_trigger" {
-  name            = "${var.resource_prefix}-graph-table-dynamodb-trigger"
-  log_group_name  = module.graph_table_dynamodb_trigger.log_group_name
-  filter_pattern  = "ERROR -USERERROR"
-  destination_arn = module.control_alert_handler.arn
-}
-
-
-resource "aws_iam_role" "manage_apps_ssm_service_role" {
+resource "aws_iam_role" "managed_app" {
   description        = "Enable AWS Systems Manager service core functionality"
-  name               = "${var.resource_prefix}-manage-apps-ssm-role"
+  name               = "${var.resource_prefix}-managed-app"
   path               = "/service-role/"
-  assume_role_policy = data.aws_iam_policy_document.manage_apps_ssm_service_role.json
+  assume_role_policy = data.aws_iam_policy_document.managed_app.json
   tags               = local.tags
 }
 
-data "aws_iam_policy_document" "manage_apps_ssm_service_role" {
+data "aws_iam_policy_document" "managed_app" {
   statement {
     actions = [
       "sts:AssumeRole",
@@ -116,26 +92,7 @@ data "aws_iam_policy_document" "manage_apps_ssm_service_role" {
   }
 }
 
-data "aws_iam_policy_document" "manage_apps_ssm_service_role_customer_policy" {
-  statement {
-    actions = [
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:BatchGetImage",
-      "ecr:DescribeImages",
-      "ecr:DescribeRepositories",
-      "ecr:GetAuthorizationToken",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:GetRepositoryPolicy",
-      "ecr:ListImages",
-    ]
-
-    resources = [
-      "arn:aws:ecr:${local.current_region}:${local.artifacts_account_id}:repository/*"
-    ]
-
-    sid = "AppCognitoPoolAccess"
-  }
-
+data "aws_iam_policy_document" "managed_app_customer_policy" {
   statement {
     actions = [
       "logs:CreateLogStream",
@@ -148,27 +105,44 @@ data "aws_iam_policy_document" "manage_apps_ssm_service_role_customer_policy" {
 
     sid = "LogsAccess"
   }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sns:Publish"
+    ]
+
+    resources = [aws_sns_topic.managed_app_cloud_init.arn]
+
+    sid = "PublishToSNS"
+  }
 }
 
-resource "aws_iam_policy" "manage_apps_ssm_service_role_customer_policy" {
+resource "aws_iam_policy" "managed_app_customer_policy" {
   description = "IAM permissions required for manage apps ssm"
-  path        = "/${var.resource_prefix}-lambda/"
-  policy      = data.aws_iam_policy_document.manage_apps_ssm_service_role_customer_policy.json
+  path        = "/lambda/control/"
+  policy      = data.aws_iam_policy_document.managed_app_customer_policy.json
 }
 
-resource "aws_iam_role_policy_attachment" "manage_apps_ssm_service_role_customer_policy" {
-  policy_arn = aws_iam_policy.manage_apps_ssm_service_role_customer_policy.arn
-  role       = aws_iam_role.manage_apps_ssm_service_role.name
+resource "aws_iam_role_policy_attachment" "managed_app_customer_policy" {
+  policy_arn = aws_iam_policy.managed_app_customer_policy.arn
+  role       = aws_iam_role.managed_app.name
 }
 
-resource "aws_iam_role_policy_attachment" "manage_apps_ssm_service_role" {
+resource "aws_iam_role_policy_attachment" "managed_app_ecr_read" {
+  policy_arn = aws_iam_policy.ecr_read.arn
+  role       = aws_iam_role.managed_app.name
+}
+
+resource "aws_iam_role_policy_attachment" "managed_app" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-  role       = aws_iam_role.manage_apps_ssm_service_role.name
+  role       = aws_iam_role.managed_app.name
 }
 
 resource "aws_iam_role_policy_attachment" "manage_apps_ssm_directory_role" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMDirectoryServiceAccess"
-  role       = aws_iam_role.manage_apps_ssm_service_role.name
+  role       = aws_iam_role.managed_app.name
 }
 
 #######################################
@@ -177,210 +151,82 @@ resource "aws_iam_role_policy_attachment" "manage_apps_ssm_directory_role" {
 data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
   statement {
     actions = [
-      "dynamodb:*",
+      "dynamodb:DeleteTable",
+      "dynamodb:DescribeTable",
+      "dynamodb:UpdateTimeToLive",
+    ]
+
+    resources = [
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-tenant-*"
+    ]
+
+    sid = "DeleteTenantTables"
+  }
+
+  statement {
+    actions = [
+      "firehose:DeleteDeliveryStream",
+      "firehose:PutRecord*",
+    ]
+
+    resources = [
+      "arn:aws:firehose:*:${local.current_account_id}:deliverystream/${var.resource_prefix}-tenant-*"
+    ]
+
+    sid = "FirehosePermissions"
+  }
+
+  statement {
+    actions = [
+      "dynamodb:DeleteItem",
     ]
 
     resources = [
       module.graph_table.arn,
     ]
 
-    sid = "TableAccess"
+    sid = "DeleteItem"
   }
 
   statement {
     actions = [
-      "appsync:GraphQL",
-      "appsync:GetGraphqlApi"
+      "logs:DeleteLogStream"
     ]
 
     resources = [
-      aws_appsync_graphql_api.echostream.arn,
+      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/kinesisfirehose/${var.resource_prefix}-audit-firehose:log-stream:*"
     ]
 
-    sid = "AppsyncAccess"
-  }
-
-  statement {
-    actions = [
-      "sqs:ReceiveMessage",
-      "sqs:DeleteMessage",
-      "sqs:GetQueueAttributes",
-      "sqs:GetQueueUrl",
-    ]
-
-    resources = [
-      "arn:aws:sqs:*:*:*db-stream*.fifo",
-      aws_sqs_queue.system_sqs_queue.arn
-    ]
-
-    sid = "PrerequisitesForQueueTrigger"
-  }
-
-  statement {
-    actions = [
-      "ses:GetTemplate",
-      "ses:ListTemplates",
-      "ses:SendEmail",
-      "ses:SendTemplatedEmail",
-    ]
-
-    resources = [
-      "*"
-    ]
-
-    sid = "SESAccess"
-  }
-
-  statement {
-    actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:DeleteLogGroup",
-      "logs:DeleteSubscriptionFilter",
-      "logs:PutLogEvents",
-      "logs:PutRetentionPolicy",
-      "logs:PutSubscriptionFilter",
-    ]
-
-    resources = [
-      "*"
-    ]
-  }
-
-  statement {
-    actions = [
-      "cognito-idp:AdminDeleteUser",
-      "cognito-idp:AdminGetUser",
-      "cognito-idp:AdminUserGlobalSignOut",
-      "cognito-idp:ListUsers",
-    ]
-
-    resources = [aws_cognito_user_pool.echostream_apps.arn,
-      aws_cognito_user_pool.echostream_ui.arn,
-    aws_cognito_user_pool.echostream_api.arn]
-
-    sid = "AdminGetUser"
-  }
-
-
-  statement {
-    actions = [
-      "kms:CreateGrant",
-      "kms:DescribeKey",
-      "kms:ListGrants",
-      "kms:ListResourceGrants",
-      "kms:RetireGrant",
-      "kms:RevokeGrant",
-      "kms:ScheduleKeyDeletion",
-    ]
-
-    resources = ["*"]
-
-    sid = "KMSPermissions"
-  }
-
-  statement {
-    actions = [
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:BatchGetImage",
-      "ecr:DescribeImages",
-      "ecr:DescribeRepositories",
-      "ecr:GetAuthorizationToken",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:GetRepositoryPolicy",
-      "ecr:ListImages",
-    ]
-
-    resources = [
-      "arn:aws:ecr:${local.current_region}:${local.artifacts_account_id}:repository/*"
-    ]
-
-    sid = "ECRAccess"
-  }
-
-  statement {
-    actions = [
-      "lambda:DeleteEventSourceMapping",
-      "lambda:CreateFunction",
-      "lambda:DeleteFunction",
-      "lambda:DeleteLayerVersion",
-      "lambda:GetFunction",
-      "lambda:GetFunctionConfiguration",
-      "lambda:GetLayerVersion",
-      "lambda:ListEventSourceMappings",
-      "lambda:ListFunctions",
-      "lambda:PublishLayerVersion",
-      "lambda:UpdateFunctionConfiguration",
-    ]
-
-    resources = [
-      "*"
-    ]
-
-    sid = "LambdaAllAccess"
-  }
-
-
-  statement {
-    actions = [
-      "s3:GetObject*",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${local.artifacts["lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${local.artifacts["lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${local.artifacts["lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${local.artifacts["tenant_lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${local.artifacts["tenant_lambda"]}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${local.artifacts["tenant_lambda"]}/*",
-    ]
-
-    sid = "GetArtifacts"
-  }
-
-  statement {
-    actions = [
-      "iam:PassRole",
-    ]
-
-    resources = [
-      aws_iam_role.tenant_function.arn
-    ]
-
-    sid = "TenantFunctionRoleIAM"
-  }
-
-  statement {
-    actions = [
-      "cloudwatch:PutMetricAlarm",
-      "cloudwatch:DeleteAlarms",
-    ]
-
-    resources = [
-      "*"
-    ]
+    sid = "DeleteLogStream"
   }
 }
 
 resource "aws_iam_policy" "graph_table_tenant_stream_handler" {
   description = "IAM permissions required for graph-table-tenant-stream-handler"
-  path        = "/${var.resource_prefix}-lambda/"
+  path        = "/lambda/control/"
   name        = "${var.resource_prefix}-graph-table-tenant-stream-handler"
   policy      = data.aws_iam_policy_document.graph_table_tenant_stream_handler.json
 }
 
 module "graph_table_tenant_stream_handler" {
-  description           = "Delegates calls to handling lambda functions in EchoStream Dynamodb Stream"
-  dead_letter_arn       = local.lambda_dead_letter_arn
-  environment_variables = local.common_lambda_environment_variables
-  handler               = "function.handler"
-  kms_key_arn           = local.lambda_env_vars_kms_key_arn
-  memory_size           = 1536
-  name                  = "${var.resource_prefix}-graph-table-tenant-stream-handler"
+  description     = "Delegates calls to handling lambda functions in EchoStream Dynamodb Stream"
+  dead_letter_arn = local.lambda_dead_letter_arn
+
+  environment_variables = merge(local.common_lambda_environment_variables,
+    { LOGGING_LEVEL = "DEBUG"
+  AUDIT_FIREHOSE_LOG_GROUP = local.audit_firehose_log_group })
+
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  memory_size = 1536
+  name        = "${var.resource_prefix}-graph-table-tenant-stream-handler"
 
   policy_arns = [
+    aws_iam_policy.ecr_read.arn,
+    aws_iam_policy.graph_ddb_read.arn,
+    aws_iam_policy.graph_ddb_write.arn,
     aws_iam_policy.graph_table_tenant_stream_handler.arn,
-    aws_iam_policy.additional_ddb_policy.arn,
+    aws_iam_policy.graph_table_handler.arn,
   ]
 
   runtime       = "python3.9"
@@ -388,18 +234,64 @@ module "graph_table_tenant_stream_handler" {
   s3_object_key = local.lambda_functions_keys["graph_table_tenant_stream_handler"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
-  timeout       = 300
-  version       = "3.0.14"
+  timeout       = 900
+  version       = "3.0.15"
 }
 
-resource "aws_lambda_event_source_mapping" "graph_table_tenant_stream_handler" {
-  function_name    = module.graph_table_tenant_stream_handler.arn
+#######################################
+## graph-table-system-stream-handler ##
+#######################################
+data "aws_iam_policy_document" "graph_table_system_stream_handler" {
+  statement {
+    actions = [
+      "dynamodb:DeleteItem",
+    ]
+
+    resources = [
+      module.graph_table.arn,
+    ]
+
+    sid = "DeleteItem"
+  }
+}
+
+resource "aws_iam_policy" "graph_table_system_stream_handler" {
+  description = "IAM permissions required for graph-table-system-stream-handler"
+  path        = "/lambda/control/"
+  name        = "${var.resource_prefix}-graph-table-system-stream-handler"
+  policy      = data.aws_iam_policy_document.graph_table_system_stream_handler.json
+}
+
+module "graph_table_system_stream_handler" {
+  description     = "Handles system-related DB changes"
+  dead_letter_arn = local.lambda_dead_letter_arn
+
+  environment_variables = merge(local.common_lambda_environment_variables,
+  { LOGGING_LEVEL = "DEBUG" })
+
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  memory_size = 1536
+  name        = "${var.resource_prefix}-graph-table-system-stream-handler"
+
+  policy_arns = [
+    aws_iam_policy.ecr_read.arn,
+    aws_iam_policy.graph_ddb_read.arn,
+    aws_iam_policy.graph_ddb_write.arn,
+    aws_iam_policy.graph_table_handler.arn,
+    aws_iam_policy.graph_table_system_stream_handler.arn,
+  ]
+
+  runtime       = "python3.9"
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["graph_table_system_stream_handler"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 900
+  version       = "3.0.18"
+}
+
+resource "aws_lambda_event_source_mapping" "graph_table_system_stream_handler" {
+  function_name    = module.graph_table_system_stream_handler.arn
   event_source_arn = aws_sqs_queue.system_sqs_queue.arn
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "graph_table_tenant_stream_handler" {
-  name            = "${var.resource_prefix}-graph-table-tenant-stream-handler"
-  log_group_name  = module.graph_table_tenant_stream_handler.log_group_name
-  filter_pattern  = "ERROR -USERERROR"
-  destination_arn = module.control_alert_handler.arn
 }

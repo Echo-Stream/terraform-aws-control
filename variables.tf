@@ -39,7 +39,7 @@ variable "ses_email_address" {
 
 variable "tenant_regions" {
   description = "List of Tenant regions"
-  type        = list(string)
+  type        = any
   default     = []
 }
 
