@@ -163,7 +163,8 @@ data "aws_iam_policy_document" "appsync_datasource" {
 
   statement {
     actions = [
-      "logs:DescribeLogGroups"
+      "logs:DescribeLogGroups",
+      "logs:FilterLogEvents"
     ]
 
     resources = [
