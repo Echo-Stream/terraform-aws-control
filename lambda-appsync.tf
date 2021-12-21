@@ -197,7 +197,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
     ]
 
     resources = [
-      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/kinesisfirehose/echo-dev-audit-firehose:log-stream:*"
+      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/kinesisfirehose/${var.resource_prefix}-audit-firehose:log-stream:*"
     ]
 
     sid = "ManageLogStreams"
@@ -210,7 +210,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
     ]
 
     resources = [
-      "arn:aws:firehose:*:${local.current_account_id}:deliverystream/echo-dev-tenant-*"
+      "arn:aws:firehose:*:${local.current_account_id}:deliverystream/${var.resource_prefix}-tenant-*"
     ]
 
     sid = "ManageFirehoseStreams"
@@ -270,7 +270,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
     ]
 
     resources = [
-      "arn:aws:dynamodb:*:${local.current_account_id}:table/echo-dev-tenant-*"
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-tenant-*"
     ]
 
     sid = "TenantDDB"
