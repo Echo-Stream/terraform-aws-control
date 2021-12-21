@@ -184,7 +184,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
 
     resources = [
       "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/lambda/*",
-      "arn:aws:logs:*:412530347624:log-group:echostream/managed-app/*:log-stream:*"
+      "arn:aws:logs:*:${local.current_account_id}:log-group:echostream/managed-app/*:log-stream:*"
     ]
 
     sid = "ManageCWLogs"
