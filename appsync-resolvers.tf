@@ -625,6 +625,10 @@ locals {
       field = "nodes"
       type  = "CrossAccountApp"
     }
+    cross_account_app_iam_policy = {
+      field = "iamPolicy"
+      type  = "CrossAccountApp"
+    }
     cross_account_app_table_access = {
       field = "tableAccess"
       type  = "CrossAccountApp"
