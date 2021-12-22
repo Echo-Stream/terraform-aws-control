@@ -29,9 +29,9 @@ data "aws_iam_policy_document" "log_retention" {
 
 resource "aws_iam_policy" "log_retention" {
   description = "IAM permissions required for log-retention lambda"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-log-retention"
-  policy      = data.aws_iam_policy_document.log_retention.json
+
+  name   = "${var.resource_prefix}-log-retention"
+  policy = data.aws_iam_policy_document.log_retention.json
 }
 
 module "log_retention" {

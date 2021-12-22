@@ -115,8 +115,8 @@ data "aws_iam_policy_document" "internal_node_sts_assume" {
 
 resource "aws_iam_policy" "internal_node" {
   description = "IAM permissions required for tenant functions"
-  path        = "/lambda/control/"
-  policy      = data.aws_iam_policy_document.internal_node.json
+
+  policy = data.aws_iam_policy_document.internal_node.json
 }
 
 resource "aws_iam_role_policy_attachment" "internal_node" {
@@ -126,8 +126,8 @@ resource "aws_iam_role_policy_attachment" "internal_node" {
 
 resource "aws_iam_policy" "internal_node_sts_assume" {
   description = "IAM permissions required for internal nodes to assume update code role"
-  path        = "/lambda/control/"
-  policy      = data.aws_iam_policy_document.internal_node_sts_assume.json
+
+  policy = data.aws_iam_policy_document.internal_node_sts_assume.json
 }
 
 resource "aws_iam_role_policy_attachment" "internal_node_sts_assume" {
@@ -191,7 +191,7 @@ data "aws_iam_policy_document" "conditional_lambda_assume_role" {
       values = [
         "518849732",
         "296027047"
-      ]
+      ] # these values are encoded inside lambda code
       variable = "sts:SourceIdentity"
     }
   }
@@ -199,7 +199,6 @@ data "aws_iam_policy_document" "conditional_lambda_assume_role" {
 
 resource "aws_iam_role" "update_code" {
   name               = "${var.resource_prefix}-update-code"
-  path               = "/lambda/tenant/"
   assume_role_policy = data.aws_iam_policy_document.conditional_lambda_assume_role.json
   tags               = local.tags
 }
@@ -227,7 +226,6 @@ data "aws_iam_policy_document" "update_code" {
 
 resource "aws_iam_policy" "update_code" {
   description = "IAM permissions required for internal nodes to update themselves"
-  path        = "/lambda/tenant/"
   policy      = data.aws_iam_policy_document.update_code.json
 }
 

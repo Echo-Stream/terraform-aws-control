@@ -34,9 +34,9 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
 
 resource "aws_iam_policy" "graph_table_dynamodb_trigger" {
   description = "IAM permissions required for graph-table-dynamodb-trigger"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-graph-table-dynamodb-trigger"
-  policy      = data.aws_iam_policy_document.graph_table_dynamodb_trigger.json
+
+  name   = "${var.resource_prefix}-graph-table-dynamodb-trigger"
+  policy = data.aws_iam_policy_document.graph_table_dynamodb_trigger.json
 }
 
 module "graph_table_dynamodb_trigger" {
@@ -73,7 +73,6 @@ resource "aws_lambda_event_source_mapping" "graph_table_dynamodb_trigger" {
 resource "aws_iam_role" "managed_app" {
   description        = "Enable AWS Systems Manager service core functionality"
   name               = "${var.resource_prefix}-managed-app"
-  path               = "/service-role/"
   assume_role_policy = data.aws_iam_policy_document.managed_app.json
   tags               = local.tags
 }
@@ -121,8 +120,8 @@ data "aws_iam_policy_document" "managed_app_customer_policy" {
 
 resource "aws_iam_policy" "managed_app_customer_policy" {
   description = "IAM permissions required for manage apps ssm"
-  path        = "/lambda/control/"
-  policy      = data.aws_iam_policy_document.managed_app_customer_policy.json
+
+  policy = data.aws_iam_policy_document.managed_app_customer_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "managed_app_customer_policy" {
@@ -203,9 +202,9 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
 
 resource "aws_iam_policy" "graph_table_tenant_stream_handler" {
   description = "IAM permissions required for graph-table-tenant-stream-handler"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-graph-table-tenant-stream-handler"
-  policy      = data.aws_iam_policy_document.graph_table_tenant_stream_handler.json
+
+  name   = "${var.resource_prefix}-graph-table-tenant-stream-handler"
+  policy = data.aws_iam_policy_document.graph_table_tenant_stream_handler.json
 }
 
 module "graph_table_tenant_stream_handler" {
@@ -257,9 +256,9 @@ data "aws_iam_policy_document" "graph_table_system_stream_handler" {
 
 resource "aws_iam_policy" "graph_table_system_stream_handler" {
   description = "IAM permissions required for graph-table-system-stream-handler"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-graph-table-system-stream-handler"
-  policy      = data.aws_iam_policy_document.graph_table_system_stream_handler.json
+
+  name   = "${var.resource_prefix}-graph-table-system-stream-handler"
+  policy = data.aws_iam_policy_document.graph_table_system_stream_handler.json
 }
 
 module "graph_table_system_stream_handler" {

@@ -30,9 +30,9 @@ data "aws_iam_policy_document" "ui_cognito_post_confirmation" {
 
 resource "aws_iam_policy" "ui_cognito_post_confirmation" {
   description = "IAM permissions required for ui-cognito-post-confirmation lambda"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-ui-cognito-post-confirmation"
-  policy      = data.aws_iam_policy_document.ui_cognito_post_confirmation.json
+
+  name   = "${var.resource_prefix}-ui-cognito-post-confirmation"
+  policy = data.aws_iam_policy_document.ui_cognito_post_confirmation.json
 }
 
 module "ui_cognito_post_confirmation" {
@@ -105,9 +105,9 @@ data "aws_iam_policy_document" "ui_cognito_pre_authentication" {
 
 resource "aws_iam_policy" "ui_cognito_pre_authentication" {
   description = "IAM permissions required for ui-cognito-pre-authentication lambda"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-ui-cognito-pre-authentication"
-  policy      = data.aws_iam_policy_document.ui_cognito_pre_authentication.json
+
+  name   = "${var.resource_prefix}-ui-cognito-pre-authentication"
+  policy = data.aws_iam_policy_document.ui_cognito_pre_authentication.json
 }
 
 module "ui_cognito_pre_authentication" {
@@ -181,9 +181,9 @@ data "aws_iam_policy_document" "ui_cognito_pre_signup" {
 
 resource "aws_iam_policy" "ui_cognito_pre_signup" {
   description = "IAM permissions required for ui-cognito-pre-signup lambda"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-ui-cognito-pre-signup"
-  policy      = data.aws_iam_policy_document.ui_cognito_pre_signup.json
+
+  name   = "${var.resource_prefix}-ui-cognito-pre-signup"
+  policy = data.aws_iam_policy_document.ui_cognito_pre_signup.json
 }
 
 module "ui_cognito_pre_signup" {
@@ -258,9 +258,9 @@ data "aws_iam_policy_document" "app_api_cognito_pre_authentication" {
 
 resource "aws_iam_policy" "app_api_cognito_pre_authentication" {
   description = "IAM permissions required for app-api-cognito-pre-authentication lambda"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-app-api-cognito-pre-authentication"
-  policy      = data.aws_iam_policy_document.app_api_cognito_pre_authentication.json
+
+  name   = "${var.resource_prefix}-app-api-cognito-pre-authentication"
+  policy = data.aws_iam_policy_document.app_api_cognito_pre_authentication.json
 }
 
 module "app_api_cognito_pre_authentication" {

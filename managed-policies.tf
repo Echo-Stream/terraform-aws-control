@@ -31,9 +31,9 @@ data "aws_iam_policy_document" "graph_ddb_read" {
 
 resource "aws_iam_policy" "graph_ddb_read" {
   description = "IAM permissions to read graph-table"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-graph-table-read"
-  policy      = data.aws_iam_policy_document.graph_ddb_read.json
+
+  name   = "${var.resource_prefix}-graph-table-read"
+  policy = data.aws_iam_policy_document.graph_ddb_read.json
 }
 
 ######################################
@@ -56,9 +56,9 @@ data "aws_iam_policy_document" "graph_ddb_write" {
 
 resource "aws_iam_policy" "graph_ddb_write" {
   description = "IAM permissions to write graph-table"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-graph-table-write"
-  policy      = data.aws_iam_policy_document.graph_ddb_write.json
+
+  name   = "${var.resource_prefix}-graph-table-write"
+  policy = data.aws_iam_policy_document.graph_ddb_write.json
 }
 
 #################################
@@ -97,9 +97,9 @@ data "aws_iam_policy_document" "artifacts_bucket_read" {
 
 resource "aws_iam_policy" "artifacts_bucket_read" {
   description = "IAM permissions to read Artifact Buckets"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-artifacts-bucket-read"
-  policy      = data.aws_iam_policy_document.artifacts_bucket_read.json
+
+  name   = "${var.resource_prefix}-artifacts-bucket-read"
+  policy = data.aws_iam_policy_document.artifacts_bucket_read.json
 }
 
 #################################
@@ -127,9 +127,9 @@ data "aws_iam_policy_document" "tenant_table_read_write" {
 
 resource "aws_iam_policy" "tenant_table_read_write" {
   description = "IAM permissions to read and write Tenant tables"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-tenant-table-read-write"
-  policy      = data.aws_iam_policy_document.tenant_table_read_write.json
+
+  name   = "${var.resource_prefix}-tenant-table-read-write"
+  policy = data.aws_iam_policy_document.tenant_table_read_write.json
 }
 
 
@@ -159,9 +159,9 @@ data "aws_iam_policy_document" "ecr_read" {
 
 resource "aws_iam_policy" "ecr_read" {
   description = "IAM permissions to get ECR images"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-ecr-read"
-  policy      = data.aws_iam_policy_document.ecr_read.json
+
+  name   = "${var.resource_prefix}-ecr-read"
+  policy = data.aws_iam_policy_document.ecr_read.json
 }
 
 ############################
@@ -423,7 +423,7 @@ data "aws_iam_policy_document" "graph_table_handler" {
 
 resource "aws_iam_policy" "graph_table_handler" {
   description = "IAM permissions required for both graph table tenant and system handlers"
-  path        = "/lambda/control/"
-  name        = "${var.resource_prefix}-graph-table-handler"
-  policy      = data.aws_iam_policy_document.graph_table_handler.json
+
+  name   = "${var.resource_prefix}-graph-table-handler"
+  policy = data.aws_iam_policy_document.graph_table_handler.json
 }
