@@ -142,6 +142,10 @@ locals {
       field = "Delete"
       type  = "CrossAccountApp"
     }
+    cross_account_app_get_aws_credentials = {
+      field = "GetAwsCredentials"
+      type  = "CrossAccountApp"
+    }
     cross_account_app_list_changes = {
       field = "ListChanges"
       type  = "CrossAccountApp"
@@ -619,6 +623,10 @@ locals {
     }
     cross_account_app_nodes = {
       field = "nodes"
+      type  = "CrossAccountApp"
+    }
+    cross_account_app_iam_policy = {
+      field = "iamPolicy"
       type  = "CrossAccountApp"
     }
     cross_account_app_table_access = {
