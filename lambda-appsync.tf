@@ -178,8 +178,10 @@ data "aws_iam_policy_document" "appsync_datasource" {
     actions = [
       "logs:CreateLogGroup",
       "logs:DeleteLogGroup",
+      "logs:DeleteRetentionPolicy",
+      "logs:DeleteSubscriptionFilter",
       "logs:PutRetentionPolicy",
-      "logs:PutSubscriptionFilter"
+      "logs:PutSubscriptionFilter",
     ]
 
     resources = [
