@@ -142,6 +142,10 @@ locals {
       field = "Delete"
       type  = "CrossAccountApp"
     }
+    cross_account_app_get_aws_credentials = {
+      field = "GetAwsCredentials"
+      type  = "CrossAccountApp"
+    }
     cross_account_app_list_changes = {
       field = "ListChanges"
       type  = "CrossAccountApp"
