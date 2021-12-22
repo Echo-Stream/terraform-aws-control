@@ -43,12 +43,6 @@ variable "tenant_regions" {
   default     = []
 }
 
-variable "manual_deployment_trigger" {
-  description = "Toggle for deployment of all echo tenant and system types, appsync, cloudfront etc. Changing the previous existing value acts as a trigger"
-  type        = string
-  default     = "foobar"
-}
-
 variable "tags" {
   description = "(Optional) A mapping of tags to assign to the resources"
   type        = map(string)

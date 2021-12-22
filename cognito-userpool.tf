@@ -149,6 +149,12 @@ resource "aws_cognito_user_pool_client" "echostream_api_userpool_client" {
   name                   = "${var.resource_prefix}-api"
   refresh_token_validity = 30
 
+  token_validity_units {
+    access_token  = "minutes"
+    id_token      = "minutes"
+    refresh_token = "days"
+  }
+
   supported_identity_providers = [
     "COGNITO",
   ]
@@ -159,10 +165,4 @@ resource "aws_cognito_user_pool_client" "echostream_api_userpool_client" {
     "ALLOW_REFRESH_TOKEN_AUTH",
     "ALLOW_USER_SRP_AUTH"
   ]
-
-  lifecycle {
-    ignore_changes = [
-      token_validity_units
-    ]
-  }
 }

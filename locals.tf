@@ -54,7 +54,6 @@ locals {
 
   lambda_functions_keys = {
     app_api_cognito_pre_authentication = "${local.artifacts["lambda"]}/app-api-cognito-pre-authentication.zip"
-    app_cognito_pre_token_generation   = "${local.artifacts["lambda"]}/app-cognito-pre-token-generation.zip"
     appsync_datasource                 = "${local.artifacts["lambda"]}/appsync-datasource.zip"
     deployment_handler                 = "${local.artifacts["lambda"]}/deployment-handler.zip"
     graph_table_dynamodb_trigger       = "${local.artifacts["lambda"]}/graph-table-dynamodb-trigger.zip"
@@ -65,7 +64,6 @@ locals {
     ui_cognito_post_confirmation       = "${local.artifacts["lambda"]}/ui-cognito-post-confirmation.zip"
     ui_cognito_pre_authentication      = "${local.artifacts["lambda"]}/ui-cognito-pre-authentication.zip"
     ui_cognito_pre_signup              = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
-    ui_cognito_preview_pre_signup      = "${local.artifacts["lambda"]}/ui-cognito-preview-pre-signup.zip"
   }
 
   log_bucket             = module.log_bucket.id

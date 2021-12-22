@@ -30,8 +30,9 @@ resource "aws_appsync_graphql_api" "echostream" {
 
   schema = data.aws_s3_bucket_object.graphql_schema.body
 
-  name = "${var.resource_prefix}-api"
-  tags = local.tags
+  xray_enabled = false
+  name         = "${var.resource_prefix}-api"
+  tags         = local.tags
 }
 
 resource "aws_iam_role" "echostream_appsync" {

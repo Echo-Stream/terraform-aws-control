@@ -163,6 +163,19 @@ data "aws_iam_policy_document" "appsync_datasource" {
 
   statement {
     actions = [
+      "logs:DescribeLogGroups",
+      "logs:FilterLogEvents"
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "DescribeAllLogGroups"
+  }
+
+  statement {
+    actions = [
       "logs:CreateLogGroup",
       "logs:DeleteLogGroup",
       "logs:PutRetentionPolicy",
@@ -170,7 +183,8 @@ data "aws_iam_policy_document" "appsync_datasource" {
     ]
 
     resources = [
-      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/lambda/*"
+      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/lambda/*",
+      "arn:aws:logs:*:${local.current_account_id}:log-group:echostream/managed-app/*:log-stream:*"
     ]
 
     sid = "ManageCWLogs"
@@ -183,7 +197,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
     ]
 
     resources = [
-      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/kinesisfirehose/echo-dev-audit-firehose:log-stream:*"
+      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/kinesisfirehose/${var.resource_prefix}-audit-firehose:log-stream:*"
     ]
 
     sid = "ManageLogStreams"
@@ -196,7 +210,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
     ]
 
     resources = [
-      "arn:aws:firehose:*:${local.current_account_id}:deliverystream/echo-dev-tenant-*"
+      "arn:aws:firehose:*:${local.current_account_id}:deliverystream/${var.resource_prefix}-tenant-*"
     ]
 
     sid = "ManageFirehoseStreams"
@@ -256,7 +270,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
     ]
 
     resources = [
-      "arn:aws:dynamodb:*:${local.current_account_id}:table/echo-dev-tenant-*"
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-tenant-*"
     ]
 
     sid = "TenantDDB"
@@ -368,7 +382,6 @@ module "appsync_datasource" {
   name        = "${var.resource_prefix}-appsync-datasource"
 
   policy_arns = [
-    "arn:aws:iam::aws:policy/AdministratorAccess",
     aws_iam_policy.appsync_datasource.arn,
     aws_iam_policy.artifacts_bucket_read.arn,
     aws_iam_policy.graph_ddb_read.arn,

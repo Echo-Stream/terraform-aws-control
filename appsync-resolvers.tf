@@ -1,4 +1,7 @@
 resource "aws_appsync_resolver" "invoke_resolvers" {
+  depends_on = [
+    module.appsync_datasource_
+  ]
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = each.value["field"]
@@ -9,6 +12,9 @@ resource "aws_appsync_resolver" "invoke_resolvers" {
 }
 
 resource "aws_appsync_resolver" "batch_invoke_resolvers" {
+  depends_on = [
+    module.appsync_datasource_
+  ]
   api_id            = aws_appsync_graphql_api.echostream.id
   data_source       = module.appsync_datasource_.name
   field             = each.value["field"]
