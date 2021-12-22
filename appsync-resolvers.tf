@@ -621,6 +621,10 @@ locals {
       field = "nodes"
       type  = "CrossAccountApp"
     }
+    cross_account_app_table_access = {
+      field = "tableAccess"
+      type  = "CrossAccountApp"
+    }
     cross_account_app_tenant = {
       field = "tenant"
       type  = "CrossAccountApp"
@@ -741,6 +745,10 @@ locals {
       field = "nodes"
       type  = "ExternalApp"
     }
+    external_app_table_access = {
+      field = "tableAccess"
+      type  = "ExternalApp"
+    }
     external_app_tenant = {
       field = "tenant"
       type  = "ExternalApp"
@@ -811,6 +819,10 @@ locals {
     }
     managed_app_nodes = {
       field = "nodes"
+      type  = "ManagedApp"
+    }
+    managed_app_table_access = {
+      field = "tableAccess"
       type  = "ManagedApp"
     }
     managed_app_tenant = {
