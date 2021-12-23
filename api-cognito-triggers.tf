@@ -191,7 +191,7 @@ module "ui_cognito_pre_signup" {
 
   environment_variables = {
     #AUTHORIZED_DOMAINS = jsonencode(["echo.stream"])
-    AUTHORIZED_DOMAINS = var.authorized_domains
+    AUTHORIZED_DOMAINS = jsonencode(var.authorized_domains)
     CHECK_DOMAINS      = true
     CONTROL_REGION     = local.current_region
     DYNAMODB_TABLE     = module.graph_table.name

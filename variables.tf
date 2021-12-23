@@ -11,7 +11,6 @@ variable "allowed_account_id" {
 variable "authorized_domains" {
   description = "List of authorized_domains that can signup to the app"
   type        = list(string)
-  default     = []
 }
 
 variable "domain_name" {
