@@ -302,6 +302,10 @@ locals {
       field = "GetNode"
       type  = "Query"
     }
+    get_supported_regions = {
+      field = "GetSupportedRegions"
+      type  = "Query"
+    }
     get_tenant = {
       field = "GetTenant"
       type  = "Query"
