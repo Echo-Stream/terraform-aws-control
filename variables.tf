@@ -8,6 +8,12 @@ variable "allowed_account_id" {
   type        = string
 }
 
+variable "authorized_domains" {
+  description = "List of authorized_domains that can signup to the app"
+  type        = list(string)
+  default     = []
+}
+
 variable "domain_name" {
   description = "Domain (which is created in pre-control TF), which may be used for Cognito custom auth, SES domain Identity and Cloudfront custom domain"
   type        = string
