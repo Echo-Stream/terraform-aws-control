@@ -48,7 +48,6 @@ locals {
     VALIDATOR_ROLE                = aws_iam_role.validator.arn
   }
 
-  domain                      = "${var.resource_prefix}.${var.domain_name}"
   lambda_dead_letter_arn      = aws_sns_topic.lambda_dead_letter.arn
   lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn
 

@@ -7,7 +7,8 @@ This module is supposed to be used along with pre-control module in the EchoStre
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|--------|
-| acm_arn | ACM certificate arn (output from pre-control TF) of the environment sub domain | `string` | n/a | yes |
+| app_acm_arn | ACM certificate arn (output from pre-control TF) of the environment sub domain - application | `string` | n/a | yes |
+| api_acm_arn | ACM certificate arn (output from pre-control TF) of the environment sub domain - api | `string` | n/a | yes |
 | allowed\_account\_id | The Account Id which hosts the environment | `string` | n/a | yes |
 | domain_name | Environment Sub Domain (output from pre-control TF), used for Cloudfront custom domain, may be used for SES domain Identity and Cognito custom domain | `string` | n/a | yes |
 | echostream\_version | `Major.Minor` Version to fetch artifacts from right location | `string` | n/a | yes |

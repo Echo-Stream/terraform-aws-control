@@ -1,5 +1,10 @@
-variable "acm_arn" {
-  description = "ACM certificate arn for the domain being used for environment"
+variable "app_acm_arn" {
+  description = "ACM certificate arn for the domain being used for environment - application"
+  type        = string
+}
+
+variable "api_acm_arn" {
+  description = "ACM certificate arn for the domain being used for environment - api"
   type        = string
 }
 
@@ -13,15 +18,20 @@ variable "authorized_domains" {
   type        = list(string)
 }
 
-variable "domain_name" {
-  description = "Domain (which is created in pre-control TF), which may be used for Cognito custom auth, SES domain Identity and Cloudfront custom domain"
+variable "app_domain_name" {
+  description = "Application Domain name of the environment which may be used for Cognito custom auth, SES domain Identity and Cloudfront custom domain"
   type        = string
 }
 
-variable "domain_zone_id" {
-  description = "Domain Zone id(which is created in pre-control TF), which may be used for Cognito custom auth, SES domain Identity and Cloudfront custom domain"
+variable "api_domain_name" {
+  description = "Api Domain name of the environment used for custom domain of Appsync API"
   type        = string
 }
+
+# variable "domain_zone_id" {
+#   description = "Domain Zone id(which is created in pre-control TF), which may be used for Cognito custom auth, SES domain Identity and Cloudfront custom domain"
+#   type        = string
+# }
 
 variable "echostream_version" {
   description = "Major.Minor Version to fetch artifacts from right location"

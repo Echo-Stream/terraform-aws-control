@@ -28,6 +28,26 @@ output "ui_user_pool_client_id" {
   value       = aws_cognito_user_pool_client.echostream_ui_userpool_client.id
 }
 
+output "api_user_pool_id" {
+  description = "The ID of the API cognito user pool"
+  value       = aws_cognito_user_pool.echostream_api.id
+}
+
+output "api_user_pool_arn" {
+  description = "The ARN of the API cognito user pool"
+  value       = aws_cognito_user_pool.echostream_api.arn
+}
+
+output "api_user_pool_endpoint" {
+  description = "Endpoint of the API cognito user pool"
+  value       = aws_cognito_user_pool.echostream_api.endpoint
+}
+
+output "api_user_pool_client_id" {
+  description = "The ID of the API cognito user pool client"
+  value       = aws_cognito_user_pool_client.echostream_api_userpool_client.id
+}
+
 # output "identity_pool_id" {
 #   description = "EchoStream Identity pool ID"
 #   value       = aws_cognito_identity_pool.echostream.id
@@ -50,6 +70,6 @@ output "cloudfront_oai_iam_arn" {
 }
 
 output "cloudfront_domain_name" {
-  description = "EchoStream CloudFront distribution Domain name"
+  description = "EchoStream CloudFront distribution Domain name to be added in to Route53"
   value       = aws_cloudfront_distribution.webapp.domain_name
 }
