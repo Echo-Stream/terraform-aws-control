@@ -8,6 +8,11 @@ output "appsync_url" {
   value       = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
 }
 
+output "appsync_custom_url" {
+  description = "Custom API URL of the EchoStream"
+  value       = local.appsync_custom_endpoint
+}
+
 output "ui_user_pool_id" {
   description = "The ID of the UI cognito user pool"
   value       = aws_cognito_user_pool.echostream_ui.id
@@ -47,16 +52,6 @@ output "api_user_pool_client_id" {
   description = "The ID of the API cognito user pool client"
   value       = aws_cognito_user_pool_client.echostream_api_userpool_client.id
 }
-
-# output "identity_pool_id" {
-#   description = "EchoStream Identity pool ID"
-#   value       = aws_cognito_identity_pool.echostream.id
-# }
-
-# output "identity_pool_arn" {
-#   description = "The ARN of the EchoStream identity pool"
-#   value       = aws_cognito_identity_pool.echostream.arn
-# }
 
 ## Cloudfront
 output "cloudfront_oai_id" {
