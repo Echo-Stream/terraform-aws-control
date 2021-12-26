@@ -73,3 +73,8 @@ output "cloudfront_domain_name" {
   description = "EchoStream CloudFront distribution Domain name to be added in to Route53"
   value       = aws_cloudfront_distribution.webapp.domain_name
 }
+
+output "cloudfront_hosted_zone_id" {
+  description = "EchoStream CloudFront distribution Hosted Zone ID"
+  value       = aws_cloudfront_distribution.webapp.hosted_zone_id
+}

@@ -70,6 +70,7 @@ module "control" {
 - This module is supported in all Regions except `US-WEST-1` region
 - Verifying an email address provided to SES service is manual. User needs to verify a link that is sent by AWS SES to the provided email.
 - DKIM is not enabled.
+- Adding custom domain and its association with API is not supported in TF yet, it is done manually.
 
 ### Notes for Internal team
 - Apps userpool MFA is OFF, Password policy length set to 16 instead of maximum
