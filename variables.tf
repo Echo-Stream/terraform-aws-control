@@ -28,11 +28,6 @@ variable "api_domain_name" {
   type        = string
 }
 
-# variable "domain_zone_id" {
-#   description = "Domain Zone id(which is created in pre-control TF), which may be used for Cognito custom auth, SES domain Identity and Cloudfront custom domain"
-#   type        = string
-# }
-
 variable "echostream_version" {
   description = "Major.Minor Version to fetch artifacts from right location"
   type        = string

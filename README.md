@@ -47,23 +47,22 @@ This module is supposed to be used along with pre-control module in the EchoStre
 ### Usage
 ```
 module "control" {
-  acm_arn                   = module.pre_control.subdomain_acm_arn
-  allowed_account_id        = var.allowed_account_id
-  domain_name               = module.pre_control.subdomain
-  domain_zone_id            = module.pre_control.subdomain_zone_id
-  echostream_version        = var.echostream_version
-  region                    = var.region
-  resource_prefix           = "${var.resource_prefix}-${var.environment}"
-  ses_email_address         = var.ses_email_address
-  tenant_regions            = var.tenant_regions
+  allowed_account_id = var.allowed_account_id
+  api_acm_arn        = module.pre_control.api_acm_arn
+  api_domain_name    = module.pre_control.api_domain_name
+  app_acm_arn        = module.pre_control.app_acm_arn
+  app_domain_name    = module.pre_control.app_domain_name
+  authorized_domains = var.authorized_domains
+  echostream_version = var.echostream_version
+  region             = var.region
+  resource_prefix    = "${var.resource_prefix}-${var.environment}"
+  ses_email_address  = var.ses_email_address
+  tags               = local.tags
+  tenant_regions     = var.tenant_regions
 
-  tags = {
-    terraform-workspace = "my-first-dev-app"
-  }
-
-  source  = "app.terraform.io/EchoStream/control/aws"
-  version = "0.0.2"
+  source = "app.terraform.io/EchoStream/control/aws"
 }
+
 ```
 ### Important Note
 - Domain name and ACM certificate covering the domain Inputs are needed. These resources are created by Pre control TF.
