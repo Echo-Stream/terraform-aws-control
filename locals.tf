@@ -1,5 +1,5 @@
 locals {
-  appsync_custom_endpoint = "https://api-${var.environment}.echo.stream/graphql"
+  appsync_custom_url = "https://api-${var.environment}.echo.stream/graphql"
   artifacts_sns_arn       = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}_${replace(var.echostream_version, ".", "-")}"
 
   artifacts = {
@@ -24,7 +24,7 @@ locals {
   # Common environment variables for lambdas that use echo-tools library
   common_lambda_environment_variables = {
     API_ID                        = aws_appsync_graphql_api.echostream.id
-    APPSYNC_ENDPOINT              = local.appsync_custom_endpoint
+    APPSYNC_ENDPOINT              = local.appsync_custom_url
     ARTIFACTS_BUCKET              = local.artifacts_bucket_prefix
     CLOUDFRONT_DISTRIBUTION_ID    = aws_cloudfront_distribution.webapp.id
     CONTROL_REGION                = local.current_region

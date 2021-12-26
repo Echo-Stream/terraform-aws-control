@@ -10,7 +10,7 @@ output "appsync_url" {
 
 output "appsync_custom_url" {
   description = "Custom API URL of the EchoStream"
-  value       = local.appsync_custom_endpoint
+  value       = local.appsync_custom_url
 }
 
 output "ui_user_pool_id" {

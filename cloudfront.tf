@@ -115,7 +115,7 @@ data "template_file" "edge_config" {
   vars = {
     api_id           = aws_appsync_graphql_api.echostream.id
     client_id        = aws_cognito_user_pool_client.echostream_ui_userpool_client.id
-    graphql_endpoint = local.appsync_custom_endpoint
+    graphql_endpoint = local.appsync_custom_url
     region           = local.current_region
     user_pool_id     = aws_cognito_user_pool.echostream_ui.id
   }
