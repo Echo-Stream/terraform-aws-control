@@ -6,7 +6,7 @@ on:
       - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -72,6 +72,8 @@ jobs:
 
   call-workflow-terraform-plan:
     uses: Echo-Stream/echo-dev/.github/workflows/terraform-plan.yml@main
+    with:
+      name: control
 
     # It runs Echo dev environment with latest version of ctrl and pre ctrl modules
       # - name: Run Terraform (Echo-Dev)
