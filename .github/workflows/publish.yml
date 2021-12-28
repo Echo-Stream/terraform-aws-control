@@ -70,7 +70,7 @@ jobs:
           --request PUT \
           --data-binary @module.tar.gz $upload_url | true
 
-  call-workflow-passing-data:
+  call-workflow-terraform-plan:
     uses: Echo-Stream/echo-dev/.github/workflows/terraform-plan.yml@main
 
     # It runs Echo dev environment with latest version of ctrl and pre ctrl modules
