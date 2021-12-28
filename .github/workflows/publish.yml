@@ -6,7 +6,7 @@ on:
       - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
-  publish:
+  publish and run:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -70,38 +70,32 @@ jobs:
           --request PUT \
           --data-binary @module.tar.gz $upload_url | true
 
-  call-workflow-terraform-plan:
-    uses: Echo-Stream/echo-dev/.github/workflows/terraform-plan.yml@v0.1
-    with:
-      name: control
-
-
     # It runs Echo dev environment with latest version of ctrl and pre ctrl modules
-      # - name: Run Terraform (Echo-Dev)
-      #   run: |
-      #     COMMIT_ID="$(echo ${GITHUB_SHA:0:7})"
-      #     workspace_id=`curl \
-      #     --header "Authorization: Bearer $TOKEN" \
-      #     --header "Content-Type: application/vnd.api+json" \
-      #     https://app.terraform.io/api/v2/organizations/EchoStream/workspaces/echo-dev | jq '.data.id'`
-      #     curl \
-      #     --header "Authorization: Bearer $TOKEN" \
-      #     --header "Content-Type: application/vnd.api+json" \
-      #     --request POST \
-      #     --data '{
-      #         "data": {
-      #           "attributes": {
-      #             "is-destroy": false,
-      #             "message": "Ctrl TF is updated, commit id:'$COMMIT_ID'. Queued by Github actions '$GITHUB_ACTOR'"
-      #           },
-      #           "type": "runs",
-      #           "relationships": {
-      #             "workspace": {
-      #               "data": {
-      #                 "type": "workspaces",
-      #                 "id": '$workspace_id'
-      #               }
-      #             }
-      #           }
-      #         }
-      #       }' https://app.terraform.io/api/v2/runs
+      - name: Run Terraform (Echo-Dev)
+        run: |
+          COMMIT_ID="$(echo ${GITHUB_SHA:0:7})"
+          workspace_id=`curl \
+          --header "Authorization: Bearer $TOKEN" \
+          --header "Content-Type: application/vnd.api+json" \
+          https://app.terraform.io/api/v2/organizations/EchoStream/workspaces/echo-dev | jq '.data.id'`
+          curl \
+          --header "Authorization: Bearer $TOKEN" \
+          --header "Content-Type: application/vnd.api+json" \
+          --request POST \
+          --data '{
+              "data": {
+                "attributes": {
+                  "is-destroy": false,
+                  "message": "Ctrl TF is updated, commit id:'$COMMIT_ID'. Queued by Github actions '$GITHUB_ACTOR'"
+                },
+                "type": "runs",
+                "relationships": {
+                  "workspace": {
+                    "data": {
+                      "type": "workspaces",
+                      "id": '$workspace_id'
+                    }
+                  }
+                }
+              }
+            }' https://app.terraform.io/api/v2/runs
