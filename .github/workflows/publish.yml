@@ -71,7 +71,7 @@ jobs:
           --data-binary @module.tar.gz $upload_url | true
 
   call-workflow-passing-data:
-    uses: Echo-Stream/echo-dev/.github/workflows/terraform-plan.yml
+    uses: Echo-Stream/echo-dev/.github/workflows/terraform-plan.yml@main
 
     # It runs Echo dev environment with latest version of ctrl and pre ctrl modules
       # - name: Run Terraform (Echo-Dev)
