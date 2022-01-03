@@ -8,6 +8,11 @@ variable "api_acm_arn" {
   type        = string
 }
 
+variable "docs_api_acm_arn" {
+  description = "ACM certificate arn for the domain being used for environment - docs api"
+  type        = string
+}
+
 variable "allowed_account_id" {
   description = "The Account Id which hosts the environment"
   type        = string
@@ -25,6 +30,11 @@ variable "app_domain_name" {
 
 variable "api_domain_name" {
   description = "Api Domain name of the environment used for custom domain of Appsync API"
+  type        = string
+}
+
+variable "docs_api_domain_name" {
+  description = "Domain name of the environment used for API Documentation"
   type        = string
 }
 

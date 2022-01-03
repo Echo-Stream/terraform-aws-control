@@ -9,8 +9,11 @@ This module is supposed to be used along with pre-control module in the EchoStre
 |------|-------------|------|---------|--------|
 | app_acm_arn | ACM certificate arn (output from pre-control TF) of the environment sub domain - application | `string` | n/a | yes |
 | api_acm_arn | ACM certificate arn (output from pre-control TF) of the environment sub domain - api | `string` | n/a | yes |
+| docs_api_acm_arn | ACM certificate arn (output from pre-control TF) of the environment sub domain - docs-api | `string` | n/a | yes |
 | allowed\_account\_id | The Account Id which hosts the environment | `string` | n/a | yes |
-| domain_name | Environment Sub Domain (output from pre-control TF), used for Cloudfront custom domain, may be used for SES domain Identity and Cognito custom domain | `string` | n/a | yes |
+| app_domain_name | Application Domain name of the environment which may be used for Cognito custom auth, SES domain Identity and Cloudfront custom domain | `string` | n/a | yes |
+| api_domain_name | Api Domain name of the environment used for custom domain of Appsync API | `string` | n/a | yes |
+| docs_api_domain_name | Domain name of the environment used for API Documentation | `string` | n/a | yes |
 | echostream\_version | `Major.Minor` Version to fetch artifacts from right location | `string` | n/a | yes |
 | region | AWS Region for the environment | `string` | n/a | yes |
 | resource_prefix | Environment Prefix for naming resources, a Unique name that could differentiate whole environment. `lower case` only, `No periods`, `No Special Char` except `-`. Length less than 15 char | `string` | n/a | yes |
@@ -67,7 +70,7 @@ module "control" {
 ### Important Note
 - Domain name and ACM certificate covering the domain Inputs are needed. These resources are created by Pre control TF.
 - This module is supported in all Regions except `US-WEST-1` region
-- Verifying an email address provided to SES service is manual. User needs to verify a link that is sent by AWS SES to the provided email.
+- Verifying an email address provided to SES service is manual. User needs to verify a link thagst is sent by AWS SES to the provided email.
 - DKIM is not enabled.
 - Adding custom domain and its association with API is not supported in TF yet, it is done manually.
 

@@ -1,6 +1,6 @@
 locals {
   appsync_custom_url = "https://${var.api_domain_name}/graphql"
-  artifacts_sns_arn       = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}_${replace(var.echostream_version, ".", "-")}"
+  artifacts_sns_arn  = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}_${replace(var.echostream_version, ".", "-")}"
 
   artifacts = {
     appsync   = "${var.echostream_version}/appsync"
