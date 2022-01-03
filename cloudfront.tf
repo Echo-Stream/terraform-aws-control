@@ -6,7 +6,7 @@ resource "aws_cloudfront_distribution" "webapp" {
   origin {
     domain_name = "${local.artifacts_bucket}.s3.amazonaws.com"
     origin_id   = "${var.resource_prefix}-webapp"
-    origin_path = "/${var.echostream_version}/reactjs"
+    origin_path = "/${var.echostream_version}/ui/app"
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path

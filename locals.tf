@@ -10,7 +10,7 @@ locals {
     }
     lambda        = "${var.echostream_version}/lambda/control"
     message_types = "${var.echostream_version}/message-types"
-    reactjs       = "${var.echostream_version}/reactjs"
+    reactjs       = "${var.echostream_version}/ui/app"
     tenant_lambda = "${var.echostream_version}/lambda/tenant"
   }
 
