@@ -54,21 +54,35 @@ output "api_user_pool_client_id" {
 }
 
 ## Cloudfront
-output "cloudfront_oai_id" {
-  description = "The identifier for the EchoStream CloudFront distribution"
+output "cloudfront_oai_id_webapp" {
+  description = "The identifier for the EchoStream Webapp CloudFront distribution"
   value       = aws_cloudfront_origin_access_identity.origin_access_identity.id
 }
 
-output "cloudfront_oai_iam_arn" {
-  description = "EchoStream Cloudfront orgin access identity. Pre-generated ARN for use in S3 bucket policies"
+output "cloudfront_oai_iam_arn_webapp" {
+  description = "EchoStream Webapp Cloudfront orgin access identity. Pre-generated ARN for use in S3 bucket policies"
   value       = aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn
 }
 
-output "cloudfront_domain_name" {
-  description = "EchoStream CloudFront distribution Domain name to be added in to Route53"
+output "cloudfront_domain_name_webapp" {
+  description = "EchoStream Webapp CloudFront distribution Domain name to be added in to Route53"
   value       = aws_cloudfront_distribution.webapp.domain_name
 }
 
+output "cloudfront_oai_id_api_docs" {
+  description = "The identifier for the EchoStream API Docs CloudFront distribution"
+  value       = aws_cloudfront_origin_access_identity.docs_origin_access_identity.id
+}
+
+output "cloudfront_oai_iam_arn_api_docs" {
+  description = "EchoStream API Docs Cloudfront orgin access identity. Pre-generated ARN for use in S3 bucket policies"
+  value       = aws_cloudfront_origin_access_identity.docs_origin_access_identity.iam_arn
+}
+
+output "cloudfront_domain_name_api_docs" {
+  description = "EchoStream API Docs CloudFront distribution Domain name to be added in to Route53"
+  value       = aws_cloudfront_distribution.docs.domain_name
+}
 output "cloudfront_hosted_zone_id" {
   description = "EchoStream CloudFront distribution Hosted Zone ID"
   value       = aws_cloudfront_distribution.webapp.hosted_zone_id
