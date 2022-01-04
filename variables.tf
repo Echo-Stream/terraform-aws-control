@@ -1,5 +1,5 @@
-variable "app_acm_arn" {
-  description = "ACM certificate arn for the domain being used for environment - application"
+variable "allowed_account_id" {
+  description = "The Account Id which hosts the environment"
   type        = string
 }
 
@@ -8,13 +8,18 @@ variable "api_acm_arn" {
   type        = string
 }
 
-variable "docs_api_acm_arn" {
-  description = "ACM certificate arn for the domain being used for environment - docs api"
+variable "api_domain_name" {
+  description = "Api Domain name of the environment used for custom domain of Appsync API"
   type        = string
 }
 
-variable "allowed_account_id" {
-  description = "The Account Id which hosts the environment"
+variable "app_acm_arn" {
+  description = "ACM certificate arn for the domain being used for environment - application"
+  type        = string
+}
+
+variable "app_domain_name" {
+  description = "Application Domain name of the environment which may be used for Cognito custom auth, SES domain Identity and Cloudfront custom domain"
   type        = string
 }
 
@@ -23,13 +28,8 @@ variable "authorized_domains" {
   type        = list(string)
 }
 
-variable "app_domain_name" {
-  description = "Application Domain name of the environment which may be used for Cognito custom auth, SES domain Identity and Cloudfront custom domain"
-  type        = string
-}
-
-variable "api_domain_name" {
-  description = "Api Domain name of the environment used for custom domain of Appsync API"
+variable "docs_api_acm_arn" {
+  description = "ACM certificate arn for the domain being used for environment - docs api"
   type        = string
 }
 
@@ -43,13 +43,13 @@ variable "echostream_version" {
   type        = string
 }
 
-variable "resource_prefix" {
-  description = "Prefix for naming resources. Lower case only, No periods"
-}
-
 variable "region" {
   description = "AWS Region for the environment"
   type        = string
+}
+
+variable "resource_prefix" {
+  description = "Prefix for naming resources. Lower case only, No periods"
 }
 
 variable "ses_email_address" {
@@ -57,14 +57,14 @@ variable "ses_email_address" {
   type        = string
 }
 
-variable "tenant_regions" {
-  description = "List of Tenant regions"
-  type        = any
-  default     = []
-}
-
 variable "tags" {
   description = "(Optional) A mapping of tags to assign to the resources"
   type        = map(string)
   default     = {}
+}
+
+variable "tenant_regions" {
+  description = "List of Tenant regions"
+  type        = any
+  default     = []
 }
