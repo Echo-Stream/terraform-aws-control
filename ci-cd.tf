@@ -63,11 +63,13 @@ data "aws_iam_policy_document" "deployment_handler" {
     ]
 
     resources = [
-      aws_cloudfront_distribution.webapp.arn
+      aws_cloudfront_distribution.webapp.arn,
+      aws_cloudfront_distribution.docs.arn
     ]
 
-    sid = "InvalidateWebappObjects"
+    sid = "InvalidateCloudfrontObjects"
   }
+
   statement {
     actions = [
       "sns:Publish"

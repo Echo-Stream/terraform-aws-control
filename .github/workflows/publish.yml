@@ -3,11 +3,10 @@ name: Terraform Publish Module
 on:
   push:
     branches:
-      - "main"
       - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
-  build:
+  publish-and-run:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -26,7 +25,7 @@ jobs:
           --header "Content-Type:application/vnd.api+json" \
           --request DELETE \
           https://app.terraform.io/api/v2/organizations/EchoStream/registry-modules/private/EchoStream/control/aws/$VERSION
-      - name: Create the Module
+      - name: Create the Module (If there is only on)
         run: |
           curl \
           --header "Authorization:Bearer $TOKEN" \
