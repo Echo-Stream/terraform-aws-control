@@ -118,6 +118,14 @@ locals {
       field = "CreateMessageType"
       type  = "Mutation"
     }
+    create_processor_function = {
+      field = "CreateProcessorFunction"
+      type  = "Mutation"
+    }
+    create_processor_node = {
+      field = "CreateProcessorNode"
+      type  = "Mutation"
+    }
     create_router_node = {
       field = "CreateRouterNode"
       type  = "Mutation"
@@ -128,14 +136,6 @@ locals {
     }
     create_timer_node = {
       field = "CreateTimerNode"
-      type  = "Mutation"
-    }
-    create_transformer_function = {
-      field = "CreateTransformerFunction"
-      type  = "Mutation"
-    }
-    create_transformer_node = {
-      field = "CreateTransformerNode"
       type  = "Mutation"
     }
     cross_account_app_delete = {
@@ -442,6 +442,42 @@ locals {
       field = "Validate"
       type  = "MessageType"
     }
+    processor_function_delete = {
+      field = "Delete"
+      type  = "ProcessorFunction"
+    }
+    processor_function_list_changes = {
+      field = "ListChanges"
+      type  = "ProcessorFunction"
+    }
+    processor_function_update = {
+      field = "Update"
+      type  = "ProcessorFunction"
+    }
+    processor_function_validate = {
+      field = "Validate"
+      type  = "ProcessorFunction"
+    }
+    processor_node_delete = {
+      field = "Delete"
+      type  = "ProcessorNode"
+    }
+    processor_node_list_changes = {
+      field = "ListChanges"
+      type  = "ProcessorNode"
+    }
+    processor_node_list_log_events = {
+      field = "ListLogEvents"
+      type  = "ProcessorNode"
+    }
+    processor_node_update = {
+      field = "Update"
+      type  = "ProcessorNode"
+    }
+    processor_node_validate = {
+      field = "Validate"
+      type  = "ProcessorNode"
+    }
     router_node_delete = {
       field = "Delete"
       type  = "RouterNode"
@@ -509,42 +545,6 @@ locals {
     timer_node_update = {
       field = "Update"
       type  = "TimerNode"
-    }
-    transformer_function_delete = {
-      field = "Delete"
-      type  = "TransformerFunction"
-    }
-    transformer_function_list_changes = {
-      field = "ListChanges"
-      type  = "TransformerFunction"
-    }
-    transformer_function_update = {
-      field = "Update"
-      type  = "TransformerFunction"
-    }
-    transformer_function_validate = {
-      field = "Validate"
-      type  = "TransformerFunction"
-    }
-    transformer_node_delete = {
-      field = "Delete"
-      type  = "TransformerNode"
-    }
-    transformer_node_list_changes = {
-      field = "ListChanges"
-      type  = "TransformerNode"
-    }
-    transformer_node_list_log_events = {
-      field = "ListLogEvents"
-      type  = "TransformerNode"
-    }
-    transformer_node_update = {
-      field = "Update"
-      type  = "TransformerNode"
-    }
-    transformer_node_validate = {
-      field = "Validate"
-      type  = "TransformerNode"
     }
   }
 
@@ -685,8 +685,8 @@ locals {
       field = "config"
       type  = "CrossTenantSendingNode"
     }
-    cross_tenant_sending_node_managed_transformer = {
-      field = "managedTransformer"
+    cross_tenant_sending_node_managed_processor = {
+      field = "managedProcessor"
       type  = "CrossTenantSendingNode"
     }
     cross_tenant_sending_node_receive_edges = {
@@ -937,6 +937,54 @@ locals {
       field = "tenant"
       type  = "MessageType"
     }
+    processor_function_argument_message_type = {
+      field = "argumentMessageType"
+      type  = "ProcessorFunction"
+    }
+    processor_function_requirements = {
+      field = "requirements"
+      type  = "ProcessorFunction"
+    }
+    processor_function_result_message_type = {
+      field = "returnMessageType"
+      type  = "ProcessorFunction"
+    }
+    processor_function_tenant = {
+      field = "tenant"
+      type  = "ProcessorFunction"
+    }
+    processor_node_config = {
+      field = "config"
+      type  = "ProcessorNode"
+    }
+    processor_node_managed_processor = {
+      field = "managedProcessor"
+      type  = "ProcessorNode"
+    }
+    processor_node_receive_edges = {
+      field = "receiveEdges"
+      type  = "ProcessorNode"
+    }
+    processor_node_receive_message_type = {
+      field = "receiveMessageType"
+      type  = "ProcessorNode"
+    }
+    processor_node_requirements = {
+      field = "requirements"
+      type  = "ProcessorNode"
+    }
+    processor_node_send_edges = {
+      field = "sendEdges"
+      type  = "ProcessorNode"
+    }
+    processor_node_send_message_type = {
+      field = "sendMessageType"
+      type  = "ProcessorNode"
+    }
+    processor_node_tenant = {
+      field = "tenant"
+      type  = "ProcessorNode"
+    }
     router_node_route_table = {
       field = "routeTable"
       type  = "RouterNode"
@@ -1008,54 +1056,6 @@ locals {
     timer_node_tenant = {
       field = "tenant"
       type  = "TimerNode"
-    }
-    transformer_function_argument_message_type = {
-      field = "argumentMessageType"
-      type  = "TransformerFunction"
-    }
-    transformer_function_requirements = {
-      field = "requirements"
-      type  = "TransformerFunction"
-    }
-    transformer_function_result_message_type = {
-      field = "returnMessageType"
-      type  = "TransformerFunction"
-    }
-    transformer_function_tenant = {
-      field = "tenant"
-      type  = "TransformerFunction"
-    }
-    transformer_node_config = {
-      field = "config"
-      type  = "TransformerNode"
-    }
-    transformer_node_managed_transformer = {
-      field = "managedTransformer"
-      type  = "TransformerNode"
-    }
-    transformer_node_receive_edges = {
-      field = "receiveEdges"
-      type  = "TransformerNode"
-    }
-    transformer_node_receive_message_type = {
-      field = "receiveMessageType"
-      type  = "TransformerNode"
-    }
-    transformer_node_requirements = {
-      field = "requirements"
-      type  = "TransformerNode"
-    }
-    transformer_node_send_edges = {
-      field = "sendEdges"
-      type  = "TransformerNode"
-    }
-    transformer_node_send_message_type = {
-      field = "sendMessageType"
-      type  = "TransformerNode"
-    }
-    transformer_node_tenant = {
-      field = "tenant"
-      type  = "TransformerNode"
     }
   }
 }
