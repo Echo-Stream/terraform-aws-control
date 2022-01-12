@@ -46,6 +46,26 @@ locals {
       field = "CreateAuditRecords"
       type  = "AppChangeReceiverNode"
     }
+    bitmap_router_node_delete = {
+      field = "Delete"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_list_changes = {
+      field = "ListChanges"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_list_log_events = {
+      field = "ListLogEvents"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_update = {
+      field = "Update"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_validate = {
+      field = "Validate"
+      type  = "BitmapRouterNode"
+    }
     bitmapper_function_delete = {
       field = "Delete"
       type  = "BitmapperFunction"
@@ -64,6 +84,10 @@ locals {
     }
     create_api_user = {
       field = "CreateApiUser"
+      type  = "Mutation"
+    }
+    create_bitmap_router_node = {
+      field = "CreateBitmapRouterNode"
       type  = "Mutation"
     }
     create_bitmapper_function = {
@@ -116,10 +140,6 @@ locals {
     }
     create_message_type = {
       field = "CreateMessageType"
-      type  = "Mutation"
-    }
-    create_router_node = {
-      field = "CreateRouterNode"
       type  = "Mutation"
     }
     create_tenant = {
@@ -442,26 +462,6 @@ locals {
       field = "Validate"
       type  = "MessageType"
     }
-    router_node_delete = {
-      field = "Delete"
-      type  = "RouterNode"
-    }
-    router_node_list_changes = {
-      field = "ListChanges"
-      type  = "RouterNode"
-    }
-    router_node_list_log_events = {
-      field = "ListLogEvents"
-      type  = "RouterNode"
-    }
-    router_node_update = {
-      field = "Update"
-      type  = "RouterNode"
-    }
-    router_node_validate = {
-      field = "Validate"
-      type  = "RouterNode"
-    }
     tenant_add_user = {
       field = "AddUser"
       type  = "Tenant"
@@ -584,6 +584,42 @@ locals {
     audit_emitter_node_tenant = {
       field = "tenant"
       type  = "AuditEmitterNode"
+    }
+    bitmap_router_node_route_table = {
+      field = "routeTable"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_config = {
+      field = "config"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_managed_bitmapper = {
+      field = "managedBitmapper"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_receive_edges = {
+      field = "receiveEdges"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_receive_message_type = {
+      field = "receiveMessageType"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_requirements = {
+      field = "requirements"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_send_edges = {
+      field = "sendEdges"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_send_message_type = {
+      field = "sendMessageType"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_tenant = {
+      field = "tenant"
+      type  = "BitmapRouterNode"
     }
     bitmapper_function_argumentMessageType = {
       field = "argumentMessageType"
@@ -936,42 +972,6 @@ locals {
     message_type_tenant = {
       field = "tenant"
       type  = "MessageType"
-    }
-    router_node_route_table = {
-      field = "routeTable"
-      type  = "RouterNode"
-    }
-    router_node_config = {
-      field = "config"
-      type  = "RouterNode"
-    }
-    router_node_managed_bitmapper = {
-      field = "managedBitmapper"
-      type  = "RouterNode"
-    }
-    router_node_receive_edges = {
-      field = "receiveEdges"
-      type  = "RouterNode"
-    }
-    router_node_receive_message_type = {
-      field = "receiveMessageType"
-      type  = "RouterNode"
-    }
-    router_node_requirements = {
-      field = "requirements"
-      type  = "RouterNode"
-    }
-    router_node_send_edges = {
-      field = "sendEdges"
-      type  = "RouterNode"
-    }
-    router_node_send_message_type = {
-      field = "sendMessageType"
-      type  = "RouterNode"
-    }
-    router_node_tenant = {
-      field = "tenant"
-      type  = "RouterNode"
     }
     tenant_config = {
       field = "config"
