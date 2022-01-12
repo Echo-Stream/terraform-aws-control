@@ -1,6 +1,6 @@
 locals {
   appsync_custom_url = "https://${var.api_domain_name}/graphql"
-  artifacts_sns_arn       = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}_${replace(var.echostream_version, ".", "-")}"
+  artifacts_sns_arn  = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}_${replace(var.echostream_version, ".", "-")}"
 
   artifacts = {
     appsync   = "${var.echostream_version}/appsync"
@@ -23,30 +23,31 @@ locals {
 
   # Common environment variables for lambdas that use echo-tools library
   common_lambda_environment_variables = {
-    API_ID                        = aws_appsync_graphql_api.echostream.id
-    APPSYNC_ENDPOINT              = local.appsync_custom_url
-    ARTIFACTS_BUCKET              = local.artifacts_bucket_prefix
-    CLOUDFRONT_DISTRIBUTION_ID    = aws_cloudfront_distribution.webapp.id
-    CONTROL_REGION                = local.current_region
-    DYNAMODB_TABLE                = module.graph_table.name
-    ECHOSTREAM_VERSION            = var.echostream_version
-    ENVIRONMENT                   = var.resource_prefix
-    HIGH_THROUGHPUT_QUEUE_REGIONS = "[\"us-east-1\", \"us-east-2\", \"us-west-2\", \"eu-west-1\"]"
-    INTERNAL_NODE_CODE            = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
-    INTERNAL_NODE_ROLE            = aws_iam_role.internal_node.arn
-    INVITE_USER_SES_TEMPLATE      = aws_ses_template.invite_user.name
-    NOTIFY_USER_SES_TEMPLATE      = aws_ses_template.notify_user.name
-    REBUILD_NOTIFICATION_QUEUE    = aws_sqs_queue.rebuild_notifications.url
-    REGION                        = var.region
-    REMOVE_USER_SES_TEMPLATE      = aws_ses_template.remove_user.name
-    SNS_TOPIC_ARN                 = aws_sns_topic.ci_cd_errors.arn
-    SYSTEM_SES_EMAIL              = var.ses_email_address
-    SYSTEM_SQS_QUEUE              = aws_sqs_queue.system_sqs_queue.id
-    TENANT_DB_STREAM_HANDLER      = "${var.resource_prefix}-graph-table-tenant-stream-handler"
-    TENANT_REGIONS                = jsonencode(local.tenant_regions)
-    UPDATE_CODE_ROLE              = aws_iam_role.update_code.arn
-    VALIDATOR_CODE                = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
-    VALIDATOR_ROLE                = aws_iam_role.validator.arn
+    API_ID                            = aws_appsync_graphql_api.echostream.id
+    APPSYNC_ENDPOINT                  = local.appsync_custom_url
+    ARTIFACTS_BUCKET                  = local.artifacts_bucket_prefix
+    CLOUDFRONT_DISTRIBUTION_ID_WEBAPP = aws_cloudfront_distribution.webapp.id
+    CLOUDFRONT_DISTRIBUTION_ID_DOCS   = aws_cloudfront_distribution.docs.id
+    CONTROL_REGION                    = local.current_region
+    DYNAMODB_TABLE                    = module.graph_table.name
+    ECHOSTREAM_VERSION                = var.echostream_version
+    ENVIRONMENT                       = var.resource_prefix
+    HIGH_THROUGHPUT_QUEUE_REGIONS     = "[\"us-east-1\", \"us-east-2\", \"us-west-2\", \"eu-west-1\"]"
+    INTERNAL_NODE_CODE                = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
+    INTERNAL_NODE_ROLE                = aws_iam_role.internal_node.arn
+    INVITE_USER_SES_TEMPLATE          = aws_ses_template.invite_user.name
+    NOTIFY_USER_SES_TEMPLATE          = aws_ses_template.notify_user.name
+    REBUILD_NOTIFICATION_QUEUE        = aws_sqs_queue.rebuild_notifications.url
+    REGION                            = var.region
+    REMOVE_USER_SES_TEMPLATE          = aws_ses_template.remove_user.name
+    SNS_TOPIC_ARN                     = aws_sns_topic.ci_cd_errors.arn
+    SYSTEM_SES_EMAIL                  = var.ses_email_address
+    SYSTEM_SQS_QUEUE                  = aws_sqs_queue.system_sqs_queue.id
+    TENANT_DB_STREAM_HANDLER          = "${var.resource_prefix}-graph-table-tenant-stream-handler"
+    TENANT_REGIONS                    = jsonencode(local.tenant_regions)
+    UPDATE_CODE_ROLE                  = aws_iam_role.update_code.arn
+    VALIDATOR_CODE                    = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
+    VALIDATOR_ROLE                    = aws_iam_role.validator.arn
   }
 
   lambda_dead_letter_arn      = aws_sns_topic.lambda_dead_letter.arn
