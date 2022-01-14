@@ -1,19 +1,20 @@
 data "aws_iam_policy_document" "presign_bulk_data" {
   statement {
     actions = [
-      "s3:PutObject",
-      "s3:PutObjectAcl",
+      "s3:GetObject*",
+      "s3:PutObject*",
     ]
 
     resources = [
       "arn:aws:s3:::${var.resource_prefix}-tenant-*",
     ]
 
-    sid = "PutObjectsInTenantBuckets"
+    sid = "PutGetObjectsInTenantBuckets"
   }
 
   statement {
     actions = [
+      "kms:Decrypt",
       "kms:DescribeKey",
       "kms:Encrypt",
       "kms:GenerateDataKey*",
@@ -23,7 +24,7 @@ data "aws_iam_policy_document" "presign_bulk_data" {
       "arn:aws:kms:${var.region}:${var.allowed_account_id}:key/*"
     ]
 
-    sid = "EncryptDataUsingTenantKeys"
+    sid = "EncryptDecryptObjectsUsingTenantKeys"
   }
 }
 
