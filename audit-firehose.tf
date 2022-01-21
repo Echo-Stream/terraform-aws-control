@@ -35,6 +35,20 @@ data "aws_iam_policy_document" "audit_firehose" {
 
   statement {
     actions = [
+      "kms:DescribeKey",
+      "kms:Encrypt",
+      "kms:GenerateDataKey*",
+    ]
+
+    resources = [
+      "arn:aws:kms:${var.region}:${var.allowed_account_id}:key/*"
+    ]
+
+    sid = "EncryptDataUsingTenantKeys"
+  }
+
+  statement {
+    actions = [
       "logs:PutLogEvents",
     ]
 
