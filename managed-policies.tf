@@ -155,6 +155,18 @@ data "aws_iam_policy_document" "ecr_read" {
 
     sid = "ECRAccess"
   }
+
+  statement {
+    actions = [
+      "ecr:GetAuthorizationToken",
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "GetAuthorizationToken"
+  }
 }
 
 resource "aws_iam_policy" "ecr_read" {
