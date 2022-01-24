@@ -139,6 +139,7 @@ resource "aws_iam_policy" "tenant_table_read_write" {
 data "aws_iam_policy_document" "ecr_read" {
   statement {
     actions = [
+      "ecr-public:DescribeImages",
       "ecr:BatchCheckLayerAvailability",
       "ecr:BatchGetImage",
       "ecr:DescribeImages",
