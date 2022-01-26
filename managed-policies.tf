@@ -170,7 +170,7 @@ data "aws_iam_policy_document" "ecr_read" {
 
   statement {
     actions = [
-      "ecr:GetAuthorizationToken",
+      "ecr-public:GetAuthorizationToken",
     ]
 
     resources = [
