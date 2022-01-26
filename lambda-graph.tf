@@ -124,13 +124,13 @@ resource "aws_iam_policy" "managed_app_customer_policy" {
   policy = data.aws_iam_policy_document.managed_app_customer_policy.json
 }
 
-resource "aws_iam_role_policy_attachment" "managed_app_customer_policy" {
-  policy_arn = aws_iam_policy.managed_app_customer_policy.arn
+resource "aws_iam_role_policy_attachment" "manage_apps_ecr_read_access" {
+  policy_arn = aws_iam_policy.ecr_read.arn
   role       = aws_iam_role.managed_app.name
 }
 
-resource "aws_iam_role_policy_attachment" "managed_app_ecr_read" {
-  policy_arn = aws_iam_policy.ecr_read.arn
+resource "aws_iam_role_policy_attachment" "manage_apps_ssm_directory_role" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMDirectoryServiceAccess"
   role       = aws_iam_role.managed_app.name
 }
 
@@ -139,8 +139,13 @@ resource "aws_iam_role_policy_attachment" "managed_app" {
   role       = aws_iam_role.managed_app.name
 }
 
-resource "aws_iam_role_policy_attachment" "manage_apps_ssm_directory_role" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMDirectoryServiceAccess"
+resource "aws_iam_role_policy_attachment" "managed_app_customer_policy" {
+  policy_arn = aws_iam_policy.managed_app_customer_policy.arn
+  role       = aws_iam_role.managed_app.name
+}
+
+resource "aws_iam_role_policy_attachment" "managed_app_ecr_read" {
+  policy_arn = aws_iam_policy.ecr_read.arn
   role       = aws_iam_role.managed_app.name
 }
 
