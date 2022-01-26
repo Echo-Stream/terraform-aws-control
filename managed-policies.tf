@@ -171,6 +171,7 @@ data "aws_iam_policy_document" "ecr_read" {
   statement {
     actions = [
       "ecr-public:GetAuthorizationToken",
+      "sts:GetServiceBearerToken"
     ]
 
     resources = [
