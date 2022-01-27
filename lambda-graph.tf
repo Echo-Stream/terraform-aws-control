@@ -93,19 +93,6 @@ data "aws_iam_policy_document" "managed_app" {
 
 data "aws_iam_policy_document" "managed_app_customer_policy" {
   statement {
-    actions = [
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-    ]
-
-    resources = [
-      "*"
-    ]
-
-    sid = "LogsAccess"
-  }
-
-  statement {
     effect = "Allow"
 
     actions = [
@@ -141,6 +128,11 @@ resource "aws_iam_role_policy_attachment" "managed_app" {
 
 resource "aws_iam_role_policy_attachment" "managed_app_customer_policy" {
   policy_arn = aws_iam_policy.managed_app_customer_policy.arn
+  role       = aws_iam_role.managed_app.name
+}
+
+resource "aws_iam_role_policy_attachment" "managed_app_cloudwatch_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
   role       = aws_iam_role.managed_app.name
 }
 
