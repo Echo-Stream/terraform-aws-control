@@ -143,7 +143,6 @@ data "aws_iam_policy_document" "ecr_read" {
       "ecr:BatchGetImage",
       "ecr:DescribeImages",
       "ecr:DescribeRepositories",
-      "ecr:GetAuthorizationToken",
       "ecr:GetDownloadUrlForLayer",
       "ecr:GetRepositoryPolicy",
       "ecr:ListImages",
@@ -171,6 +170,7 @@ data "aws_iam_policy_document" "ecr_read" {
   statement {
     actions = [
       "ecr-public:GetAuthorizationToken",
+      "ecr:GetAuthorizationToken",
       "sts:GetServiceBearerToken"
     ]
 
