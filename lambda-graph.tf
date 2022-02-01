@@ -103,6 +103,19 @@ data "aws_iam_policy_document" "managed_app_customer_policy" {
 
     sid = "PublishToSNS"
   }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+
+    resources = ["*"]
+
+    sid = "Logs"
+  }
 }
 
 resource "aws_iam_policy" "managed_app_customer_policy" {
@@ -128,11 +141,6 @@ resource "aws_iam_role_policy_attachment" "managed_app" {
 
 resource "aws_iam_role_policy_attachment" "managed_app_customer_policy" {
   policy_arn = aws_iam_policy.managed_app_customer_policy.arn
-  role       = aws_iam_role.managed_app.name
-}
-
-resource "aws_iam_role_policy_attachment" "managed_app_cloudwatch_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
   role       = aws_iam_role.managed_app.name
 }
 
