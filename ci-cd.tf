@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "deployment_handler" {
   statement {
     actions = [
       "lambda:CreateFunction",
-      "lambda:GetFunction",
+      "lambda:GetFunction*",
       "lambda:InvokeFunction",
       "lambda:ListFunctions",
       "lambda:PublishLayerVersion",

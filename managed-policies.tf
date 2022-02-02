@@ -143,7 +143,6 @@ data "aws_iam_policy_document" "ecr_read" {
       "ecr:BatchGetImage",
       "ecr:DescribeImages",
       "ecr:DescribeRepositories",
-      "ecr:GetAuthorizationToken",
       "ecr:GetDownloadUrlForLayer",
       "ecr:GetRepositoryPolicy",
       "ecr:ListImages",
@@ -153,12 +152,26 @@ data "aws_iam_policy_document" "ecr_read" {
       "arn:aws:ecr:${local.current_region}:${local.artifacts_account_id}:repository/*"
     ]
 
-    sid = "ECRAccess"
+    sid = "ECRPrivateAccess"
   }
+  statement {
+    actions = [
+      "ecr-public:DescribeImages",
+    ]
+
+    resources = [
+      "arn:aws:ecr-public::${local.artifacts_account_id}:repository/*"
+    ]
+
+    sid = "ECRPublicAccess"
+  }
+
 
   statement {
     actions = [
+      "ecr-public:GetAuthorizationToken",
       "ecr:GetAuthorizationToken",
+      "sts:GetServiceBearerToken"
     ]
 
     resources = [

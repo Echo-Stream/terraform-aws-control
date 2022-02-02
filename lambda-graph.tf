@@ -93,19 +93,6 @@ data "aws_iam_policy_document" "managed_app" {
 
 data "aws_iam_policy_document" "managed_app_customer_policy" {
   statement {
-    actions = [
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-    ]
-
-    resources = [
-      "*"
-    ]
-
-    sid = "LogsAccess"
-  }
-
-  statement {
     effect = "Allow"
 
     actions = [
@@ -116,12 +103,42 @@ data "aws_iam_policy_document" "managed_app_customer_policy" {
 
     sid = "PublishToSNS"
   }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+
+    resources = [
+      "arn:aws:logs:*:${local.current_account_id}:log-group:echostream/managed-app/*"
+    ]
+
+    sid = "Logs"
+  }
 }
 
 resource "aws_iam_policy" "managed_app_customer_policy" {
   description = "IAM permissions required for manage apps ssm"
 
   policy = data.aws_iam_policy_document.managed_app_customer_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "manage_apps_ecr_read_access" {
+  policy_arn = aws_iam_policy.ecr_read.arn
+  role       = aws_iam_role.managed_app.name
+}
+
+resource "aws_iam_role_policy_attachment" "manage_apps_ssm_directory_role" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMDirectoryServiceAccess"
+  role       = aws_iam_role.managed_app.name
+}
+
+resource "aws_iam_role_policy_attachment" "managed_app" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  role       = aws_iam_role.managed_app.name
 }
 
 resource "aws_iam_role_policy_attachment" "managed_app_customer_policy" {
@@ -131,16 +148,6 @@ resource "aws_iam_role_policy_attachment" "managed_app_customer_policy" {
 
 resource "aws_iam_role_policy_attachment" "managed_app_ecr_read" {
   policy_arn = aws_iam_policy.ecr_read.arn
-  role       = aws_iam_role.managed_app.name
-}
-
-resource "aws_iam_role_policy_attachment" "managed_app" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-  role       = aws_iam_role.managed_app.name
-}
-
-resource "aws_iam_role_policy_attachment" "manage_apps_ssm_directory_role" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMDirectoryServiceAccess"
   role       = aws_iam_role.managed_app.name
 }
 

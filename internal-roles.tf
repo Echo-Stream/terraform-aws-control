@@ -22,15 +22,21 @@ data "aws_iam_policy_document" "remote_app_assume_role" {
   }
 }
 
+# Temporary Admin access
 resource "aws_iam_role_policy_attachment" "remote_app_basic" {
   role       = aws_iam_role.remote_app.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
-resource "aws_iam_role_policy_attachment" "remote_app_tenant_table_read_write" {
-  role       = aws_iam_role.remote_app.name
-  policy_arn = aws_iam_policy.tenant_table_read_write.arn
-}
+# resource "aws_iam_role_policy_attachment" "remote_app_basic" {
+#   role       = aws_iam_role.remote_app.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+# }
+
+# resource "aws_iam_role_policy_attachment" "remote_app_tenant_table_read_write" {
+#   role       = aws_iam_role.remote_app.name
+#   policy_arn = aws_iam_policy.tenant_table_read_write.arn
+# }
 
 ############################
 ## Internal Functions IAM ##
