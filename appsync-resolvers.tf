@@ -877,6 +877,10 @@ locals {
       field = "tenant"
       type  = "ManagedApp"
     }
+    managed_app_userdata = {
+      field = "userdata"
+      type  = "ManagedApp"
+    }
     app_change_receiver_node_app = {
       field = "app"
       type  = "AppChangeReceiverNode"
