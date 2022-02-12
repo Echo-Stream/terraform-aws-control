@@ -68,7 +68,6 @@ locals {
   }
 
   log_bucket             = module.log_bucket.id
-  module_release_version = "0.0.3"                                    # this is used in workflows/publish.yml to release terraform module
   regions                = concat(local.tenant_regions, [var.region]) # Tenant + Control Regions
   tenant_regions         = split(",", var.tenant_regions)             # only Tenant regions
 
