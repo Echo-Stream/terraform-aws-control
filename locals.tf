@@ -67,9 +67,9 @@ locals {
     ui_cognito_pre_signup              = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
   }
 
-  log_bucket             = module.log_bucket.id
-  regions                = concat(local.tenant_regions, [var.region]) # Tenant + Control Regions
-  tenant_regions         = split(",", var.tenant_regions)             # only Tenant regions
+  log_bucket     = module.log_bucket.id
+  regions        = concat(local.tenant_regions, [var.region]) # Tenant + Control Regions
+  tenant_regions = split(",", var.tenant_regions)             # only Tenant regions
 
   tags = merge({
     app         = "echostream"

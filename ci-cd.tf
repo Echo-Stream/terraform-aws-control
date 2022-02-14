@@ -142,7 +142,7 @@ module "deployment_handler" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 600
-  version       = "3.0.18"
+  version       = "4.0.0"
 }
 
 resource "aws_sns_topic" "ci_cd_errors" {
@@ -244,7 +244,7 @@ module "rebuild_notifications" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 600
-  version       = "3.0.18"
+  version       = "4.0.0"
 }
 
 resource "aws_sqs_queue" "rebuild_notifications" {

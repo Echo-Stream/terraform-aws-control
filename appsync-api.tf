@@ -2,7 +2,7 @@
 ## GraphQL Schema ##
 ####################
 
-data "aws_s3_bucket_object" "graphql_schema" {
+data "aws_s3_object" "graphql_schema" {
   bucket = local.artifacts_bucket
   key    = "${local.artifacts["appsync"]}/schema.graphql"
 }
@@ -28,7 +28,7 @@ resource "aws_appsync_graphql_api" "echostream" {
     }
   }
 
-  schema = data.aws_s3_bucket_object.graphql_schema.body
+  schema = data.aws_s3_object.graphql_schema.body
 
   xray_enabled = false
   name         = "${var.resource_prefix}-api"
