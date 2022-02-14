@@ -3,8 +3,10 @@
 ###############################
 module "log_bucket" {
   name_prefix = var.resource_prefix
-  source      = "QuiNovas/log-bucket/aws"
-  version     = "4.0.0"
+  tags        = local.tags
+
+  source  = "QuiNovas/log-bucket/aws"
+  version = "4.0.0"
 }
 
 resource "aws_sns_topic" "lambda_dead_letter" {
@@ -28,8 +30,10 @@ module "log_bucket_us_east_1" {
   count        = contains(local.regions, "us-east-1") == true ? 1 : 0
   name_prefix  = var.resource_prefix
   name_postfix = "us-east-1"
-  source       = "QuiNovas/log-bucket/aws"
-  version      = "4.0.0"
+  tags         = local.tags
+
+  source  = "QuiNovas/log-bucket/aws"
+  version = "4.0.0"
 
   providers = {
     aws = aws.north-virginia
