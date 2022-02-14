@@ -1,5 +1,5 @@
 ## Control Terraform
-Terraform Module for Echo Stream Control Resources. It creates all control structure of echostream environment on aws.
+Terraform Module for Echo Stream Control Resources. It creates the control structure of echostream environment on aws.
 This module is supposed to be used along with pre-control module in the EchoStream environment.
 
 
@@ -75,11 +75,9 @@ module "control" {
 ```
 ### Important Note
 - Domain name and ACM certificate covering the domain Inputs are needed. These resources are created by Pre control TF.
-- This module is supported in all Regions except `US-WEST-1` region
-- Verifying an email address provided to SES service is manual. User needs to verify a link thagst is sent by AWS SES to the provided email.
+- Verifying an email address provided to SES service is a manual task. User needs to verify a link that is sent by AWS SES to the provided email.
 - DKIM is not enabled.
 - Adding custom domain and its association with Appsync API is not supported in TF yet, it is done manually.
 
 ### Notes for Internal team
-- Apps userpool MFA is OFF, Password policy length set to 16 instead of maximum
 - UI Userpool devices: Remember your users devices is set to `always`
