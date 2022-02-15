@@ -737,6 +737,10 @@ locals {
       field = "requirements"
       type  = "CrossTenantSendingNode"
     }
+    cross_tenant_sending_node_send_message_type = {
+      field = "sendMessageType"
+      type  = "CrossTenantSendingNode"
+    }
     cross_tenant_sending_node_tenant = {
       field = "tenant"
       type  = "CrossTenantSendingNode"
