@@ -73,6 +73,7 @@ data "aws_iam_policy_document" "artifacts_bucket_read" {
     resources = [
       "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}",
       "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-1",
       "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2",
     ]
 
@@ -87,6 +88,7 @@ data "aws_iam_policy_document" "artifacts_bucket_read" {
     resources = [
       "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${var.echostream_version}/*",
       "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${var.echostream_version}/*",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-1/${var.echostream_version}/*",
       "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${var.echostream_version}/*",
 
     ]
