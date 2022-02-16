@@ -52,6 +52,6 @@ resource "aws_appsync_domain_name" "echostream_appsync" {
 }
 
 resource "aws_appsync_domain_name_api_association" "echostream_appsync" {
-  api_id      = aws_appsync_graphql_api.echostream_appsync.id
+  api_id      = aws_appsync_graphql_api.echostream.id
   domain_name = aws_appsync_domain_name.echostream_appsync.domain_name
 }
