@@ -28,7 +28,7 @@ output "appsync_custom_url" {
 
 output "appsync_domain_name" {
   description = "The Cloudfront Domain name that AppSync provides"
-  value       = aws_cognito_user_pool.echostream_appsync.domain_name
+  value       = aws_appsync_domain_name.echostream_appsync.domain_name
 }
 
 output "appsync_id" {
