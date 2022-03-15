@@ -126,7 +126,7 @@ module "graph_table" {
 
 
   replica = [
-    for region in setsubtract(local.tenant_regions, local.current_region) :
+    for region in setsubtract(local.tenant_regions, [local.current_region]) :
     {
       region_name = region
     }
