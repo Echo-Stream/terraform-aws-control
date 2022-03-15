@@ -20,7 +20,7 @@ module "app_cognito_pre_authentication" {
   ]
 
   runtime       = "python3.9"
-  s3_bucket     = "${var.artifacts_bucket}-${var.tenant_region}"
+  s3_bucket     = "${var.artifacts_bucket}"
   s3_object_key = var.function_s3_object_key
   source        = "QuiNovas/lambda/aws"
   tags          = var.tags
