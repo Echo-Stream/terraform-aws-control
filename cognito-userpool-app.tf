@@ -16,7 +16,7 @@ module "app_cognito_pool_us_east_2" {
   count = contains(local.regions, "us-east-2") == true ? 1 : 0
 
 
-  artifacts_bucket       = local.artifacts_bucket
+  artifacts_bucket       = "${local.artifacts_bucket_prefix}-us-east-2"
   control_region         = local.current_region
   dead_letter_arn        = module.lambda_underpin_us_east_2.dead_letter_arn
   environment            = var.resource_prefix
