@@ -111,26 +111,27 @@ module "graph_table" {
   ttl_attribute_name     = "ttl"
   stream_view_type       = "NEW_AND_OLD_IMAGES"
 
-  replica = [
-    {
-      region_name = "us-east-2"
-    },
-    {
-      region_name = "us-west-1"
-    },
+  # replica = [
+  #   {
+  #     region_name = "us-east-2"
+  #   },
+  #   {
+  #     region_name = "us-west-1"
+  #   },
 
+  #   {
+  #     region_name = "us-west-2"
+  #   },
+  # ]
+
+
+  replica = [
+    for region in setsubtract(local.tenant_regions, local.current_region) :
     {
-      region_name = "us-west-2"
-    },
+      region_name = region
+    }
   ]
 
-
-  # dynamic "replica" {
-  #   for_each = var.tenant_regions
-  #   content {
-  #     region_name = tenant_regions.value
-  #   }
-  # }
 
   source  = "QuiNovas/dynamodb-table/aws"
   version = "3.0.8"
