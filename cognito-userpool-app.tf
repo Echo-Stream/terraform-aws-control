@@ -12,7 +12,7 @@ module "app_cognito_pool_us_east_1" {
   function_s3_object_key                        = local.lambda_functions_keys["app_api_cognito_pre_authentication"]
   graph_ddb_read_iam_policy_arn                 = aws_iam_policy.graph_ddb_read.arn
   graph_table_name                              = module.graph_table.name
-  kms_key_arn                                   = aws_kms_key.lambda_environment_variables.kms_key_arn
+  kms_key_arn                                   = aws_kms_key.lambda_environment_variables.arn
   name                                          = var.resource_prefix
   tags                                          = local.tags
   tenant_regions                                = jsonencode(local.tenant_regions)
