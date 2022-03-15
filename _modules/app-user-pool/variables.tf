@@ -7,6 +7,11 @@ variable "control_region" {
   type        = string
 }
 
+variable "tenant_region" {
+  description = "tenant region name, e.g us-east-1"
+  type        = string
+}
+
 variable "dead_letter_arn" {
   description = "The arn for the SNS topic that handles dead letters"
   type        = string
@@ -52,4 +57,14 @@ variable "tags" {
 variable "tenant_regions" {
   description = "Json encoded list of tenant regions"
   type        = any
+}
+
+variable "app_cognito_pre_authentication_iam_policy_arn" {
+  description = "The IAM policy for the app cognito pre authentication lambda"
+  type        = string
+}
+
+variable "graph_ddb_read_iam_policy_arn" {
+  description = "The IAM policy for read only access to the graph-table"
+  type        = string
 }

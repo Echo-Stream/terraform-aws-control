@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "graph_ddb_read" {
     ]
 
     resources = [
-      module.graph_table.arn,
+      "arn:aws:dynamodb:*:${local.artifacts_account_id}:table/${var.resource_prefix}-graph",
     ]
 
     sid = "TableAccessRead"
@@ -21,8 +21,8 @@ data "aws_iam_policy_document" "graph_ddb_read" {
     ]
 
     resources = [
-      module.graph_table.arn,
-      "${module.graph_table.arn}/index/*"
+      "arn:aws:dynamodb:*:${local.artifacts_account_id}:table/${var.resource_prefix}-graph",
+      "arn:aws:dynamodb:*:${local.artifacts_account_id}:table/${var.resource_prefix}-graph/index/*"
     ]
 
     sid = "TableAccessQuery"

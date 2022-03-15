@@ -1,76 +1,3 @@
-####################################
-## Manage Graph Table - Read Only ##
-####################################
-data "aws_iam_policy_document" "graph_ddb_read" {
-  statement {
-    actions = [
-      "dynamodb:DescribeTable",
-      "dynamodb:GetItem",
-    ]
-
-    resources = [
-      data.aws_dynamodb_table.graph_table.arn,
-    ]
-
-    sid = "TableAccessRead"
-  }
-
-  statement {
-    actions = [
-      "dynamodb:Query"
-    ]
-
-    resources = [
-      data.aws_dynamodb_table.graph_table.arn,
-      "${data.aws_dynamodb_table.graph_table.arn}/index/*"
-    ]
-
-    sid = "TableAccessQuery"
-  }
-}
-
-resource "aws_iam_policy" "graph_ddb_read" {
-  description = "IAM permissions to read graph-table"
-  name        = "${var.name}-graph-table-read"
-  policy      = data.aws_iam_policy_document.graph_ddb_read.json
-}
-
-##########################################
-##  app-cognito-pre-authentication  ##
-##########################################
-data "aws_iam_policy_document" "app_cognito_pre_authentication" {
-  statement {
-    actions = [
-      "dynamodb:Query",
-    ]
-
-    resources = [
-      data.aws_dynamodb_table.graph_table.arn,
-      "${data.aws_dynamodb_table.graph_table.arn}/*",
-    ]
-
-    sid = "TableAccess"
-  }
-
-  statement {
-    actions = [
-      "cloudwatch:PutMetricData",
-    ]
-
-    resources = [
-      "*",
-    ]
-
-    sid = "CWPutMetrics"
-  }
-}
-
-resource "aws_iam_policy" "app_cognito_pre_authentication" {
-  description = "IAM permissions required for app-cognito-pre-authentication lambda"
-  name        = "${var.name}-app-cognito-pre-authentication"
-  policy      = data.aws_iam_policy_document.app_cognito_pre_authentication.json
-}
-
 module "app_cognito_pre_authentication" {
   description = "Function that gets triggered when cognito user to be authenticated"
 
@@ -85,13 +12,12 @@ module "app_cognito_pre_authentication" {
   handler         = "function.handler"
   kms_key_arn     = var.kms_key_arn
   memory_size     = 1536
-  name            = "${var.name}-app-cognito-pre-authentication"
+  name            = "${var.name}-${var.tenant_region}-app-cognito-pre-authentication"
 
   policy_arns = [
-    aws_iam_policy.app_cognito_pre_authentication.arn,
-    aws_iam_policy.graph_ddb_read.arn
-  ]
-
+    var.app_cognito_pre_authentication_iam_policy_arn,
+    var.graph_ddb_read_iam_policy_arn
+  ],
   runtime       = "python3.9"
   s3_bucket     = var.artifacts_bucket
   s3_object_key = var.function_s3_object_key
