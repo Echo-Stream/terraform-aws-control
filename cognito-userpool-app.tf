@@ -1,5 +1,5 @@
 module "lambda_underpin_us_east_2" {
-  name = "us-east-2"
+  name = local.resource_prefix
   tags = local.tags
 
   source = "./_modules/lambda-underpin"
