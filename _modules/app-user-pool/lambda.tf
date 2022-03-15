@@ -17,7 +17,8 @@ module "app_cognito_pre_authentication" {
   policy_arns = [
     var.app_cognito_pre_authentication_iam_policy_arn,
     var.graph_ddb_read_iam_policy_arn
-  ],
+  ]
+
   runtime       = "python3.9"
   s3_bucket     = var.artifacts_bucket
   s3_object_key = var.function_s3_object_key
