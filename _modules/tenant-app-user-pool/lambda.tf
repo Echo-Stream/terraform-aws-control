@@ -106,5 +106,5 @@ resource "aws_lambda_permission" "app_cognito_pre_authentication" {
   action        = "lambda:InvokeFunction"
   function_name = module.app_cognito_pre_authentication.name
   principal     = "cognito-idp.amazonaws.com"
-  source_arn    = aws_cognito_user_pool.echostream_api.arn
+  source_arn    = aws_cognito_user_pool.echostream_app.arn
 }
