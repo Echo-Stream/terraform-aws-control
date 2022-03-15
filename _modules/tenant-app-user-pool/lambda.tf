@@ -31,8 +31,8 @@ data "aws_iam_policy_document" "graph_ddb_read" {
 
 resource "aws_iam_policy" "graph_ddb_read" {
   description = "IAM permissions to read graph-table"
-  name   = "${var.name}-graph-table-read"
-  policy = data.aws_iam_policy_document.graph_ddb_read.json
+  name        = "${var.name}-graph-table-read"
+  policy      = data.aws_iam_policy_document.graph_ddb_read.json
 }
 
 ##########################################
@@ -67,23 +67,23 @@ data "aws_iam_policy_document" "app_cognito_pre_authentication" {
 
 resource "aws_iam_policy" "app_cognito_pre_authentication" {
   description = "IAM permissions required for app-cognito-pre-authentication lambda"
-  name   = "${var.name}-app-cognito-pre-authentication"
-  policy = data.aws_iam_policy_document.app_cognito_pre_authentication.json
+  name        = "${var.name}-app-cognito-pre-authentication"
+  policy      = data.aws_iam_policy_document.app_cognito_pre_authentication.json
 }
 
 module "app_cognito_pre_authentication" {
   description = "Function that gets triggered when cognito user to be authenticated"
 
   environment_variables = {
-    CONTROL_REGION = local.current_region
+    CONTROL_REGION = var.control_region
     DYNAMODB_TABLE = var.graph_table_name
     ENVIRONMENT    = var.environment
     TENANT_REGIONS = var.tenant_regions
   }
 
-  dead_letter_arn = local.lambda_dead_letter_arn
+  dead_letter_arn = var.dead_letter_arn
   handler         = "function.handler"
-  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  kms_key_arn     = var.kms_key_arn
   memory_size     = 1536
   name            = "${var.name}-app-cognito-pre-authentication"
 
@@ -94,9 +94,9 @@ module "app_cognito_pre_authentication" {
 
   runtime       = "python3.9"
   s3_bucket     = var.artifacts_bucket
-  s3_object_key = local.lambda_functions_keys["app_cognito_pre_authentication"]
+  s3_object_key = var.function_s3_object_key
   source        = "QuiNovas/lambda/aws"
-  tags          = local.tags
+  tags          = var.tags
   timeout       = 30
   version       = "4.0.0"
 }

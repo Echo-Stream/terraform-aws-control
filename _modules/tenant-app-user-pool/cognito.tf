@@ -35,7 +35,7 @@ resource "aws_cognito_user_pool" "echostream_app" {
     temporary_password_validity_days = 90
   }
 
-  tags = local.tags
+  tags = var.tags
 }
 
 resource "aws_cognito_user_pool_client" "echostream_app_userpool_client" {
