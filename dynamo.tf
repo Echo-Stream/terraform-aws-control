@@ -112,7 +112,7 @@ module "graph_table" {
   stream_view_type       = "NEW_AND_OLD_IMAGES"
 
   replica = [
-    for region in var.tenant_regions : {
+    for region in local.tenant_regions : {
       region_name = region
     }
 
