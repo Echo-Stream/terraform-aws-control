@@ -3,7 +3,7 @@ output "dead_letter_arn" {
   value       = aws_sns_topic.lambda_dead_letter.arn
 }
 
-output "lambda_environment_variables" {
+output "kms_key_arn" {
   description = "KMS Key arn for encrypting lambda environment variables"
   value       = aws_kms_key.lambda_environment_variables.arn
 }
