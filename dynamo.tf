@@ -111,20 +111,6 @@ module "graph_table" {
   ttl_attribute_name     = "ttl"
   stream_view_type       = "NEW_AND_OLD_IMAGES"
 
-  # replica = [
-  #   {
-  #     region_name = "us-east-2"
-  #   },
-  #   {
-  #     region_name = "us-west-1"
-  #   },
-
-  #   {
-  #     region_name = "us-west-2"
-  #   },
-  # ]
-
-
   replica = [
     for region in setsubtract(local.tenant_regions, [local.current_region]) :
     {
