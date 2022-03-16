@@ -31,8 +31,8 @@ data "aws_iam_policy_document" "graph_ddb_read" {
 
 resource "aws_iam_policy" "graph_ddb_read" {
   description = "IAM permissions to read graph-table"
-  name   = "${var.resource_prefix}-graph-table-read"
-  policy = data.aws_iam_policy_document.graph_ddb_read.json
+  name        = "${var.resource_prefix}-graph-table-read"
+  policy      = data.aws_iam_policy_document.graph_ddb_read.json
 }
 
 ######################################

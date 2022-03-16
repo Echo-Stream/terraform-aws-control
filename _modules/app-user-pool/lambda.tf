@@ -30,7 +30,6 @@ resource "aws_lambda_function" "app_cognito_pre_authentication" {
   }
 
   memory_size = 1536
-  publish     = true
   role        = var.app_cognito_pre_authentication_lambda_role_arn
   runtime     = "python3.9"
 
