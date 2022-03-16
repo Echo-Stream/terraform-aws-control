@@ -22,9 +22,9 @@ data "aws_iam_policy_document" "multi_region_app_cognito_pre_authentication_func
       "kms:GenerateDataKey*",
     ]
     resources = [
-      module.lambda_underpin_us_east_2.dead_letter_arn,
-      module.lambda_underpin_us_west_1.dead_letter_arn,
-      module.lambda_underpin_us_west_2.dead_letter_arn,
+      module.lambda_underpin_us_east_2.kms_key_arn,
+      module.lambda_underpin_us_west_1.kms_key_arn,
+      module.lambda_underpin_us_west_2.kms_key_arn,
     ]
     sid = "AllowEcryptDecryptEnvVars"
   }
