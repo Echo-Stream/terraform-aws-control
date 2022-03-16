@@ -33,11 +33,11 @@ module "app_cognito_pool_us_east_2" {
   app_cognito_pre_authentication_lambda_role_arn = aws_iam_role.app_cognito_pre_authentication_function.arn
   artifacts_bucket                               = "${local.artifacts_bucket_prefix}-us-east-2"
   control_region                                 = local.current_region
-  dead_letter_arn                                = aws_sns_topic.lambda_dead_letter.arn
+  dead_letter_arn                                = module.lambda_underpin_us_east_2.dead_letter_arn
   environment                                    = var.resource_prefix
   function_s3_object_key                         = local.lambda_functions_keys["app_api_cognito_pre_authentication"]
   graph_table_name                               = module.graph_table.name
-  kms_key_arn                                    = aws_kms_key.lambda_environment_variables.arn
+  kms_key_arn                                    = module.lambda_underpin_us_east_2.kms_key_arn
   name                                           = var.resource_prefix
   tags                                           = local.tags
   tenant_region                                  = "us-east-2"
