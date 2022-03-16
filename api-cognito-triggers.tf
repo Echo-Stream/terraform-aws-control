@@ -237,8 +237,8 @@ data "aws_iam_policy_document" "app_api_cognito_pre_authentication" {
     ]
 
     resources = [
-      "arn:aws:dynamodb:*:${local.artifacts_account_id}:table/${var.resource_prefix}-graph",
-      "arn:aws:dynamodb:*:${local.artifacts_account_id}:table/${var.resource_prefix}-graph/*",
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-graph",
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-graph/*",
     ]
 
     sid = "TableAccess"
