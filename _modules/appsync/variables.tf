@@ -1,4 +1,4 @@
-variable "user_pool_id" {
+variable "userpool_id" {
   description = "App user pool id that is used for authentication"
   type        = string
 }

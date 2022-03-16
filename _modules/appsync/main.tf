@@ -8,7 +8,7 @@ resource "aws_appsync_graphql_api" "echostream" {
 
   user_pool_config {
     default_action = "ALLOW"
-    user_pool_id   = var.user_pool_id
+    user_pool_id   = var.userpool_id
   }
 
   schema       = var.schema

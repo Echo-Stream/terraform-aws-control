@@ -28,7 +28,7 @@ module "appsync_us_east_2" {
   kms_key_arn                        = module.lambda_underpin_us_east_2.kms_key_arn
   name                               = var.resource_prefix
   tags                               = local.tags
-  user_pool_id                       = module.app_cognito_pool_us_east_2.userpool_id
+  userpool_id                        = module.app_cognito_pool_us_east_2.0.userpool_id
   invoke_policy_arn                  = aws_iam_policy.invoke_appsync_datasource.arn
 
   source = "./_modules/appsync"
