@@ -3,6 +3,7 @@ data "aws_s3_object" "function_package" {
   key    = var.function_s3_object_key
 }
 
+
 resource "aws_lambda_function" "appsync_datasource" {
   description = "Function that gets triggered when cognito user to be authenticated"
   dead_letter_config {

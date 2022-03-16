@@ -15,7 +15,7 @@ resource "aws_appsync_graphql_api" "echostream" {
   xray_enabled = false
   name         = "${var.name}-api"
 
-  tags = local.tags
+  tags = var.tags
 }
 
 ###################

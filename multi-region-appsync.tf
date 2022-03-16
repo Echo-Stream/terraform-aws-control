@@ -22,6 +22,8 @@ module "appsync_us_east_2" {
   count = contains(local.regions, "us-east-2") == true ? 1 : 0
 
   appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
+  schema                             = data.aws_s3_object.graphql_schema.body
+  appsync_role_arn                   = aws_iam_role.echostream_appsync.arn
   artifacts_bucket                   = "${local.artifacts_bucket_prefix}-us-east-2"
   dead_letter_arn                    = module.lambda_underpin_us_east_2.dead_letter_arn
   function_s3_object_key             = local.lambda_functions_keys["appsync_datasource"]

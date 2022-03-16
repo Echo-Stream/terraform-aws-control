@@ -3,10 +3,21 @@ variable "userpool_id" {
   type        = string
 }
 
+variable "schema" {
+  description = "Appsync schema"
+  type        = string
+}
+
 variable "appsync_datasource_lambda_role_arn" {
+  description = "The ARN of the appsync datasource lambda role that has basic + necessary permissions"
+  type        = string
+}
+
+variable "appsync_role_arn" {
   description = "The ARN of the appsync role that can write logs"
   type        = string
 }
+
 
 variable "tags" {
   default     = {}
