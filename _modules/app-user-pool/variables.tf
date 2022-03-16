@@ -59,12 +59,17 @@ variable "tenant_regions" {
   type        = any
 }
 
-variable "app_cognito_pre_authentication_iam_policy_arn" {
-  description = "The IAM policy for the app cognito pre authentication lambda"
-  type        = string
-}
+# variable "app_cognito_pre_authentication_iam_policy_arn" {
+#   description = "The IAM policy for the app cognito pre authentication lambda"
+#   type        = string
+# }
 
-variable "graph_ddb_read_iam_policy_arn" {
-  description = "The IAM policy for read only access to the graph-table"
+# variable "graph_ddb_read_iam_policy_arn" {
+#   description = "The IAM policy for read only access to the graph-table"
+#   type        = string
+# }
+
+variable "app_cognito_pre_authentication_lambda_role_arn" {
+  description = "The IAM role arn for the app cognito pre authentication lambda, which should have all necessary permissions"
   type        = string
 }
