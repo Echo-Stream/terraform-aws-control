@@ -42,12 +42,6 @@ variable "name" {
   type        = string
 }
 
-variable "resource_prefix" {
-  default     = []
-  description = "A list of users/customers (normally root users) that can access the artifact bucket across accounts."
-  type        = list(string)
-}
-
 variable "tags" {
   default     = {}
   description = "Key-value map of tags"
@@ -58,16 +52,6 @@ variable "tenant_regions" {
   description = "Json encoded list of tenant regions"
   type        = any
 }
-
-# variable "app_cognito_pre_authentication_iam_policy_arn" {
-#   description = "The IAM policy for the app cognito pre authentication lambda"
-#   type        = string
-# }
-
-# variable "graph_ddb_read_iam_policy_arn" {
-#   description = "The IAM policy for read only access to the graph-table"
-#   type        = string
-# }
 
 variable "app_cognito_pre_authentication_lambda_role_arn" {
   description = "The IAM role arn for the app cognito pre authentication lambda, which should have all necessary permissions"

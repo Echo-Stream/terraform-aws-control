@@ -1,10 +1,10 @@
-resource "aws_iam_role" "multi_region_app_cognito_pre_authentication_function" {
-  name               = "${var.resource_prefix}-multi-region-app-cognito-pre-authentication"
+resource "aws_iam_role" "app_cognito_pre_authentication_function" {
+  name               = "${var.resource_prefix}-app-cognito-pre-authentication"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
   tags               = var.tags
 }
 
-data "aws_iam_policy_document" "multi_region_app_cognito_pre_authentication_function_basic" {
+data "aws_iam_policy_document" "app_cognito_pre_authentication_function_basic" {
   statement {
     actions = [
       "logs:CreateLogStream",
@@ -54,13 +54,13 @@ data "aws_iam_policy_document" "multi_region_app_cognito_pre_authentication_func
   }
 }
 
-resource "aws_iam_role_policy" "multi_region_app_cognito_pre_authentication_function_basic" {
+resource "aws_iam_role_policy" "app_cognito_pre_authentication_function_basic" {
   name   = "basic-access"
-  policy = data.aws_iam_policy_document.multi_region_app_cognito_pre_authentication_function_basic.json
-  role   = aws_iam_role.multi_region_app_cognito_pre_authentication_function.id
+  policy = data.aws_iam_policy_document.app_cognito_pre_authentication_function_basic.json
+  role   = aws_iam_role.app_cognito_pre_authentication_function.id
 }
 
 resource "aws_iam_role_policy_attachment" "graph_ddb_read" {
   policy_arn = aws_iam_policy.graph_ddb_read.arn
-  role       = aws_iam_role.multi_region_app_cognito_pre_authentication_function.name
+  role       = aws_iam_role.app_cognito_pre_authentication_function.name
 }

@@ -4,20 +4,20 @@
 module "app_cognito_pool_us_east_1" {
   count = contains(local.regions, "us-east-1") == true ? 1 : 0
 
-  app_cognito_pre_authentication_lambda_role_arn = aws_iam_role.multi_region_app_cognito_pre_authentication_function.arn
+  app_cognito_pre_authentication_lambda_role_arn = aws_iam_role.app_cognito_pre_authentication_function.arn
   artifacts_bucket                               = "${local.artifacts_bucket_prefix}-us-east-1"
   control_region                                 = local.current_region
   dead_letter_arn                                = aws_sns_topic.lambda_dead_letter.arn
   environment                                    = var.resource_prefix
   function_s3_object_key                         = local.lambda_functions_keys["app_api_cognito_pre_authentication"]
-  #graph_ddb_read_iam_policy_arn                 = aws_iam_policy.graph_ddb_read.arn
-  graph_table_name = module.graph_table.name
-  kms_key_arn      = aws_kms_key.lambda_environment_variables.arn
-  name             = var.resource_prefix
-  tags             = local.tags
-  tenant_region    = "us-east-1"
-  tenant_regions   = jsonencode(local.tenant_regions)
-  source           = "./_modules/app-user-pool"
+  graph_table_name                               = module.graph_table.name
+  kms_key_arn                                    = aws_kms_key.lambda_environment_variables.arn
+  name                                           = var.resource_prefix
+  tags                                           = local.tags
+  tenant_region                                  = "us-east-1"
+  tenant_regions                                 = jsonencode(local.tenant_regions)
+  
+  source = "./_modules/app-user-pool"
 
   providers = {
     aws = aws.north-virginia
