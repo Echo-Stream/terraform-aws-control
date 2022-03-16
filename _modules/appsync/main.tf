@@ -11,11 +11,11 @@ resource "aws_appsync_graphql_api" "echostream" {
     user_pool_id   = var.user_pool_id
   }
 
-  schema = var.schema
+  schema       = var.schema
   xray_enabled = false
   name         = "${var.name}-api"
 
-  tags         = local.tags
+  tags = local.tags
 }
 
 ###################
@@ -26,7 +26,7 @@ module "appsync_datasource_" {
   description              = "Main Lambda datasource for the echo-stream API "
   invoke_lambda_policy_arn = var.invoke_policy_arn
   lambda_function_arn      = aws_lambda_function.appsync_datasource.arn
-  name                     = replace("${var.resource_prefix}_appsync_datasource", "-", "_")
+  name                     = replace("${var.name}_appsync_datasource", "-", "_")
   source                   = "QuiNovas/appsync-lambda-datasource/aws"
   version                  = "3.0.4"
 }

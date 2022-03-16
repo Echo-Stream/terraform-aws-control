@@ -2,6 +2,7 @@ variable "artifacts_bucket" {
   description = "Artifacts bucket name"
   type        = string
 }
+
 variable "control_region" {
   description = "Control region name, e.g us-east-1"
   type        = string
