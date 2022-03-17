@@ -7,7 +7,7 @@ locals {
     {
       API_USER_POOL_CLIENT_ID         = aws_cognito_user_pool_client.echostream_api_userpool_client.id
       API_USER_POOL_ID                = aws_cognito_user_pool.echostream_api.id
-      APP_USER_POOL_IDS               = local.regional_appsync_endpoints
+      #APP_USER_POOL_IDS               = local.regional_appsync_endpoints
       AUDIT_FIREHOSE_LOG_GROUP        = local.audit_firehose_log_group
       AUDIT_FIREHOSE_ROLE             = aws_iam_role.audit_firehose.arn
       BULK_DATA_AWS_ACCESS_KEY_ID     = aws_iam_access_key.presign_bulk_data.id
@@ -21,10 +21,11 @@ locals {
       UI_USER_POOL_ID                 = aws_cognito_user_pool.echostream_ui.id
     }
   )
-  regional_appsync_endpoints = {
-    us-east-1 = local.appsync_custom_url
+
+  regional_appsync_endpoints = jsonencode({
+    us-east-1 = local.appsync_custom_url,
     us-east-2 = format("https://%s/graphql", lookup(var.regional_apis["us-east-2"], "domain", ""))
-  }
+  })
 
   app_user_pool_ids = {
     us-east-1 = module.app_cognito_pool_us_east_1.0.userpool_id
