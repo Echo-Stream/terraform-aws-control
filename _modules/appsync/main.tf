@@ -44,3 +44,13 @@ resource "aws_appsync_datasource" "appsync_datasource_" {
   service_role_arn = var.appsync_service_role_arn
   type             = "AWS_LAMBDA"
 }
+
+resource "aws_appsync_domain_name" "echostream_appsync" {
+  domain_name     = var.api_domain_name
+  certificate_arn = var.api_acm_arn
+}
+
+resource "aws_appsync_domain_name_api_association" "echostream_appsync" {
+  api_id      = aws_appsync_graphql_api.echostream.id
+  domain_name = aws_appsync_domain_name.echostream_appsync.domain_name
+}

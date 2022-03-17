@@ -48,6 +48,12 @@ variable "region" {
   type        = string
 }
 
+variable "regional_apis" {
+  description = "A map with regional api acm arns and domain names"
+  type        = map(string)
+  default     = {}
+}
+
 variable "resource_prefix" {
   description = "Prefix for naming resources. Lower case only, No periods"
 }
