@@ -15,6 +15,52 @@ resource "aws_iam_policy" "invoke_appsync_datasource" {
   policy      = data.aws_iam_policy_document.invoke_appsync_datasource.json
 }
 
+data "aws_iam_policy_document" "multi_region_appsync_datasource" {
+  statement {
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+    resources = [
+      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/lambda/${var.resource_prefix}-appsync-datasource*",
+    ]
+    sid = "AllowLogWriting"
+  }
+  statement {
+    actions = [
+      "kms:Decrypt",
+      "kms:Encrypt",
+      "kms:GenerateDataKey*",
+    ]
+    resources = [
+      aws_kms_key.lambda_environment_variables.arn,
+      module.lambda_underpin_us_east_2.kms_key_arn,
+      module.lambda_underpin_us_west_1.kms_key_arn,
+      module.lambda_underpin_us_west_2.kms_key_arn,
+    ]
+    sid = "AllowEcryptDecryptEnvVars"
+  }
+  statement {
+    actions = [
+      "sns:Publish",
+      "sqs:SendMessage",
+    ]
+    resources = [
+      aws_sns_topic.lambda_dead_letter.arn,
+      module.lambda_underpin_us_east_2.dead_letter_arn,
+      module.lambda_underpin_us_west_1.dead_letter_arn,
+      module.lambda_underpin_us_west_2.dead_letter_arn
+    ]
+    sid = "AllowDeadLetterWriting"
+  }
+}
+
+resource "aws_iam_role_policy" "multi_region_appsync_datasource" {
+  name   = "basic-access-2"
+  policy = data.aws_iam_policy_document.multi_region_appsync_datasource.json
+  role   = aws_iam_role.app_cognito_pre_authentication_function.id
+}
+
 #######################
 ## Appsync us-east-2 ##
 #######################
