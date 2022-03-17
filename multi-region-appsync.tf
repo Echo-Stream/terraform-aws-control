@@ -95,8 +95,8 @@ module "appsync_us_east_2" {
   schema                             = data.aws_s3_object.graphql_schema.body
   tags                               = local.tags
   userpool_id                        = module.app_cognito_pool_us_east_2.0.userpool_id
-  api_domain_name                    = var.regional_apis["us-east-2"]["domain"]
-  api_acm_arn                        = var.regional_apis["us-east-2"]["acm_arn"]
+  api_domain_name                    = lookup(var.regional_apis["us-east-2"], "domain", "")
+  api_acm_arn                        = lookup(var.regional_apis["us-east-2"], "acm_arn", "")
 
   source = "./_modules/appsync"
 

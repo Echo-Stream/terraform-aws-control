@@ -27,8 +27,8 @@ locals {
   }
 
   app_user_pool_ids = {
-    us-east-1 = module.app_cognito_pool_us_east_1.userpool_id
-    us-east-2 = module.app_cognito_pool_us_east_2.userpool_id
+    us-east-1 = module.app_cognito_pool_us_east_1.0.userpool_id
+    us-east-2 = module.app_cognito_pool_us_east_2.0.userpool_id
   }
 }
 
