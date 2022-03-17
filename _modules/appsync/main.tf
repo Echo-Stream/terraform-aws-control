@@ -2,7 +2,7 @@ resource "aws_appsync_graphql_api" "echostream" {
   authentication_type = "AMAZON_COGNITO_USER_POOLS"
 
   log_config {
-    cloudwatch_logs_role_arn = var.appsync_role_arn
+    cloudwatch_logs_role_arn = var.appsync_service_role_arn
     field_log_level          = "ERROR"
   }
 
