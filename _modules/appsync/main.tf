@@ -40,7 +40,7 @@ resource "aws_appsync_datasource" "appsync_datasource_" {
     function_arn = aws_lambda_function.appsync_datasource.arn
   }
 
-  name             = var.name
+  name             = replace("${var.name}_appsync_datasource", "-", "_")
   service_role_arn = var.appsync_service_role_arn
   type             = "AWS_LAMBDA"
 }

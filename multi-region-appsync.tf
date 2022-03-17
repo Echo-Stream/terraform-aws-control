@@ -18,14 +18,14 @@ resource "aws_iam_policy" "multi_region_invoke_appsync_lambda_datasource" {
 }
 
 resource "aws_iam_role_policy_attachment" "multi_region_invoke_appsync_lambda_datasource" {
-  role       = module.appsync_datasource_.name
+  role       = module.appsync_datasource_.role_name
   policy_arn = aws_iam_policy.multi_region_invoke_appsync_lambda_datasource.arn
 }
 
 # this policy is used for appsync api, for logs access
 resource "aws_iam_role_policy_attachment" "multi_region_cloudwatch_appsync" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs"
-  role       = module.appsync_datasource_.name
+  role       = module.appsync_datasource_.role_name
 }
 ################################################################################################
 # This policy is used to give permissions to multi region lambda env kms keys and dead letters
