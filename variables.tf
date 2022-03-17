@@ -50,7 +50,7 @@ variable "region" {
 
 variable "regional_apis" {
   description = "A map with regional api acm arns and domain names"
-  type        = map(string)
+  type        = any
   default     = {}
 }
 

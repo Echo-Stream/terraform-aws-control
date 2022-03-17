@@ -84,19 +84,19 @@ resource "aws_iam_role_policy" "multi_region_appsync_datasource" {
 module "appsync_us_east_2" {
   count = contains(local.regions, "us-east-2") == true ? 1 : 0
 
+  api_acm_arn                        = lookup(var.regional_apis["us-east-2"], "acm_arn", "")
+  api_domain_name                    = lookup(var.regional_apis["us-east-2"], "domain", "")
   appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
   appsync_service_role_arn           = module.appsync_datasource_.role_arn
-  environment_variables              = local.appsync_datasource_lambda_environment_variables
   artifacts_bucket                   = "${local.artifacts_bucket_prefix}-us-east-2"
   dead_letter_arn                    = module.lambda_underpin_us_east_2.dead_letter_arn
+  environment_variables              = local.appsync_datasource_lambda_environment_variables
   function_s3_object_key             = local.lambda_functions_keys["appsync_datasource"]
   kms_key_arn                        = module.lambda_underpin_us_east_2.kms_key_arn
   name                               = var.resource_prefix
   schema                             = data.aws_s3_object.graphql_schema.body
   tags                               = local.tags
   userpool_id                        = module.app_cognito_pool_us_east_2.0.userpool_id
-  api_domain_name                    = lookup(var.regional_apis["us-east-2"], "domain", "")
-  api_acm_arn                        = lookup(var.regional_apis["us-east-2"], "acm_arn", "")
 
   source = "./_modules/appsync"
 
