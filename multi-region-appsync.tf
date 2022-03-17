@@ -1,4 +1,6 @@
-data "aws_iam_policy_document" "invoke_appsync_datasource" {
+################################################################################################
+# This policy is attached to appsync service role to invoke the lambda datasource
+data "aws_iam_policy_document" "multi_region_invoke_appsync_lambda_datasource" {
   statement {
     actions = [
       "lambda:InvokeFunction",
@@ -6,15 +8,23 @@ data "aws_iam_policy_document" "invoke_appsync_datasource" {
     resources = [
       "arn:aws:lambda:*:${local.current_account_id}:function:${var.resource_prefix}-appsync-datasource",
     ]
-    sid = "AllowInvoke"
+    sid = "AllowInvokeOfLambdaDatasource"
   }
 }
 
-resource "aws_iam_policy" "invoke_appsync_datasource" {
+resource "aws_iam_policy" "multi_region_invoke_appsync_lambda_datasource" {
   name_prefix = "${var.resource_prefix}-invoke-appsync-datasource"
   policy      = data.aws_iam_policy_document.invoke_appsync_datasource.json
 }
 
+resource "aws_iam_role_policy_attachment" "multi_region_invoke_appsync_lambda_datasource" {
+  role       = aws_iam_role.echostream_appsync.name
+  policy_arn = aws_iam_policy.multi_region_invoke_appsync_lambda_datasource.arn
+}
+
+################################################################################################
+# This policy is used to give permissions to multi region lambda env kms keys and dead letters
+# and is attached to the appsync datasource lambda role, which is common to all multi region lambdas
 data "aws_iam_policy_document" "multi_region_appsync_datasource" {
   statement {
     actions = [
@@ -56,10 +66,12 @@ data "aws_iam_policy_document" "multi_region_appsync_datasource" {
 }
 
 resource "aws_iam_role_policy" "multi_region_appsync_datasource" {
-  name   = "basic-access-2"
+  name   = "basic-access-all-regions"
   policy = data.aws_iam_policy_document.multi_region_appsync_datasource.json
   role   = "${var.resource_prefix}-appsync-datasource"
 }
+
+################################################################################################
 
 #######################
 ## Appsync us-east-2 ##
@@ -88,7 +100,6 @@ module "appsync_us_east_2" {
   artifacts_bucket       = "${local.artifacts_bucket_prefix}-us-east-2"
   dead_letter_arn        = module.lambda_underpin_us_east_2.dead_letter_arn
   function_s3_object_key = local.lambda_functions_keys["appsync_datasource"]
-  invoke_policy_arn      = aws_iam_policy.invoke_appsync_datasource.arn
   kms_key_arn            = module.lambda_underpin_us_east_2.kms_key_arn
   name                   = var.resource_prefix
   schema                 = data.aws_s3_object.graphql_schema.body

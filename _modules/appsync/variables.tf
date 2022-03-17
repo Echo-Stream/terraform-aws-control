@@ -59,8 +59,3 @@ variable "function_s3_object_key" {
   description = "S3 object key for the lambda function"
   type        = string
 }
-
-variable "invoke_policy_arn" {
-  description = "The ARN of the IAM policy that has permissions to invoke the lambda; used by datasource"
-  type        = string
-}
