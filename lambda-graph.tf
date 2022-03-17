@@ -54,7 +54,7 @@ module "graph_table_dynamodb_trigger" {
     aws_iam_policy.graph_table_dynamodb_trigger.arn,
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["graph_table_dynamodb_trigger"]
   source        = "QuiNovas/lambda/aws"
@@ -235,7 +235,7 @@ module "graph_table_tenant_stream_handler" {
     aws_iam_policy.graph_table_handler.arn,
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["graph_table_tenant_stream_handler"]
   source        = "QuiNovas/lambda/aws"
@@ -288,7 +288,7 @@ module "graph_table_system_stream_handler" {
     aws_iam_policy.graph_table_system_stream_handler.arn,
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["graph_table_system_stream_handler"]
   source        = "QuiNovas/lambda/aws"

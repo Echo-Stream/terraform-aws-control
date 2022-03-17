@@ -56,7 +56,7 @@ module "ui_cognito_post_confirmation" {
     aws_iam_policy.graph_ddb_read.arn
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["ui_cognito_post_confirmation"]
   source        = "QuiNovas/lambda/aws"
@@ -131,7 +131,7 @@ module "ui_cognito_pre_authentication" {
     aws_iam_policy.graph_ddb_read.arn
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["ui_cognito_pre_authentication"]
   source        = "QuiNovas/lambda/aws"
@@ -210,7 +210,7 @@ module "ui_cognito_pre_signup" {
     aws_iam_policy.graph_ddb_read.arn
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["ui_cognito_pre_signup"]
   source        = "QuiNovas/lambda/aws"
@@ -285,7 +285,7 @@ module "app_api_cognito_pre_authentication" {
     aws_iam_policy.graph_ddb_read.arn
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["app_api_cognito_pre_authentication"]
   source        = "QuiNovas/lambda/aws"

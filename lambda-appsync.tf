@@ -393,7 +393,7 @@ module "appsync_datasource" {
     aws_iam_policy.graph_ddb_write.arn,
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["appsync_datasource"]
   source        = "QuiNovas/lambda/aws"

@@ -49,7 +49,7 @@ module "log_retention" {
     aws_iam_policy.log_retention.arn,
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["log_retention"]
   source        = "QuiNovas/lambda/aws"

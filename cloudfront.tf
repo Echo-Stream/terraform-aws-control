@@ -136,7 +136,7 @@ resource "aws_lambda_function" "edge_config" {
   handler          = "function.lambda_handler"
   publish          = true
   role             = aws_iam_role.edge_config.arn
-  runtime          = "python3.9"
+  runtime          = local.lambda_runtime
   source_code_hash = data.archive_file.edge_config.output_base64sha256
   tags             = local.tags
   provider         = aws.north-virginia ## currently Edge functions are supported in us-east-1 only
