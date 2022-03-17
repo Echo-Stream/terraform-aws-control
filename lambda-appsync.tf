@@ -23,7 +23,7 @@ locals {
   )
   regional_appsync_endpoints = {
     us-east-1 = local.appsync_custom_url
-    us-east-2 = "https://$(lookup($var.regional_apis['us-east-2'], 'domain', ''))/graphql"
+    us-east-2 = format("https://%s/graphql", lookup(var.regional_apis["us-east-2"], "domain", ""))
   }
 
   app_user_pool_ids = {
