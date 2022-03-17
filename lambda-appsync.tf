@@ -14,7 +14,7 @@ locals {
       BULK_DATA_AWS_SECRET_ACCESS_KEY = aws_iam_access_key.presign_bulk_data.secret
       BULK_DATA_IAM_USER              = aws_iam_user.presign_bulk_data.arn
       MANAGED_APP_CLOUD_INIT_TOPIC    = aws_sns_topic.managed_app_cloud_init.arn
-      REGIONAL_APPSYNC_ENDPOINTS      = local.app_user_pool_ids
+      #REGIONAL_APPSYNC_ENDPOINTS      = local.app_user_pool_ids
       REMOTE_APP_ROLE                 = aws_iam_role.remote_app.arn
       SSM_SERVICE_ROLE                = aws_iam_role.managed_app.name
       TENANT_DB_STREAM_HANDLER_ROLE   = module.graph_table_tenant_stream_handler.role_arn
@@ -23,7 +23,7 @@ locals {
   )
 
   regional_appsync_endpoints = jsonencode({
-    us-east-1 = local.appsync_custom_url,
+    us-east-1 = local.appsync_custom_url
     us-east-2 = format("https://%s/graphql", lookup(var.regional_apis["us-east-2"], "domain", ""))
   })
 
