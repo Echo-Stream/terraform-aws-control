@@ -18,10 +18,15 @@ resource "aws_iam_policy" "multi_region_invoke_appsync_lambda_datasource" {
 }
 
 resource "aws_iam_role_policy_attachment" "multi_region_invoke_appsync_lambda_datasource" {
-  role       = aws_iam_role.echostream_appsync.name
+  role       = module.appsync_datasource_.name
   policy_arn = aws_iam_policy.multi_region_invoke_appsync_lambda_datasource.arn
 }
 
+# this policy is used for appsync api, for logs access
+resource "aws_iam_role_policy_attachment" "multi_region_cloudwatch_appsync" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs"
+  role       = module.appsync_datasource_.name
+}
 ################################################################################################
 # This policy is used to give permissions to multi region lambda env kms keys and dead letters
 # and is attached to the appsync datasource lambda role, which is common to all multi region lambdas
@@ -80,7 +85,7 @@ module "appsync_us_east_2" {
   count = contains(local.regions, "us-east-2") == true ? 1 : 0
 
   appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
-  appsync_role_arn                   = aws_iam_role.echostream_appsync.arn
+  appsync_role_arn                   = module.appsync_datasource_.name
   environment_variables = merge(local.common_lambda_environment_variables,
     {
       API_USER_POOL_CLIENT_ID         = aws_cognito_user_pool_client.echostream_api_userpool_client.id
