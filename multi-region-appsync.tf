@@ -84,8 +84,8 @@ resource "aws_iam_role_policy" "multi_region_appsync_datasource" {
 module "appsync_us_east_2" {
   count = contains(local.regions, "us-east-2") == true ? 1 : 0
 
-  api_acm_arn                        = lookup(var.regional_apis["us-east-2"], "acm_arn", "")
-  api_domain_name                    = lookup(var.regional_apis["us-east-2"], "domain", "")
+  api_acm_arn                        = lookup(var.regional_apis["acm_arns"], "us-east-2", "")
+  api_domain_name                    = lookup(var.regional_apis["domains"], "us-east-2", "")
   appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
   appsync_service_role_arn           = module.appsync_datasource_.role_arn
   artifacts_bucket                   = "${local.artifacts_bucket_prefix}-us-east-2"
