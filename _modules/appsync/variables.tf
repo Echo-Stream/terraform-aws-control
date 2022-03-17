@@ -13,8 +13,8 @@ variable "appsync_datasource_lambda_role_arn" {
   type        = string
 }
 
-variable "appsync_role_arn" {
-  description = "The ARN of the appsync role that can write logs"
+variable "appsync_service_role_arn" {
+  description = "The ARN of the appsync service role that can write logs"
   type        = string
 }
 

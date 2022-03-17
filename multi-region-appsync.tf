@@ -85,7 +85,7 @@ module "appsync_us_east_2" {
   count = contains(local.regions, "us-east-2") == true ? 1 : 0
 
   appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
-  appsync_role_arn                   = module.appsync_datasource_.name
+  appsync_service_role_arn           = module.appsync_datasource_.role_arn
   environment_variables = merge(local.common_lambda_environment_variables,
     {
       API_USER_POOL_CLIENT_ID         = aws_cognito_user_pool_client.echostream_api_userpool_client.id

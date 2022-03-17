@@ -41,6 +41,6 @@ resource "aws_appsync_datasource" "appsync_datasource_" {
   }
 
   name             = var.name
-  service_role_arn = var.appsync_role_arn
+  service_role_arn = var.appsync_service_role_arn
   type             = "AWS_LAMBDA"
 }
