@@ -647,6 +647,10 @@ locals {
       field = "tenant"
       type  = "ChangeEmitterNode"
     }
+    cross_account_app_appsync_endpoint = {
+      field = "appsyncEndpoint"
+      type  = "CrossAccountApp"
+    }
     cross_account_app_config = {
       field = "config"
       type  = "CrossAccountApp"
@@ -778,6 +782,10 @@ locals {
     edge_tenant = {
       field = "tenant"
       type  = "Edge"
+    }
+    external_app_appsync_endpoint = {
+      field = "appsyncEndpoint"
+      type  = "ExternalApp"
     }
     external_app_config = {
       field = "config"
