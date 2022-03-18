@@ -1,6 +1,0 @@
-#if ($!ctx.result.echo_error)
-  $util.error($ctx.result.echo_error, $ctx.result.error_type)
-#else
-  $util.toJson(${ctx.result})
-#end
-
