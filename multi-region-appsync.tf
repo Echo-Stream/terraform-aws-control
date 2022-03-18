@@ -104,3 +104,57 @@ module "appsync_us_east_2" {
     aws = aws.ohio
   }
 }
+
+#######################
+## Appsync us-west-1 ##
+#######################
+module "appsync_us_west_1" {
+  count = contains(local.regions, "us-west-1") == true ? 1 : 0
+
+  api_acm_arn                        = lookup(var.regional_apis["acm_arns"], "us-west-1", "")
+  api_domain_name                    = lookup(var.regional_apis["domains"], "us-west-1", "")
+  appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
+  appsync_service_role_arn           = module.appsync_datasource_.role_arn
+  artifacts_bucket                   = "${local.artifacts_bucket_prefix}-us-west-1"
+  dead_letter_arn                    = module.lambda_underpin_us_west_1.dead_letter_arn
+  environment_variables              = local.appsync_datasource_lambda_environment_variables
+  function_s3_object_key             = local.lambda_functions_keys["appsync_datasource"]
+  kms_key_arn                        = module.lambda_underpin_us_west_1.kms_key_arn
+  name                               = var.resource_prefix
+  schema                             = data.aws_s3_object.graphql_schema.body
+  tags                               = local.tags
+  userpool_id                        = module.app_cognito_pool_us_west_1.0.userpool_id
+
+  source = "./_modules/appsync"
+
+  providers = {
+    aws = aws.north-california
+  }
+}
+
+#######################
+## Appsync us-west-2 ##
+#######################
+module "appsync_us_west_2" {
+  count = contains(local.regions, "us-west-2") == true ? 1 : 0
+
+  api_acm_arn                        = lookup(var.regional_apis["acm_arns"], "us-west-2", "")
+  api_domain_name                    = lookup(var.regional_apis["domains"], "us-west-2", "")
+  appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
+  appsync_service_role_arn           = module.appsync_datasource_.role_arn
+  artifacts_bucket                   = "${local.artifacts_bucket_prefix}-us-west-2"
+  dead_letter_arn                    = module.lambda_underpin_us_west_2.dead_letter_arn
+  environment_variables              = local.appsync_datasource_lambda_environment_variables
+  function_s3_object_key             = local.lambda_functions_keys["appsync_datasource"]
+  kms_key_arn                        = module.lambda_underpin_us_west_2.kms_key_arn
+  name                               = var.resource_prefix
+  schema                             = data.aws_s3_object.graphql_schema.body
+  tags                               = local.tags
+  userpool_id                        = module.app_cognito_pool_us_west_2.0.userpool_id
+
+  source = "./_modules/appsync"
+
+  providers = {
+    aws = aws.oregon
+  }
+}
