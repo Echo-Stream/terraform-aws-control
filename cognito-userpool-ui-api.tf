@@ -128,7 +128,7 @@ resource "aws_cognito_user_pool" "echostream_api" {
   name = "${var.resource_prefix}-api"
 
   lambda_config {
-    pre_authentication = module.app_api_cognito_pre_authentication.arn
+    pre_authentication = module.api_cognito_pre_authentication.arn
   }
 
   password_policy {

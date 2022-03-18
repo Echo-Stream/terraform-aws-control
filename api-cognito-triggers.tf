@@ -227,10 +227,10 @@ resource "aws_lambda_permission" "ui_cognito_pre_signup" {
   source_arn    = aws_cognito_user_pool.echostream_ui.arn
 }
 
-##########################################
-##  app-api-cognito-pre-authentication  ##
-##########################################
-data "aws_iam_policy_document" "app_api_cognito_pre_authentication" {
+######################################
+##  api-cognito-pre-authentication  ##
+######################################
+data "aws_iam_policy_document" "api_cognito_pre_authentication" {
   statement {
     actions = [
       "dynamodb:Query",
@@ -257,14 +257,14 @@ data "aws_iam_policy_document" "app_api_cognito_pre_authentication" {
   }
 }
 
-resource "aws_iam_policy" "app_api_cognito_pre_authentication" {
-  description = "IAM permissions required for app-api-cognito-pre-authentication lambda"
+resource "aws_iam_policy" "api_cognito_pre_authentication" {
+  description = "IAM permissions required for api-cognito-pre-authentication lambda"
 
-  name   = "${var.resource_prefix}-app-api-cognito-pre-authentication"
-  policy = data.aws_iam_policy_document.app_api_cognito_pre_authentication.json
+  name   = "${var.resource_prefix}-api-cognito-pre-authentication"
+  policy = data.aws_iam_policy_document.api_cognito_pre_authentication.json
 }
 
-module "app_api_cognito_pre_authentication" {
+module "api_cognito_pre_authentication" {
   description = "Function that gets triggered when cognito user to be authenticated"
 
   environment_variables = {
@@ -278,10 +278,10 @@ module "app_api_cognito_pre_authentication" {
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
   memory_size     = 1536
-  name            = "${var.resource_prefix}-app-api-cognito-pre-authentication"
+  name            = "${var.resource_prefix}-api-cognito-pre-authentication"
 
   policy_arns = [
-    aws_iam_policy.app_api_cognito_pre_authentication.arn,
+    aws_iam_policy.api_cognito_pre_authentication.arn,
     aws_iam_policy.graph_ddb_read.arn
   ]
 
@@ -294,10 +294,10 @@ module "app_api_cognito_pre_authentication" {
   version       = "4.0.0"
 }
 
-resource "aws_lambda_permission" "app_api_cognito_pre_authentication" {
+resource "aws_lambda_permission" "api_cognito_pre_authentication" {
   statement_id  = "AllowExecutionFromCognito"
   action        = "lambda:InvokeFunction"
-  function_name = module.app_api_cognito_pre_authentication.name
+  function_name = module.api_cognito_pre_authentication.name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.echostream_api.arn
 }
