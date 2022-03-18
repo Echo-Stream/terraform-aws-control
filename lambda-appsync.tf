@@ -29,7 +29,7 @@ locals {
     us-west-2 = module.appsync_us_west_2.0.api_id
   })
 
-  appsync_endpoints = jsonencode({
+  regional_appsync_endpoints = jsonencode({
     us-east-1 = local.appsync_custom_url
     us-east-2 = format("https://%s/graphql", lookup(var.regional_apis["domains"], "us-east-2", ""))
     us-west-1 = format("https://%s/graphql", lookup(var.regional_apis["domains"], "us-west-1", ""))
