@@ -273,10 +273,10 @@ module "appsync_us_west_2" {
 }
 
 module "appsync_resolvers_us_west_2" {
-  count = contains(local.regions, "us-west-1") == true ? 1 : 0
+  count = contains(local.regions, "us-west-2") == true ? 1 : 0
 
-  api_id          = module.appsync_us_west_1.0.api_id
-  datasource_name = module.appsync_us_west_1.0.datasource_name
+  api_id          = module.appsync_us_west_2.0.api_id
+  datasource_name = module.appsync_us_west_2.0.datasource_name
 
   source = "./_modules/appsync-resolvers"
 
