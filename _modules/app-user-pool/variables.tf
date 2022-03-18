@@ -3,14 +3,12 @@ variable "artifacts_bucket" {
   type        = string
 }
 
-variable "control_region" {
-  description = "Control region name, e.g us-east-1"
-  type        = string
-}
-
-variable "tenant_region" {
-  description = "tenant region name, e.g us-east-1"
-  type        = string
+variable "environment_variables" {
+  default = {
+    DEFAULT = "default"
+  }
+  description = "The map of environment variables to give to the Lambda function"
+  type        = map(any)
 }
 
 variable "dead_letter_arn" {
@@ -18,18 +16,8 @@ variable "dead_letter_arn" {
   type        = string
 }
 
-variable "environment" {
-  description = "value for environment variable in lambda"
-  type        = string
-}
-
 variable "function_s3_object_key" {
   description = "S3 object key for the lambda function"
-  type        = string
-}
-
-variable "graph_table_name" {
-  description = "Graph table name"
   type        = string
 }
 
@@ -49,12 +37,14 @@ variable "tags" {
   type        = map(string)
 }
 
-variable "tenant_regions" {
-  description = "Json encoded list of tenant regions"
-  type        = any
-}
 
 variable "app_cognito_pre_authentication_lambda_role_arn" {
   description = "The IAM role arn for the app cognito pre authentication lambda, which should have all necessary permissions"
+  type        = string
+}
+
+variable "runtime" {
+  default     = "python3.9"
+  description = "Runtime for the lambda, defaults to Python 3.9"
   type        = string
 }

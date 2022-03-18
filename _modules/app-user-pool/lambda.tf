@@ -4,17 +4,12 @@ data "aws_s3_object" "function_package" {
 }
 
 resource "aws_lambda_function" "app_cognito_pre_authentication" {
-  description = "Function that gets triggered when cognito user to be authenticated"
+  description = "Function that gets triggered when app cognito user to be authenticated"
   dead_letter_config {
     target_arn = var.dead_letter_arn
   }
   environment {
-    variables = {
-      CONTROL_REGION = var.control_region
-      DYNAMODB_TABLE = var.graph_table_name
-      ENVIRONMENT    = var.environment
-      TENANT_REGIONS = var.tenant_regions
-    }
+    variables = var.environment_variables
   }
 
   function_name = "${var.name}-app-cognito-pre-authentication"
@@ -29,10 +24,9 @@ resource "aws_lambda_function" "app_cognito_pre_authentication" {
     ]
   }
 
-  memory_size = 1536
-  role        = var.app_cognito_pre_authentication_lambda_role_arn
-  runtime     = "python3.9"
-
+  memory_size       = 1536
+  role              = var.app_cognito_pre_authentication_lambda_role_arn
+  runtime           = var.runtime
   s3_bucket         = data.aws_s3_object.function_package.bucket
   s3_key            = data.aws_s3_object.function_package.key
   s3_object_version = data.aws_s3_object.function_package.version_id

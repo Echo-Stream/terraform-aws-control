@@ -1,3 +1,11 @@
+locals {
+  app_api_cognito_pre_authentication_environment_variables = {
+    CONTROL_REGION = local.current_region
+    DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.resource_prefix
+    TENANT_REGIONS = jsonencode(local.tenant_regions)
+  }
+}
 ####################################
 ##  ui-cognito-post-confirmation  ##
 ####################################
@@ -265,20 +273,13 @@ resource "aws_iam_policy" "api_cognito_pre_authentication" {
 }
 
 module "api_cognito_pre_authentication" {
-  description = "Function that gets triggered when cognito user to be authenticated"
-
-  environment_variables = {
-    CONTROL_REGION = local.current_region
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.resource_prefix
-    TENANT_REGIONS = jsonencode(local.tenant_regions)
-  }
-
-  dead_letter_arn = local.lambda_dead_letter_arn
-  handler         = "function.handler"
-  kms_key_arn     = local.lambda_env_vars_kms_key_arn
-  memory_size     = 1536
-  name            = "${var.resource_prefix}-api-cognito-pre-authentication"
+  description           = "Function that gets triggered when api cognito user to be authenticated"
+  environment_variables = local.app_api_cognito_pre_authentication_environment_variables
+  dead_letter_arn       = local.lambda_dead_letter_arn
+  handler               = "function.handler"
+  kms_key_arn           = local.lambda_env_vars_kms_key_arn
+  memory_size           = 1536
+  name                  = "${var.resource_prefix}-api-cognito-pre-authentication"
 
   policy_arns = [
     aws_iam_policy.api_cognito_pre_authentication.arn,

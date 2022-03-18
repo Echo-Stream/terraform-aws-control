@@ -69,3 +69,9 @@ variable "api_acm_arn" {
   description = "ACM certificate arn for the domain being used for environment - api"
   type        = string
 }
+
+variable "runtime" {
+  default     = "python3.9"
+  description = "Runtime for the lambda, defaults to Python 3.9"
+  type        = string
+}
