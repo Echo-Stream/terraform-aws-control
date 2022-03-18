@@ -6,6 +6,7 @@ locals {
     TENANT_REGIONS = jsonencode(local.tenant_regions)
   }
 }
+
 ####################################
 ##  ui-cognito-post-confirmation  ##
 ####################################
