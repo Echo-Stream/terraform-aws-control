@@ -8,6 +8,7 @@ locals {
       API_USER_POOL_CLIENT_ID         = aws_cognito_user_pool_client.echostream_api_userpool_client.id
       API_USER_POOL_ID                = aws_cognito_user_pool.echostream_api.id
       APP_USER_POOL_IDS               = local.app_user_pool_ids
+      APP_USER_POOL_CLIENT_IDS        = local.app_user_pool_client_ids
       AUDIT_FIREHOSE_LOG_GROUP        = local.audit_firehose_log_group
       AUDIT_FIREHOSE_ROLE             = aws_iam_role.audit_firehose.arn
       BULK_DATA_AWS_ACCESS_KEY_ID     = aws_iam_access_key.presign_bulk_data.id
@@ -41,6 +42,13 @@ locals {
     us-east-2 = module.app_cognito_pool_us_east_2.0.userpool_id
     us-west-1 = module.app_cognito_pool_us_west_1.0.userpool_id
     us-west-2 = module.app_cognito_pool_us_west_2.0.userpool_id
+  })
+
+  app_user_pool_client_ids = jsonencode({
+    us-east-1 = module.app_cognito_pool_us_east_1.0.client_id
+    us-east-2 = module.app_cognito_pool_us_east_2.0.client_id
+    us-west-1 = module.app_cognito_pool_us_west_1.0.client_id
+    us-west-2 = module.app_cognito_pool_us_west_2.0.client_id
   })
 }
 
