@@ -232,6 +232,19 @@ module "appsync_us_west_1" {
   }
 }
 
+module "appsync_resolvers_us_west_1" {
+  count = contains(local.regions, "us-west-1") == true ? 1 : 0
+
+  api_id          = module.appsync_us_west_1.0.api_id
+  datasource_name = module.appsync_us_west_1.0.datasource_name
+
+  source = "./_modules/appsync-resolvers"
+
+  providers = {
+    aws = aws.north-california
+  }
+}
+
 #######################
 ## Appsync us-west-2 ##
 #######################
@@ -253,6 +266,19 @@ module "appsync_us_west_2" {
   userpool_id                        = module.app_cognito_pool_us_west_2.0.userpool_id
 
   source = "./_modules/appsync-api"
+
+  providers = {
+    aws = aws.oregon
+  }
+}
+
+module "appsync_resolvers_us_west_2" {
+  count = contains(local.regions, "us-west-1") == true ? 1 : 0
+
+  api_id          = module.appsync_us_west_1.0.api_id
+  datasource_name = module.appsync_us_west_1.0.datasource_name
+
+  source = "./_modules/appsync-resolvers"
 
   providers = {
     aws = aws.oregon
