@@ -1,5 +1,5 @@
 ###########################
-##  appsync--datasource  ##
+##  appsync-datasource  ##
 ###########################
 
 locals {
@@ -22,9 +22,18 @@ locals {
     }
   )
 
-  regional_appsync_endpoints = jsonencode({
+  appsync_api_ids = jsonencode({
+    us-east-1 = aws_appsync_graphql_api.echostream.id
+    us-east-2 = module.appsync_us_east_2.0.api_id
+    us-west-1 = module.appsync_us_west_1.0.api_id
+    us-west-2 = module.appsync_us_west_2.0.api_id
+  })
+
+  appsync_endpoints = jsonencode({
     us-east-1 = local.appsync_custom_url
     us-east-2 = format("https://%s/graphql", lookup(var.regional_apis["domains"], "us-east-2", ""))
+    us-west-1 = format("https://%s/graphql", lookup(var.regional_apis["domains"], "us-west-1", ""))
+    us-west-2 = format("https://%s/graphql", lookup(var.regional_apis["domains"], "us-west-2", ""))
   })
 
   app_user_pool_ids = jsonencode({
