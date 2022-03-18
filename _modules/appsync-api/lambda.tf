@@ -33,3 +33,9 @@ resource "aws_lambda_function" "appsync_datasource" {
   timeout           = 30
   tags              = var.tags
 }
+
+resource "aws_cloudwatch_log_group" "appsync_datasource" {
+  name              = "/aws/lambda/${var.name}-appsync-datasource"
+  retention_in_days = 7
+  tags              = var.tags
+}
