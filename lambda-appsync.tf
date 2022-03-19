@@ -356,7 +356,10 @@ data "aws_iam_policy_document" "appsync_datasource" {
     ]
 
     resources = [
-      aws_cognito_user_pool.echostream_api.arn
+      aws_cognito_user_pool.echostream_api.arn,
+      module.appsync_us_east_2.0.arn,
+      module.appsync_us_west_1.0.arn,
+      module.appsync_us_west_2.0.arn
     ]
 
     sid = "CognitoIDPAccess"
