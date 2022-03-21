@@ -18,6 +18,7 @@ resource "aws_sns_topic" "lambda_dead_letter" {
 resource "aws_kms_key" "lambda_environment_variables" {
   description         = "Lambda environment variable key for ${var.resource_prefix}"
   enable_key_rotation = true
+  tags                = local.tags
 }
 
 resource "aws_kms_alias" "lambda_environment_variables" {

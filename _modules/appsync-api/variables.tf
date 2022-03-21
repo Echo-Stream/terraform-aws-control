@@ -28,7 +28,6 @@ variable "dead_letter_arn" {
   type        = string
 }
 
-
 variable "environment_variables" {
   default = {
     DEFAULT = "default"
@@ -41,7 +40,6 @@ variable "function_s3_object_key" {
   description = "S3 object key for the lambda function"
   type        = string
 }
-
 
 variable "kms_key_arn" {
   description = "The arn of the KMS key used to encrypt the environment variables"
@@ -69,6 +67,7 @@ variable "tags" {
   description = "Key-value map of tags"
   type        = map(string)
 }
+
 variable "userpool_id" {
   description = "App user pool id that is used for authentication"
   type        = string
