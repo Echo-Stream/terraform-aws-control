@@ -95,6 +95,7 @@ data "aws_iam_policy_document" "appsync_datasource" {
       "s3:DeleteBucket",
       "s3:GetBucketNotification",
       "s3:PutAccelerateConfiguration",
+      "s3:PutBucketCors",
       "s3:PutBucketLogging",
       "s3:PutBucketNotification",
       "s3:PutBucketPolicy",

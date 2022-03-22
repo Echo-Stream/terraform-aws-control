@@ -122,8 +122,7 @@ data "aws_iam_policy_document" "managed_app_customer_policy" {
 
 resource "aws_iam_policy" "managed_app_customer_policy" {
   description = "IAM permissions required for manage apps ssm"
-
-  policy = data.aws_iam_policy_document.managed_app_customer_policy.json
+  policy      = data.aws_iam_policy_document.managed_app_customer_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "manage_apps_ecr_read_access" {
