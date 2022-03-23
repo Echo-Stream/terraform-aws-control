@@ -57,8 +57,8 @@ resource "aws_iam_role_policy_attachment" "echostream_appsync" {
 }
 
 resource "aws_appsync_domain_name" "echostream_appsync" {
-  domain_name     = var.api_domain_name
-  certificate_arn = var.api_acm_arn
+  domain_name     = lookup(var.regional_apis["domains"], var.region, "")
+  certificate_arn = lookup(var.regional_apis["acm_arns"], var.region, "")
 }
 
 resource "aws_appsync_domain_name_api_association" "echostream_appsync" {
