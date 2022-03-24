@@ -54,13 +54,13 @@ module "graph_table_dynamodb_trigger" {
     aws_iam_policy.graph_table_dynamodb_trigger.arn,
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["graph_table_dynamodb_trigger"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "3.0.18"
+  version       = "4.0.0"
 }
 
 resource "aws_lambda_event_source_mapping" "graph_table_dynamodb_trigger" {
@@ -122,8 +122,7 @@ data "aws_iam_policy_document" "managed_app_customer_policy" {
 
 resource "aws_iam_policy" "managed_app_customer_policy" {
   description = "IAM permissions required for manage apps ssm"
-
-  policy = data.aws_iam_policy_document.managed_app_customer_policy.json
+  policy      = data.aws_iam_policy_document.managed_app_customer_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "manage_apps_ecr_read_access" {
@@ -235,13 +234,13 @@ module "graph_table_tenant_stream_handler" {
     aws_iam_policy.graph_table_handler.arn,
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["graph_table_tenant_stream_handler"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 900
-  version       = "3.0.15"
+  version       = "4.0.0"
 }
 
 #######################################
@@ -288,13 +287,13 @@ module "graph_table_system_stream_handler" {
     aws_iam_policy.graph_table_system_stream_handler.arn,
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["graph_table_system_stream_handler"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 900
-  version       = "3.0.18"
+  version       = "4.0.0"
 }
 
 resource "aws_lambda_event_source_mapping" "graph_table_system_stream_handler" {

@@ -1,26 +1,20 @@
 resource "aws_appsync_resolver" "invoke_resolvers" {
-  depends_on = [
-    module.appsync_datasource_
-  ]
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
+  api_id            = var.api_id
+  data_source       = var.datasource_name
   field             = each.value["field"]
   for_each          = local.invoke_resolvers
-  request_template  = file("${path.module}/files/invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
+  request_template  = file("${path.module}/templates/invoke.vtl")
+  response_template = file("${path.module}/templates/response-template.vtl")
   type              = each.value["type"]
 }
 
 resource "aws_appsync_resolver" "batch_invoke_resolvers" {
-  depends_on = [
-    module.appsync_datasource_
-  ]
-  api_id            = aws_appsync_graphql_api.echostream.id
-  data_source       = module.appsync_datasource_.name
+  api_id            = var.api_id
+  data_source       = var.datasource_name
   field             = each.value["field"]
   for_each          = local.batch_invoke_resolvers
-  request_template  = file("${path.module}/files/batch-invoke.vtl")
-  response_template = file("${path.module}/files/response-template.vtl")
+  request_template  = file("${path.module}/templates/batch-invoke.vtl")
+  response_template = file("${path.module}/templates/response-template.vtl")
   type              = each.value["type"]
 }
 
@@ -653,6 +647,10 @@ locals {
       field = "tenant"
       type  = "ChangeEmitterNode"
     }
+    cross_account_app_appsync_endpoint = {
+      field = "appsyncEndpoint"
+      type  = "CrossAccountApp"
+    }
     cross_account_app_config = {
       field = "config"
       type  = "CrossAccountApp"
@@ -737,6 +735,10 @@ locals {
       field = "requirements"
       type  = "CrossTenantSendingNode"
     }
+    cross_tenant_sending_node_send_message_type = {
+      field = "sendMessageType"
+      type  = "CrossTenantSendingNode"
+    }
     cross_tenant_sending_node_tenant = {
       field = "tenant"
       type  = "CrossTenantSendingNode"
@@ -780,6 +782,10 @@ locals {
     edge_tenant = {
       field = "tenant"
       type  = "Edge"
+    }
+    external_app_appsync_endpoint = {
+      field = "appsyncEndpoint"
+      type  = "ExternalApp"
     }
     external_app_config = {
       field = "config"
@@ -875,6 +881,10 @@ locals {
     }
     managed_app_tenant = {
       field = "tenant"
+      type  = "ManagedApp"
+    }
+    managed_app_userdata = {
+      field = "userdata"
       type  = "ManagedApp"
     }
     app_change_receiver_node_app = {

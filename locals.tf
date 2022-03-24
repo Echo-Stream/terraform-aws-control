@@ -1,5 +1,5 @@
 locals {
-  appsync_custom_url = "https://${var.api_domain_name}/graphql"
+  appsync_custom_url = format("https://%s/graphql", lookup(var.regional_apis["domains"], var.region, ""))
   artifacts_sns_arn  = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}_${replace(var.echostream_version, ".", "-")}"
 
   artifacts = {
@@ -48,10 +48,12 @@ locals {
     UPDATE_CODE_ROLE                  = aws_iam_role.update_code.arn
     VALIDATOR_CODE                    = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
     VALIDATOR_ROLE                    = aws_iam_role.validator.arn
+    APPSYNC_API_IDS                   = local.appsync_api_ids
   }
 
   lambda_dead_letter_arn      = aws_sns_topic.lambda_dead_letter.arn
   lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn
+  lambda_runtime              = "python3.9"
 
   lambda_functions_keys = {
     app_api_cognito_pre_authentication = "${local.artifacts["lambda"]}/app-api-cognito-pre-authentication.zip"
@@ -67,10 +69,9 @@ locals {
     ui_cognito_pre_signup              = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
   }
 
-  log_bucket             = module.log_bucket.id
-  module_release_version = "0.0.3"                                    # this is used in workflows/publish.yml to release terraform module
-  regions                = concat(local.tenant_regions, [var.region]) # Tenant + Control Regions
-  tenant_regions         = split(",", var.tenant_regions)             # only Tenant regions
+  log_bucket     = module.log_bucket.id
+  regions        = concat(local.tenant_regions, [var.region]) # Tenant + Control Regions
+  tenant_regions = split(",", var.tenant_regions)             # only Tenant regions
 
   tags = merge({
     app         = "echostream"

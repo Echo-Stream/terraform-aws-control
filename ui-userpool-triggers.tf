@@ -1,3 +1,12 @@
+locals {
+  app_api_cognito_pre_authentication_environment_variables = {
+    CONTROL_REGION = local.current_region
+    DYNAMODB_TABLE = module.graph_table.name
+    ENVIRONMENT    = var.resource_prefix
+    TENANT_REGIONS = jsonencode(local.tenant_regions)
+  }
+}
+
 ####################################
 ##  ui-cognito-post-confirmation  ##
 ####################################
@@ -56,13 +65,13 @@ module "ui_cognito_post_confirmation" {
     aws_iam_policy.graph_ddb_read.arn
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["ui_cognito_post_confirmation"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.18"
+  version       = "4.0.0"
 }
 
 resource "aws_lambda_permission" "ui_cognito_post_confirmation" {
@@ -131,13 +140,13 @@ module "ui_cognito_pre_authentication" {
     aws_iam_policy.graph_ddb_read.arn
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["ui_cognito_pre_authentication"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.18"
+  version       = "4.0.0"
 }
 
 resource "aws_lambda_permission" "ui_cognito_pre_authentication" {
@@ -210,13 +219,13 @@ module "ui_cognito_pre_signup" {
     aws_iam_policy.graph_ddb_read.arn
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["ui_cognito_pre_signup"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.18"
+  version       = "4.0.0"
 }
 
 resource "aws_lambda_permission" "ui_cognito_pre_signup" {
@@ -227,18 +236,18 @@ resource "aws_lambda_permission" "ui_cognito_pre_signup" {
   source_arn    = aws_cognito_user_pool.echostream_ui.arn
 }
 
-##########################################
-##  app-api-cognito-pre-authentication  ##
-##########################################
-data "aws_iam_policy_document" "app_api_cognito_pre_authentication" {
+######################################
+##  api-cognito-pre-authentication  ##
+######################################
+data "aws_iam_policy_document" "api_cognito_pre_authentication" {
   statement {
     actions = [
       "dynamodb:Query",
     ]
 
     resources = [
-      module.graph_table.arn,
-      "${module.graph_table.arn}/*",
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-graph",
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-graph/*",
     ]
 
     sid = "TableAccess"
@@ -257,47 +266,40 @@ data "aws_iam_policy_document" "app_api_cognito_pre_authentication" {
   }
 }
 
-resource "aws_iam_policy" "app_api_cognito_pre_authentication" {
-  description = "IAM permissions required for app-api-cognito-pre-authentication lambda"
+resource "aws_iam_policy" "api_cognito_pre_authentication" {
+  description = "IAM permissions required for api-cognito-pre-authentication lambda"
 
-  name   = "${var.resource_prefix}-app-api-cognito-pre-authentication"
-  policy = data.aws_iam_policy_document.app_api_cognito_pre_authentication.json
+  name   = "${var.resource_prefix}-api-cognito-pre-authentication"
+  policy = data.aws_iam_policy_document.api_cognito_pre_authentication.json
 }
 
-module "app_api_cognito_pre_authentication" {
-  description = "Function that gets triggered when cognito user to be authenticated"
-
-  environment_variables = {
-    CONTROL_REGION = local.current_region
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.resource_prefix
-    TENANT_REGIONS = jsonencode(local.tenant_regions)
-  }
-
-  dead_letter_arn = local.lambda_dead_letter_arn
-  handler         = "function.handler"
-  kms_key_arn     = local.lambda_env_vars_kms_key_arn
-  memory_size     = 1536
-  name            = "${var.resource_prefix}-app-api-cognito-pre-authentication"
+module "api_cognito_pre_authentication" {
+  description           = "Function that gets triggered when api cognito user to be authenticated"
+  environment_variables = local.app_api_cognito_pre_authentication_environment_variables
+  dead_letter_arn       = local.lambda_dead_letter_arn
+  handler               = "function.handler"
+  kms_key_arn           = local.lambda_env_vars_kms_key_arn
+  memory_size           = 1536
+  name                  = "${var.resource_prefix}-api-cognito-pre-authentication"
 
   policy_arns = [
-    aws_iam_policy.app_api_cognito_pre_authentication.arn,
+    aws_iam_policy.api_cognito_pre_authentication.arn,
     aws_iam_policy.graph_ddb_read.arn
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["app_api_cognito_pre_authentication"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "3.0.18"
+  version       = "4.0.0"
 }
 
-resource "aws_lambda_permission" "app_api_cognito_pre_authentication" {
+resource "aws_lambda_permission" "api_cognito_pre_authentication" {
   statement_id  = "AllowExecutionFromCognito"
   action        = "lambda:InvokeFunction"
-  function_name = module.app_api_cognito_pre_authentication.name
+  function_name = module.api_cognito_pre_authentication.name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.echostream_api.arn
 }

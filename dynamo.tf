@@ -111,6 +111,15 @@ module "graph_table" {
   ttl_attribute_name     = "ttl"
   stream_view_type       = "NEW_AND_OLD_IMAGES"
 
+  replica = [
+    # do not create a replica if control-region and tenant-region are same
+    for region in setsubtract(local.tenant_regions, [local.current_region]) :
+    {
+      region_name = region
+    }
+  ]
+
+
   source  = "QuiNovas/dynamodb-table/aws"
-  version = "3.0.7"
+  version = "3.0.8"
 }

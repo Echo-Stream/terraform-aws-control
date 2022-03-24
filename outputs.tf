@@ -24,6 +24,13 @@ output "appsync_custom_url" {
   description = "Custom API URL of the EchoStream"
   value       = local.appsync_custom_url
 }
+
+
+output "appsync_domain_name" {
+  description = "The Cloudfront Domain name that AppSync provides"
+  value       = aws_appsync_domain_name.echostream_appsync.domain_name
+}
+
 output "appsync_id" {
   description = "Main API ID of the EchoStream"
   value       = aws_appsync_graphql_api.echostream.id

@@ -136,13 +136,13 @@ module "deployment_handler" {
     aws_iam_policy.graph_ddb_write.arn,
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["deployment_handler"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 600
-  version       = "3.0.18"
+  version       = "4.0.0"
 }
 
 resource "aws_sns_topic" "ci_cd_errors" {
@@ -238,13 +238,13 @@ module "rebuild_notifications" {
     aws_iam_policy.rebuild_notifications.arn,
   ]
 
-  runtime       = "python3.9"
+  runtime       = local.lambda_runtime
   s3_bucket     = local.artifacts_bucket
   s3_object_key = local.lambda_functions_keys["rebuild_notifications"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 600
-  version       = "3.0.18"
+  version       = "4.0.0"
 }
 
 resource "aws_sqs_queue" "rebuild_notifications" {

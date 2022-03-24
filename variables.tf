@@ -3,16 +3,6 @@ variable "allowed_account_id" {
   type        = string
 }
 
-variable "api_acm_arn" {
-  description = "ACM certificate arn for the domain being used for environment - api"
-  type        = string
-}
-
-variable "api_domain_name" {
-  description = "Api Domain name of the environment used for custom domain of Appsync API"
-  type        = string
-}
-
 variable "app_acm_arn" {
   description = "ACM certificate arn for the domain being used for environment - application"
   type        = string
@@ -46,6 +36,12 @@ variable "echostream_version" {
 variable "region" {
   description = "AWS Region for the environment"
   type        = string
+}
+
+variable "regional_apis" {
+  description = "A map with regional api acm arns and domain names"
+  type        = any
+  default     = {}
 }
 
 variable "resource_prefix" {

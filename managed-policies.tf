@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "graph_ddb_read" {
     ]
 
     resources = [
-      module.graph_table.arn,
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-graph",
     ]
 
     sid = "TableAccessRead"
@@ -21,8 +21,8 @@ data "aws_iam_policy_document" "graph_ddb_read" {
     ]
 
     resources = [
-      module.graph_table.arn,
-      "${module.graph_table.arn}/index/*"
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-graph",
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-graph/index/*"
     ]
 
     sid = "TableAccessQuery"
@@ -31,9 +31,8 @@ data "aws_iam_policy_document" "graph_ddb_read" {
 
 resource "aws_iam_policy" "graph_ddb_read" {
   description = "IAM permissions to read graph-table"
-
-  name   = "${var.resource_prefix}-graph-table-read"
-  policy = data.aws_iam_policy_document.graph_ddb_read.json
+  name        = "${var.resource_prefix}-graph-table-read"
+  policy      = data.aws_iam_policy_document.graph_ddb_read.json
 }
 
 ######################################
@@ -73,6 +72,7 @@ data "aws_iam_policy_document" "artifacts_bucket_read" {
     resources = [
       "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}",
       "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-1",
       "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2",
     ]
 
@@ -87,6 +87,7 @@ data "aws_iam_policy_document" "artifacts_bucket_read" {
     resources = [
       "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${var.echostream_version}/*",
       "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${var.echostream_version}/*",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-1/${var.echostream_version}/*",
       "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${var.echostream_version}/*",
 
     ]
