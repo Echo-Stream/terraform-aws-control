@@ -336,9 +336,9 @@ resource "aws_sfn_state_machine" "rebuild_notifications" {
 }
 
 ## Alert if Any execution of the rebuild notifications state machine fails
-resource "aws_cloudwatch_event_rule" "rebuild_notifications_cloudwatch_event" {
-  name        = "capture-aws-sign-in"
-  description = "Capture each AWS Console Sign In"
+resource "aws_cloudwatch_event_rule" "rebuild_notifications_alert" {
+  name        = "${var.resource_prefix}-rebuild-notifications-alert"
+  description = "Notify by SNS if Rebuild Notifications Step function fails"
 
   event_pattern = <<EOF
 {
@@ -354,27 +354,27 @@ EOF
   tags = local.tags
 }
 
-resource "aws_cloudwatch_event_target" "rebuild_notifications_cloudwatch_event" {
-  rule      = aws_cloudwatch_event_rule.rebuild_notifications_cloudwatch_event.name
+resource "aws_cloudwatch_event_target" "rebuild_notifications_alert" {
+  rule      = aws_cloudwatch_event_rule.rebuild_notifications_alert.name
   target_id = "SendToCICDErrorsTopic"
   arn       = aws_sns_topic.ci_cd_errors.arn
 }
 
-resource "aws_sns_topic_policy" "rebuild_notifications_cloudwatch_event" {
-  arn    = aws_sns_topic.ci_cd_errors.arn
-  policy = data.aws_iam_policy_document.rebuild_notifications_cloudwatch_event.json
-}
+# resource "aws_sns_topic_policy" "rebuild_notifications_alert" {
+#   arn    = aws_sns_topic.ci_cd_errors.arn
+#   policy = data.aws_iam_policy_document.rebuild_notifications_alert.json
+# }
 
-data "aws_iam_policy_document" "rebuild_notifications_cloudwatch_event" {
-  statement {
-    effect  = "Allow"
-    actions = ["SNS:Publish"]
+# data "aws_iam_policy_document" "rebuild_notifications_alert" {
+#   statement {
+#     effect  = "Allow"
+#     actions = ["SNS:Publish"]
 
-    principals {
-      type        = "Service"
-      identifiers = ["events.amazonaws.com"]
-    }
+#     principals {
+#       type        = "Service"
+#       identifiers = ["events.amazonaws.com"]
+#     }
 
-    resources = [aws_sns_topic.ci_cd_errors.arn]
-  }
-}
+#     resources = [aws_sns_topic.ci_cd_errors.arn]
+#   }
+# }
