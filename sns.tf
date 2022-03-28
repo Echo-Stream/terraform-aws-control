@@ -18,6 +18,14 @@ resource "aws_sns_topic" "ci_cd_errors" {
   tags         = local.tags
 }
 
+module "ci_cd_errors_subscription" {
+  install_aws_cli = false
+  topic_arn       = aws_sns_topic.ci_cd_errors.arn
+  email_address   = var.ses_email_address
+  source          = "QuiNovas/sns-email-subscription/aws"
+  version         = "0.0.2"
+}
+
 resource "aws_sns_topic_policy" "ci_cd_errors" {
   arn    = aws_sns_topic.ci_cd_errors.arn
   policy = data.aws_iam_policy_document.ci_cd_errors.json
