@@ -11,3 +11,10 @@ module "managed_app_cloud_init_subscription" {
   source          = "QuiNovas/sns-email-subscription/aws"
   version         = "0.0.2"
 }
+
+
+resource "aws_sns_topic" "ci_cd_errors" {
+  name         = "${var.resource_prefix}-ci-cd-errors"
+  display_name = "${var.resource_prefix} CI/CD Notifications"
+  tags         = local.tags
+}

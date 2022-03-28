@@ -145,12 +145,6 @@ module "deployment_handler" {
   version       = "4.0.0"
 }
 
-resource "aws_sns_topic" "ci_cd_errors" {
-  name         = "${var.resource_prefix}-ci-cd-errors"
-  display_name = "${var.resource_prefix} CI/CD Notifications"
-  tags         = local.tags
-}
-
 resource "aws_lambda_permission" "deployment_handler" {
   statement_id  = "AllowExecutionFromSNS"
   action        = "lambda:InvokeFunction"
@@ -368,7 +362,7 @@ resource "aws_cloudwatch_event_target" "rebuild_notifications_cloudwatch_event" 
 
 resource "aws_sns_topic_policy" "rebuild_notifications_cloudwatch_event" {
   arn    = aws_sns_topic.ci_cd_errors.arn
-  policy = data.aws_iam_policy_document.sns_topic_policy.json
+  policy = data.aws_iam_policy_document.rebuild_notifications_cloudwatch_event.json
 }
 
 data "aws_iam_policy_document" "rebuild_notifications_cloudwatch_event" {
