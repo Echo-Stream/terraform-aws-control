@@ -25,6 +25,7 @@ resource "aws_sns_topic_policy" "ci_cd_errors" {
 
 data "aws_iam_policy_document" "ci_cd_errors" {
   statement {
+    sid     = "AWSEvents_stepfunctionFail"
     effect  = "Allow"
     actions = ["SNS:Publish"]
 
@@ -37,6 +38,7 @@ data "aws_iam_policy_document" "ci_cd_errors" {
   }
 
   statement {
+    sid     = "__default_statement_ID"
     effect  = "Allow"
     actions = ["SNS:Publish"]
 
