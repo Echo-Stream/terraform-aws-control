@@ -340,3 +340,47 @@ resource "aws_sfn_state_machine" "rebuild_notifications" {
   }
   tags = local.tags
 }
+
+## Alert if Any execution of the rebuild notifications state machine fails
+resource "aws_cloudwatch_event_rule" "rebuild_notifications_cloudwatch_event" {
+  name        = "capture-aws-sign-in"
+  description = "Capture each AWS Console Sign In"
+
+  event_pattern = <<EOF
+{
+  "source": ["aws.states"],
+  "detail-type": ["Step Functions Execution Status Change"],
+  "detail": {
+    "status": ["FAILED"],
+    "stateMachineArn": ["arn:aws:states:${local.current_region}:${local.current_account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"]
+  }
+}
+EOF
+
+  tags = local.tags
+}
+
+resource "aws_cloudwatch_event_target" "rebuild_notifications_cloudwatch_event" {
+  rule      = aws_cloudwatch_event_rule.rebuild_notifications_cloudwatch_event.name
+  target_id = "SendToCICDErrorsTopic"
+  arn       = aws_sns_topic.ci_cd_errors.arn
+}
+
+resource "aws_sns_topic_policy" "rebuild_notifications_cloudwatch_event" {
+  arn    = aws_sns_topic.ci_cd_errors.arn
+  policy = data.aws_iam_policy_document.sns_topic_policy.json
+}
+
+data "aws_iam_policy_document" "rebuild_notifications_cloudwatch_event" {
+  statement {
+    effect  = "Allow"
+    actions = ["SNS:Publish"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["events.amazonaws.com"]
+    }
+
+    resources = [aws_sns_topic.ci_cd_errors.arn]
+  }
+}
