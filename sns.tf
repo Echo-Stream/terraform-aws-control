@@ -7,6 +7,12 @@ resource "aws_sns_topic" "managed_app_cloud_init" {
   tags = local.tags
 }
 
+resource "aws_sns_topic_subscription" "managed_app_cloud_init" {
+  topic_arn = aws_sns_topic.managed_app_cloud_init.arn
+  protocol  = "sqs"
+  endpoint  = aws_sqs_queue.managed_app_cloud_init.arn
+}
+
 # module "managed_app_cloud_init_subscription" {
 #   install_aws_cli = false
 #   topic_arn       = aws_sns_topic.managed_app_cloud_init.arn
