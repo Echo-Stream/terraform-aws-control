@@ -1,7 +1,10 @@
 resource "aws_sns_topic" "managed_app_cloud_init" {
-  name         = "${var.resource_prefix}-managed-app-cloud-init"
-  display_name = "Managed App Cloud Init topic"
-  tags         = local.tags
+  fifo_topic                  = true
+  content_based_deduplication = true
+  display_name                = "Managed App Cloud Init topic"
+  name                        = "${var.resource_prefix}-managed-app-cloud-init"
+
+  tags = local.tags
 }
 
 module "managed_app_cloud_init_subscription" {
