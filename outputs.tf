@@ -1,3 +1,9 @@
+## General
+output "log_bucket_id" {
+  description = "The ID of the control region bucket"
+  value       = module.log_bucket.id
+}
+
 ## Cloudfront
 
 output "api_user_pool_arn" {
