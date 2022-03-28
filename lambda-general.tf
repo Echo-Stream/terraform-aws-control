@@ -35,7 +35,7 @@ resource "aws_iam_policy" "log_retention" {
 }
 
 module "log_retention" {
-  description     = "set log group retention to 7 days"
+  description     = "Set log group retention to 7 days"
   dead_letter_arn = local.lambda_dead_letter_arn
   environment_variables = {
     ENVIRONMENT = var.resource_prefix
@@ -61,7 +61,7 @@ module "log_retention" {
 
 resource "aws_cloudwatch_event_rule" "log_retention" {
   name                = "${var.resource_prefix}-log-retention"
-  description         = "set log group retention to 7 days daily"
+  description         = "Set log group retention to 7 days daily"
   schedule_expression = "cron(0 10 * * ? *)"
 }
 

@@ -12,9 +12,47 @@ module "managed_app_cloud_init_subscription" {
   version         = "0.0.2"
 }
 
-
 resource "aws_sns_topic" "ci_cd_errors" {
   name         = "${var.resource_prefix}-ci-cd-errors"
   display_name = "${var.resource_prefix} CI/CD Notifications"
   tags         = local.tags
+}
+
+resource "aws_sns_topic_policy" "ci_cd_errors" {
+  arn    = aws_sns_topic.ci_cd_errors.arn
+  policy = data.aws_iam_policy_document.ci_cd_errors.json
+}
+
+data "aws_iam_policy_document" "ci_cd_errors" {
+  statement {
+    effect  = "Allow"
+    actions = ["SNS:Publish"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["events.amazonaws.com"]
+    }
+
+    resources = [aws_sns_topic.ci_cd_errors.arn]
+  }
+
+  statement {
+    effect  = "Allow"
+    actions = ["SNS:Publish"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    resources = [aws_sns_topic.ci_cd_errors.arn]
+
+    condition {
+      test = "StringEquals"
+      values = [
+        var.allowed_account_id
+      ]
+      variable = "AWS:SourceOwner"
+    }
+  }
 }
