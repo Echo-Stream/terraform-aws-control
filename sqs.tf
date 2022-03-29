@@ -16,6 +16,7 @@ resource "aws_sqs_queue" "stream_dead_letter_queue" {
 
 resource "aws_sqs_queue" "managed_app_cloud_init" {
   name                        = "${var.resource_prefix}-managed-app-cloud-init.fifo"
+  kms_master_key_id           = "alias/aws/sqs"
   content_based_deduplication = "true"
   fifo_queue                  = true
   tags                        = local.tags

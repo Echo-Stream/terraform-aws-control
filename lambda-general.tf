@@ -78,3 +78,72 @@ resource "aws_lambda_permission" "log_retention" {
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.log_retention.arn
 }
+
+###############################
+##  managed-app-cloud-init   ##
+###############################
+data "aws_iam_policy_document" "managed_app_cloud_init" {
+  statement {
+    actions = [
+      "logs:DescribeLogGroups"
+    ]
+
+    resources = [
+      "arn:aws:logs:${var.region}:${var.allowed_account_id}:*",
+    ]
+
+    sid = "ListLogGroups"
+  }
+
+  statement {
+    actions = [
+      "logs:PutRetentionPolicy"
+    ]
+
+    resources = [
+      "arn:aws:logs:${var.region}:${var.allowed_account_id}:log-group:*",
+    ]
+
+    sid = "SetRetention"
+  }
+}
+
+resource "aws_iam_policy" "managed_app_cloud_init" {
+  description = "IAM permissions required for managed-app-cloud-init lambda"
+  name        = "${var.resource_prefix}-managed-app-cloud-init"
+  policy      = data.aws_iam_policy_document.managed_app_cloud_init.json
+}
+
+module "managed_app_cloud_init" {
+  description     = "Set log group retention to 7 days"
+  dead_letter_arn = local.lambda_dead_letter_arn
+
+  environment_variables = {
+    ENVIRONMENT = var.resource_prefix
+  }
+
+  handler     = "function.handler"
+  kms_key_arn = local.lambda_env_vars_kms_key_arn
+  memory_size = 128
+  name        = "${var.resource_prefix}-managed-app-cloud-init"
+
+  policy_arns = [
+    aws_iam_policy.managed_app_cloud_init.arn,
+  ]
+
+  runtime       = local.lambda_runtime
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["managed_app_cloud_init"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 60
+  version       = "4.0.0"
+}
+
+# resource "aws_lambda_permission" "managed_app_cloud_init" {
+#   statement_id  = "AllowExecutionFromCloudWatch"
+#   action        = "lambda:InvokeFunction"
+#   function_name = module.managed_app_cloud_init.name
+#   principal     = "events.amazonaws.com"
+#   source_arn    = aws_cloudwatch_event_rule.managed_app_cloud_init.arn
+# }
