@@ -143,6 +143,6 @@ module "managed_app_cloud_init" {
 }
 
 resource "aws_lambda_event_source_mapping" "managed_app_cloud_init" {
-  event_source_arn = aws_sqs_queue.sqs_queue_test.arn
+  event_source_arn = aws_sqs_queue.managed_app_cloud_init.arn
   function_name    = module.managed_app_cloud_init.name
 }
