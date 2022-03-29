@@ -24,10 +24,11 @@ locals {
   # Common environment variables for lambdas that use echo-tools library
   common_lambda_environment_variables = {
     API_ID                            = aws_appsync_graphql_api.echostream.id
+    APPSYNC_API_IDS                   = local.appsync_api_ids
     APPSYNC_ENDPOINT                  = local.appsync_custom_url
     ARTIFACTS_BUCKET                  = local.artifacts_bucket_prefix
-    CLOUDFRONT_DISTRIBUTION_ID_WEBAPP = aws_cloudfront_distribution.webapp.id
     CLOUDFRONT_DISTRIBUTION_ID_DOCS   = aws_cloudfront_distribution.docs.id
+    CLOUDFRONT_DISTRIBUTION_ID_WEBAPP = aws_cloudfront_distribution.webapp.id
     CONTROL_REGION                    = local.current_region
     DYNAMODB_TABLE                    = module.graph_table.name
     ECHOSTREAM_VERSION                = var.echostream_version
@@ -36,6 +37,7 @@ locals {
     INTERNAL_NODE_CODE                = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
     INTERNAL_NODE_ROLE                = aws_iam_role.internal_node.arn
     INVITE_USER_SES_TEMPLATE          = aws_ses_template.invite_user.name
+    MANAGED_APP_CLOUD_INIT_QUEUE      = aws_sqs_queue.rebuild_notifications.managed_app_cloud_init
     NOTIFY_USER_SES_TEMPLATE          = aws_ses_template.notify_user.name
     REBUILD_NOTIFICATION_QUEUE        = aws_sqs_queue.rebuild_notifications.url
     REGION                            = var.region
@@ -48,7 +50,6 @@ locals {
     UPDATE_CODE_ROLE                  = aws_iam_role.update_code.arn
     VALIDATOR_CODE                    = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
     VALIDATOR_ROLE                    = aws_iam_role.validator.arn
-    APPSYNC_API_IDS                   = local.appsync_api_ids
   }
 
   lambda_dead_letter_arn      = aws_sns_topic.lambda_dead_letter.arn
