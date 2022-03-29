@@ -37,7 +37,7 @@ locals {
     INTERNAL_NODE_CODE                = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
     INTERNAL_NODE_ROLE                = aws_iam_role.internal_node.arn
     INVITE_USER_SES_TEMPLATE          = aws_ses_template.invite_user.name
-    MANAGED_APP_CLOUD_INIT_QUEUE      = aws_sqs_queue.rebuild_notifications.managed_app_cloud_init
+    MANAGED_APP_CLOUD_INIT_QUEUE      = aws_sqs_queue.rebuild_notifications.managed_app_cloud_init.url
     NOTIFY_USER_SES_TEMPLATE          = aws_ses_template.notify_user.name
     REBUILD_NOTIFICATION_QUEUE        = aws_sqs_queue.rebuild_notifications.url
     REGION                            = var.region
