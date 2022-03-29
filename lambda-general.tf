@@ -96,15 +96,17 @@ data "aws_iam_policy_document" "managed_app_cloud_init" {
   }
 
   statement {
+    effect = "Allow"
+
     actions = [
-      "logs:PutRetentionPolicy"
+      "sqs:ReceiveMessage*",
+      "sqs:DeleteMessage*",
+      "sqs:GetQueueAttributes"
     ]
 
-    resources = [
-      "arn:aws:logs:${var.region}:${var.allowed_account_id}:log-group:*",
-    ]
+    resources = [aws_sqs_queue.managed_app_cloud_init.arn]
 
-    sid = "SetRetention"
+    sid = "ManagedAppCloudInitQueuesAccess"
   }
 }
 
@@ -140,10 +142,7 @@ module "managed_app_cloud_init" {
   version       = "4.0.0"
 }
 
-# resource "aws_lambda_permission" "managed_app_cloud_init" {
-#   statement_id  = "AllowExecutionFromCloudWatch"
-#   action        = "lambda:InvokeFunction"
-#   function_name = module.managed_app_cloud_init.name
-#   principal     = "events.amazonaws.com"
-#   source_arn    = aws_cloudwatch_event_rule.managed_app_cloud_init.arn
-# }
+resource "aws_lambda_event_source_mapping" "managed_app_cloud_init" {
+  event_source_arn = aws_sqs_queue.sqs_queue_test.arn
+  function_name    = module.managed_app_cloud_init.name
+}
