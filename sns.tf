@@ -1,17 +1,17 @@
-resource "aws_sns_topic" "managed_app_cloud_init" {
-  fifo_topic                  = true
-  content_based_deduplication = true
-  display_name                = "Managed App Cloud Init topic"
-  name                        = "${var.resource_prefix}-managed-app-cloud-init.fifo"
+# resource "aws_sns_topic" "managed_app_cloud_init" {
+#   fifo_topic                  = true
+#   content_based_deduplication = true
+#   display_name                = "Managed App Cloud Init topic"
+#   name                        = "${var.resource_prefix}-managed-app-cloud-init.fifo"
 
-  tags = local.tags
-}
+#   tags = local.tags
+# }
 
-resource "aws_sns_topic_subscription" "managed_app_cloud_init" {
-  topic_arn = aws_sns_topic.managed_app_cloud_init.arn
-  protocol  = "sqs"
-  endpoint  = aws_sqs_queue.managed_app_cloud_init.arn
-}
+# resource "aws_sns_topic_subscription" "managed_app_cloud_init" {
+#   topic_arn = aws_sns_topic.managed_app_cloud_init.arn
+#   protocol  = "sqs"
+#   endpoint  = aws_sqs_queue.managed_app_cloud_init.arn
+# }
 
 resource "aws_sns_topic" "ci_cd_errors" {
   name         = "${var.resource_prefix}-ci-cd-errors"

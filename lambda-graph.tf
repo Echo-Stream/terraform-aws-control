@@ -96,12 +96,14 @@ data "aws_iam_policy_document" "managed_app_customer_policy" {
     effect = "Allow"
 
     actions = [
-      "sns:Publish"
+      "sqs:SendMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:GetQueueUrl",
     ]
 
-    resources = [aws_sns_topic.managed_app_cloud_init.arn]
+    resources = [aws_sqs_queue.managed_app_cloud_init.arn]
 
-    sid = "PublishToSNS"
+    sid = "SendMessageToManagedAppCloudInitQueue"
   }
 
   statement {

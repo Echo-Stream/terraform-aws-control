@@ -5,7 +5,7 @@ resource "aws_sqs_queue" "system_sqs_queue" {
   name                        = "${var.resource_prefix}-system-db-stream.fifo"
   visibility_timeout_seconds  = 900
 
-  tags                        = local.tags
+  tags = local.tags
 }
 
 resource "aws_sqs_queue" "stream_dead_letter_queue" {
@@ -13,7 +13,7 @@ resource "aws_sqs_queue" "stream_dead_letter_queue" {
   fifo_queue                  = true
   name                        = "${var.resource_prefix}-stream-dead-letter.fifo"
 
-  tags                        = local.tags
+  tags = local.tags
 }
 
 resource "aws_sqs_queue" "managed_app_cloud_init" {
@@ -23,5 +23,5 @@ resource "aws_sqs_queue" "managed_app_cloud_init" {
   name                        = "${var.resource_prefix}-managed-app-cloud-init.fifo"
   visibility_timeout_seconds  = 900
 
-  tags                        = local.tags
+  tags = local.tags
 }
