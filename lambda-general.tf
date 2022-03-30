@@ -126,8 +126,9 @@ module "managed_app_cloud_init" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    CONTROL_REGION = local.current_region
-    ENVIRONMENT    = var.resource_prefix
+    CONTROL_REGION        = local.current_region
+    COST_AND_USAGE_BUCKET = aws_s3_bucket.cost_and_usage.id
+    ENVIRONMENT           = var.resource_prefix
   }
 
   handler     = "function.handler"
