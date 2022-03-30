@@ -6,13 +6,14 @@ resource "aws_glue_catalog_database" "billing" {
 resource "aws_glue_catalog_table" "managed_instances" {
   name          = "${var.resource_prefix}-managed-instances"
   database_name = aws_glue_catalog_database.billing.name
-  description = "Managed Instances"
+  description   = "Managed Instances"
 
   table_type = "EXTERNAL_TABLE"
 
   parameters = {
-    EXTERNAL              = "TRUE"
+    "classification"      = "parquet"
     "parquet.compression" = "SNAPPY"
+    EXTERNAL              = "TRUE"
   }
 
   storage_descriptor {
