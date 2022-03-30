@@ -83,16 +83,21 @@ resource "aws_lambda_permission" "log_retention" {
 ##  managed-app-cloud-init   ##
 ###############################
 data "aws_iam_policy_document" "managed_app_cloud_init" {
+
   statement {
     actions = [
-      "logs:DescribeLogGroups"
+      "s3:AbortMultipartUpload",
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:PutObject",
     ]
 
     resources = [
-      "arn:aws:logs:${var.region}:${var.allowed_account_id}:*",
+      aws_s3_bucket.cost_and_usage.arn,
+      "${aws_s3_bucket.cost_and_usage.arn}/*"
     ]
 
-    sid = "ListLogGroups"
+    sid = "AllowReadAndWriteToCostAndUsageBucket"
   }
 
   statement {
@@ -121,7 +126,8 @@ module "managed_app_cloud_init" {
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
-    ENVIRONMENT = var.resource_prefix
+    CONTROL_REGION = local.current_region
+    ENVIRONMENT    = var.resource_prefix
   }
 
   handler     = "function.handler"
