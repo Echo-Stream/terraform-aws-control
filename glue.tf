@@ -1,5 +1,5 @@
 resource "aws_glue_catalog_database" "billing" {
-  description = "Primary database for echostream billing. It has Cost/Usage, ManagedInstances tables"
+  description = "Primary database for echostream billing. Cost/Usage, ManagedInstances tables"
   name        = "${var.resource_prefix}-billing"
 }
 
@@ -43,7 +43,7 @@ resource "aws_glue_catalog_table" "managed_instances" {
     }
 
     columns {
-      name    = "appId"
+      name    = "appid"
       type    = "string"
       comment = "Managed App ID"
     }

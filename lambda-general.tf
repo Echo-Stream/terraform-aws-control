@@ -122,7 +122,7 @@ resource "aws_iam_policy" "managed_app_cloud_init" {
 }
 
 module "managed_app_cloud_init" {
-  description     = "It updates the billing DB with managed app instance details and notifies Tenant owners by an email"
+  description     = "Updates Glue db with managed app instance details and notifies Tenant owners by an email"
   dead_letter_arn = local.lambda_dead_letter_arn
 
   environment_variables = {
