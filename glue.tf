@@ -56,8 +56,8 @@ resource "aws_glue_catalog_table" "managed_instances" {
 
     columns {
       name    = "timestamp"
-      type    = "timestamp"
-      comment = "The timestampe when the record is written"
+      type    = "string"
+      comment = "The timestamp when the record is written"
     }
   }
 }
