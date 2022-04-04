@@ -923,14 +923,6 @@ locals {
       field = "tenant"
       type  = "AppChangeRouterNode"
     }
-    managed_instance_last_ping_date_time = {
-      field = "lastPingDateTime"
-      type  = "ManagedInstance"
-    }
-    managed_instance_ping_status = {
-      field = "pingStatus"
-      type  = "ManagedInstance"
-    }
     managed_node_app = {
       field = "app"
       type  = "ManagedNode"
