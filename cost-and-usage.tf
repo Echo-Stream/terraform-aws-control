@@ -99,7 +99,7 @@ resource "aws_s3_bucket_policy" "cost_and_usage" {
 
 ## CUR Report Definition ##
 resource "aws_cur_report_definition" "cost_and_usage" {
-  additional_artifacts       = ["REDSHIFT", "QUICKSIGHT"]
+  #additional_artifacts       = ["REDSHIFT", "QUICKSIGHT"]
   additional_schema_elements = ["RESOURCES"]
   compression                = "Parquet"
   format                     = "Parquet"
