@@ -119,6 +119,7 @@ resource "aws_cur_report_definition" "cost_and_usage_test" {
   report_name                = "CostAndUsage_test"
   report_versioning          = "OVERWRITE_REPORT"
   s3_bucket                  = aws_s3_bucket.cost_and_usage.id
+  s3_prefix                  = "test"
   s3_region                  = local.current_region
   time_unit                  = "HOURLY"
 }
