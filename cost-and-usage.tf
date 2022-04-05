@@ -124,3 +124,17 @@ resource "aws_cur_report_definition" "cost_and_usage_test" {
   s3_region                  = local.current_region
   time_unit                  = "HOURLY"
 }
+
+resource "aws_cur_report_definition" "cost_and_usage_test_2" {
+  additional_artifacts       = ["ATHENA"]
+  additional_schema_elements = ["RESOURCES"]
+  compression                = "Parquet"
+  format                     = "Parquet"
+  refresh_closed_reports     = true
+  report_name                = "CostAndUsage_test_2"
+  report_versioning          = "OVERWRITE_REPORT"
+  s3_bucket                  = aws_s3_bucket.cost_and_usage.id
+  s3_prefix                  = ""
+  s3_region                  = local.current_region
+  time_unit                  = "HOURLY"
+}

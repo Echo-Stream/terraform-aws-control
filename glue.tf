@@ -112,7 +112,7 @@ resource "aws_iam_role_policy" "cost_and_usage_crawler" {
 resource "aws_glue_crawler" "cost_and_usage_crawler_test" {
   database_name = aws_glue_catalog_database.billing.name
   description   = "Test crawler"
-  name          = "${var.resource_prefix}-cost-and-usage-crawler"
+  name          = "${var.resource_prefix}-cost-and-usage-crawler-test"
   role          = aws_iam_role.cost_and_usage_crawler.arn
   tags          = local.tags
 
