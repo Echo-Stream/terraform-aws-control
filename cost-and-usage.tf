@@ -105,9 +105,10 @@ resource "aws_cur_report_definition" "cost_and_usage" {
   refresh_closed_reports     = true
   report_name                = "CostAndUsage"
   report_versioning          = "OVERWRITE_REPORT"
-  s3_bucket                  = aws_s3_bucket.cost_and_usage.id
-  s3_region                  = local.current_region
-  time_unit                  = "DAILY"
+
+  s3_bucket = aws_s3_bucket.cost_and_usage.id
+  s3_region = local.current_region
+  time_unit = "DAILY"
 }
 
 resource "aws_cur_report_definition" "cost_and_usage_test" {

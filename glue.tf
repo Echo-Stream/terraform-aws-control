@@ -94,15 +94,29 @@ data "aws_iam_policy_document" "cost_and_usage_crawler" {
     ]
 
     resources = [
-      "${aws_s3_bucket.cost_and_usage.arn}//CostAndUsage/*",
+      "${aws_s3_bucket.cost_and_usage.arn}/*", # change this later, left at root for testing
     ]
 
     sid = "MinimumPermissionsToCrawl"
   }
 }
 
+
 resource "aws_iam_role_policy" "cost_and_usage_crawler" {
   name   = "${var.resource_prefix}-cost-and-usage-crawler"
   policy = data.aws_iam_policy_document.cost_and_usage_crawler.json
   role   = aws_iam_role.cost_and_usage_crawler.id
+}
+
+## test crawler
+resource "aws_glue_crawler" "cost_and_usage_crawler_test" {
+  database_name = aws_glue_catalog_database.billing.name
+  description   = "Test crawler"
+  name          = "${var.resource_prefix}-cost-and-usage-crawler"
+  role          = aws_iam_role.cost_and_usage_crawler.arn
+  tags          = local.tags
+
+  s3_target {
+    path = "s3://${aws_s3_bucket.cost_and_usage.id}/test/CostAndUsage_test/"
+  }
 }
