@@ -105,7 +105,7 @@ resource "aws_cur_report_definition" "cost_and_usage" {
   refresh_closed_reports     = true
   report_name                = "CostAndUsage"
   report_versioning          = "OVERWRITE_REPORT"
-  # s3_prefix                  = ""
+  s3_prefix                  = "reports"
   # Can't leave S3 prefix empty if Definition is integrated with Athena
   # If s3_prefix is empty, AWS is making ReportPathPrefix = /<report_name>
   # so final reports are put under /<report_name>/<report_name>
@@ -127,20 +127,6 @@ resource "aws_cur_report_definition" "cost_and_usage_test" {
   report_versioning          = "OVERWRITE_REPORT"
   s3_bucket                  = aws_s3_bucket.cost_and_usage.id
   s3_prefix                  = "test"
-  s3_region                  = local.current_region
-  time_unit                  = "HOURLY"
-}
-
-resource "aws_cur_report_definition" "cost_and_usage_test_2" {
-  #additional_artifacts       = ["ATHENA"]
-  additional_schema_elements = ["RESOURCES"]
-  compression                = "Parquet"
-  format                     = "Parquet"
-  refresh_closed_reports     = true
-  report_name                = "CostAndUsage_test_2"
-  report_versioning          = "OVERWRITE_REPORT"
-  s3_bucket                  = aws_s3_bucket.cost_and_usage.id
-  #s3_prefix                  = "echo"
   s3_region                  = local.current_region
   time_unit                  = "HOURLY"
 }
