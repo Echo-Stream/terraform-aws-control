@@ -63,6 +63,21 @@ resource "aws_glue_catalog_table" "managed_instances" {
 }
 
 resource "aws_glue_crawler" "cost_and_usage_crawler" {
+  configuration = <<CONFIGURATION
+  {
+   "Version": 1.0,
+   "CrawlerOutput": {
+    "Partitions": {
+      "AddOrUpdateBehavior": "InheritFromTable"
+    },
+    "Tables": {
+      "AddOrUpdateBehavior": "MergeNewColumns"
+    }
+   }
+  }
+  
+CONFIGURATION
+
   database_name = aws_glue_catalog_database.billing.name
   description   = "Lambda invoked crawler that crawls cost and usage reports"
   name          = "${var.resource_prefix}-cost-and-usage-crawler"
@@ -84,7 +99,6 @@ resource "aws_iam_role_policy_attachment" "cost_and_usage_crawler" {
   role       = aws_iam_role.cost_and_usage_crawler.id
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
 }
-
 
 data "aws_iam_policy_document" "cost_and_usage_crawler" {
   statement {
