@@ -62,30 +62,24 @@ resource "aws_glue_catalog_table" "managed_instances" {
   }
 }
 
+###################################################
+################ COST AND USAGE ###################
+###################################################
 resource "aws_glue_crawler" "cost_and_usage_crawler" {
-  configuration = <<CONFIGURATION
-  {
-   "Version": 1.0,
-   "CrawlerOutput": {
-    "Partitions": {
-      "AddOrUpdateBehavior": "InheritFromTable"
-    },
-    "Tables": {
-      "AddOrUpdateBehavior": "MergeNewColumns"
-    }
-   }
-  }
-  
-CONFIGURATION
-
   database_name = aws_glue_catalog_database.billing.name
-  description   = "Lambda invoked crawler that crawls cost and usage reports"
+  description   = "Lambda invoked crawler that keeps cost and usage reports table up to date in Athena"
   name          = "${var.resource_prefix}-cost-and-usage-crawler"
   role          = aws_iam_role.cost_and_usage_crawler.arn
   tags          = local.tags
 
   s3_target {
-    path = "s3://${aws_s3_bucket.cost_and_usage.id}//CostAndUsage/CostAndUsage"
+    path       = "s3://${aws_s3_bucket.cost_and_usage.id}//CostAndUsage/CostAndUsage"
+    exclusions = ["**.json", "**.yml", "**.sql", "**.csv", "**.zip", "**.gz"]
+  }
+
+    schema_change_policy {
+    delete_behavior = "DELETE_FROM_DATABASE"
+    update_behavior = "UPDATE_IN_DATABASE"
   }
 }
 
@@ -115,7 +109,6 @@ data "aws_iam_policy_document" "cost_and_usage_crawler" {
   }
 }
 
-
 resource "aws_iam_role_policy" "cost_and_usage_crawler" {
   name   = "${var.resource_prefix}-cost-and-usage-crawler"
   policy = data.aws_iam_policy_document.cost_and_usage_crawler.json
@@ -125,12 +118,18 @@ resource "aws_iam_role_policy" "cost_and_usage_crawler" {
 ## test crawler
 resource "aws_glue_crawler" "cost_and_usage_crawler_test" {
   database_name = aws_glue_catalog_database.billing.name
-  description   = "Test crawler"
+  description   = "Lambda invoked crawler that keeps cost and usage reports table up to date in Athena"
   name          = "${var.resource_prefix}-cost-and-usage-crawler-test"
   role          = aws_iam_role.cost_and_usage_crawler.arn
   tags          = local.tags
 
   s3_target {
-    path = "s3://${aws_s3_bucket.cost_and_usage.id}/test/CostAndUsage_test/CostAndUsage_test"
+    path       = "s3://${aws_s3_bucket.cost_and_usage.id}/test/CostAndUsage_test/CostAndUsage_test"
+    exclusions = ["**.json", "**.yml", "**.sql", "**.csv", "**.zip", "**.gz"]
+  }
+
+    schema_change_policy {
+    delete_behavior = "DELETE_FROM_DATABASE"
+    update_behavior = "UPDATE_IN_DATABASE"
   }
 }
