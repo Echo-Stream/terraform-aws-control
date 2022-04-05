@@ -105,7 +105,13 @@ resource "aws_cur_report_definition" "cost_and_usage" {
   refresh_closed_reports     = true
   report_name                = "CostAndUsage"
   report_versioning          = "OVERWRITE_REPORT"
-
+  # s3_prefix                  = ""
+  # Can't leave S3 prefix empty if Definition is integrated with Athena
+  # If s3_prefix is empty, AWS is making ReportPathPrefix = /<report_name>
+  # so final reports are put under /<report_name>/<report_name>
+  # Example, lets say our report-name = "CostAndUsage". The S3 path would be s3://<bucket-name>//CostAndUsage/CostAndUsage/<reports>
+  # better to include some prefix, to make it look cleaner (avoids leading slash)
+  # for e.g if prefix is set to 'echo'. The s3 path would look like s3://<bucket-name>/echo/CostAndUsage/CostAndUsage/<reports>
   s3_bucket = aws_s3_bucket.cost_and_usage.id
   s3_region = local.current_region
   time_unit = "DAILY"
@@ -134,7 +140,7 @@ resource "aws_cur_report_definition" "cost_and_usage_test_2" {
   report_name                = "CostAndUsage_test_2"
   report_versioning          = "OVERWRITE_REPORT"
   s3_bucket                  = aws_s3_bucket.cost_and_usage.id
-  s3_prefix                  = ""
+  s3_prefix                  = "echo"
   s3_region                  = local.current_region
   time_unit                  = "HOURLY"
 }
