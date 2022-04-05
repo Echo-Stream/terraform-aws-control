@@ -84,3 +84,25 @@ resource "aws_iam_role_policy_attachment" "cost_and_usage_crawler" {
   role       = aws_iam_role.cost_and_usage_crawler.id
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
 }
+
+
+data "aws_iam_policy_document" "cost_and_usage_crawler" {
+  statement {
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+    ]
+
+    resources = [
+      "${aws_s3_bucket.cost_and_usage.id}//CostAndUsage/*",
+    ]
+
+    sid = "MinimumPermissionsToCrawl"
+  }
+}
+
+resource "aws_iam_role_policy" "cost_and_usage_crawler" {
+  name   = "${var.resource_prefix}-cost-and-usage-crawler"
+  policy = data.aws_iam_policy_document.cost_and_usage_crawler.json
+  role   = aws_iam_role.cost_and_usage_crawler.id
+}
