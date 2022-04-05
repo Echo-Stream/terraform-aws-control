@@ -126,7 +126,7 @@ resource "aws_cur_report_definition" "cost_and_usage_test" {
 }
 
 resource "aws_cur_report_definition" "cost_and_usage_test_2" {
-  additional_artifacts       = ["ATHENA"]
+  #additional_artifacts       = ["ATHENA"]
   additional_schema_elements = ["RESOURCES"]
   compression                = "Parquet"
   format                     = "Parquet"
