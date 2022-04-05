@@ -94,7 +94,7 @@ data "aws_iam_policy_document" "cost_and_usage_crawler" {
     ]
 
     resources = [
-      "${aws_s3_bucket.cost_and_usage.id}//CostAndUsage/*",
+      "${aws_s3_bucket.cost_and_usage.arn}//CostAndUsage/*",
     ]
 
     sid = "MinimumPermissionsToCrawl"
