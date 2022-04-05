@@ -70,7 +70,7 @@ resource "aws_glue_crawler" "cost_and_usage_crawler" {
   tags          = local.tags
 
   s3_target {
-    path = "s3://${aws_s3_bucket.cost_and_usage.id}//CostAndUsage/"
+    path = "s3://${aws_s3_bucket.cost_and_usage.id}//CostAndUsage/CostAndUsage"
   }
 }
 
@@ -117,6 +117,6 @@ resource "aws_glue_crawler" "cost_and_usage_crawler_test" {
   tags          = local.tags
 
   s3_target {
-    path = "s3://${aws_s3_bucket.cost_and_usage.id}/test/CostAndUsage_test/"
+    path = "s3://${aws_s3_bucket.cost_and_usage.id}/test/CostAndUsage_test/CostAndUsage_test"
   }
 }
