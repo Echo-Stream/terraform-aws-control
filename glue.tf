@@ -73,7 +73,7 @@ resource "aws_glue_crawler" "cost_and_usage_crawler" {
   tags          = local.tags
 
   s3_target {
-    path       = "s3://${aws_s3_bucket.cost_and_usage.id}//CostAndUsage/CostAndUsage"
+    path       = "s3://${aws_s3_bucket.cost_and_usage.id}/reports/CostAndUsage/CostAndUsage"
     exclusions = ["**.json", "**.yml", "**.sql", "**.csv", "**.zip", "**.gz"]
   }
 
