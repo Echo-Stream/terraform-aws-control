@@ -113,6 +113,46 @@ data "aws_iam_policy_document" "managed_app_cloud_init" {
 
     sid = "ManagedAppCloudInitQueuesAccess"
   }
+  statement {
+    actions = [
+      "ses:GetTemplate",
+      "ses:ListTemplates"
+    ]
+
+    resources = [
+      "*"
+    ]
+
+    sid = "SESRead"
+  }
+
+
+  statement {
+    actions = [
+      "ses:SendEmail",
+    ]
+
+    resources = [
+      aws_ses_configuration_set.email_errors.arn,
+      aws_ses_email_identity.support.arn,
+    ]
+
+    sid = "SESSendEmail"
+  }
+
+  statement {
+    actions = [
+      "ses:SendTemplatedEmail",
+    ]
+
+    resources = [
+      aws_ses_configuration_set.email_errors.arn,
+      aws_ses_email_identity.support.arn,
+      aws_ses_template.managed_app_cloud_init_notify.arn,
+    ]
+
+    sid = "SESSendTemplatedEmail"
+  }
 }
 
 resource "aws_iam_policy" "managed_app_cloud_init" {
@@ -122,21 +162,16 @@ resource "aws_iam_policy" "managed_app_cloud_init" {
 }
 
 module "managed_app_cloud_init" {
-  description     = "Updates Glue db with managed app instance details and notifies Tenant owners by an email"
-  dead_letter_arn = local.lambda_dead_letter_arn
-
-  environment_variables = {
-    CONTROL_REGION        = local.current_region
-    COST_AND_USAGE_BUCKET = aws_s3_bucket.cost_and_usage.id
-    ENVIRONMENT           = var.resource_prefix
-  }
-
-  handler     = "function.handler"
-  kms_key_arn = local.lambda_env_vars_kms_key_arn
-  memory_size = 128
-  name        = "${var.resource_prefix}-managed-app-cloud-init"
+  description           = "Updates Glue db with managed app instance details and notifies Tenant owners by an email"
+  dead_letter_arn       = local.lambda_dead_letter_arn
+  environment_variables = local.common_lambda_environment_variables
+  handler               = "function.handler"
+  kms_key_arn           = local.lambda_env_vars_kms_key_arn
+  memory_size           = 128
+  name                  = "${var.resource_prefix}-managed-app-cloud-init"
 
   policy_arns = [
+    aws_iam_policy.graph_ddb_read.arn,
     aws_iam_policy.managed_app_cloud_init.arn,
   ]
 

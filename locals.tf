@@ -30,6 +30,7 @@ locals {
     CLOUDFRONT_DISTRIBUTION_ID_DOCS        = aws_cloudfront_distribution.docs.id
     CLOUDFRONT_DISTRIBUTION_ID_WEBAPP      = aws_cloudfront_distribution.webapp.id
     CONTROL_REGION                         = local.current_region
+    COST_AND_USAGE_BUCKET                  = aws_s3_bucket.cost_and_usage.id
     DYNAMODB_TABLE                         = module.graph_table.name
     ECHOSTREAM_VERSION                     = var.echostream_version
     ENVIRONMENT                            = var.resource_prefix
@@ -37,12 +38,12 @@ locals {
     INTERNAL_NODE_CODE                     = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
     INTERNAL_NODE_ROLE                     = aws_iam_role.internal_node.arn
     INVITE_USER_SES_TEMPLATE               = aws_ses_template.invite_user.name
+    MANAGED_APP_CLOUD_INIT_NOTIFY_TEMPLATE = aws_ses_template.managed_app_cloud_init_notify.name
     MANAGED_APP_CLOUD_INIT_QUEUE           = aws_sqs_queue.managed_app_cloud_init.url
     NOTIFY_USER_SES_TEMPLATE               = aws_ses_template.notify_user.name
     REBUILD_NOTIFICATION_QUEUE             = aws_sqs_queue.rebuild_notifications.url
     REGION                                 = var.region
     REMOVE_USER_SES_TEMPLATE               = aws_ses_template.remove_user.name
-    MANAGED_APP_CLOUD_INIT_NOTIFY_TEMPLATE = aws_ses_template.managed_app_cloud_init_notify.name
     SNS_TOPIC_ARN                          = aws_sns_topic.ci_cd_errors.arn
     SYSTEM_SES_EMAIL                       = var.ses_email_address
     SYSTEM_SQS_QUEUE                       = aws_sqs_queue.system_sqs_queue.id
