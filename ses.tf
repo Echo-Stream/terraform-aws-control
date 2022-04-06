@@ -60,9 +60,9 @@ resource "aws_ses_template" "remove_user" {
   text    = file("${path.module}/files/remove-user.txt")
 }
 
-resource "aws_ses_template" "managed_app_cloud_init" {
-  name    = "${var.resource_prefix}-managed-app-cloud-init"
+resource "aws_ses_template" "managed_app_cloud_init_notify" {
+  name    = "${var.resource_prefix}-managed-app-cloud-init-notify"
   subject = "Successfully initialized {{managed_app}} managed app"
-  html    = file("${path.module}/files/managed-app-cloud-init.html")
-  text    = file("${path.module}/files/managed-app-cloud-init.txt")
+  html    = file("${path.module}/files/managed-app-cloud-init-notify.html")
+  text    = file("${path.module}/files/managed-app-cloud-init-notify.txt")
 }
