@@ -77,7 +77,7 @@ resource "aws_glue_crawler" "cost_and_usage_crawler" {
     exclusions = ["**.json", "**.yml", "**.sql", "**.csv", "**.zip", "**.gz"]
   }
 
-    schema_change_policy {
+  schema_change_policy {
     delete_behavior = "DELETE_FROM_DATABASE"
     update_behavior = "UPDATE_IN_DATABASE"
   }
@@ -102,7 +102,7 @@ data "aws_iam_policy_document" "cost_and_usage_crawler" {
     ]
 
     resources = [
-      "${aws_s3_bucket.cost_and_usage.arn}/*", # change this later, left at root for testing
+      "${aws_s3_bucket.cost_and_usage.arn}/reports/CostAndUsage/CostAndUsage/*",
     ]
 
     sid = "MinimumPermissionsToCrawl"
@@ -113,42 +113,4 @@ resource "aws_iam_role_policy" "cost_and_usage_crawler" {
   name   = "${var.resource_prefix}-cost-and-usage-crawler"
   policy = data.aws_iam_policy_document.cost_and_usage_crawler.json
   role   = aws_iam_role.cost_and_usage_crawler.id
-}
-
-## test crawler
-resource "aws_glue_crawler" "cost_and_usage_crawler_test" {
-  database_name = aws_glue_catalog_database.billing.name
-  description   = "Lambda invoked crawler that keeps cost and usage reports table up to date in Athena"
-  name          = "${var.resource_prefix}-cost-and-usage-crawler-test"
-  role          = aws_iam_role.cost_and_usage_crawler.arn
-  tags          = local.tags
-
-  s3_target {
-    path       = "s3://${aws_s3_bucket.cost_and_usage.id}/test/CostAndUsage_test/CostAndUsage_test"
-    exclusions = ["**.json", "**.yml", "**.sql", "**.csv", "**.zip", "**.gz"]
-  }
-
-    schema_change_policy {
-    delete_behavior = "DELETE_FROM_DATABASE"
-    update_behavior = "UPDATE_IN_DATABASE"
-  }
-}
-
-## test-2 crawler
-resource "aws_glue_crawler" "cost_and_usage_crawler_test_2" {
-  database_name = aws_glue_catalog_database.billing.name
-  description   = "Lambda invoked crawler that keeps cost and usage reports table up to date in Athena"
-  name          = "${var.resource_prefix}-cost-and-usage-crawler-test-2"
-  role          = aws_iam_role.cost_and_usage_crawler.arn
-  tags          = local.tags
-
-  s3_target {
-    path       = "s3://${aws_s3_bucket.cost_and_usage.id}/crawler-test"
-    exclusions = ["**.json", "**.yml", "**.sql", "**.csv", "**.zip", "**.gz"]
-  }
-
-    schema_change_policy {
-    delete_behavior = "DELETE_FROM_DATABASE"
-    update_behavior = "UPDATE_IN_DATABASE"
-  }
 }
