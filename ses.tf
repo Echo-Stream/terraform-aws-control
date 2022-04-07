@@ -62,7 +62,7 @@ resource "aws_ses_template" "remove_user" {
 
 resource "aws_ses_template" "managed_app_cloud_init_notify" {
   name    = "${var.resource_prefix}-managed-app-cloud-init-notify"
-  subject = "Successfully initialized {{managed_app}} managed app"
+  subject = "Managed instance {{ managed_instance_id }} is registered in {{ tenant }} EchoStream Tenant"
   html    = file("${path.module}/files/managed-app-cloud-init-notify.html")
   text    = file("${path.module}/files/managed-app-cloud-init-notify.txt")
 }

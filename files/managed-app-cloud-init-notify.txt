@@ -1,1 +1,1 @@
-You initiated a Managed app {{managed_app}} successfully.
+A managed instance with id {{managed_instance_id}} is registered successfully with the {{ tenant }}.
