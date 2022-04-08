@@ -23,6 +23,7 @@ locals {
 
   # Common environment variables for lambdas that use echo-tools library
   common_lambda_environment_variables = {
+    ALARM_TOPIC                            = aws_sns_topic.alarms.arn
     API_ID                                 = aws_appsync_graphql_api.echostream.id
     APPSYNC_API_IDS                        = local.appsync_api_ids
     APPSYNC_ENDPOINT                       = local.appsync_custom_url
