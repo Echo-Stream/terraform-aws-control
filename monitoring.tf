@@ -26,7 +26,7 @@ locals {
 resource "aws_cloudwatch_metric_alarm" "sqs" {
   for_each = toset(local.sqs_names)
 
-  alarm_name          = each.key
+  alarm_name          = "sqs:${each.key}"
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
 
@@ -85,7 +85,7 @@ resource "aws_cloudwatch_metric_alarm" "stepfunction" {
   evaluation_periods        = "4"
   metric_name               = "ExecutionsFailed"
   namespace                 = "AWS/States"
-  period                    = "180"
+  period                    = "60"
   statistic                 = "Sum"
   threshold                 = "1"
   alarm_description         = "ExecutionsFailed > 1 for ${aws_sfn_state_machine.rebuild_notifications.name} state machine"
