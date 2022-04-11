@@ -1,3 +1,6 @@
+locals {
+
+}
 resource "aws_sqs_queue" "system_sqs_queue" {
   content_based_deduplication = "true"
   fifo_queue                  = true
@@ -9,8 +12,13 @@ resource "aws_sqs_queue" "system_sqs_queue" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "system_sqs_queue" {
-  alarm_name                = "terraform-test-foobar5"
-  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  alarm_name          = "terraform-test-foobar5"
+  alarm_actions       = [aws_sns_topic.alarms.arn]
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  dimensions = {
+    QueueName = aws_sqs_queue.system_sqs_queue.name
+  }
+
   evaluation_periods        = "4"
   metric_name               = "ApproximateAgeOfOldestMessage"
   namespace                 = "AWS/SQS"
