@@ -8,6 +8,22 @@ resource "aws_sqs_queue" "system_sqs_queue" {
   tags = local.tags
 }
 
+resource "aws_cloudwatch_metric_alarm" "system_sqs_queue" {
+  alarm_name                = "terraform-test-foobar5"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "4"
+  metric_name               = "ApproximateAgeOfOldestMessage"
+  namespace                 = "AWS/SQS"
+  period                    = "60"
+  statistic                 = "Maximum"
+  threshold                 = "120"
+  alarm_description         = "Age of oldest message >= 120"
+  insufficient_data_actions = [aws_sns_topic.alarms.arn]
+  treat_missing_data        = "notBreaching"
+
+  tags = local.tags
+}
+
 resource "aws_sqs_queue" "stream_dead_letter_queue" {
   content_based_deduplication = "true"
   fifo_queue                  = true
