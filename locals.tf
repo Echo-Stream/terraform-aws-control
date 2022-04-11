@@ -28,6 +28,7 @@ locals {
     APPSYNC_API_IDS                        = local.appsync_api_ids
     APPSYNC_ENDPOINT                       = local.appsync_custom_url
     ARTIFACTS_BUCKET                       = local.artifacts_bucket_prefix
+    CI_CD_TOPIC_ARN                        = aws_sns_topic.ci_cd_errors.arn
     CLOUDFRONT_DISTRIBUTION_ID_DOCS        = aws_cloudfront_distribution.docs.id
     CLOUDFRONT_DISTRIBUTION_ID_WEBAPP      = aws_cloudfront_distribution.webapp.id
     CONTROL_REGION                         = local.current_region
@@ -45,7 +46,6 @@ locals {
     REBUILD_NOTIFICATION_QUEUE             = aws_sqs_queue.rebuild_notifications.url
     REGION                                 = var.region
     REMOVE_USER_SES_TEMPLATE               = aws_ses_template.remove_user.name
-    SNS_TOPIC_ARN                          = aws_sns_topic.ci_cd_errors.arn
     SYSTEM_SES_EMAIL                       = var.ses_email_address
     SYSTEM_SQS_QUEUE                       = aws_sqs_queue.system_sqs_queue.id
     TENANT_DB_STREAM_HANDLER               = "${var.resource_prefix}-graph-table-tenant-stream-handler"
