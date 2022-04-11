@@ -50,7 +50,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs" {
 
 resource "aws_cloudwatch_metric_alarm" "lambda" {
   for_each            = toset(local.lambda_names)
-  alarm_name          = each.key
+  alarm_name          = "lambda:${aws_sfn_state_machine.rebuild_notifications.name}"
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
 
@@ -71,3 +71,28 @@ resource "aws_cloudwatch_metric_alarm" "lambda" {
 
   tags = local.tags
 }
+
+resource "aws_cloudwatch_metric_alarm" "stepfunction" {
+  for_each            = toset(local.lambda_names)
+  alarm_name          = "state-machine:${aws_sfn_state_machine.rebuild_notifications.name}"
+  alarm_actions       = [aws_sns_topic.alarms.arn]
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+
+  dimensions = {
+    StateMachineArn = aws_sfn_state_machine.rebuild_notifications.arn
+  }
+
+  evaluation_periods        = "4"
+  metric_name               = "Errors"
+  namespace                 = "AWS/States"
+  period                    = "180"
+  statistic                 = "Sum"
+  threshold                 = "1"
+  alarm_description         = "Errors > 1 for ${aws_sfn_state_machine.rebuild_notifications.name} state machine"
+  insufficient_data_actions = [aws_sns_topic.alarms.arn]
+  treat_missing_data        = "notBreaching"
+  unit                      = "Count"
+
+  tags = local.tags
+}
+
