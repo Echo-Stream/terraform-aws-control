@@ -83,12 +83,12 @@ resource "aws_cloudwatch_metric_alarm" "stepfunction" {
   }
 
   evaluation_periods        = "4"
-  metric_name               = "Errors"
+  metric_name               = "ExecutionsFailed"
   namespace                 = "AWS/States"
   period                    = "180"
   statistic                 = "Sum"
   threshold                 = "1"
-  alarm_description         = "Errors > 1 for ${aws_sfn_state_machine.rebuild_notifications.name} state machine"
+  alarm_description         = "ExecutionsFailed > 1 for ${aws_sfn_state_machine.rebuild_notifications.name} state machine"
   insufficient_data_actions = [aws_sns_topic.alarms.arn]
   treat_missing_data        = "notBreaching"
   unit                      = "Count"
