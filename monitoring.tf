@@ -49,8 +49,9 @@ resource "aws_cloudwatch_metric_alarm" "sqs" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda" {
-  for_each            = toset(local.lambda_names)
-  alarm_name          = "lambda:${aws_sfn_state_machine.rebuild_notifications.name}"
+  for_each = toset(local.lambda_names)
+
+  alarm_name          = "lambda:${each.key}"
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
 
