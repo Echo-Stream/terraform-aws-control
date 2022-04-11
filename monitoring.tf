@@ -2,7 +2,6 @@ locals {
 
   sqs_names = [
     aws_sqs_queue.system_sqs_queue.name,
-    aws_sqs_queue.stream_dead_letter_queue.name,
     aws_sqs_queue.managed_app_cloud_init.name,
     aws_sqs_queue.rebuild_notifications.name
   ]
