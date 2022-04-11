@@ -33,3 +33,27 @@ resource "aws_cloudwatch_metric_alarm" "sqs" {
 
   tags = local.tags
 }
+
+resource "aws_cloudwatch_metric_alarm" "lambda" {
+
+  alarm_name          = "test"
+  alarm_actions       = [aws_sns_topic.alarms.arn]
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+
+  dimensions = {
+    FunctionName = module.appsync_datasource.name
+  }
+
+  evaluation_periods        = "4"
+  metric_name               = "Errors"
+  namespace                 = "AWS/Lambda"
+  period                    = "60"
+  statistic                 = "Sum"
+  threshold                 = "120"
+  alarm_description         = "Errors > 1"
+  insufficient_data_actions = [aws_sns_topic.alarms.arn]
+  treat_missing_data        = "notBreaching"
+  unit                      = "Count"
+
+  tags = local.tags
+}
