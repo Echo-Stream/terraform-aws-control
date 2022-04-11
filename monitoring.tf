@@ -83,10 +83,10 @@ resource "aws_cloudwatch_metric_alarm" "stepfunction" {
     StateMachineArn = aws_sfn_state_machine.rebuild_notifications.arn
   }
 
-  evaluation_periods        = "4"
+  evaluation_periods        = "1"
   metric_name               = "ExecutionsFailed"
   namespace                 = "AWS/States"
-  period                    = "60"
+  period                    = "120"
   statistic                 = "Sum"
   threshold                 = "1"
   alarm_description         = "ExecutionsFailed > 1 for ${aws_sfn_state_machine.rebuild_notifications.name} state machine"
