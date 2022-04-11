@@ -58,7 +58,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda" {
     FunctionName = each.key
   }
 
-  evaluation_periods        = "3"
+  evaluation_periods        = "4"
   metric_name               = "Errors"
   namespace                 = "AWS/Lambda"
   period                    = "60"
