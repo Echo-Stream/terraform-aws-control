@@ -24,18 +24,18 @@ resource "aws_sns_topic_policy" "ci_cd_errors" {
 }
 
 data "aws_iam_policy_document" "ci_cd_errors" {
-  statement {
-    sid     = "AWSEvents_stepfunctionFail"
-    effect  = "Allow"
-    actions = ["SNS:Publish"]
+  # statement {
+  #   sid     = "AWSEvents_stepfunctionFail"
+  #   effect  = "Allow"
+  #   actions = ["SNS:Publish"]
 
-    principals {
-      type        = "Service"
-      identifiers = ["events.amazonaws.com"]
-    }
+  #   principals {
+  #     type        = "Service"
+  #     identifiers = ["events.amazonaws.com"]
+  #   }
 
-    resources = [aws_sns_topic.ci_cd_errors.arn]
-  }
+  #   resources = [aws_sns_topic.ci_cd_errors.arn]
+  # }
 
   statement {
     sid     = "__default_statement_ID"

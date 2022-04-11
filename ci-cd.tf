@@ -335,27 +335,27 @@ resource "aws_sfn_state_machine" "rebuild_notifications" {
   tags = local.tags
 }
 
-## Alert if Any execution of the rebuild notifications state machine fails
-resource "aws_cloudwatch_event_rule" "rebuild_notifications_alert" {
-  name        = "${var.resource_prefix}-rebuild-notifications-alert"
-  description = "Notify to CI CD errors topic if Rebuild Notifications Step function fails"
+# ## Alert if Any execution of the rebuild notifications state machine fails
+# resource "aws_cloudwatch_event_rule" "rebuild_notifications_alert" {
+#   name        = "${var.resource_prefix}-rebuild-notifications-alert"
+#   description = "Notify to CI CD errors topic if Rebuild Notifications Step function fails"
 
-  event_pattern = <<EOF
-{
-  "source": ["aws.states"],
-  "detail-type": ["Step Functions Execution Status Change"],
-  "detail": {
-    "status": ["FAILED"],
-    "stateMachineArn": ["arn:aws:states:${local.current_region}:${local.current_account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"]
-  }
-}
-EOF
+#   event_pattern = <<EOF
+# {
+#   "source": ["aws.states"],
+#   "detail-type": ["Step Functions Execution Status Change"],
+#   "detail": {
+#     "status": ["FAILED"],
+#     "stateMachineArn": ["arn:aws:states:${local.current_region}:${local.current_account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"]
+#   }
+# }
+# EOF
 
-  tags = local.tags
-}
+#   tags = local.tags
+# }
 
-resource "aws_cloudwatch_event_target" "rebuild_notifications_alert" {
-  rule      = aws_cloudwatch_event_rule.rebuild_notifications_alert.name
-  target_id = "SendToCICDErrorsTopic"
-  arn       = aws_sns_topic.ci_cd_errors.arn
-}
+# resource "aws_cloudwatch_event_target" "rebuild_notifications_alert" {
+#   rule      = aws_cloudwatch_event_rule.rebuild_notifications_alert.name
+#   target_id = "SendToCICDErrorsTopic"
+#   arn       = aws_sns_topic.ci_cd_errors.arn
+# }
