@@ -40,7 +40,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs" {
   period                    = "60"
   statistic                 = "Maximum"
   threshold                 = "120"
-  alarm_description         = "Age of oldest message >= 120"
+  alarm_description         = "Age of oldest message >= 120 for ${each.key}"
   insufficient_data_actions = [aws_sns_topic.alarms.arn]
   treat_missing_data        = "notBreaching"
   unit                      = "Seconds"
@@ -64,7 +64,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda" {
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = "1"
-  alarm_description         = "Errors > 1"
+  alarm_description         = "Errors > 1 for ${each.key}"
   insufficient_data_actions = [aws_sns_topic.alarms.arn]
   treat_missing_data        = "notBreaching"
   unit                      = "Count"
