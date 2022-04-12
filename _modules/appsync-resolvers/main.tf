@@ -384,6 +384,10 @@ locals {
       field = "ListTenants"
       type  = "Query"
     }
+    login_user_delete = {
+      field = "Delete"
+      type  = "LoginUser"
+    }
     managed_app_delete = {
       field = "Delete"
       type  = "ManagedApp"
