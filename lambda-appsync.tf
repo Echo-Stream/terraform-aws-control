@@ -364,7 +364,19 @@ data "aws_iam_policy_document" "appsync_datasource" {
       module.app_cognito_pool_us_west_2.0.userpool_arn
     ]
 
-    sid = "CognitoIDPAccess"
+    sid = "CognitoIDPAccessAppPool"
+  }
+
+  statement {
+    actions = [
+      "cognito-idp:AdminDeleteUser",
+    ]
+
+    resources = [
+      aws_cognito_user_pool.echostream_ui.arn,
+    ]
+
+    sid = "CognitoIDPAccessUIPool"
   }
 
   statement {
