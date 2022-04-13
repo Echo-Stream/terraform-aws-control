@@ -112,32 +112,6 @@ data "aws_iam_policy_document" "appsync_datasource" {
     sid = "S3Access"
   }
 
-
-  statement {
-    actions = [
-      "lambda:CreateEventSourceMapping",
-      "lambda:DeleteEventSourceMapping",
-    ]
-
-    resources = [
-      "arn:aws:lambda:*:${local.current_account_id}:event-source-mapping:*"
-    ]
-
-    sid = "LambdaEventSourceMappingAccess"
-  }
-
-  statement {
-    actions = [
-      "lambda:CreateEventSourceMapping",
-    ]
-
-    resources = [
-      "*"
-    ]
-
-    sid = "CreateLambdaEventSourceMapping"
-  }
-
   statement {
     actions = [
       "iam:PassRole",
@@ -148,18 +122,6 @@ data "aws_iam_policy_document" "appsync_datasource" {
     ]
 
     sid = "PassRoleAll"
-  }
-
-  statement {
-    actions = [
-      "lambda:DeleteEventSourceMapping",
-    ]
-
-    resources = [
-      "arn:aws:lambda:*:${local.current_account_id}:event-source-mapping:*"
-    ]
-
-    sid = "DeleteLambdaEventSourceMapping"
   }
 
   statement {
