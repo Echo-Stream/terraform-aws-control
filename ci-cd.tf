@@ -145,12 +145,6 @@ module "deployment_handler" {
   version       = "4.0.0"
 }
 
-resource "aws_sns_topic" "ci_cd_errors" {
-  name         = "${var.resource_prefix}-ci-cd-errors"
-  display_name = "${var.resource_prefix} CI/CD Notifications"
-  tags         = local.tags
-}
-
 resource "aws_lambda_permission" "deployment_handler" {
   statement_id  = "AllowExecutionFromSNS"
   action        = "lambda:InvokeFunction"
@@ -172,6 +166,7 @@ data "aws_iam_policy_document" "rebuild_notifications" {
   statement {
     actions = [
       "dynamodb:Scan",
+      "dynamodb:UpdateItem",
     ]
 
     resources = [
@@ -340,3 +335,28 @@ resource "aws_sfn_state_machine" "rebuild_notifications" {
   }
   tags = local.tags
 }
+
+# ## Alert if Any execution of the rebuild notifications state machine fails
+# resource "aws_cloudwatch_event_rule" "rebuild_notifications_alert" {
+#   name        = "${var.resource_prefix}-rebuild-notifications-alert"
+#   description = "Notify to CI CD errors topic if Rebuild Notifications Step function fails"
+
+#   event_pattern = <<EOF
+# {
+#   "source": ["aws.states"],
+#   "detail-type": ["Step Functions Execution Status Change"],
+#   "detail": {
+#     "status": ["FAILED"],
+#     "stateMachineArn": ["arn:aws:states:${local.current_region}:${local.current_account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"]
+#   }
+# }
+# EOF
+
+#   tags = local.tags
+# }
+
+# resource "aws_cloudwatch_event_target" "rebuild_notifications_alert" {
+#   rule      = aws_cloudwatch_event_rule.rebuild_notifications_alert.name
+#   target_id = "SendToCICDErrorsTopic"
+#   arn       = aws_sns_topic.ci_cd_errors.arn
+# }

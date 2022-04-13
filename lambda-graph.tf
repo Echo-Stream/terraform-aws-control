@@ -96,12 +96,14 @@ data "aws_iam_policy_document" "managed_app_customer_policy" {
     effect = "Allow"
 
     actions = [
-      "sns:Publish"
+      "sqs:SendMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:GetQueueUrl",
     ]
 
-    resources = [aws_sns_topic.managed_app_cloud_init.arn]
+    resources = [aws_sqs_queue.managed_app_cloud_init.arn]
 
-    sid = "PublishToSNS"
+    sid = "SendMessageToManagedAppCloudInitQueue"
   }
 
   statement {
@@ -158,6 +160,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     actions = [
       "dynamodb:DeleteTable",
       "dynamodb:DescribeTable",
+      "dynamodb:UpdateTable",
       "dynamodb:UpdateTimeToLive",
     ]
 
@@ -165,7 +168,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
       "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-tenant-*"
     ]
 
-    sid = "DeleteTenantTables"
+    sid = "ManageTenantTables"
   }
 
   statement {

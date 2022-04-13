@@ -6,6 +6,16 @@
 			"Comment": "Check for any New message on the queue and process it, if not go to sleep",
 			"Type": "Task",
 			"Resource": "${function_arn}",
+			"Retry": [
+				{
+					"ErrorEquals": [
+						"States.ALL"
+					],
+					"IntervalSeconds": 3,
+					"MaxAttempts": 2,
+					"BackoffRate": 1.5
+				}
+			],
 			"Parameters": {
 				"task_name": "CheckForMessages"
 			},
@@ -31,6 +41,16 @@
 				"payload.$": "$.payload"
 			},
 			"Resource": "${function_arn}",
+			"Retry": [
+				{
+					"ErrorEquals": [
+						"States.ALL"
+					],
+					"IntervalSeconds": 3,
+					"MaxAttempts": 2,
+					"BackoffRate": 1.5
+				}
+			],
 			"Next": "NotifyNextSetOrReinvokeMyself"
 		},
 		"NotifyNextSetOrReinvokeMyself": {

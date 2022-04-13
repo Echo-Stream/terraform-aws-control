@@ -14,7 +14,6 @@ locals {
       BULK_DATA_AWS_ACCESS_KEY_ID     = aws_iam_access_key.presign_bulk_data.id
       BULK_DATA_AWS_SECRET_ACCESS_KEY = aws_iam_access_key.presign_bulk_data.secret
       BULK_DATA_IAM_USER              = aws_iam_user.presign_bulk_data.arn
-      MANAGED_APP_CLOUD_INIT_TOPIC    = aws_sns_topic.managed_app_cloud_init.arn
       REGIONAL_APPSYNC_ENDPOINTS      = local.regional_appsync_endpoints
       REMOTE_APP_ROLE                 = aws_iam_role.remote_app.arn
       SSM_SERVICE_ROLE                = aws_iam_role.managed_app.name
@@ -281,7 +280,8 @@ data "aws_iam_policy_document" "appsync_datasource" {
     ]
 
     resources = [
-      "arn:aws:cloudwatch:*:${local.current_account_id}:alarm:TENANT~*"
+      "arn:aws:cloudwatch:*:${local.current_account_id}:alarm:TENANT~*",
+      "arn:aws:cloudwatch:*:${local.current_account_id}:alarm:db-stream*"
     ]
 
     sid = "ManageAlarms"
@@ -365,7 +365,19 @@ data "aws_iam_policy_document" "appsync_datasource" {
       module.app_cognito_pool_us_west_2.0.userpool_arn
     ]
 
-    sid = "CognitoIDPAccess"
+    sid = "CognitoIDPAccessAppPool"
+  }
+
+  statement {
+    actions = [
+      "cognito-idp:AdminDeleteUser",
+    ]
+
+    resources = [
+      aws_cognito_user_pool.echostream_ui.arn,
+    ]
+
+    sid = "CognitoIDPAccessUIPool"
   }
 
   statement {
@@ -406,8 +418,6 @@ data "aws_iam_policy_document" "appsync_datasource" {
 
     sid = "SSM2"
   }
-
-
 }
 
 resource "aws_iam_policy" "appsync_datasource" {

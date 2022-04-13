@@ -219,9 +219,10 @@ data "aws_iam_policy_document" "update_code" {
     effect = "Allow"
 
     actions = [
-      "lambda:UpdateFunctionCode",
-      "lambda:ListFunctions",
       "lambda:GetFunction",
+      "lambda:ListFunctions",
+      "lambda:UpdateFunctionCode",
+      "lambda:UpdateFunctionConfiguration",
     ]
 
     resources = ["*"]

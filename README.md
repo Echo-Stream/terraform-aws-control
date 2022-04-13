@@ -8,8 +8,6 @@ This module is supposed to be used along with pre-control module in the EchoStre
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|--------|
 | allowed\_account\_id | The Account Id which hosts the environment | `string` | n/a | yes |
-| api_acm_arn | ACM certificate arn (output from pre-control TF) of the environment sub domain - api | `string` | n/a | yes |
-| api_domain_name | Api Domain name of the environment used for custom domain of Appsync API | `string` | n/a | yes |
 | app_acm_arn | ACM certificate arn (output from pre-control TF) of the environment sub domain - application | `string` | n/a | yes |
 | app_domain_name | Application Domain name of the environment which may be used for Cognito custom auth, SES domain Identity and Cloudfront custom domain | `string` | n/a | yes |
 | authorized\_domains | List of authorized_domains that can signup to the app | `list(string)` | n/a | yes |
@@ -17,11 +15,11 @@ This module is supposed to be used along with pre-control module in the EchoStre
 | docs_api_domain_name | Domain name of the environment used for API Documentation | `string` | n/a | yes |
 | echostream\_version | `Major.Minor` Version to fetch artifacts from right location | `string` | n/a | yes |
 | region | AWS Region for the environment | `string` | n/a | yes |
+| regional\_apis | A map with regional api acm arns and domain names | `any` | `{}` | no |
 | resource_prefix | Environment Prefix for naming resources, a Unique name that could differentiate whole environment. `lower case` only, `No periods`, `No Special Char` except `-`. Length less than 15 char | `string` | n/a | yes |
 | ses_email_address | Preferred Email Address that SES uses for communication with tenants | `string` | n/a | yes |
 | tags | A mapping of tags to assign to the resources | `map(string)` | `{}` | no |
 | tenant_regions | List of regions where tenants exist | `list(string)` | `[]` | no |
-
 
 ### Outputs
 
@@ -55,8 +53,6 @@ This module is supposed to be used along with pre-control module in the EchoStre
 ```
 module "control" {
   allowed_account_id   = var.allowed_account_id
-  api_acm_arn          = module.pre_control.api_acm_arn
-  api_domain_name      = module.pre_control.api_domain_name
   app_acm_arn          = module.pre_control.app_acm_arn
   app_domain_name      = module.pre_control.app_domain_name
   authorized_domains   = var.authorized_domains
@@ -64,6 +60,7 @@ module "control" {
   docs_api_domain_name = module.pre_control.docs_api_domain_name
   echostream_version   = var.echostream_version
   region               = var.region
+  regional_apis        = module.pre_control.regional_apis
   resource_prefix      = "${var.resource_prefix}-${var.environment}"
   ses_email_address    = var.ses_email_address
   tags                 = local.tags
@@ -77,7 +74,6 @@ module "control" {
 - Domain name and ACM certificate covering the domain Inputs are needed. These resources are created by Pre control TF.
 - Verifying an email address provided to SES service is a manual task. User needs to verify a link that is sent by AWS SES to the provided email.
 - DKIM is not enabled.
-- Adding custom domain and its association with Appsync API is not supported in TF yet, it is done manually.
 
 ### Notes for Internal team
 - UI Userpool devices: Remember your users devices is set to `always`

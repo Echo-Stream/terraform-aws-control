@@ -102,12 +102,12 @@ provider "aws" {
 #   alias               = "frankfurt"
 # }
 
-# eu-west-1 aws provider
-# provider "aws" {
-#   allowed_account_ids = [var.allowed_account_id]
-#   region              = "eu-west-1"
-#   alias               = "ireland"
-# }
+#eu-west-1 aws provider
+provider "aws" {
+  allowed_account_ids = [var.allowed_account_id]
+  region              = "eu-west-1"
+  alias               = "ireland"
+}
 
 # # eu-west-2 aws provider
 # provider "aws" {
