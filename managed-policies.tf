@@ -440,7 +440,8 @@ data "aws_iam_policy_document" "graph_table_handler" {
     ]
 
     resources = [
-      "arn:aws:cloudwatch:*:${local.current_account_id}:alarm:TENANT~*"
+      "arn:aws:cloudwatch:*:${local.current_account_id}:alarm:TENANT~*",
+      "arn:aws:cloudwatch:*:${local.current_account_id}:alarm:db-stream*"
     ]
 
     sid = "AccessTenantAlarms"
