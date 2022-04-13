@@ -166,6 +166,7 @@ data "aws_iam_policy_document" "rebuild_notifications" {
   statement {
     actions = [
       "dynamodb:Scan",
+      "dynamodb:UpdateItem",
     ]
 
     resources = [
