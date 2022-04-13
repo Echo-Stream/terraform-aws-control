@@ -280,7 +280,8 @@ data "aws_iam_policy_document" "appsync_datasource" {
     ]
 
     resources = [
-      "arn:aws:cloudwatch:*:${local.current_account_id}:alarm:TENANT~*"
+      "arn:aws:cloudwatch:*:${local.current_account_id}:alarm:TENANT~*",
+      "arn:aws:cloudwatch:*:${local.current_account_id}:alarm:db-stream*"
     ]
 
     sid = "ManageAlarms"
