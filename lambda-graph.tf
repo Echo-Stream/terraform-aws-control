@@ -160,6 +160,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
     actions = [
       "dynamodb:DeleteTable",
       "dynamodb:DescribeTable",
+      "dynamodb:UpdateTable",
       "dynamodb:UpdateTimeToLive",
     ]
 
@@ -167,7 +168,7 @@ data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
       "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-tenant-*"
     ]
 
-    sid = "DeleteTenantTables"
+    sid = "ManageTenantTables"
   }
 
   statement {
