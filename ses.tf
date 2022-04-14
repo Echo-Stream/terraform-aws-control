@@ -66,3 +66,24 @@ resource "aws_ses_template" "managed_app_cloud_init_notify" {
   html    = file("${path.module}/files/managed-app-cloud-init-notify.html")
   text    = file("${path.module}/files/managed-app-cloud-init-notify.txt")
 }
+
+resource "aws_ses_template" "tenant_created" {
+  name    = "${var.resource_prefix}-tenant-created"
+  subject = "EchoStream Tenant {{tenant}} is sucessfully created!"
+  html    = file("${path.module}/files/tenant-created.html")
+  text    = file("${path.module}/files/tenant-created.txt")
+}
+
+resource "aws_ses_template" "tenant_deleted" {
+  name    = "${var.resource_prefix}-tenant-deleted"
+  subject = "EchoStream Tenant {{tenant}} is sucessfully deleted!"
+  html    = file("${path.module}/files/tenant-deleted.html")
+  text    = file("${path.module}/files/tenant-deleted.txt")
+}
+
+resource "aws_ses_template" "tenant_errored" {
+  name    = "${var.resource_prefix}-tenant-errored"
+  subject = "EchoStream Tenant {{tenant}} creation was unsuccessful!"
+  html    = file("${path.module}/files/tenant-errored.html")
+  text    = file("${path.module}/files/tenant-errored.txt")
+}
