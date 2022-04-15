@@ -48,14 +48,14 @@ locals {
     REMOVE_USER_SES_TEMPLATE               = aws_ses_template.remove_user.name
     SYSTEM_SES_EMAIL                       = var.ses_email_address
     SYSTEM_SQS_QUEUE                       = aws_sqs_queue.system_sqs_queue.id
+    TENANT_CREATED_SES_TEMPLATE            = aws_ses_template.tenant_created.name
     TENANT_DB_STREAM_HANDLER               = "${var.resource_prefix}-graph-table-tenant-stream-handler"
+    TENANT_DELETED_SES_TEMPLATE            = aws_ses_template.tenant_deleted.name
+    TENANT_ERRORED_SES_TEMPLATE            = aws_ses_template.tenant_errored.name
     TENANT_REGIONS                         = jsonencode(local.tenant_regions)
     UPDATE_CODE_ROLE                       = aws_iam_role.update_code.arn
     VALIDATOR_CODE                         = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
     VALIDATOR_ROLE                         = aws_iam_role.validator.arn
-    TENANT_CREATED_SES_TEMPLATE            = aws_ses_template.tenant_created.name
-    TENANT_DELETED_SES_TEMPLATE            = aws_ses_template.tenant_deleted.name
-    TENANT_ERRORED_SES_TEMPLATE            = aws_ses_template.tenant_errored.name
   }
 
   lambda_dead_letter_arn      = aws_sns_topic.lambda_dead_letter.arn

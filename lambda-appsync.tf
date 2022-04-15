@@ -400,6 +400,9 @@ module "appsync_datasource" {
 
   policy_arns = [
     aws_iam_policy.appsync_datasource.arn,
+    aws_iam_policy.graph_table_handler.arn,
+    aws_iam_policy.graph_table_system_stream_handler.arn,
+
     aws_iam_policy.artifacts_bucket_read.arn,
     aws_iam_policy.ecr_read.arn,
     aws_iam_policy.graph_ddb_read.arn,
