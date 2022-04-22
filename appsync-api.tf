@@ -66,6 +66,19 @@ resource "aws_appsync_domain_name_api_association" "echostream_appsync" {
   domain_name = aws_appsync_domain_name.echostream_appsync.domain_name
 }
 
+module "appsync_domain" {
+  domain_name = aws_appsync_domain_name.echostream_appsync.appsync_domain_name
+  name        = lookup(var.regional_apis["domains"], var.region, "")
+  zone_id     = data.aws_route53_zone.root_domain.zone_id
+
+  source  = "QuiNovas/cloudfront-r53-alias-record/aws"
+  version = "0.0.2"
+
+  providers = {
+    aws = aws.route-53
+  }
+}
+
 ##########################################################################################
 ##################################### Multi-Region #######################################
 ##########################################################################################
@@ -192,6 +205,20 @@ module "appsync_us_east_2" {
   }
 }
 
+module "appsync_domain_us_east_2" {
+  domain_name = module.appsync_us_east_2.0.appsync_domain_name
+  name        = lookup(var.regional_apis["domains"], "us-east-2", "")
+  zone_id     = data.aws_route53_zone.root_domain.zone_id
+
+  source  = "QuiNovas/cloudfront-r53-alias-record/aws"
+  version = "0.0.2"
+
+  providers = {
+    aws = aws.route-53
+  }
+}
+
+
 module "appsync_resolvers_us_east_2" {
   count = contains(local.regions, "us-east-2") == true ? 1 : 0
 
@@ -204,6 +231,7 @@ module "appsync_resolvers_us_east_2" {
     aws = aws.ohio
   }
 }
+
 
 #######################
 ## Appsync us-west-1 ##
@@ -229,6 +257,19 @@ module "appsync_us_west_1" {
 
   providers = {
     aws = aws.north-california
+  }
+}
+
+module "appsync_domain_us_west_1" {
+  domain_name = module.appsync_us_west_1.0.appsync_domain_name
+  name        = lookup(var.regional_apis["domains"], "us-west-1", "")
+  zone_id     = data.aws_route53_zone.root_domain.zone_id
+
+  source  = "QuiNovas/cloudfront-r53-alias-record/aws"
+  version = "0.0.2"
+
+  providers = {
+    aws = aws.route-53
   }
 }
 
@@ -269,6 +310,19 @@ module "appsync_us_west_2" {
 
   providers = {
     aws = aws.oregon
+  }
+}
+
+module "appsync_domain_us_west_2" {
+  domain_name = module.appsync_us_west_2.0.appsync_domain_name
+  name        = lookup(var.regional_apis["domains"], "us-west-2", "")
+  zone_id     = data.aws_route53_zone.root_domain.zone_id
+
+  source  = "QuiNovas/cloudfront-r53-alias-record/aws"
+  version = "0.0.2"
+
+  providers = {
+    aws = aws.route-53
   }
 }
 
