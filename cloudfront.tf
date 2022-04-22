@@ -156,7 +156,7 @@ module "webapp" {
   zone_id     = data.aws_route53_zone.root_domain.zone_id
 
   source  = "QuiNovas/cloudfront-r53-alias-record/aws"
-  version = "0.0.1"
+  version = "0.0.2"
 
   providers = {
     aws = aws.route-53
@@ -237,4 +237,17 @@ resource "aws_cloudfront_distribution" "docs" {
 
 resource "aws_cloudfront_origin_access_identity" "docs_origin_access_identity" {
   comment = "${var.resource_prefix} Echo Stream API docs"
+}
+
+module "docs" {
+  domain_name = aws_cloudfront_distribution.docs.domain_name
+  name        = var.docs_api_domain_name
+  zone_id     = data.aws_route53_zone.root_domain.zone_id
+
+  source  = "QuiNovas/cloudfront-r53-alias-record/aws"
+  version = "0.0.2"
+
+  providers = {
+    aws = aws.route-53
+  }
 }
