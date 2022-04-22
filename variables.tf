@@ -8,6 +8,10 @@ variable "app_acm_arn" {
   type        = string
 }
 
+variable "domain_name" {
+  description = "Your root domain, Used to fetch the hosted_zone_id and create webapp/appsync dns"
+}
+
 variable "app_domain_name" {
   description = "Application Domain name of the environment which may be used for Cognito custom auth, SES domain Identity and Cloudfront custom domain"
   type        = string
@@ -46,6 +50,16 @@ variable "regional_apis" {
 
 variable "resource_prefix" {
   description = "Prefix for naming resources. Lower case only, No periods"
+}
+
+variable "route53_account_id" {
+  description = "The AWS Account ID, where EchoStream Route53 resides"
+  type        = string
+}
+
+variable "route53_manager_role_name" {
+  description = "The Name of the role that needs to be assumed to managed DNS records in Corp/EchoStream Route53"
+  type        = string
 }
 
 variable "ses_email_address" {

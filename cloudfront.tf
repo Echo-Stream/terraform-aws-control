@@ -150,6 +150,19 @@ resource "aws_lambda_permission" "edge_config" {
   statement_id  = "AllowExecutionFromCloudFront"
 }
 
+module "webapp" {
+  domain_name = var.app_domain_name
+  name        = aws_cloudfront_distribution.webapp.domain_name
+  zone_id     = data.aws_route53_zone.root_domain.zone_id
+
+  source  = "QuiNovas/cloudfront-r53-alias-record/aws"
+  version = "0.0.1"
+
+  providers = {
+    aws = aws.route-53
+  }
+}
+
 ################################
 ### Documentation Cloudfront ###
 ################################

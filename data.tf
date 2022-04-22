@@ -6,6 +6,12 @@ data "aws_s3_bucket" "log_bucket" {
   bucket = local.log_bucket
 }
 
+data "aws_route53_zone" "root_domain" {
+  name         = var.domain_name
+  private_zone = false
+  provider     = aws.route-53
+}
+
 data "aws_iam_policy_document" "appsync_assume_role" {
   statement {
     actions = [
