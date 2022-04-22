@@ -1,4 +1,8 @@
 resource "aws_cloudfront_distribution" "webapp" {
+  depends_on = [
+    aws_acm_certificate_validation.app,
+  ]
+
   aliases = [
     local.app_sub_domain
   ]
@@ -167,6 +171,10 @@ module "webapp" {
 ### Documentation Cloudfront ###
 ################################
 resource "aws_cloudfront_distribution" "docs" {
+  depends_on = [
+    aws_acm_certificate_validation.docs_api,
+  ]
+
   aliases = [
     local.docs_api_sub_domain
   ]

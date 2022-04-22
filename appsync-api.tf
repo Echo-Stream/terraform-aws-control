@@ -67,6 +67,8 @@ resource "aws_appsync_domain_name_api_association" "echostream_appsync" {
 }
 
 module "appsync_domain" {
+  #depends_on = []
+
   domain_name = aws_appsync_domain_name.echostream_appsync.appsync_domain_name
   name        = lookup(local.regional_apis["domains"], var.region, "")
   zone_id     = data.aws_route53_zone.root_domain.zone_id
