@@ -1,5 +1,5 @@
 locals {
-  appsync_custom_url = format("https://%s/graphql", lookup(var.regional_apis["domains"], var.region, ""))
+  appsync_custom_url = format("https://%s/graphql", lookup(local.regional_apis["domains"], var.region, ""))
   artifacts_sns_arn  = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}_${replace(var.echostream_version, ".", "-")}"
 
   artifacts = {

@@ -3,33 +3,13 @@ variable "allowed_account_id" {
   type        = string
 }
 
-variable "app_acm_arn" {
-  description = "ACM certificate arn for the domain being used for environment - application"
-  type        = string
-}
-
 variable "domain_name" {
   description = "Your root domain, Used to fetch the hosted_zone_id and create webapp/appsync dns"
-}
-
-variable "app_domain_name" {
-  description = "Application Domain name of the environment which may be used for Cognito custom auth, SES domain Identity and Cloudfront custom domain"
-  type        = string
 }
 
 variable "authorized_domains" {
   description = "List of authorized_domains that can signup to the app"
   type        = list(string)
-}
-
-variable "docs_api_acm_arn" {
-  description = "ACM certificate arn for the domain being used for environment - docs api"
-  type        = string
-}
-
-variable "docs_api_domain_name" {
-  description = "Domain name of the environment used for API Documentation"
-  type        = string
 }
 
 variable "echostream_version" {
@@ -40,12 +20,6 @@ variable "echostream_version" {
 variable "region" {
   description = "AWS Region for the environment"
   type        = string
-}
-
-variable "regional_apis" {
-  description = "A map with regional api acm arns and domain names"
-  type        = any
-  default     = {}
 }
 
 variable "resource_prefix" {
@@ -77,4 +51,8 @@ variable "tenant_regions" {
   description = "List of Tenant regions"
   type        = any
   default     = []
+}
+
+variable "environment" {
+  description = "Environment. Could be dev, stg, prod"
 }
