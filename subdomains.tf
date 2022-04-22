@@ -108,3 +108,10 @@ resource "aws_route53_record" "regional_api" {
 
   provider = aws.route-53
 }
+
+resource "aws_acm_certificate_validation" "regional_api" {
+  for_each = aws_acm_certificate.regional_api
+
+  certificate_arn         = each.value.arn
+  validation_record_fqdns = [for record in aws_route53_record.regional_api : record.fqdn]
+}
