@@ -57,6 +57,7 @@ resource "aws_iam_role_policy_attachment" "echostream_appsync" {
 }
 
 resource "aws_appsync_domain_name" "echostream_appsync" {
+  depends_on      = [aws_acm_certificate_validation.regional_api]
   domain_name     = lookup(local.regional_apis["domains"], var.region, "")
   certificate_arn = lookup(local.regional_apis["acm_arns"], var.region, "")
 }
@@ -67,8 +68,6 @@ resource "aws_appsync_domain_name_api_association" "echostream_appsync" {
 }
 
 module "appsync_domain" {
-  depends_on = [aws_acm_certificate_validation.regional_api]
-
   domain_name = aws_appsync_domain_name.echostream_appsync.appsync_domain_name
   name        = lookup(local.regional_apis["domains"], var.region, "")
   zone_id     = data.aws_route53_zone.root_domain.zone_id
@@ -184,7 +183,8 @@ module "appsync_resolvers_us_east_1" {
 ## Appsync us-east-2 ##
 #######################
 module "appsync_us_east_2" {
-  count = contains(local.regions, "us-east-2") == true ? 1 : 0
+  depends_on = [aws_acm_certificate_validation.regional_api]
+  count      = contains(local.regions, "us-east-2") == true ? 1 : 0
 
   api_acm_arn                        = lookup(local.regional_apis["acm_arns"], "us-east-2", "")
   api_domain_name                    = lookup(local.regional_apis["domains"], "us-east-2", "")
@@ -208,8 +208,6 @@ module "appsync_us_east_2" {
 }
 
 module "appsync_domain_us_east_2" {
-  depends_on = [aws_acm_certificate_validation.regional_api]
-
   domain_name = module.appsync_us_east_2.0.appsync_domain_name
   name        = lookup(local.regional_apis["domains"], "us-east-2", "")
   zone_id     = data.aws_route53_zone.root_domain.zone_id
@@ -241,7 +239,8 @@ module "appsync_resolvers_us_east_2" {
 ## Appsync us-west-1 ##
 #######################
 module "appsync_us_west_1" {
-  count = contains(local.regions, "us-west-1") == true ? 1 : 0
+  depends_on = [aws_acm_certificate_validation.regional_api]
+  count      = contains(local.regions, "us-west-1") == true ? 1 : 0
 
   api_acm_arn                        = lookup(local.regional_apis["acm_arns"], "us-west-1", "")
   api_domain_name                    = lookup(local.regional_apis["domains"], "us-west-1", "")
@@ -265,8 +264,6 @@ module "appsync_us_west_1" {
 }
 
 module "appsync_domain_us_west_1" {
-  depends_on = [aws_acm_certificate_validation.regional_api]
-
   domain_name = module.appsync_us_west_1.0.appsync_domain_name
   name        = lookup(local.regional_apis["domains"], "us-west-1", "")
   zone_id     = data.aws_route53_zone.root_domain.zone_id
@@ -296,6 +293,8 @@ module "appsync_resolvers_us_west_1" {
 ## Appsync us-west-2 ##
 #######################
 module "appsync_us_west_2" {
+  depends_on = [aws_acm_certificate_validation.regional_api]
+
   count = contains(local.regions, "us-west-2") == true ? 1 : 0
 
   api_acm_arn                        = lookup(local.regional_apis["acm_arns"], "us-west-2", "")
@@ -320,8 +319,6 @@ module "appsync_us_west_2" {
 }
 
 module "appsync_domain_us_west_2" {
-  depends_on = [aws_acm_certificate_validation.regional_api]
-
   domain_name = module.appsync_us_west_2.0.appsync_domain_name
   name        = lookup(local.regional_apis["domains"], "us-west-2", "")
   zone_id     = data.aws_route53_zone.root_domain.zone_id
