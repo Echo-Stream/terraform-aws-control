@@ -56,3 +56,9 @@ variable "tenant_regions" {
 variable "environment" {
   description = "Environment. Could be dev, stg, prod"
 }
+
+variable "create_dynamo_db_replication_service_role" {
+  description = "Enable boolean to create a dynamo db replication service role"
+  type        = bool
+  default     = true
+}

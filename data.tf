@@ -112,3 +112,16 @@ data "aws_iam_policy_document" "glue_assume_role" {
     }
   }
 }
+
+data "aws_iam_policy_document" "dynamodb_replication_assume_role" {
+  statement {
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    principals {
+      identifiers = ["replication.dynamodb.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+}
