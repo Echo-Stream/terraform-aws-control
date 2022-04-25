@@ -1,5 +1,5 @@
 locals {
-  appsync_custom_url = format("https://%s/graphql", lookup(var.regional_apis["domains"], var.region, ""))
+  appsync_custom_url = format("https://%s/graphql", lookup(local.regional_apis["domains"], var.region, ""))
   artifacts_sns_arn  = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}_${replace(var.echostream_version, ".", "-")}"
 
   artifacts = {
@@ -48,7 +48,10 @@ locals {
     REMOVE_USER_SES_TEMPLATE               = aws_ses_template.remove_user.name
     SYSTEM_SES_EMAIL                       = var.ses_email_address
     SYSTEM_SQS_QUEUE                       = aws_sqs_queue.system_sqs_queue.id
+    TENANT_CREATED_SES_TEMPLATE            = aws_ses_template.tenant_created.name
     TENANT_DB_STREAM_HANDLER               = "${var.resource_prefix}-graph-table-tenant-stream-handler"
+    TENANT_DELETED_SES_TEMPLATE            = aws_ses_template.tenant_deleted.name
+    TENANT_ERRORED_SES_TEMPLATE            = aws_ses_template.tenant_errored.name
     TENANT_REGIONS                         = jsonencode(local.tenant_regions)
     UPDATE_CODE_ROLE                       = aws_iam_role.update_code.arn
     VALIDATOR_CODE                         = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"

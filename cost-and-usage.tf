@@ -99,6 +99,7 @@ resource "aws_s3_bucket_policy" "cost_and_usage" {
 
 ## CUR Report Definition ##
 resource "aws_cur_report_definition" "cost_and_usage" {
+  depends_on                 = [aws_s3_bucket_policy.cost_and_usage]
   additional_schema_elements = ["RESOURCES"]
   compression                = "Parquet"
   format                     = "Parquet"

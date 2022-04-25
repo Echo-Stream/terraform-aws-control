@@ -1,6 +1,10 @@
 resource "aws_cloudfront_distribution" "webapp" {
+  depends_on = [
+    aws_acm_certificate_validation.app,
+  ]
+
   aliases = [
-    var.app_domain_name
+    local.app_sub_domain
   ]
 
   origin {
@@ -84,7 +88,7 @@ resource "aws_cloudfront_distribution" "webapp" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = var.app_acm_arn
+    acm_certificate_arn      = aws_acm_certificate.app.arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
@@ -150,12 +154,29 @@ resource "aws_lambda_permission" "edge_config" {
   statement_id  = "AllowExecutionFromCloudFront"
 }
 
+module "webapp" {
+  domain_name = aws_cloudfront_distribution.webapp.domain_name
+  name        = local.app_sub_domain
+  zone_id     = data.aws_route53_zone.root_domain.zone_id
+
+  source  = "QuiNovas/cloudfront-r53-alias-record/aws"
+  version = "0.0.2"
+
+  providers = {
+    aws = aws.route-53
+  }
+}
+
 ################################
 ### Documentation Cloudfront ###
 ################################
 resource "aws_cloudfront_distribution" "docs" {
+  depends_on = [
+    aws_acm_certificate_validation.docs_api,
+  ]
+
   aliases = [
-    var.docs_api_domain_name
+    local.docs_api_sub_domain
   ]
 
   origin {
@@ -214,7 +235,7 @@ resource "aws_cloudfront_distribution" "docs" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = var.docs_api_acm_arn
+    acm_certificate_arn      = aws_acm_certificate.docs_api.arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
@@ -224,4 +245,17 @@ resource "aws_cloudfront_distribution" "docs" {
 
 resource "aws_cloudfront_origin_access_identity" "docs_origin_access_identity" {
   comment = "${var.resource_prefix} Echo Stream API docs"
+}
+
+module "docs" {
+  domain_name = aws_cloudfront_distribution.docs.domain_name
+  name        = local.docs_api_sub_domain
+  zone_id     = data.aws_route53_zone.root_domain.zone_id
+
+  source  = "QuiNovas/cloudfront-r53-alias-record/aws"
+  version = "0.0.2"
+
+  providers = {
+    aws = aws.route-53
+  }
 }

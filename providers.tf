@@ -4,6 +4,18 @@ provider "aws" {
   region              = var.region
 }
 
+# Provider for Managing DNS
+provider "aws" {
+  alias               = "route-53"
+  allowed_account_ids = [var.route53_account_id] # Usually corporate account id
+
+  assume_role {
+    role_arn = "arn:aws:iam::${var.route53_account_id}:role/${var.route53_manager_role_name}"
+  }
+
+  region = "us-east-1"
+}
+
 ## This should be it until Terraform supports Dynamic provider configuration ##
 
 ############################# US Regions ######################################

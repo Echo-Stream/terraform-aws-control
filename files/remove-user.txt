@@ -1,1 +1,1 @@
-You've been removed by {{caller}} from the Tenant {{tenant}}.
+You've been removed by {{caller}} from the EchoStream Tenant {{tenant}}.

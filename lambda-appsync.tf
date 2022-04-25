@@ -31,10 +31,10 @@ locals {
 
   regional_appsync_endpoints = jsonencode({
     #us-east-1 = local.appsync_custom_url
-    us-east-1 = format("https://%s/graphql", lookup(var.regional_apis["domains"], "us-east-1", ""))
-    us-east-2 = format("https://%s/graphql", lookup(var.regional_apis["domains"], "us-east-2", ""))
-    us-west-1 = format("https://%s/graphql", lookup(var.regional_apis["domains"], "us-west-1", ""))
-    us-west-2 = format("https://%s/graphql", lookup(var.regional_apis["domains"], "us-west-2", ""))
+    us-east-1 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-east-1", ""))
+    us-east-2 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-east-2", ""))
+    us-west-1 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-west-1", ""))
+    us-west-2 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-west-2", ""))
   })
 
   app_user_pool_ids = jsonencode({
@@ -112,32 +112,6 @@ data "aws_iam_policy_document" "appsync_datasource" {
     sid = "S3Access"
   }
 
-
-  statement {
-    actions = [
-      "lambda:CreateEventSourceMapping",
-      "lambda:DeleteEventSourceMapping",
-    ]
-
-    resources = [
-      "arn:aws:lambda:*:${local.current_account_id}:event-source-mapping:*"
-    ]
-
-    sid = "LambdaEventSourceMappingAccess"
-  }
-
-  statement {
-    actions = [
-      "lambda:CreateEventSourceMapping",
-    ]
-
-    resources = [
-      "*"
-    ]
-
-    sid = "CreateLambdaEventSourceMapping"
-  }
-
   statement {
     actions = [
       "iam:PassRole",
@@ -148,18 +122,6 @@ data "aws_iam_policy_document" "appsync_datasource" {
     ]
 
     sid = "PassRoleAll"
-  }
-
-  statement {
-    actions = [
-      "lambda:DeleteEventSourceMapping",
-    ]
-
-    resources = [
-      "arn:aws:lambda:*:${local.current_account_id}:event-source-mapping:*"
-    ]
-
-    sid = "DeleteLambdaEventSourceMapping"
   }
 
   statement {
@@ -438,6 +400,9 @@ module "appsync_datasource" {
 
   policy_arns = [
     aws_iam_policy.appsync_datasource.arn,
+    aws_iam_policy.graph_table_handler.arn,
+    aws_iam_policy.graph_table_system_stream_handler.arn,
+
     aws_iam_policy.artifacts_bucket_read.arn,
     aws_iam_policy.ecr_read.arn,
     aws_iam_policy.graph_ddb_read.arn,

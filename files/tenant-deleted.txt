@@ -1,0 +1,1 @@
+Your Tenant {{tenant}} has been successfully deleted in EchoStream.
