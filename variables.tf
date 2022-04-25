@@ -3,18 +3,28 @@ variable "allowed_account_id" {
   type        = string
 }
 
-variable "domain_name" {
-  description = "Your root domain, Used to fetch the hosted_zone_id and create webapp/appsync dns"
-}
-
 variable "authorized_domains" {
   description = "List of authorized_domains that can signup to the app"
   type        = list(string)
 }
 
+variable "create_dynamo_db_replication_service_role" {
+  description = "Enable boolean to create a dynamo db replication service role"
+  type        = bool
+  default     = true
+}
+
+variable "domain_name" {
+  description = "Your root domain, Used to fetch the hosted_zone_id and create webapp/appsync dns"
+}
+
 variable "echostream_version" {
   description = "Major.Minor Version to fetch artifacts from right location"
   type        = string
+}
+
+variable "environment" {
+  description = "Environment. Could be dev, stg, prod"
 }
 
 variable "region" {
@@ -51,14 +61,4 @@ variable "tenant_regions" {
   description = "List of Tenant regions"
   type        = any
   default     = []
-}
-
-variable "environment" {
-  description = "Environment. Could be dev, stg, prod"
-}
-
-variable "create_dynamo_db_replication_service_role" {
-  description = "Enable boolean to create a dynamo db replication service role"
-  type        = bool
-  default     = true
 }
