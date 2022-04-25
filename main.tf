@@ -26,17 +26,16 @@ resource "aws_kms_alias" "lambda_environment_variables" {
   target_key_id = aws_kms_key.lambda_environment_variables.key_id
 }
 
-resource "aws_iam_role" "dynamo_db_replication" {
-  count              = var.create_dynamo_db_replication_service_role ? 1 : 0
-  name               = "AWSServiceRoleForDynamoDBReplication"
-  assume_role_policy = data.aws_iam_policy_document.dynamodb_replication_assume_role.json
-  tags               = local.tags
+resource "aws_iam_service_linked_role" "dynamo_db_replication" {
+  count            = var.create_dynamo_db_replication_service_role ? 1 : 0
+  aws_service_name = "replication.dynamodb.amazonaws.com"
 }
 
+
 resource "aws_iam_role_policy_attachment" "dynamo_db_replication" {
-  count              = var.create_dynamo_db_replication_service_role ? 1 : 0
+  count      = var.create_dynamo_db_replication_service_role ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/service-role/DynamoDBReplicationServiceRolePolicy"
-  role       = aws_iam_role.dynamo_db_replication.0.name
+  role       = aws_iam_service_linked_role.dynamo_db_replication.0.name
 }
 
 
