@@ -19,10 +19,6 @@ data "aws_ses_email_identity" "support" {
   email = var.ses_email_address
 }
 
-# resource "aws_ses_email_identity" "support" {
-#   email = var.ses_email_address
-# }
-
 resource "aws_ses_configuration_set" "email_errors" {
   name = "${var.resource_prefix}-email-errors"
 }

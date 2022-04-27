@@ -46,7 +46,7 @@ locals {
     REBUILD_NOTIFICATION_QUEUE             = aws_sqs_queue.rebuild_notifications.url
     REGION                                 = var.region
     REMOVE_USER_SES_TEMPLATE               = aws_ses_template.remove_user.name
-    SYSTEM_SES_EMAIL                       = var.ses_email_address
+    SYSTEM_SES_EMAIL                       = data.aws_ses_email_identity.support.email
     SYSTEM_SQS_QUEUE                       = aws_sqs_queue.system_sqs_queue.id
     TENANT_CREATED_SES_TEMPLATE            = aws_ses_template.tenant_created.name
     TENANT_DB_STREAM_HANDLER               = "${var.resource_prefix}-graph-table-tenant-stream-handler"

@@ -22,7 +22,7 @@ resource "aws_cognito_user_pool" "echostream_ui" {
 
   email_configuration {
     source_arn            = data.aws_ses_email_identity.support.arn
-    from_email_address    = var.ses_email_address
+    from_email_address    = data.aws_ses_email_identity.support.email
     email_sending_account = "DEVELOPER"
   }
 
