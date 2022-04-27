@@ -336,7 +336,7 @@ resource "aws_sfn_state_machine" "rebuild_notifications" {
   tags = local.tags
 }
 
-resource "aws_instance" "start_rebuild_notifications_step_function" {
+resource "null_resource" "start_rebuild_notifications_step_function" {
 
   provisioner "local-exec" {
     command = "aws stepfunctions start-execution --state-machine-arn ${aws_sfn_state_machine.rebuild_notifications.arn}"
