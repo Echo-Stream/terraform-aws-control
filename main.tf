@@ -32,11 +32,11 @@ resource "aws_iam_service_linked_role" "dynamo_db_replication" {
 }
 
 
-resource "aws_iam_role_policy_attachment" "dynamo_db_replication" {
-  count      = var.create_dynamo_db_replication_service_role ? 1 : 0
-  policy_arn = "arn:aws:iam::aws:policy/service-role/DynamoDBReplicationServiceRolePolicy"
-  role       = aws_iam_service_linked_role.dynamo_db_replication.0.name
-}
+# resource "aws_iam_role_policy_attachment" "dynamo_db_replication" {
+#   count      = var.create_dynamo_db_replication_service_role ? 1 : 0
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/DynamoDBReplicationServiceRolePolicy"
+#   role       = aws_iam_service_linked_role.dynamo_db_replication.0.name
+# }
 
 
 ## Regional Log buckets
