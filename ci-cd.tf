@@ -336,27 +336,9 @@ resource "aws_sfn_state_machine" "rebuild_notifications" {
   tags = local.tags
 }
 
-# ## Alert if Any execution of the rebuild notifications state machine fails
-# resource "aws_cloudwatch_event_rule" "rebuild_notifications_alert" {
-#   name        = "${var.resource_prefix}-rebuild-notifications-alert"
-#   description = "Notify to CI CD errors topic if Rebuild Notifications Step function fails"
+resource "aws_instance" "start_rebuild_notifications_step_function" {
 
-#   event_pattern = <<EOF
-# {
-#   "source": ["aws.states"],
-#   "detail-type": ["Step Functions Execution Status Change"],
-#   "detail": {
-#     "status": ["FAILED"],
-#     "stateMachineArn": ["arn:aws:states:${local.current_region}:${local.current_account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"]
-#   }
-# }
-# EOF
-
-#   tags = local.tags
-# }
-
-# resource "aws_cloudwatch_event_target" "rebuild_notifications_alert" {
-#   rule      = aws_cloudwatch_event_rule.rebuild_notifications_alert.name
-#   target_id = "SendToCICDErrorsTopic"
-#   arn       = aws_sns_topic.ci_cd_errors.arn
-# }
+  provisioner "local-exec" {
+    command = "aws stepfunctions start-execution --state-machine-arn ${aws_sfn_state_machine.rebuild_notifications.arn}"
+  }
+}
