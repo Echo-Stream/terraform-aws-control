@@ -69,5 +69,5 @@ module "control" {
 
 ```
 ### Important Note
-- Verifying an email address provided to SES service is a manual task. User needs to verify a link that is sent by AWS SES to the provided email.
+- The SES email identity of the ses email address that is being passed in should have been already ready to be used.
 - DKIM is not enabled.

@@ -21,7 +21,7 @@ resource "aws_cognito_user_pool" "echostream_ui" {
   }                                              ## TF 14.5, aws plugin 3.26.0 doesn't support to set it to 'always'
 
   email_configuration {
-    source_arn            = aws_ses_email_identity.support.arn
+    source_arn            = data.aws_ses_email_identity.support.arn
     from_email_address    = var.ses_email_address
     email_sending_account = "DEVELOPER"
   }
