@@ -14,7 +14,8 @@ Complaint Notifications SNS Topic: 	none
 Delivery Notifications SNS Topic: 	none
 Include Original Headers: 	disabled
 */
-resource "aws_ses_email_identity" "support" {
+
+data "aws_ses_email_identity" "support" {
   email = var.ses_email_address
 }
 

@@ -172,6 +172,9 @@ module "appsync_datasource_" {
 }
 
 module "appsync_resolvers_us_east_1" {
+  depends_on = [
+    module.appsync_datasource_
+  ]
   api_id          = aws_appsync_graphql_api.echostream.id
   datasource_name = module.appsync_datasource_.name
   source          = "./_modules/appsync-resolvers"
@@ -222,6 +225,9 @@ module "appsync_domain_us_east_2" {
 
 
 module "appsync_resolvers_us_east_2" {
+  depends_on = [
+    module.appsync_us_east_2
+  ]
   count = contains(local.regions, "us-east-2") == true ? 1 : 0
 
   api_id          = module.appsync_us_east_2.0.api_id
@@ -277,6 +283,9 @@ module "appsync_domain_us_west_1" {
 }
 
 module "appsync_resolvers_us_west_1" {
+  depends_on = [
+    module.appsync_us_west_1
+  ]
   count = contains(local.regions, "us-west-1") == true ? 1 : 0
 
   api_id          = module.appsync_us_west_1.0.api_id
@@ -332,6 +341,9 @@ module "appsync_domain_us_west_2" {
 }
 
 module "appsync_resolvers_us_west_2" {
+  depends_on = [
+    module.appsync_us_west_2
+  ]
   count = contains(local.regions, "us-west-2") == true ? 1 : 0
 
   api_id          = module.appsync_us_west_2.0.api_id

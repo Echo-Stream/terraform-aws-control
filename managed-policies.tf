@@ -230,7 +230,7 @@ data "aws_iam_policy_document" "graph_table_handler" {
 
     resources = [
       aws_ses_configuration_set.email_errors.arn,
-      aws_ses_email_identity.support.arn,
+      data.aws_ses_email_identity.support.arn,
     ]
 
     sid = "SESSendEmail"
@@ -243,7 +243,7 @@ data "aws_iam_policy_document" "graph_table_handler" {
 
     resources = [
       aws_ses_configuration_set.email_errors.arn,
-      aws_ses_email_identity.support.arn,
+      data.aws_ses_email_identity.support.arn,
       aws_ses_template.invite_user.arn,
       aws_ses_template.notify_user.arn,
       aws_ses_template.remove_user.arn,

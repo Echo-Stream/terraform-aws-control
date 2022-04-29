@@ -42,11 +42,6 @@ Terraform Module Control Resources.
 | ui_user_pool_endpoint | Endpoint of the UI cognito user pool |
 | ui_user_pool_id | The ID of the UI cognito user pool |
 
-
-### CI/CD for Publish Module (.github/workflows/publish.yml)
-- To publish the module, merge/checkout changes from `main` to branch named like `vX.X.X`
-- Merging changes into a already existing versioned branch will publish new code on same version.
-
 ### Usage
 ```
 module "control" {
@@ -68,6 +63,9 @@ module "control" {
 }
 
 ```
+
+### CI/CD to Publish Module
+- To publish the module to public registry, use tags `vx.x.x`
+
 ### Important Note
-- Verifying an email address provided to SES service is a manual task. User needs to verify a link that is sent by AWS SES to the provided email.
-- DKIM is not enabled.
+- The SES email identity of the ses email address that is being passed as input should have been already ready to be used.
