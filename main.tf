@@ -31,14 +31,6 @@ resource "aws_iam_service_linked_role" "dynamo_db_replication" {
   aws_service_name = "replication.dynamodb.amazonaws.com"
 }
 
-
-# resource "aws_iam_role_policy_attachment" "dynamo_db_replication" {
-#   count      = var.create_dynamo_db_replication_service_role ? 1 : 0
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/DynamoDBReplicationServiceRolePolicy"
-#   role       = aws_iam_service_linked_role.dynamo_db_replication.0.name
-# }
-
-
 ## Regional Log buckets
 module "log_bucket_us_east_1" {
   count        = contains(local.regions, "us-east-1") == true ? 1 : 0

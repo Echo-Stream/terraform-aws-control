@@ -1,11 +1,3 @@
-## General
-output "log_bucket_id" {
-  description = "The ID of the control region bucket"
-  value       = module.log_bucket.id
-}
-
-## Cloudfront
-
 output "api_user_pool_arn" {
   description = "The ARN of the API cognito user pool"
   value       = aws_cognito_user_pool.echostream_api.arn
@@ -24,27 +16,6 @@ output "api_user_pool_endpoint" {
 output "api_user_pool_id" {
   description = "The ID of the API cognito user pool"
   value       = aws_cognito_user_pool.echostream_api.id
-}
-
-output "appsync_custom_url" {
-  description = "Custom API URL of the EchoStream"
-  value       = local.appsync_custom_url
-}
-
-
-output "appsync_domain_name" {
-  description = "The Cloudfront Domain name that AppSync provides"
-  value       = aws_appsync_domain_name.echostream_appsync.domain_name
-}
-
-output "appsync_id" {
-  description = "Main API ID of the EchoStream"
-  value       = aws_appsync_graphql_api.echostream.id
-}
-
-output "appsync_url" {
-  description = "API URL of the EchoStream"
-  value       = aws_appsync_graphql_api.echostream.uris["GRAPHQL"]
 }
 
 output "cloudfront_domain_name_api_docs" {
@@ -78,6 +49,31 @@ output "cloudfront_oai_id_api_docs" {
 output "cloudfront_oai_id_webapp" {
   description = "The identifier for the EchoStream Webapp CloudFront distribution"
   value       = aws_cloudfront_origin_access_identity.origin_access_identity.id
+}
+
+output "log_bucket_id" {
+  description = "The ID of the control region bucket"
+  value       = module.log_bucket.id
+}
+
+output "regional_app_user_pool_client_ids" {
+  description = "A map of all regional App userpool client ids"
+  value       = local.app_user_pool_client_ids
+}
+
+output "regional_app_user_pool_ids" {
+  description = "A map of all regional App userpool endpoints"
+  value       = local.app_user_pool_ids
+}
+
+output "regional_appsync_endpoints" {
+  description = "A map of regional appsync endpoints"
+  value       = local.regional_appsync_endpoints
+}
+
+output "regional_appsync_ids" {
+  description = "A map of regional appsync ids"
+  value       = local.appsync_api_ids
 }
 
 output "ui_user_pool_arn" {
