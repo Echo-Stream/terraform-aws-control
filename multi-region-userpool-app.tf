@@ -14,7 +14,7 @@ module "app_cognito_pool_us_east_1" {
   runtime                                        = local.lambda_runtime
   tags                                           = local.tags
 
-  source = "./_modules/app-user-pool"
+  source = "./modules/app-user-pool"
 
   providers = {
     aws = aws.north-virginia
@@ -37,7 +37,7 @@ module "app_cognito_pool_us_east_2" {
   runtime                                        = local.lambda_runtime
   tags                                           = local.tags
 
-  source = "./_modules/app-user-pool"
+  source = "./modules/app-user-pool"
 
   providers = {
     aws = aws.ohio
@@ -62,7 +62,7 @@ module "app_cognito_pool_us_west_1" {
   runtime                                        = local.lambda_runtime
   tags                                           = local.tags
 
-  source = "./_modules/app-user-pool"
+  source = "./modules/app-user-pool"
 
   providers = {
     aws = aws.north-california
@@ -86,7 +86,7 @@ module "app_cognito_pool_us_west_2" {
   runtime                                        = local.lambda_runtime
   tags                                           = local.tags
 
-  source = "./_modules/app-user-pool"
+  source = "./modules/app-user-pool"
 
   providers = {
     aws = aws.oregon

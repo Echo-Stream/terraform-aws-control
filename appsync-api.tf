@@ -177,7 +177,7 @@ module "appsync_resolvers_us_east_1" {
   ]
   api_id          = aws_appsync_graphql_api.echostream.id
   datasource_name = module.appsync_datasource_.name
-  source          = "./_modules/appsync-resolvers"
+  source          = "./modules/appsync-resolvers"
 }
 
 ################################################################################################
@@ -203,7 +203,7 @@ module "appsync_us_east_2" {
   tags                               = local.tags
   userpool_id                        = module.app_cognito_pool_us_east_2.0.userpool_id
 
-  source = "./_modules/appsync-api"
+  source = "./modules/appsync-api"
 
   providers = {
     aws = aws.ohio
@@ -233,7 +233,7 @@ module "appsync_resolvers_us_east_2" {
   api_id          = module.appsync_us_east_2.0.api_id
   datasource_name = module.appsync_us_east_2.0.datasource_name
 
-  source = "./_modules/appsync-resolvers"
+  source = "./modules/appsync-resolvers"
 
   providers = {
     aws = aws.ohio
@@ -262,7 +262,7 @@ module "appsync_us_west_1" {
   tags                               = local.tags
   userpool_id                        = module.app_cognito_pool_us_west_1.0.userpool_id
 
-  source = "./_modules/appsync-api"
+  source = "./modules/appsync-api"
 
   providers = {
     aws = aws.north-california
@@ -291,7 +291,7 @@ module "appsync_resolvers_us_west_1" {
   api_id          = module.appsync_us_west_1.0.api_id
   datasource_name = module.appsync_us_west_1.0.datasource_name
 
-  source = "./_modules/appsync-resolvers"
+  source = "./modules/appsync-resolvers"
 
   providers = {
     aws = aws.north-california
@@ -320,7 +320,7 @@ module "appsync_us_west_2" {
   tags                               = local.tags
   userpool_id                        = module.app_cognito_pool_us_west_2.0.userpool_id
 
-  source = "./_modules/appsync-api"
+  source = "./modules/appsync-api"
 
   providers = {
     aws = aws.oregon
@@ -349,7 +349,7 @@ module "appsync_resolvers_us_west_2" {
   api_id          = module.appsync_us_west_2.0.api_id
   datasource_name = module.appsync_us_west_2.0.datasource_name
 
-  source = "./_modules/appsync-resolvers"
+  source = "./modules/appsync-resolvers"
 
   providers = {
     aws = aws.oregon
