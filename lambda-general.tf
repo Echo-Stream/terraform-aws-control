@@ -55,7 +55,7 @@ module "log_retention" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 60
-  version       = "4.0.0"
+  version       = "4.0.1"
 }
 
 
@@ -181,7 +181,7 @@ module "managed_app_cloud_init" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 60
-  version       = "4.0.0"
+  version       = "4.0.1"
 }
 
 resource "aws_lambda_event_source_mapping" "managed_app_cloud_init" {

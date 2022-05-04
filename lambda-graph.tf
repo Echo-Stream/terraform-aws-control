@@ -60,7 +60,7 @@ module "graph_table_dynamodb_trigger" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "4.0.0"
+  version       = "4.0.1"
 }
 
 resource "aws_lambda_event_source_mapping" "graph_table_dynamodb_trigger" {
@@ -243,7 +243,7 @@ module "graph_table_tenant_stream_handler" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 900
-  version       = "4.0.0"
+  version       = "4.0.1"
 }
 
 #######################################
@@ -299,7 +299,7 @@ module "graph_table_system_stream_handler" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 900
-  version       = "4.0.0"
+  version       = "4.0.1"
 }
 
 resource "aws_lambda_event_source_mapping" "graph_table_system_stream_handler" {
