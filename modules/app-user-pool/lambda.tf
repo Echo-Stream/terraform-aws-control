@@ -25,7 +25,6 @@ resource "aws_lambda_function" "app_cognito_pre_authentication" {
     ignore_changes = [
       last_modified,
       qualified_arn,
-      s3_object_version,
       version,
     ]
   }
@@ -35,7 +34,6 @@ resource "aws_lambda_function" "app_cognito_pre_authentication" {
   runtime           = var.runtime
   s3_bucket         = data.aws_s3_object.function_package.bucket
   s3_key            = data.aws_s3_object.function_package.key
-  s3_object_version = data.aws_s3_object.function_package.version_id
   timeout           = 30
   tags              = var.tags
 }
