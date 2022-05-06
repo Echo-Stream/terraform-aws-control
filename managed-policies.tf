@@ -385,6 +385,7 @@ data "aws_iam_policy_document" "graph_table_handler" {
       "lambda:GetFunction",
       "lambda:GetFunctionConfiguration",
       "lambda:InvokeFunction",
+      "lambda:TagResource",
       "lambda:UpdateFunctionConfiguration",
     ]
 

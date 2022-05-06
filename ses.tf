@@ -43,48 +43,48 @@ resource "aws_sns_topic" "email_error_events" {
 resource "aws_ses_template" "invite_user" {
   name    = "${var.resource_prefix}-invite-user"
   subject = "Welcome to EchoStream!"
-  html    = file("${path.module}/files/invite-user.html")
-  text    = file("${path.module}/files/invite-user.txt")
+  html    = file("${path.module}/templates/invite-user.html")
+  text    = file("${path.module}/templates/invite-user.txt")
 }
 
 resource "aws_ses_template" "notify_user" {
   name    = "${var.resource_prefix}-notify-user"
   subject = "Welcome {{name}} to EchoStream Tenant {{tenant}}"
-  html    = file("${path.module}/files/notify-user.html")
-  text    = file("${path.module}/files/notify-user.txt")
+  html    = file("${path.module}/templates/notify-user.html")
+  text    = file("${path.module}/templates/notify-user.txt")
 }
 
 resource "aws_ses_template" "remove_user" {
   name    = "${var.resource_prefix}-remove-user"
   subject = "Goodbye {{name}} from EchoStream Tenant {{tenant}}"
-  html    = file("${path.module}/files/remove-user.html")
-  text    = file("${path.module}/files/remove-user.txt")
+  html    = file("${path.module}/templates/remove-user.html")
+  text    = file("${path.module}/templates/remove-user.txt")
 }
 
 resource "aws_ses_template" "managed_app_cloud_init_notify" {
   name    = "${var.resource_prefix}-managed-app-cloud-init-notify"
   subject = "Managed instance {{ managed_instance_id }} is sucessfully registered!"
-  html    = file("${path.module}/files/managed-app-cloud-init-notify.html")
-  text    = file("${path.module}/files/managed-app-cloud-init-notify.txt")
+  html    = file("${path.module}/templates/managed-app-cloud-init-notify.html")
+  text    = file("${path.module}/templates/managed-app-cloud-init-notify.txt")
 }
 
 resource "aws_ses_template" "tenant_created" {
   name    = "${var.resource_prefix}-tenant-created"
   subject = "EchoStream Tenant {{tenant}} is sucessfully created!"
-  html    = file("${path.module}/files/tenant-created.html")
-  text    = file("${path.module}/files/tenant-created.txt")
+  html    = file("${path.module}/templates/tenant-created.html")
+  text    = file("${path.module}/templates/tenant-created.txt")
 }
 
 resource "aws_ses_template" "tenant_deleted" {
   name    = "${var.resource_prefix}-tenant-deleted"
   subject = "EchoStream Tenant {{tenant}} is sucessfully deleted!"
-  html    = file("${path.module}/files/tenant-deleted.html")
-  text    = file("${path.module}/files/tenant-deleted.txt")
+  html    = file("${path.module}/templates/tenant-deleted.html")
+  text    = file("${path.module}/templates/tenant-deleted.txt")
 }
 
 resource "aws_ses_template" "tenant_errored" {
   name    = "${var.resource_prefix}-tenant-errored"
   subject = "EchoStream Tenant {{tenant}} creation was unsuccessful!"
-  html    = file("${path.module}/files/tenant-errored.html")
-  text    = file("${path.module}/files/tenant-errored.txt")
+  html    = file("${path.module}/templates/tenant-errored.html")
+  text    = file("${path.module}/templates/tenant-errored.txt")
 }

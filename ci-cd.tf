@@ -20,6 +20,7 @@ data "aws_iam_policy_document" "deployment_handler" {
       "lambda:ListFunctions",
       "lambda:PublishLayerVersion",
       "lambda:PublishVersion",
+      "lambda:TagResource",
       "lambda:UpdateFunctionCode",
       "lambda:UpdateFunctionConfiguration",
     ]
@@ -184,6 +185,7 @@ data "aws_iam_policy_document" "rebuild_notifications" {
       "lambda:ListFunctions",
       "lambda:PublishLayerVersion",
       "lambda:PublishVersion",
+      "lambda:TagResource",
       "lambda:UpdateFunctionCode",
       "lambda:UpdateFunctionConfiguration",
     ]
@@ -261,7 +263,7 @@ resource "aws_iam_role" "rebuild_notifications_state_machine" {
 }
 
 data "template_file" "rebuild_notifications_state_machine" {
-  template = file("${path.module}/files/rebuild-notifications-state-machine.json")
+  template = file("${path.module}/templates/rebuild-notifications-state-machine.json")
 
   vars = {
     function_arn          = module.rebuild_notifications.arn
