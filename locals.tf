@@ -28,6 +28,8 @@ locals {
     APPSYNC_API_IDS                        = local.appsync_api_ids
     APPSYNC_ENDPOINT                       = local.appsync_custom_url
     ARTIFACTS_BUCKET                       = local.artifacts_bucket_prefix
+    AUDITOR_CODE                           = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/auditor.zip\"}"
+    AUDITOR_ROLE                           = aws_iam_role.auditor.arn
     CI_CD_TOPIC_ARN                        = aws_sns_topic.ci_cd_errors.arn
     CLOUDFRONT_DISTRIBUTION_ID_DOCS        = aws_cloudfront_distribution.docs.id
     CLOUDFRONT_DISTRIBUTION_ID_WEBAPP      = aws_cloudfront_distribution.webapp.id
