@@ -157,7 +157,7 @@ resource "aws_iam_policy" "tenant_firehose_write" {
   description = "IAM permissions required to write to Tenant firehose"
 
   name   = "${var.resource_prefix}-tenant-firehose-write"
-  policy = data.aws_iam_policy_document.auditor.json
+  policy = data.aws_iam_policy_document.tenant_firehose_write.json
 }
 
 ################
