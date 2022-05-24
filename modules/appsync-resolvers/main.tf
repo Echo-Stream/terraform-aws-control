@@ -36,10 +36,6 @@ locals {
       field = "Update"
       type  = "ApiUser"
     }
-    app_change_receiver_node_create_audit_records = {
-      field = "CreateAuditRecords"
-      type  = "AppChangeReceiverNode"
-    }
     bitmap_router_node_delete = {
       field = "Delete"
       type  = "BitmapRouterNode"
@@ -264,10 +260,6 @@ locals {
       field = "Update"
       type  = "ExternalApp"
     }
-    external_node_create_audit_records = {
-      field = "CreateAuditRecords"
-      type  = "ExternalNode"
-    }
     external_node_delete = {
       field = "Delete"
       type  = "ExternalNode"
@@ -411,10 +403,6 @@ locals {
     managed_app_update = {
       field = "Update"
       type  = "ManagedApp"
-    }
-    managed_node_create_audit_records = {
-      field = "CreateAuditRecords"
-      type  = "ManagedNode"
     }
     managed_node_delete = {
       field = "Delete"
