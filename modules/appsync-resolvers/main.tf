@@ -655,6 +655,10 @@ locals {
       field = "appsyncEndpoint"
       type  = "CrossAccountApp"
     }
+    cross_account_app_audit_records_endpoint = {
+      field = "auditRecordsEndpoint"
+      type  = "CrossAccountApp"
+    }
     cross_account_app_config = {
       field = "config"
       type  = "CrossAccountApp"
@@ -791,6 +795,10 @@ locals {
       field = "appsyncEndpoint"
       type  = "ExternalApp"
     }
+    external_app_audit_records_endpoint = {
+      field = "auditRecordsEndpoint"
+      type  = "ExternalApp"
+    }
     external_app_config = {
       field = "config"
       type  = "ExternalApp"
@@ -858,6 +866,10 @@ locals {
     kms_key_tenant = {
       field = "tenant"
       type  = "KmsKey"
+    }
+    managed_app_audit_records_endpoint = {
+      field = "auditRecordsEndpoint"
+      type  = "ManagedApp"
     }
     managed_app_config = {
       field = "config"
