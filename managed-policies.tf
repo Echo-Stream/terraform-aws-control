@@ -133,6 +133,32 @@ resource "aws_iam_policy" "tenant_table_read_write" {
   policy = data.aws_iam_policy_document.tenant_table_read_write.json
 }
 
+#############################
+## Tenant Firehose - Write ##
+#############################
+data "aws_iam_policy_document" "tenant_firehose_write" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "firehose:PutRecord*"
+    ]
+
+    resources = [
+      "arn:aws:firehose:*:${local.current_account_id}:deliverystream/${var.resource_prefix}-tenant-*"
+    ]
+
+    sid = "WriteAuditRecords"
+  }
+
+}
+
+resource "aws_iam_policy" "tenant_firehose_write" {
+  description = "IAM permissions required to write to Tenant firehose"
+
+  name   = "${var.resource_prefix}-tenant-firehose-write"
+  policy = data.aws_iam_policy_document.auditor.json
+}
 
 ################
 ## ECR - Read ##

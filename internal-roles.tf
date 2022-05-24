@@ -39,7 +39,7 @@ resource "aws_iam_role_policy_attachment" "remote_app_basic" {
 # }
 
 ############################
-## Internal Functions IAM ##
+## Internal Node IAM ##
 ############################
 resource "aws_iam_role" "internal_node" {
   name               = "${var.resource_prefix}-internal-node"
@@ -53,20 +53,6 @@ resource "aws_iam_role_policy_attachment" "internal_node_basic" {
 }
 
 data "aws_iam_policy_document" "internal_node" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "firehose:PutRecord*"
-    ]
-
-    resources = [
-      "arn:aws:firehose:*:${local.current_account_id}:deliverystream/${var.resource_prefix}-tenant-*"
-    ]
-
-    sid = "WriteAuditRecords"
-  }
-
   statement {
     effect = "Allow"
 
@@ -85,42 +71,8 @@ data "aws_iam_policy_document" "internal_node" {
   }
 }
 
-data "aws_iam_policy_document" "internal_node_sts_assume" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "sts:AssumeRole",
-    ]
-
-    resources = [aws_iam_role.update_code.arn]
-
-    sid = "AssumeRole"
-  }
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "sts:SetSourceIdentity",
-    ]
-
-    resources = [aws_iam_role.update_code.arn]
-
-    sid = "SetSourceIdentity"
-
-    condition {
-      test = "StringLike"
-      values = [
-        "518849732",
-        "296027047"
-      ]
-      variable = "sts:SourceIdentity"
-    }
-  }
-}
-
 resource "aws_iam_policy" "internal_node" {
-  description = "IAM permissions required for tenant functions"
+  description = "IAM permissions required for Internal Nodes"
 
   policy = data.aws_iam_policy_document.internal_node.json
 }
@@ -130,15 +82,9 @@ resource "aws_iam_role_policy_attachment" "internal_node" {
   policy_arn = aws_iam_policy.internal_node.arn
 }
 
-resource "aws_iam_policy" "internal_node_sts_assume" {
-  description = "IAM permissions required for internal nodes to assume update code role"
-
-  policy = data.aws_iam_policy_document.internal_node_sts_assume.json
-}
-
 resource "aws_iam_role_policy_attachment" "internal_node_sts_assume" {
   role       = aws_iam_role.internal_node.name
-  policy_arn = aws_iam_policy.internal_node_sts_assume.arn
+  policy_arn = aws_iam_policy.update_code_sts_assume.arn
 }
 
 resource "aws_iam_role_policy_attachment" "internal_node_graph_ddb_read" {
@@ -149,6 +95,40 @@ resource "aws_iam_role_policy_attachment" "internal_node_graph_ddb_read" {
 resource "aws_iam_role_policy_attachment" "internal_node_tenant_table_read_write" {
   role       = aws_iam_role.internal_node.name
   policy_arn = aws_iam_policy.tenant_table_read_write.arn
+}
+
+resource "aws_iam_role_policy_attachment" "internal_node_tenant_firehose_write" {
+  role       = aws_iam_role.internal_node.name
+  policy_arn = aws_iam_policy.tenant_firehose_write.arn
+}
+
+############################
+## Auditor IAM ##
+############################
+resource "aws_iam_role" "auditor" {
+  name               = "${var.resource_prefix}-auditor"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  tags               = local.tags
+}
+
+resource "aws_iam_role_policy_attachment" "auditor_basic" {
+  role       = aws_iam_role.auditor.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+resource "aws_iam_role_policy_attachment" "auditor_sts_assume" {
+  role       = aws_iam_role.auditor.name
+  policy_arn = aws_iam_policy.update_code_sts_assume.arn
+}
+
+resource "aws_iam_role_policy_attachment" "auditor_graph_ddb_read" {
+  role       = aws_iam_role.auditor.name
+  policy_arn = aws_iam_policy.graph_ddb_read.arn
+}
+
+resource "aws_iam_role_policy_attachment" "auditor_tenant_firehose_write" {
+  role       = aws_iam_role.auditor.name
+  policy_arn = aws_iam_policy.tenant_firehose_write.arn
 }
 
 ###################
@@ -172,7 +152,7 @@ resource "aws_iam_role_policy_attachment" "validator_db" {
 
 resource "aws_iam_role_policy_attachment" "validator_sts_assume" {
   role       = aws_iam_role.validator.name
-  policy_arn = aws_iam_policy.internal_node_sts_assume.arn
+  policy_arn = aws_iam_policy.update_code_sts_assume.arn
 }
 
 #####################
@@ -196,7 +176,8 @@ data "aws_iam_policy_document" "conditional_lambda_assume_role" {
       test = "StringEquals"
       values = [
         "518849732",
-        "296027047"
+        "296027047",
+        "181404377"
       ] # these values are encoded inside lambda code
       variable = "sts:SourceIdentity"
     }
@@ -252,3 +233,45 @@ resource "aws_iam_role_policy_attachment" "update_code_graph_ddb_access" {
   role       = aws_iam_role.update_code.name
   policy_arn = aws_iam_policy.graph_ddb_read.arn
 }
+
+data "aws_iam_policy_document" "update_code_sts_assume" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    resources = [aws_iam_role.update_code.arn]
+
+    sid = "AssumeRole"
+  }
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sts:SetSourceIdentity",
+    ]
+
+    resources = [aws_iam_role.update_code.arn]
+
+    sid = "SetSourceIdentity"
+
+    condition {
+      test = "StringLike"
+      values = [
+        "518849732",
+        "296027047",
+        "181404377"
+      ]
+      variable = "sts:SourceIdentity"
+    }
+  }
+}
+
+resource "aws_iam_policy" "update_code_sts_assume" {
+  description = "IAM permissions required for tenant functions to assume update code role"
+
+  policy = data.aws_iam_policy_document.update_code_sts_assume.json
+}
+
