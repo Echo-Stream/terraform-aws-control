@@ -74,6 +74,7 @@ data "aws_iam_policy_document" "internal_node" {
 resource "aws_iam_policy" "internal_node" {
   description = "IAM permissions required for Internal Nodes"
 
+  name   = "${var.resource_prefix}-internal-node"
   policy = data.aws_iam_policy_document.internal_node.json
 }
 
@@ -273,6 +274,7 @@ data "aws_iam_policy_document" "update_code_sts_assume" {
 resource "aws_iam_policy" "update_code_sts_assume" {
   description = "IAM permissions required for tenant functions to assume update code role"
 
+  name   = "${var.resource_prefix}-update-code-sts-assume"
   policy = data.aws_iam_policy_document.update_code_sts_assume.json
 }
 
