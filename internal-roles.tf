@@ -166,6 +166,7 @@ data "aws_iam_policy_document" "conditional_lambda_assume_role" {
     ]
     principals {
       identifiers = [
+        aws_iam_role.auditor.arn,
         aws_iam_role.internal_node.arn,
         aws_iam_role.validator.arn,
       ]
