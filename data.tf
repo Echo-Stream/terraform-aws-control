@@ -12,6 +12,10 @@ data "aws_route53_zone" "root_domain" {
   provider     = aws.route-53
 }
 
+data "aws_iam_policy" "administrator_access" {
+  arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
+
 data "aws_iam_policy_document" "appsync_assume_role" {
   statement {
     actions = [
