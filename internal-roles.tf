@@ -1,12 +1,6 @@
 #####################
 ## Remote APP IAM ##
 ####################
-resource "aws_iam_role" "remote_app" {
-  name               = "${var.resource_prefix}-remote-app"
-  assume_role_policy = data.aws_iam_policy_document.remote_app_assume_role.json
-  tags               = local.tags
-}
-
 data "aws_iam_policy_document" "remote_app_assume_role" {
   statement {
     actions = [
@@ -22,21 +16,17 @@ data "aws_iam_policy_document" "remote_app_assume_role" {
   }
 }
 
-# Temporary Admin access
-resource "aws_iam_role_policy_attachment" "remote_app_basic" {
-  role       = aws_iam_role.remote_app.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+resource "aws_iam_role" "remote_app" {
+  name               = "${var.resource_prefix}-remote-app"
+  assume_role_policy = data.aws_iam_policy_document.remote_app_assume_role.json
+  tags               = local.tags
 }
 
-# resource "aws_iam_role_policy_attachment" "remote_app_basic" {
-#   role       = aws_iam_role.remote_app.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-# }
-
-# resource "aws_iam_role_policy_attachment" "remote_app_tenant_table_read_write" {
-#   role       = aws_iam_role.remote_app.name
-#   policy_arn = aws_iam_policy.tenant_table_read_write.arn
-# }
+# Admin Access. This is constrained when the role is assumed inside of echo-tools
+resource "aws_iam_role_policy_attachment" "remote_app_basic" {
+  role       = aws_iam_role.remote_app.name
+  policy_arn = data.aws_iam_policy.administrator_access.arn
+}
 
 ############################
 ## Internal Node IAM ##
@@ -71,16 +61,10 @@ data "aws_iam_policy_document" "internal_node" {
   }
 }
 
-resource "aws_iam_policy" "internal_node" {
-  description = "IAM permissions required for Internal Nodes"
-
-  name   = "${var.resource_prefix}-internal-node"
-  policy = data.aws_iam_policy_document.internal_node.json
-}
-
-resource "aws_iam_role_policy_attachment" "internal_node" {
-  role       = aws_iam_role.internal_node.name
-  policy_arn = aws_iam_policy.internal_node.arn
+resource "aws_iam_role_policy" "internal_node" {
+  name    = "${var.resource_prefix}-internal-node"
+  policy  = data.aws_iam_policy_document.internal_node.json
+  role    = aws_iam_role.internal_node.name
 }
 
 resource "aws_iam_role_policy_attachment" "internal_node_sts_assume" {
@@ -193,8 +177,8 @@ resource "aws_iam_role" "update_code" {
 }
 
 resource "aws_iam_role_policy_attachment" "update_code_basic" {
-  role       = aws_iam_role.update_code.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  role       = aws_iam_role.update_code.name
 }
 
 data "aws_iam_policy_document" "update_code" {
@@ -214,16 +198,11 @@ data "aws_iam_policy_document" "update_code" {
   }
 }
 
-resource "aws_iam_policy" "update_code" {
-  description = "IAM permissions required for internal nodes to update themselves"
-  policy      = data.aws_iam_policy_document.update_code.json
+resource "aws_iam_role_policy" "update_code" {
+  name    = "update-code"
+  policy  = data.aws_iam_policy_document.update_code.json
+  role    = aws_iam_role.update_code.name
 }
-
-resource "aws_iam_role_policy_attachment" "update_code" {
-  role       = aws_iam_role.update_code.name
-  policy_arn = aws_iam_policy.update_code.arn
-}
-
 
 resource "aws_iam_role_policy_attachment" "update_code_artifacts_read" {
   role       = aws_iam_role.update_code.name

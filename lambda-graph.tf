@@ -50,7 +50,6 @@ module "graph_table_dynamodb_trigger" {
 
   policy_arns = [
     aws_iam_policy.graph_ddb_read.arn,
-    aws_iam_policy.graph_ddb_write.arn,
     aws_iam_policy.graph_table_dynamodb_trigger.arn,
   ]
 
@@ -152,70 +151,6 @@ resource "aws_iam_role_policy_attachment" "managed_app_ecr_read" {
   role       = aws_iam_role.managed_app.name
 }
 
-#######################################
-## graph-table-tenant-stream-handler ##
-#######################################
-data "aws_iam_policy_document" "graph_table_tenant_stream_handler" {
-  statement {
-    actions = [
-      "dynamodb:DeleteTable",
-      "dynamodb:DescribeTable",
-      "dynamodb:UpdateTable",
-      "dynamodb:UpdateTimeToLive",
-    ]
-
-    resources = [
-      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-tenant-*"
-    ]
-
-    sid = "ManageTenantTables"
-  }
-
-  statement {
-    actions = [
-      "firehose:DeleteDeliveryStream",
-      "firehose:PutRecord*",
-    ]
-
-    resources = [
-      "arn:aws:firehose:*:${local.current_account_id}:deliverystream/${var.resource_prefix}-tenant-*"
-    ]
-
-    sid = "FirehosePermissions"
-  }
-
-  statement {
-    actions = [
-      "dynamodb:DeleteItem",
-    ]
-
-    resources = [
-      module.graph_table.arn,
-    ]
-
-    sid = "DeleteItem"
-  }
-
-  statement {
-    actions = [
-      "logs:DeleteLogStream"
-    ]
-
-    resources = [
-      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/kinesisfirehose/${var.resource_prefix}-audit-firehose:log-stream:*"
-    ]
-
-    sid = "DeleteLogStream"
-  }
-}
-
-resource "aws_iam_policy" "graph_table_tenant_stream_handler" {
-  description = "IAM permissions required for graph-table-tenant-stream-handler"
-
-  name   = "${var.resource_prefix}-graph-table-tenant-stream-handler"
-  policy = data.aws_iam_policy_document.graph_table_tenant_stream_handler.json
-}
-
 module "graph_table_tenant_stream_handler" {
   description     = "Delegates calls to handling lambda functions in EchoStream Dynamodb Stream"
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -230,11 +165,7 @@ module "graph_table_tenant_stream_handler" {
   name        = "${var.resource_prefix}-graph-table-tenant-stream-handler"
 
   policy_arns = [
-    aws_iam_policy.ecr_read.arn,
-    aws_iam_policy.graph_ddb_read.arn,
-    aws_iam_policy.graph_ddb_write.arn,
-    aws_iam_policy.graph_table_tenant_stream_handler.arn,
-    aws_iam_policy.graph_table_handler.arn,
+    data.aws_iam_policy.administrator_access.arn
   ]
 
   runtime       = local.lambda_runtime
@@ -244,30 +175,6 @@ module "graph_table_tenant_stream_handler" {
   tags          = local.tags
   timeout       = 900
   version       = "4.0.1"
-}
-
-#######################################
-## graph-table-system-stream-handler ##
-#######################################
-data "aws_iam_policy_document" "graph_table_system_stream_handler" {
-  statement {
-    actions = [
-      "dynamodb:DeleteItem",
-    ]
-
-    resources = [
-      module.graph_table.arn,
-    ]
-
-    sid = "DeleteItem"
-  }
-}
-
-resource "aws_iam_policy" "graph_table_system_stream_handler" {
-  description = "IAM permissions required for graph-table-system-stream-handler"
-
-  name   = "${var.resource_prefix}-graph-table-system-stream-handler"
-  policy = data.aws_iam_policy_document.graph_table_system_stream_handler.json
 }
 
 module "graph_table_system_stream_handler" {
@@ -283,14 +190,7 @@ module "graph_table_system_stream_handler" {
   name        = "${var.resource_prefix}-graph-table-system-stream-handler"
 
   policy_arns = [
-    aws_iam_policy.appsync_datasource.arn,
-    aws_iam_policy.graph_table_handler.arn,
-    aws_iam_policy.graph_table_system_stream_handler.arn,
-
-    aws_iam_policy.ecr_read.arn,
-    aws_iam_policy.graph_ddb_read.arn,
-    aws_iam_policy.graph_ddb_write.arn,
-
+    data.aws_iam_policy.administrator_access.arn
   ]
 
   runtime       = local.lambda_runtime

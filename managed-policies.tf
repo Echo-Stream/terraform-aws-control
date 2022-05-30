@@ -17,7 +17,8 @@ data "aws_iam_policy_document" "graph_ddb_read" {
 
   statement {
     actions = [
-      "dynamodb:Query"
+      "dynamodb:Query",
+      "dynamodb:Scan",
     ]
 
     resources = [
@@ -41,6 +42,7 @@ resource "aws_iam_policy" "graph_ddb_read" {
 data "aws_iam_policy_document" "graph_ddb_write" {
   statement {
     actions = [
+      "dynamodb:DeleteItem",
       "dynamodb:PutItem",
       "dynamodb:UpdateItem"
     ]
@@ -70,10 +72,7 @@ data "aws_iam_policy_document" "artifacts_bucket_read" {
     ]
 
     resources = [
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-1",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2",
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-*",
     ]
 
     sid = "ListArtifactsBucket"
@@ -85,11 +84,7 @@ data "aws_iam_policy_document" "artifacts_bucket_read" {
     ]
 
     resources = [
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-${local.current_region}/${var.echostream_version}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-east-2/${var.echostream_version}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-1/${var.echostream_version}/*",
-      "arn:aws:s3:::${local.artifacts_bucket_prefix}-us-west-2/${var.echostream_version}/*",
-
+      "arn:aws:s3:::${local.artifacts_bucket_prefix}-*/${var.echostream_version}/*",
     ]
 
     sid = "GetArtifacts"
@@ -114,15 +109,28 @@ data "aws_iam_policy_document" "tenant_table_read_write" {
       "dynamodb:DeleteItem",
       "dynamodb:GetItem",
       "dynamodb:PutItem",
-      "dynamodb:Query",
-      "dynamodb:UpdateItem"
+      "dynamodb:UpdateItem",
     ]
 
     resources = [
       "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-tenant-*"
     ]
 
-    sid = "TenantTableAccess"
+    sid = "TenantTableAccessReadWrite"
+  }
+
+  statement {
+    actions = [
+      "dynamodb:Query",
+      "dynamodb:Scan",
+    ]
+
+    resources = [
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-tenant-*",
+      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-tenant-*/index/*"
+    ]
+
+    sid = "TenantTableAccessQuery"
   }
 }
 
@@ -170,34 +178,12 @@ data "aws_iam_policy_document" "ecr_read" {
       "ecr:BatchGetImage",
       "ecr:DescribeImages",
       "ecr:DescribeRepositories",
+      "ecr:GetAuthorizationToken",
       "ecr:GetDownloadUrlForLayer",
       "ecr:GetRepositoryPolicy",
       "ecr:ListImages",
-    ]
-
-    resources = [
-      "arn:aws:ecr:${local.current_region}:${local.artifacts_account_id}:repository/*"
-    ]
-
-    sid = "ECRPrivateAccess"
-  }
-  statement {
-    actions = [
       "ecr-public:DescribeImages",
-    ]
-
-    resources = [
-      "arn:aws:ecr-public::${local.artifacts_account_id}:repository/*"
-    ]
-
-    sid = "ECRPublicAccess"
-  }
-
-
-  statement {
-    actions = [
       "ecr-public:GetAuthorizationToken",
-      "ecr:GetAuthorizationToken",
       "sts:GetServiceBearerToken"
     ]
 
@@ -205,7 +191,7 @@ data "aws_iam_policy_document" "ecr_read" {
       "*"
     ]
 
-    sid = "GetAuthorizationToken"
+    sid = "ECRAccess"
   }
 }
 
@@ -214,270 +200,4 @@ resource "aws_iam_policy" "ecr_read" {
 
   name   = "${var.resource_prefix}-ecr-read"
   policy = data.aws_iam_policy_document.ecr_read.json
-}
-
-############################
-### Graph table handlers ###
-############################
-
-data "aws_iam_policy_document" "graph_table_handler" {
-  statement {
-    actions = [
-      "appsync:GraphQL",
-      "appsync:GetGraphqlApi"
-    ]
-
-    resources = [
-      aws_appsync_graphql_api.echostream.arn,
-    ]
-
-    sid = "AppsyncAccess"
-  }
-
-
-  statement {
-    actions = [
-      "ses:GetTemplate",
-      "ses:ListTemplates"
-    ]
-
-    resources = [
-      "*"
-    ]
-
-    sid = "SESRead"
-  }
-
-
-  statement {
-    actions = [
-      "ses:SendEmail",
-    ]
-
-    resources = [
-      aws_ses_configuration_set.email_errors.arn,
-      data.aws_ses_email_identity.support.arn,
-    ]
-
-    sid = "SESSendEmail"
-  }
-
-  statement {
-    actions = [
-      "ses:SendTemplatedEmail",
-    ]
-
-    resources = [
-      aws_ses_configuration_set.email_errors.arn,
-      data.aws_ses_email_identity.support.arn,
-      aws_ses_template.invite_user.arn,
-      aws_ses_template.notify_user.arn,
-      aws_ses_template.remove_user.arn,
-    ]
-
-    sid = "SESSendTemplatedEmail"
-  }
-
-  statement {
-    actions = [
-      "sqs:DeleteMessage",
-      "sqs:GetQueueAttributes",
-      "sqs:GetQueueUrl",
-      "sqs:ReceiveMessage",
-    ]
-
-    resources = [
-      "arn:aws:sqs:*:${local.current_account_id}:db-stream*.fifo",
-      aws_sqs_queue.system_sqs_queue.arn
-    ]
-
-    sid = "PrerequisitesForQueueTrigger"
-  }
-
-  statement {
-    actions = [
-      "sqs:DeleteQueue",
-    ]
-
-    resources = [
-      "arn:aws:sqs:*:${local.current_account_id}:edge*.fifo",
-      "arn:aws:sqs:*:${local.current_account_id}:db-stream*.fifo"
-    ]
-
-    sid = "DeleteQueue"
-  }
-
-  statement {
-    actions = [
-      "sqs:SendMessage",
-      "sqs:GetQueueUrl",
-    ]
-
-    resources = [
-      aws_sqs_queue.rebuild_notifications.arn
-    ]
-
-    sid = "SendMessageToRebuildNotificationQueue"
-  }
-
-  statement {
-    actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:DeleteLogGroup",
-      "logs:DeleteSubscriptionFilter",
-      "logs:PutRetentionPolicy",
-      "logs:PutSubscriptionFilter",
-    ]
-
-    resources = [
-      "arn:aws:logs:*:${local.current_account_id}:log-group:*"
-    ]
-
-    sid = "LogsAccess"
-  }
-
-  statement {
-    actions = [
-      "logs:Describe*",
-    ]
-
-    resources = [
-      "*"
-    ]
-
-    sid = "LogsReadAccess"
-  }
-
-  statement {
-    actions = [
-      "logs:PutLogEvents",
-    ]
-
-    resources = [
-      "arn:aws:logs:*:${local.current_account_id}:log-group:*:log-stream:*"
-    ]
-
-    sid = "LogsEventsAccess"
-  }
-
-
-  statement {
-    actions = [
-      "cognito-idp:AdminDeleteUser",
-      "cognito-idp:AdminGetUser",
-      "cognito-idp:AdminUserGlobalSignOut",
-      "cognito-idp:ListUsers",
-    ]
-
-    resources = [
-      aws_cognito_user_pool.echostream_api.arn,
-      aws_cognito_user_pool.echostream_ui.arn,
-    ]
-
-    sid = "AdminGetUser"
-  }
-
-
-  statement {
-    actions = [
-      "kms:CreateGrant",
-      "kms:DescribeKey",
-      "kms:ListGrants",
-      "kms:RetireGrant",
-      "kms:RevokeGrant",
-      "kms:ScheduleKeyDeletion",
-    ]
-
-    resources = ["arn:aws:kms:*:${local.current_account_id}:key/*"]
-
-    sid = "KMSPermissions"
-  }
-
-  statement {
-    actions = [
-      "kms:DeleteAlias",
-    ]
-
-    resources = ["arn:aws:kms:*:${local.current_account_id}:alias/*"]
-
-    sid = "DeleteKMSAlias"
-  }
-
-  statement {
-    actions = [
-      "lambda:CreateFunction",
-      "lambda:DeleteFunction",
-      "lambda:GetFunction",
-      "lambda:GetFunctionConfiguration",
-      "lambda:InvokeFunction",
-      "lambda:TagResource",
-      "lambda:UpdateFunctionConfiguration",
-    ]
-
-    resources = [
-      "arn:aws:lambda:*:${local.current_account_id}:function:*Node*",
-      "arn:aws:lambda:*:${local.current_account_id}:function:Validator*"
-    ]
-
-    sid = "LambdaAllAccess"
-  }
-
-  statement {
-    actions = [
-      "lambda:DeleteEventSourceMapping",
-    ]
-
-    resources = [
-      "arn:aws:lambda:*:${local.current_account_id}:event-source-mapping:*"
-    ]
-
-    sid = "LambdaEventSourceMappings"
-  }
-
-  statement {
-    actions = [
-      "lambda:ListEventSourceMappings",
-      "lambda:ListFunctions",
-    ]
-
-    resources = [
-      "*"
-    ]
-
-    sid = "LambdaListAccess"
-  }
-
-  statement {
-    actions = [
-      "iam:PassRole",
-    ]
-
-    resources = [
-      aws_iam_role.internal_node.arn
-    ]
-
-    sid = "TenantFunctionRoleIAM"
-  }
-
-  statement {
-    actions = [
-      "cloudwatch:PutMetricAlarm",
-      "cloudwatch:DeleteAlarms",
-    ]
-
-    resources = [
-      "arn:aws:cloudwatch:*:${local.current_account_id}:alarm:TENANT~*",
-      "arn:aws:cloudwatch:*:${local.current_account_id}:alarm:db-stream*"
-    ]
-
-    sid = "AccessTenantAlarms"
-  }
-}
-
-resource "aws_iam_policy" "graph_table_handler" {
-  description = "IAM permissions required for both graph table tenant and system handlers"
-
-  name   = "${var.resource_prefix}-graph-table-handler"
-  policy = data.aws_iam_policy_document.graph_table_handler.json
 }
