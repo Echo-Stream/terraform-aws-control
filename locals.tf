@@ -1,4 +1,31 @@
 locals {
+  app_user_pool_ids = jsonencode(
+    {
+      us-east-1 = module.app_cognito_pool_us_east_1.0.userpool_id
+      us-east-2 = module.app_cognito_pool_us_east_2.0.userpool_id
+      us-west-1 = module.app_cognito_pool_us_west_1.0.userpool_id
+      us-west-2 = module.app_cognito_pool_us_west_2.0.userpool_id
+    }
+  )
+
+  app_user_pool_client_ids = jsonencode(
+    {
+      us-east-1 = module.app_cognito_pool_us_east_1.0.client_id
+      us-east-2 = module.app_cognito_pool_us_east_2.0.client_id
+      us-west-1 = module.app_cognito_pool_us_west_1.0.client_id
+      us-west-2 = module.app_cognito_pool_us_west_2.0.client_id
+    }
+  )
+
+  appsync_api_ids = jsonencode(
+    {
+      us-east-1 = aws_appsync_graphql_api.echostream.id
+      us-east-2 = module.appsync_us_east_2.0.api_id
+      us-west-1 = module.appsync_us_west_1.0.api_id
+      us-west-2 = module.appsync_us_west_2.0.api_id
+    }
+  )
+
   appsync_custom_url = format("https://%s/graphql", lookup(local.regional_apis["domains"], var.region, ""))
   artifacts_sns_arn  = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}_${replace(var.echostream_version, ".", "-")}"
 
@@ -25,11 +52,20 @@ locals {
   common_lambda_environment_variables = {
     ALARM_TOPIC                                 = aws_sns_topic.alarms.arn
     API_ID                                      = aws_appsync_graphql_api.echostream.id
+    API_USER_POOL_CLIENT_ID                     = aws_cognito_user_pool_client.echostream_api_userpool_client.id
+    API_USER_POOL_ID                            = aws_cognito_user_pool.echostream_api.id
+    APP_USER_POOL_IDS                           = local.app_user_pool_ids
+    APP_USER_POOL_CLIENT_IDS                    = local.app_user_pool_client_ids
     APPSYNC_API_IDS                             = local.appsync_api_ids
     APPSYNC_ENDPOINT                            = local.appsync_custom_url
     ARTIFACTS_BUCKET                            = local.artifacts_bucket_prefix
     AUDITOR_CODE                                = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/auditor.zip\"}"
+    AUDIT_FIREHOSE_LOG_GROUP                    = local.audit_firehose_log_group
+    AUDIT_FIREHOSE_ROLE                         = aws_iam_role.audit_firehose.arn
     AUDITOR_ROLE                                = aws_iam_role.auditor.arn
+    BULK_DATA_AWS_ACCESS_KEY_ID                 = aws_iam_access_key.presign_bulk_data.id
+    BULK_DATA_AWS_SECRET_ACCESS_KEY             = aws_iam_access_key.presign_bulk_data.secret
+    BULK_DATA_IAM_USER                          = aws_iam_user.presign_bulk_data.arn
     CI_CD_TOPIC_ARN                             = aws_sns_topic.ci_cd_errors.arn
     CLOUDFRONT_DISTRIBUTION_ID_DOCS             = aws_cloudfront_distribution.docs.id
     CLOUDFRONT_DISTRIBUTION_ID_WEBAPP           = aws_cloudfront_distribution.webapp.id
@@ -47,14 +83,19 @@ locals {
     NOTIFY_USER_SES_TEMPLATE                    = aws_ses_template.notify_user.name
     REBUILD_NOTIFICATION_QUEUE                  = aws_sqs_queue.rebuild_notifications.url
     REGION                                      = var.region
+    REGIONAL_APPSYNC_ENDPOINTS                  = local.regional_appsync_endpoints
+    REMOTE_APP_ROLE                             = aws_iam_role.remote_app.arn
     REMOVE_USER_SES_TEMPLATE                    = aws_ses_template.remove_user.name
+    SSM_SERVICE_ROLE                            = aws_iam_role.managed_app.name
     SYSTEM_SES_EMAIL                            = data.aws_ses_email_identity.support.email
     SYSTEM_SQS_QUEUE                            = aws_sqs_queue.system_sqs_queue.id
     TENANT_CREATED_SES_TEMPLATE                 = aws_ses_template.tenant_created.name
     TENANT_DB_STREAM_HANDLER                    = "${var.resource_prefix}-graph-table-tenant-stream-handler"
+    TENANT_DB_STREAM_HANDLER_ROLE               = module.graph_table_tenant_stream_handler.role_arn
     TENANT_DELETED_SES_TEMPLATE                 = aws_ses_template.tenant_deleted.name
     TENANT_ERRORED_SES_TEMPLATE                 = aws_ses_template.tenant_errored.name
     TENANT_REGIONS                              = jsonencode(local.tenant_regions)
+    UI_USER_POOL_ID                             = aws_cognito_user_pool.echostream_ui.id
     UPDATE_CODE_ROLE                            = aws_iam_role.update_code.arn
     VALIDATOR_CODE                              = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
     VALIDATOR_ROLE                              = aws_iam_role.validator.arn
@@ -82,6 +123,14 @@ locals {
   }
 
   log_bucket     = module.log_bucket.id
+  regional_appsync_endpoints = jsonencode(
+    {
+      us-east-1 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-east-1", ""))
+      us-east-2 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-east-2", ""))
+      us-west-1 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-west-1", ""))
+      us-west-2 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-west-2", ""))
+    }
+  )
   regions        = concat(local.tenant_regions, [var.region]) # Tenant + Control Regions
   tenant_regions = split(",", var.tenant_regions)             # only Tenant regions
 

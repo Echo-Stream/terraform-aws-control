@@ -155,9 +155,7 @@ module "graph_table_tenant_stream_handler" {
   description     = "Delegates calls to handling lambda functions in EchoStream Dynamodb Stream"
   dead_letter_arn = local.lambda_dead_letter_arn
 
-  environment_variables = merge(local.common_lambda_environment_variables,
-    { LOGGING_LEVEL = "DEBUG"
-  AUDIT_FIREHOSE_LOG_GROUP = local.audit_firehose_log_group })
+  environment_variables = local.common_lambda_environment_variables
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
@@ -181,8 +179,7 @@ module "graph_table_system_stream_handler" {
   description     = "Handles system-related DB changes"
   dead_letter_arn = local.lambda_dead_letter_arn
 
-  environment_variables = merge(local.common_lambda_environment_variables,
-  { LOGGING_LEVEL = "DEBUG" })
+  environment_variables = local.common_lambda_environment_variables
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
