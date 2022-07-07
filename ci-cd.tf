@@ -126,7 +126,7 @@ module "deployment_handler" {
   dead_letter_arn       = local.lambda_dead_letter_arn
   handler               = "function.handler"
   kms_key_arn           = local.lambda_env_vars_kms_key_arn
-  memory_size           = 256
+  memory_size           = 1536
   name                  = "${var.resource_prefix}-deployment-handler"
 
   policy_arns = [
@@ -226,7 +226,7 @@ module "rebuild_notifications" {
   dead_letter_arn       = local.lambda_dead_letter_arn
   handler               = "function.handler"
   kms_key_arn           = local.lambda_env_vars_kms_key_arn
-  memory_size           = 256
+  memory_size           = 1536
   name                  = "${var.resource_prefix}-rebuild-notifications"
 
   policy_arns = [
