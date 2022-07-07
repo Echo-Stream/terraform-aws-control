@@ -112,6 +112,10 @@ locals {
       field = "CreateExternalNode"
       type  = "Mutation"
     }
+    create_files_dot_com_webhook_node = {
+      field = "CreateFilesDotComWebhookNode"
+      type  = "Mutation"
+    }
     create_kms_key = {
       field = "CreateKmsKey"
       type  = "Mutation"
@@ -271,6 +275,18 @@ locals {
     external_node_update = {
       field = "Update"
       type  = "ExternalNode"
+    }
+    files_dot_com_webhook_node_delete = {
+      field = "Delete"
+      type  = "FilesDotComWebhookNode"
+    }
+    files_dot_com_webhook_node_list_changes = {
+      field = "ListChanges"
+      type  = "FilesDotComWebhookNode"
+    }
+    files_dot_com_webhook_node_update = {
+      field = "Update"
+      type  = "FilesDotComWebhookNode"
     }
     get_api_user = {
       field = "GetApiUser"
@@ -834,6 +850,22 @@ locals {
     external_node_tenant = {
       field = "tenant"
       type  = "ExternalNode"
+    }
+    files_dot_com_webhook_node_endpoint = {
+      field = "endpoint"
+      type  = "FilesDotComWebhookNode"
+    }
+    files_dot_com_webhook_node_sendedges = {
+      field = "sendEdges"
+      type  = "FilesDotComWebhookNode"
+    }
+    files_dot_com_webhook_node_sendmessagetype = {
+      field = "sendMessageType"
+      type  = "FilesDotComWebhookNode"
+    }
+    files_dot_com_webhook_node_tenant = {
+      field = "tenant"
+      type  = "FilesDotComWebhookNode"
     }
     log_emitter_node_sendedges = {
       field = "sendEdges"
