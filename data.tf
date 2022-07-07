@@ -129,8 +129,3 @@ data "aws_iam_policy_document" "dynamodb_replication_assume_role" {
     }
   }
 }
-
-data "aws_lambda_layer_version" "aws_data_wranlger" {
-  layer_name  = "AWSDataWrangler-Python39"
-  version     = 9
-}
