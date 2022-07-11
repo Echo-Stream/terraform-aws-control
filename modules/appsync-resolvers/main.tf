@@ -152,6 +152,10 @@ locals {
       field = "CreateTimerNode"
       type  = "Mutation"
     }
+    create_webhook_authenticator_function = {
+      field = "CreateWebhookAuthenticatorFunction"
+      type  = "Mutation"
+    }
     cross_account_app_delete = {
       field = "Delete"
       type  = "CrossAccountApp"
@@ -547,6 +551,22 @@ locals {
     timer_node_update = {
       field = "Update"
       type  = "TimerNode"
+    }
+    webhook_authenticator_function_delete = {
+      field = "Delete"
+      type  = "WebhookAuthenticatorFunction"
+    }
+    webhook_authenticator_function_list_changes = {
+      field = "ListChanges"
+      type  = "WebhookAuthenticatorFunction"
+    }
+    webhook_authenticator_function_update = {
+      field = "Update"
+      type  = "WebhookAuthenticatorFunction"
+    }
+    webhook_authenticator_function_validate = {
+      field = "Validate"
+      type  = "WebhookAuthenticatorFunction"
     }
   }
 
@@ -1094,6 +1114,14 @@ locals {
     timer_node_tenant = {
       field = "tenant"
       type  = "TimerNode"
+    }
+    webhook_authenticator_function_requirements = {
+      field = "requirements"
+      type  = "WebhookAuthenticatorFunction"
+    }
+    webhook_authenticator_function_tenant = {
+      field = "tenant"
+      type  = "WebhookAuthenticatorFunction"
     }
   }
 }
