@@ -74,7 +74,6 @@ resource "aws_cloudwatch_metric_alarm" "lambda" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "stepfunction" {
-  for_each            = toset(local.lambda_names)
   alarm_name          = "state-machine:${aws_sfn_state_machine.rebuild_notifications.name}"
   alarm_actions       = [aws_sns_topic.alarms.arn]
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -90,7 +89,7 @@ resource "aws_cloudwatch_metric_alarm" "stepfunction" {
   statistic                 = "Sum"
   threshold                 = "1"
   alarm_description         = "ExecutionsFailed > 1 for ${aws_sfn_state_machine.rebuild_notifications.name} state machine"
-  insufficient_data_actions = [aws_sns_topic.alarms.arn]
+  ok_actions                = [aws_sns_topic.alarms.arn]
   treat_missing_data        = "notBreaching"
   unit                      = "Count"
 
