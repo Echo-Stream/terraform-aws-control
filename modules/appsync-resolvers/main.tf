@@ -156,6 +156,10 @@ locals {
       field = "CreateWebhookAuthenticatorFunction"
       type  = "Mutation"
     }
+    create_webhook_node = {
+      field = "CreateWebhookNode"
+      type  = "Mutation"
+    }
     cross_account_app_delete = {
       field = "Delete"
       type  = "CrossAccountApp"
@@ -567,6 +571,26 @@ locals {
     webhook_authenticator_function_validate = {
       field = "Validate"
       type  = "WebhookAuthenticatorFunction"
+    }
+    webhook_node_delete = {
+      field = "Delete"
+      type  = "WebhookNode"
+    }
+    webhook_node_list_changes = {
+      field = "ListChanges"
+      type  = "WebhookNode"
+    }
+    webhook_node_list_log_events = {
+      field = "ListLogEvents"
+      type  = "WebhookNode"
+    }
+    webhook_node_update = {
+      field = "Update"
+      type  = "WebhookNode"
+    }
+    webhook_node_validate = {
+      field = "Validate"
+      type  = "WebhookNode"
     }
   }
 
@@ -1122,6 +1146,34 @@ locals {
     webhook_authenticator_function_tenant = {
       field = "tenant"
       type  = "WebhookAuthenticatorFunction"
+    }
+    webhook_node_config = {
+      field = "config"
+      type  = "WebhookNode"
+    }
+    webhook_node_endpoint = {
+      field = "endpoint"
+      type  = "WebhookNode"
+    }
+    webhook_node_managed_webhook_authenticator = {
+      field = "managedWebhookAuthenticator"
+      type  = "WebhookNode"
+    }
+    webhook_node_requirements = {
+      field = "requirements"
+      type  = "WebhookNode"
+    }
+    webhook_node_send_edges = {
+      field = "sendEdges"
+      type  = "WebhookNode"
+    }
+    webhook_node_send_message_type = {
+      field = "sendMessageType"
+      type  = "WebhookNode"
+    }
+    webhook_node_tenant = {
+      field = "tenant"
+      type  = "WebhookNode"
     }
   }
 }
