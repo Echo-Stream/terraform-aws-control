@@ -20,6 +20,22 @@ resource "aws_appsync_resolver" "batch_invoke_resolvers" {
 
 locals {
   invoke_resolvers = {
+    api_authenticator_function_delete = {
+      field = "Delete"
+      type  = "ApiAuthenticatorFunction"
+    }
+    api_authenticator_function_list_changes = {
+      field = "ListChanges"
+      type  = "ApiAuthenticatorFunction"
+    }
+    api_authenticator_function_update = {
+      field = "Update"
+      type  = "ApiAuthenticatorFunction"
+    }
+    api_authenticator_function_validate = {
+      field = "Validate"
+      type  = "ApiAuthenticatorFunction"
+    }
     api_user_delete = {
       field = "Delete"
       type  = "ApiUser"
@@ -71,6 +87,10 @@ locals {
     bitmapper_function_validate = {
       field = "Validate"
       type  = "BitmapperFunction"
+    }
+    create_api_authenticator_function = {
+      field = "CreateApiAuthenticatorFunction"
+      type  = "Mutation"
     }
     create_api_user = {
       field = "CreateApiUser"
@@ -150,10 +170,6 @@ locals {
     }
     create_timer_node = {
       field = "CreateTimerNode"
-      type  = "Mutation"
-    }
-    create_webhook_authenticator_function = {
-      field = "CreateWebhookAuthenticatorFunction"
       type  = "Mutation"
     }
     create_webhook_node = {
@@ -556,22 +572,6 @@ locals {
       field = "Update"
       type  = "TimerNode"
     }
-    webhook_authenticator_function_delete = {
-      field = "Delete"
-      type  = "WebhookAuthenticatorFunction"
-    }
-    webhook_authenticator_function_list_changes = {
-      field = "ListChanges"
-      type  = "WebhookAuthenticatorFunction"
-    }
-    webhook_authenticator_function_update = {
-      field = "Update"
-      type  = "WebhookAuthenticatorFunction"
-    }
-    webhook_authenticator_function_validate = {
-      field = "Validate"
-      type  = "WebhookAuthenticatorFunction"
-    }
     webhook_node_delete = {
       field = "Delete"
       type  = "WebhookNode"
@@ -610,6 +610,14 @@ locals {
     alert_emitter_node_tenant = {
       field = "tenant"
       type  = "AlertEmitterNode"
+    }
+    api_authenticator_function_requirements = {
+      field = "requirements"
+      type  = "ApiAuthenticatorFunction"
+    }
+    api_authenticator_function_tenant = {
+      field = "tenant"
+      type  = "ApiAuthenticatorFunction"
     }
     api_user_credentials = {
       field = "credentials"
@@ -1139,14 +1147,6 @@ locals {
       field = "tenant"
       type  = "TimerNode"
     }
-    webhook_authenticator_function_requirements = {
-      field = "requirements"
-      type  = "WebhookAuthenticatorFunction"
-    }
-    webhook_authenticator_function_tenant = {
-      field = "tenant"
-      type  = "WebhookAuthenticatorFunction"
-    }
     webhook_node_config = {
       field = "config"
       type  = "WebhookNode"
@@ -1155,8 +1155,8 @@ locals {
       field = "endpoint"
       type  = "WebhookNode"
     }
-    webhook_node_managed_webhook_authenticator = {
-      field = "managedWebhookAuthenticator"
+    webhook_node_managed_api_authenticator = {
+      field = "managedApiAuthenticator"
       type  = "WebhookNode"
     }
     webhook_node_requirements = {
