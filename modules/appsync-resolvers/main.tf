@@ -532,6 +532,10 @@ locals {
       field = "Delete"
       type  = "Tenant"
     }
+    tenant_get_aws_credentials = {
+      field = "GetAwsCredentials"
+      type  = "Tenant"
+    }
     tenant_list_changes = {
       field = "ListChanges"
       type  = "Tenant"
