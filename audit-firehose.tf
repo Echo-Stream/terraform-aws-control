@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "audit_firehose" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.resource_prefix}-tenant-*/audit-records/*",
+      "arn:aws:s3:::tenant-*/audit-records/*",
     ]
 
     sid = "AllowIntermediateBucketAccess"
@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "audit_firehose" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.resource_prefix}-tenant-*",
+      "arn:aws:s3:::tenant-*",
     ]
 
     sid = "AllowBucketOperations"
@@ -53,7 +53,7 @@ data "aws_iam_policy_document" "audit_firehose" {
     ]
 
     resources = [
-      "arn:aws:logs:*:${local.current_account_id}:log-group:${local.audit_firehose_log_group}:log-stream:${var.resource_prefix}-tenant-*",
+      "arn:aws:logs:*:${local.current_account_id}:log-group:${local.audit_firehose_log_group}:log-stream:tenant-*",
     ]
 
     sid = "AllowWritingErrorEvents"
