@@ -140,6 +140,10 @@ locals {
       field = "CreateKmsKey"
       type  = "Mutation"
     }
+    create_load_balancer_node = {
+      field = "CreateLoadBalancerNode"
+      type  = "Mutation"
+    }
     create_managed_app = {
       field = "CreateManagedApp"
       type  = "Mutation"
@@ -415,6 +419,18 @@ locals {
     list_tenants = {
       field = "ListTenants"
       type  = "Query"
+    }
+    load_balancer_node_delete = {
+      field = "Delete"
+      type  = "LoadBalancerNode"
+    }
+    load_balancer_node_list_changes = {
+      field = "ListChanges"
+      type  = "LoadBalancerNode"
+    }
+    load_balancer_node_update = {
+      field = "Update"
+      type  = "LoadBalancerNode"
     }
     login_user_delete = {
       field = "Delete"
@@ -922,6 +938,26 @@ locals {
     files_dot_com_webhook_node_tenant = {
       field = "tenant"
       type  = "FilesDotComWebhookNode"
+    }
+    load_balancer_node_receive_edges = {
+      field = "receiveEdges"
+      type  = "LoadBalancerNode"
+    }
+    load_balancer_node_receive_message_type = {
+      field = "receiveMessageType"
+      type  = "LoadBalancerNode"
+    }
+    load_balancer_node_send_edges = {
+      field = "sendEdges"
+      type  = "LoadBalancerNode"
+    }
+    load_balancer_node_send_message_type = {
+      field = "sendMessageType"
+      type  = "LoadBalancerNode"
+    }
+    load_balancer_node_tenant = {
+      field = "tenant"
+      type  = "LoadBalancerNode"
     }
     log_emitter_node_sendedges = {
       field = "sendEdges"
