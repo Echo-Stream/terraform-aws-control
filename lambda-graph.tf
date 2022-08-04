@@ -114,7 +114,7 @@ data "aws_iam_policy_document" "managed_app_customer_policy" {
     ]
 
     resources = [
-      "arn:aws:logs:*:${local.current_account_id}:log-group:echostream/managed-app/*"
+      "arn:aws:logs:*:${local.current_account_id}:log-group:/echostream/managed-app/*"
     ]
 
     sid = "Logs"
