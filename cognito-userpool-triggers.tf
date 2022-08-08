@@ -199,9 +199,8 @@ module "ui_cognito_pre_signup" {
   description = "Validate invitation for new UI user "
 
   environment_variables = {
-    #AUTHORIZED_DOMAINS = jsonencode(["echo.stream"])
     AUTHORIZED_DOMAINS = jsonencode(var.authorized_domains)
-    CHECK_DOMAINS      = true
+    CHECK_DOMAINS      = var.check_domains
     CONTROL_REGION     = local.current_region
     DYNAMODB_TABLE     = module.graph_table.name
     ENVIRONMENT        = var.resource_prefix

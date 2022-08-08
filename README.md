@@ -6,6 +6,7 @@ Terraform Module Control Resources.
 module "control" {
   allowed_account_id                        = var.allowed_account_id
   authorized_domains                        = var.authorized_domains
+  check_domains                             = true
   create_dynamo_db_replication_service_role = false
   domain_name                               = var.domain_name
   echostream_version                        = var.echostream_version

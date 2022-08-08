@@ -6,6 +6,13 @@ variable "allowed_account_id" {
 variable "authorized_domains" {
   description = "List of authorized_domains that can signup to the app"
   type        = list(string)
+  default     = []
+}
+
+variable "check_domains" {
+  description = "Controls whether we use authorized domains or not"
+  type        = bool
+  default     = false
 }
 
 variable "create_dynamo_db_replication_service_role" {
