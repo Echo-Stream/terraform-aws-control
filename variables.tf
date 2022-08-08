@@ -66,6 +66,5 @@ variable "tags" {
 
 variable "tenant_regions" {
   description = "List of Tenant regions"
-  type        = any
-  default     = []
+  type        = list(string)
 }

@@ -94,7 +94,7 @@ locals {
     TENANT_DB_STREAM_HANDLER_ROLE               = module.graph_table_tenant_stream_handler.role_arn
     TENANT_DELETED_SES_TEMPLATE                 = aws_ses_template.tenant_deleted.name
     TENANT_ERRORED_SES_TEMPLATE                 = aws_ses_template.tenant_errored.name
-    TENANT_REGIONS                              = jsonencode(local.tenant_regions)
+    TENANT_REGIONS                              = jsonencode(var.tenant_regions)
     UI_USER_POOL_ID                             = aws_cognito_user_pool.echostream_ui.id
     UPDATE_CODE_ROLE                            = aws_iam_role.update_code.arn
     VALIDATOR_CODE                              = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
@@ -131,8 +131,7 @@ locals {
       us-west-2 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-west-2", ""))
     }
   )
-  regions        = concat(local.tenant_regions, [var.region]) # Tenant + Control Regions
-  tenant_regions = split(",", var.tenant_regions)             # only Tenant regions
+  regions        = concat(var.tenant_regions, [var.region]) # Tenant + Control Regions
 
   tags = merge({
     app         = "echostream"

@@ -113,7 +113,7 @@ module "graph_table" {
 
   replica = [
     # do not create a replica if control-region and tenant-region are same
-    for region in setsubtract(local.tenant_regions, [local.current_region]) :
+    for region in setsubtract(var.tenant_regions, [local.current_region]) :
     {
       region_name = region
     }
