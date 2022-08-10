@@ -64,6 +64,14 @@ locals {
       field = "ListLogEvents"
       type  = "BitmapRouterNode"
     }
+    bitmap_router_node_start = {
+      field = "Start"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_stop = {
+      field = "Stop"
+      type  = "BitmapRouterNode"
+    }
     bitmap_router_node_update = {
       field = "Update"
       type  = "BitmapRouterNode"
@@ -216,6 +224,14 @@ locals {
       field = "ListChanges"
       type  = "CrossTenantReceivingNode"
     }
+    cross_tenant_receiving_node_start = {
+      field = "Start"
+      type  = "CrossTenantReceivingNode"
+    }
+    cross_tenant_receiving_node_stop = {
+      field = "Stop"
+      type  = "CrossTenantReceivingNode"
+    }
     cross_tenant_receiving_node_update = {
       field = "Update"
       type  = "CrossTenantReceivingNode"
@@ -242,6 +258,14 @@ locals {
     }
     cross_tenant_sending_node_list_log_events = {
       field = "ListLogEvents"
+      type  = "CrossTenantSendingNode"
+    }
+    cross_tenant_sending_node_start = {
+      field = "Start"
+      type  = "CrossTenantSendingNode"
+    }
+    cross_tenant_sending_node_stop = {
+      field = "Stop"
       type  = "CrossTenantSendingNode"
     }
     cross_tenant_sending_node_update = {
@@ -300,6 +324,14 @@ locals {
       field = "ListChanges"
       type  = "ExternalNode"
     }
+    external_node_start = {
+      field = "Start"
+      type  = "ExternalNode"
+    }
+    external_node_stop = {
+      field = "Stop"
+      type  = "ExternalNode"
+    }
     external_node_update = {
       field = "Update"
       type  = "ExternalNode"
@@ -310,6 +342,14 @@ locals {
     }
     files_dot_com_webhook_node_list_changes = {
       field = "ListChanges"
+      type  = "FilesDotComWebhookNode"
+    }
+    files_dot_com_webhook_node_start = {
+      field = "Start"
+      type  = "FilesDotComWebhookNode"
+    }
+    files_dot_com_webhook_node_stop = {
+      field = "Stop"
       type  = "FilesDotComWebhookNode"
     }
     files_dot_com_webhook_node_update = {
@@ -428,6 +468,14 @@ locals {
       field = "ListChanges"
       type  = "LoadBalancerNode"
     }
+    load_balancer_node_start = {
+      field = "Start"
+      type  = "LoadBalancerNode"
+    }
+    load_balancer_node_stop = {
+      field = "Stop"
+      type  = "LoadBalancerNode"
+    }
     load_balancer_node_update = {
       field = "Update"
       type  = "LoadBalancerNode"
@@ -470,6 +518,14 @@ locals {
     }
     managed_node_list_log_events = {
       field = "ListLogEvents"
+      type  = "ManagedNode"
+    }
+    managed_node_start = {
+      field = "Start"
+      type  = "ManagedNode"
+    }
+    managed_node_stop = {
+      field = "Stop"
       type  = "ManagedNode"
     }
     managed_node_type_delete = {
@@ -532,6 +588,14 @@ locals {
       field = "ListLogEvents"
       type  = "ProcessorNode"
     }
+    processor_node_start = {
+      field = "Start"
+      type  = "ProcessorNode"
+    }
+    processor_node_stop = {
+      field = "Stop"
+      type  = "ProcessorNode"
+    }
     processor_node_update = {
       field = "Update"
       type  = "ProcessorNode"
@@ -588,6 +652,14 @@ locals {
       field = "ListChanges"
       type  = "TimerNode"
     }
+    timer_node_start = {
+      field = "Start"
+      type  = "TimerNode"
+    }
+    timer_node_stop = {
+      field = "Stop"
+      type  = "TimerNode"
+    }
     timer_node_update = {
       field = "Update"
       type  = "TimerNode"
@@ -602,6 +674,14 @@ locals {
     }
     webhook_node_list_log_events = {
       field = "ListLogEvents"
+      type  = "WebhookNode"
+    }
+    webhook_node_start = {
+      field = "Start"
+      type  = "WebhookNode"
+    }
+    webhook_node_stop = {
+      field = "Stop"
       type  = "WebhookNode"
     }
     webhook_node_update = {
