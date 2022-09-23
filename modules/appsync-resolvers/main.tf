@@ -719,6 +719,10 @@ locals {
       field = "tenant"
       type  = "ApiAuthenticatorFunction"
     }
+    api_user_appsync_endpoint = {
+      field = "appsyncEndpoint"
+      type  = "ApiUser"
+    }
     api_user_credentials = {
       field = "credentials"
       type  = "ApiUser"
@@ -1230,6 +1234,10 @@ locals {
     processor_node_tenant = {
       field = "tenant"
       type  = "ProcessorNode"
+    }
+    tenant_active = {
+      field = "active"
+      type  = "Tenant"
     }
     tenant_config = {
       field = "config"
