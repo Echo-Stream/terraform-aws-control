@@ -711,6 +711,10 @@ locals {
       field = "tenant"
       type  = "AlertEmitterNode"
     }
+    api_authenticator_function_in_use = {
+      field = "inUse"
+      type  = "ApiAuthenticatorFunction"
+    }
     api_authenticator_function_requirements = {
       field = "requirements"
       type  = "ApiAuthenticatorFunction"
@@ -731,6 +735,42 @@ locals {
       field = "tenant"
       type  = "ApiUser"
     }
+    app_change_receiver_node_app = {
+      field = "app"
+      type  = "AppChangeReceiverNode"
+    }
+    app_change_receiver_node_receive_edge = {
+      field = "receiveEdge"
+      type  = "AppChangeReceiverNode"
+    }
+    app_change_receiver_node_receive_message_type = {
+      field = "receiveMessageType"
+      type  = "AppChangeReceiverNode"
+    }
+    app_change_receiver_node_tenant = {
+      field = "tenant"
+      type  = "AppChangeReceiverNode"
+    }
+    app_change_router_node_receive_edge = {
+      field = "receiveEdge"
+      type  = "AppChangeRouterNode"
+    }
+    app_change_router_node_receive_message_type = {
+      field = "receiveMessageType"
+      type  = "AppChangeRouterNode"
+    }
+    app_change_router_node_send_edges = {
+      field = "sendEdges"
+      type  = "AppChangeRouterNode"
+    }
+    app_change_router_node_send_message_type = {
+      field = "sendMessageType"
+      type  = "AppChangeRouterNode"
+    }
+    app_change_router_node_tenant = {
+      field = "tenant"
+      type  = "AppChangeRouterNode"
+    }
     audit_emitter_node_sendedges = {
       field = "sendEdges"
       type  = "AuditEmitterNode"
@@ -743,12 +783,12 @@ locals {
       field = "tenant"
       type  = "AuditEmitterNode"
     }
-    bitmap_router_node_route_table = {
-      field = "routeTable"
-      type  = "BitmapRouterNode"
-    }
     bitmap_router_node_config = {
       field = "config"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_in_use = {
+      field = "inUse"
       type  = "BitmapRouterNode"
     }
     bitmap_router_node_managed_bitmapper = {
@@ -765,6 +805,10 @@ locals {
     }
     bitmap_router_node_requirements = {
       field = "requirements"
+      type  = "BitmapRouterNode"
+    }
+    bitmap_router_node_route_table = {
+      field = "routeTable"
       type  = "BitmapRouterNode"
     }
     bitmap_router_node_send_edges = {
@@ -1099,42 +1143,6 @@ locals {
       field = "userdata"
       type  = "ManagedApp"
     }
-    app_change_receiver_node_app = {
-      field = "app"
-      type  = "AppChangeReceiverNode"
-    }
-    app_change_receiver_node_receive_edge = {
-      field = "receiveEdge"
-      type  = "AppChangeReceiverNode"
-    }
-    app_change_receiver_node_receive_message_type = {
-      field = "receiveMessageType"
-      type  = "AppChangeReceiverNode"
-    }
-    app_change_receiver_node_tenant = {
-      field = "tenant"
-      type  = "AppChangeReceiverNode"
-    }
-    app_change_router_node_receive_edge = {
-      field = "receiveEdge"
-      type  = "AppChangeRouterNode"
-    }
-    app_change_router_node_receive_message_type = {
-      field = "receiveMessageType"
-      type  = "AppChangeRouterNode"
-    }
-    app_change_router_node_send_edges = {
-      field = "sendEdges"
-      type  = "AppChangeRouterNode"
-    }
-    app_change_router_node_send_message_type = {
-      field = "sendMessageType"
-      type  = "AppChangeRouterNode"
-    }
-    app_change_router_node_tenant = {
-      field = "tenant"
-      type  = "AppChangeRouterNode"
-    }
     managed_node_app = {
       field = "app"
       type  = "ManagedNode"
@@ -1167,6 +1175,10 @@ locals {
       field = "tenant"
       type  = "ManagedNode"
     }
+    managed_node_type_in_use = {
+      field = "inUse"
+      type  = "ManagedNodeType"
+    }
     managed_node_type_receive_message_type = {
       field = "receiveMessageType"
       type  = "ManagedNodeType"
@@ -1178,6 +1190,10 @@ locals {
     managed_node_type_tenant = {
       field = "tenant"
       type  = "ManagedNodeType"
+    }
+    message_type_in_use = {
+      field = "inUse"
+      type  = "MessageType"
     }
     message_type_requirements = {
       field = "requirements"
