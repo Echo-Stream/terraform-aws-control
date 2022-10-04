@@ -787,10 +787,6 @@ locals {
       field = "config"
       type  = "BitmapRouterNode"
     }
-    bitmap_router_node_in_use = {
-      field = "inUse"
-      type  = "BitmapRouterNode"
-    }
     bitmap_router_node_managed_bitmapper = {
       field = "managedBitmapper"
       type  = "BitmapRouterNode"
@@ -825,6 +821,10 @@ locals {
     }
     bitmapper_function_argumentMessageType = {
       field = "argumentMessageType"
+      type  = "BitmapperFunction"
+    }
+    bitmapper_function_node_in_use = {
+      field = "inUse"
       type  = "BitmapperFunction"
     }
     bitmapper_function_requirements = {
@@ -1205,6 +1205,10 @@ locals {
     }
     processor_function_argument_message_type = {
       field = "argumentMessageType"
+      type  = "ProcessorFunction"
+    }
+    processor_function_in_use = {
+      field = "inUse"
       type  = "ProcessorFunction"
     }
     processor_function_requirements = {
