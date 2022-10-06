@@ -1067,6 +1067,14 @@ locals {
       field = "tenant"
       type  = "FilesDotComWebhookNode"
     }
+    kms_key_in_use = {
+      field = "inUse"
+      type  = "KmsKey"
+    }
+    kms_key_tenant = {
+      field = "tenant"
+      type  = "KmsKey"
+    }
     load_balancer_node_receive_edges = {
       field = "receiveEdges"
       type  = "LoadBalancerNode"
@@ -1102,10 +1110,6 @@ locals {
     login_user_tenant_users = {
       field = "tenantUsers"
       type  = "LoginUser"
-    }
-    kms_key_tenant = {
-      field = "tenant"
-      type  = "KmsKey"
     }
     managed_app_audit_records_endpoint = {
       field = "auditRecordsEndpoint"
