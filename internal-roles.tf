@@ -17,9 +17,10 @@ data "aws_iam_policy_document" "remote_app_assume_role" {
 }
 
 resource "aws_iam_role" "remote_app" {
-  name               = "${var.resource_prefix}-remote-app"
-  assume_role_policy = data.aws_iam_policy_document.remote_app_assume_role.json
-  tags               = local.tags
+  name                  = "${var.resource_prefix}-remote-app"
+  assume_role_policy    = data.aws_iam_policy_document.remote_app_assume_role.json
+  max_session_duration  = 43200
+  tags                  = local.tags
 }
 
 # Admin Access. This is constrained when the role is assumed inside of echo-tools
