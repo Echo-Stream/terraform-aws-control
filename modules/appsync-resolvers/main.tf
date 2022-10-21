@@ -13,6 +13,7 @@ resource "aws_appsync_resolver" "batch_invoke_resolvers" {
   data_source       = var.datasource_name
   field             = each.value["field"]
   for_each          = local.batch_invoke_resolvers
+  max_batch_size    = 100
   request_template  = file("${path.module}/templates/batch-invoke.vtl")
   response_template = file("${path.module}/templates/response-template.vtl")
   type              = each.value["type"]
@@ -1178,6 +1179,10 @@ locals {
     managed_node_tenant = {
       field = "tenant"
       type  = "ManagedNode"
+    }
+    managed_node_type_config_template = {
+      field = "configTemplate"
+      type  = "ManagedNodeType"
     }
     managed_node_type_in_use = {
       field = "inUse"
