@@ -28,14 +28,6 @@ resource "aws_cognito_user_pool" "echostream_ui" {
   email_verification_message = "Your verification code is {####}. "
   email_verification_subject = "Your verification code"
 
-  lifecycle {
-    ignore_changes = [
-      schema,
-      device_configuration,
-      account_recovery_setting
-    ]
-  }
-
   mfa_configuration = "ON"
   name              = "${var.resource_prefix}-ui"
 
