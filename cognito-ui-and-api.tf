@@ -15,7 +15,6 @@ resource "aws_cognito_user_pool" "echostream_ui" {
     "email"
   ]
 
-
   device_configuration {
     device_only_remembered_on_user_prompt = true ## Set to always in the console by hand
   }                                              ## TF 14.5, aws plugin 3.26.0 doesn't support to set it to 'always'
@@ -30,7 +29,6 @@ resource "aws_cognito_user_pool" "echostream_ui" {
   email_verification_subject = "Your verification code"
 
   lifecycle {
-    # prevent_destroy = true
     ignore_changes = [
       schema,
       device_configuration,
@@ -114,16 +112,6 @@ resource "aws_cognito_user_pool" "echostream_api" {
   admin_create_user_config {
     allow_admin_create_user_only = true
   }
-
-  /*
-  lifecycle {
-    ignore_changes = [
-      schema
-    ]
-
-    # prevent_destroy = true
-  }
-  */
 
   name = "${var.resource_prefix}-api"
 
