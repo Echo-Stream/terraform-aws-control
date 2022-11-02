@@ -115,6 +115,7 @@ resource "aws_cognito_user_pool" "echostream_api" {
     allow_admin_create_user_only = true
   }
 
+  /*
   lifecycle {
     ignore_changes = [
       schema
@@ -122,6 +123,7 @@ resource "aws_cognito_user_pool" "echostream_api" {
 
     # prevent_destroy = true
   }
+  */
 
   name = "${var.resource_prefix}-api"
 
