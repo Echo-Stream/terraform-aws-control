@@ -29,13 +29,13 @@ resource "aws_lambda_function" "app_cognito_pre_authentication" {
     ]
   }
 
-  memory_size       = 1536
-  role              = var.app_cognito_pre_authentication_lambda_role_arn
-  runtime           = var.runtime
-  s3_bucket         = data.aws_s3_object.function_package.bucket
-  s3_key            = data.aws_s3_object.function_package.key
-  timeout           = 30
-  tags              = var.tags
+  memory_size = 1536
+  role        = var.app_cognito_pre_authentication_lambda_role_arn
+  runtime     = var.runtime
+  s3_bucket   = data.aws_s3_object.function_package.bucket
+  s3_key      = data.aws_s3_object.function_package.key
+  timeout     = 30
+  tags        = var.tags
 }
 
 resource "aws_lambda_permission" "app_cognito_pre_authentication" {

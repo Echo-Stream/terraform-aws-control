@@ -17,9 +17,9 @@ data "aws_iam_policy_document" "remote_app_assume_role" {
 }
 
 resource "aws_iam_role" "remote_app" {
-  name                  = "${var.resource_prefix}-remote-app"
-  assume_role_policy    = data.aws_iam_policy_document.remote_app_assume_role.json
-  tags                  = local.tags
+  name               = "${var.resource_prefix}-remote-app"
+  assume_role_policy = data.aws_iam_policy_document.remote_app_assume_role.json
+  tags               = local.tags
 }
 
 # Admin Access. This is constrained when the role is assumed inside of echo-tools
@@ -62,9 +62,9 @@ data "aws_iam_policy_document" "internal_node" {
 }
 
 resource "aws_iam_role_policy" "internal_node" {
-  name    = "${var.resource_prefix}-internal-node"
-  policy  = data.aws_iam_policy_document.internal_node.json
-  role    = aws_iam_role.internal_node.name
+  name   = "${var.resource_prefix}-internal-node"
+  policy = data.aws_iam_policy_document.internal_node.json
+  role   = aws_iam_role.internal_node.name
 }
 
 resource "aws_iam_role_policy_attachment" "internal_node_sts_assume" {
@@ -199,9 +199,9 @@ data "aws_iam_policy_document" "update_code" {
 }
 
 resource "aws_iam_role_policy" "update_code" {
-  name    = "update-code"
-  policy  = data.aws_iam_policy_document.update_code.json
-  role    = aws_iam_role.update_code.name
+  name   = "update-code"
+  policy = data.aws_iam_policy_document.update_code.json
+  role   = aws_iam_role.update_code.name
 }
 
 resource "aws_iam_role_policy_attachment" "update_code_artifacts_read" {
