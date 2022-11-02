@@ -104,18 +104,13 @@ resource "aws_cognito_user_pool_domain" "echostream_amazon_cognito_domain" {
 
 ## API userpool
 resource "aws_cognito_user_pool" "echostream_api" {
-  admin_create_user_config {
-    allow_admin_create_user_only = true
-
-    invite_message_template {
-      email_message = "Your username is {username} and temporary password is {####}. "
-      email_subject = "Your temporary password"
-      sms_message   = "Your username is {username} and temporary password is {####}. "
-    }
+  account_recovery_setting {
+    name = "admin_only"
   }
 
-  email_verification_message = "Your verification code is {####}. "
-  email_verification_subject = "Your verification code"
+  admin_create_user_config {
+    allow_admin_create_user_only = true
+  }
 
   lifecycle {
     ignore_changes = [
