@@ -105,7 +105,10 @@ resource "aws_cognito_user_pool_domain" "echostream_amazon_cognito_domain" {
 ## API userpool
 resource "aws_cognito_user_pool" "echostream_api" {
   account_recovery_setting {
-    name = "admin_only"
+    recovery_mechanism {
+      name     = "admin_only"
+      priority = 1
+    }
   }
 
   admin_create_user_config {
