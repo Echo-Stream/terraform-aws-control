@@ -138,6 +138,18 @@ resource "aws_cognito_user_pool" "echostream_api" {
     temporary_password_validity_days = 90
   }
 
+  schema {
+    attribute_data_type      = "String"
+    developer_only_attribute = true
+    mutable                  = false
+    name                     = "tenant"
+    required                 = false
+    string_attribute_constraints {
+      max_length = 80
+      min_length = 8
+    }
+  }
+
   tags = local.tags
 }
 
