@@ -47,15 +47,27 @@ resource "aws_cognito_user_pool" "echostream_ui" {
   }
 
   schema {
-    attribute_data_type = "String"
-    name                = "given_name"
-    required            = true
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = false
+    name                     = "given_name"
+    required                 = true
+    string_attribute_constraints {
+      max_length = 2048
+      min_length = 0
+    }
   }
 
   schema {
-    attribute_data_type = "String"
-    name                = "family_name"
-    required            = true
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = false
+    name                     = "family_name"
+    required                 = true
+    string_attribute_constraints {
+      max_length = 2048
+      min_length = 0
+    }
   }
 
   software_token_mfa_configuration {
