@@ -10,6 +10,7 @@ resource "aws_cognito_user_pool" "echostream_app" {
     allow_admin_create_user_only = true
   }
 
+  /*
   lifecycle {
     ignore_changes = [
       schema
@@ -17,6 +18,7 @@ resource "aws_cognito_user_pool" "echostream_app" {
 
     # prevent_destroy = true
   }
+  */
 
   name = "${var.name}-app"
 
