@@ -34,7 +34,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs" {
     QueueName = each.key
   }
 
-  evaluation_periods        = "4"
+  evaluation_periods        = "1"
   metric_name               = "ApproximateAgeOfOldestMessage"
   namespace                 = "AWS/SQS"
   period                    = "60"
@@ -59,7 +59,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda" {
     FunctionName = each.key
   }
 
-  evaluation_periods        = "4"
+  evaluation_periods        = "1"
   metric_name               = "Errors"
   namespace                 = "AWS/Lambda"
   period                    = "60"
@@ -82,16 +82,16 @@ resource "aws_cloudwatch_metric_alarm" "stepfunction" {
     StateMachineArn = aws_sfn_state_machine.rebuild_notifications.arn
   }
 
-  evaluation_periods        = "1"
-  metric_name               = "ExecutionsFailed"
-  namespace                 = "AWS/States"
-  period                    = "120"
-  statistic                 = "Sum"
-  threshold                 = "1"
-  alarm_description         = "ExecutionsFailed > 1 for ${aws_sfn_state_machine.rebuild_notifications.name} state machine"
-  ok_actions                = [aws_sns_topic.alarms.arn]
-  treat_missing_data        = "notBreaching"
-  unit                      = "Count"
+  evaluation_periods = "1"
+  metric_name        = "ExecutionsFailed"
+  namespace          = "AWS/States"
+  period             = "60"
+  statistic          = "Sum"
+  threshold          = "1"
+  alarm_description  = "ExecutionsFailed > 1 for ${aws_sfn_state_machine.rebuild_notifications.name} state machine"
+  ok_actions         = [aws_sns_topic.alarms.arn]
+  treat_missing_data = "notBreaching"
+  unit               = "Count"
 
   tags = local.tags
 }
