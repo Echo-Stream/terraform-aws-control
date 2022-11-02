@@ -96,3 +96,28 @@ resource "aws_cloudwatch_metric_alarm" "stepfunction" {
   tags = local.tags
 }
 
+resource "aws_cloudwatch_metric_alarm" "replication" {
+  for_each = setsubtract(var.tenant_regions, [local.current_region])
+
+  alarm_name          = "replication:${each.key}"
+  alarm_actions       = [aws_sns_topic.alarms.arn]
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+
+  dimensions = {
+    ReceivingRegion = each.key
+    TableName = module.graph_table.name
+  }
+
+  evaluation_periods        = "1"
+  metric_name               = "ReplicationLatency"
+  namespace                 = "AWS/DynamoDB"
+  period                    = "60"
+  statistic                 = "Maximum"
+  threshold                 = "2000"
+  alarm_description         = "Replication >= 2000ms for ${each.key}"
+  insufficient_data_actions = [aws_sns_topic.alarms.arn]
+  treat_missing_data        = "notBreaching"
+  unit                      = "Milliseconds"
+
+  tags = local.tags
+}
