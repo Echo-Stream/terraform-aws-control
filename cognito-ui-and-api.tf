@@ -15,6 +15,8 @@ resource "aws_cognito_user_pool" "echostream_ui" {
     "email"
   ]
 
+  deletion_protection = "ACTIVE"
+
   device_configuration {
     device_only_remembered_on_user_prompt = true ## Set to always in the console by hand
   }                                              ## TF 14.5, aws plugin 3.26.0 doesn't support to set it to 'always'
@@ -117,11 +119,13 @@ resource "aws_cognito_user_pool" "echostream_api" {
     allow_admin_create_user_only = true
   }
 
-  name = "${var.resource_prefix}-api"
+  deletion_protection = "ACTIVE"
 
   lambda_config {
     pre_authentication = module.api_cognito_pre_authentication.arn
   }
+
+  name = "${var.resource_prefix}-api"
 
   password_policy {
     minimum_length                   = 60

@@ -10,11 +10,13 @@ resource "aws_cognito_user_pool" "echostream_app" {
     allow_admin_create_user_only = true
   }
 
-  name = "${var.name}-app"
+  deletion_protection = "ACTIVE"
 
   lambda_config {
     pre_authentication = aws_lambda_function.app_cognito_pre_authentication.arn
   }
+
+  name = "${var.name}-app"
 
   password_policy {
     minimum_length                   = 60
