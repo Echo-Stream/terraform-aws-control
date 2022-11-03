@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "ci_cd_errors" {
     condition {
       test = "StringEquals"
       values = [
-        var.allowed_account_id
+        data.aws_caller_identity.current.account_id
       ]
       variable = "AWS:SourceOwner"
     }

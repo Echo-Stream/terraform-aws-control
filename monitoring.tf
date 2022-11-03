@@ -97,7 +97,7 @@ resource "aws_cloudwatch_metric_alarm" "stepfunction" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "replication" {
-  for_each = setsubtract(var.tenant_regions, [local.current_region])
+  for_each = setsubtract(var.tenant_regions, [data.aws_region.current.name])
 
   alarm_actions       = [aws_sns_topic.alarms.arn]
   alarm_description   = "Replication >= 2000ms for ${each.key}"

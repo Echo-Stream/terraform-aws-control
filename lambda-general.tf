@@ -8,7 +8,7 @@ data "aws_iam_policy_document" "log_retention" {
     ]
 
     resources = [
-      "arn:aws:logs:${var.region}:${var.allowed_account_id}:*",
+      "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*",
     ]
 
     sid = "ListLogGroups"
@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "log_retention" {
     ]
 
     resources = [
-      "arn:aws:logs:${var.region}:${var.allowed_account_id}:log-group:*",
+      "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*",
     ]
 
     sid = "SetRetention"
@@ -167,7 +167,7 @@ module "managed_app_cloud_init" {
   environment_variables = local.common_lambda_environment_variables
   handler               = "function.handler"
   kms_key_arn           = local.lambda_env_vars_kms_key_arn
-  layers                = ["arn:aws:lambda:${local.current_region}:336392948345:layer:AWSDataWrangler-Python39:9"]
+  layers                = ["arn:aws:lambda:${data.aws_region.current.name}:336392948345:layer:AWSDataWrangler-Python39:9"]
   memory_size           = 1536
   name                  = "${var.resource_prefix}-managed-app-cloud-init"
 

@@ -53,8 +53,8 @@ data "aws_iam_policy_document" "internal_node" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:${local.current_account_id}:edge*.fifo",
-      "arn:aws:sqs:*:${local.current_account_id}:dead-letter*.fifo"
+      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:edge*.fifo",
+      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:dead-letter*.fifo"
     ]
 
     sid = "EdgeQueuesAccess"

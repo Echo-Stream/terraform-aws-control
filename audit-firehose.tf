@@ -41,7 +41,7 @@ data "aws_iam_policy_document" "audit_firehose" {
     ]
 
     resources = [
-      "arn:aws:kms:${var.region}:${var.allowed_account_id}:key/*"
+      "arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/*"
     ]
 
     sid = "EncryptDataUsingTenantKeys"
@@ -53,7 +53,7 @@ data "aws_iam_policy_document" "audit_firehose" {
     ]
 
     resources = [
-      "arn:aws:logs:*:${local.current_account_id}:log-group:${local.audit_firehose_log_group}:log-stream:tenant-*",
+      "arn:aws:logs:*:${data.aws_caller_identity.current.account_id}:log-group:${local.audit_firehose_log_group}:log-stream:tenant-*",
     ]
 
     sid = "AllowWritingErrorEvents"
@@ -70,6 +70,7 @@ resource "aws_iam_role_policy" "audit_firehose" {
 # Create log groups in each region #
 ####################################
 
+/*
 resource "aws_cloudwatch_log_group" "audit_firehose_us_east_1" {
   name              = local.audit_firehose_log_group
   retention_in_days = 7
@@ -104,4 +105,4 @@ resource "aws_cloudwatch_log_group" "audit_firehose_us_west_2" {
 #   tags              = var.tags
 #   provider          = aws.ireland
 # }
-
+*/

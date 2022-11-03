@@ -268,7 +268,7 @@ data "template_file" "rebuild_notifications_state_machine" {
   vars = {
     function_arn          = module.rebuild_notifications.arn
     sleep_time_in_seconds = 60
-    my_arn                = "arn:aws:states:${local.current_region}:${local.current_account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"
+    my_arn                = "arn:aws:states:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"
   }
 }
 
@@ -291,7 +291,7 @@ data "aws_iam_policy_document" "rebuild_notifications_state_machine" {
       "states:StartExecution",
     ]
 
-    resources = ["arn:aws:states:${local.current_region}:${local.current_account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"]
+    resources = ["arn:aws:states:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"]
 
     sid = "StateMachineAccess"
   }

@@ -58,8 +58,8 @@ resource "aws_iam_role_policy_attachment" "echostream_appsync" {
 
 resource "aws_appsync_domain_name" "echostream_appsync" {
   depends_on      = [aws_acm_certificate_validation.regional_api]
-  domain_name     = lookup(local.regional_apis["domains"], var.region, "")
-  certificate_arn = lookup(local.regional_apis["acm_arns"], var.region, "")
+  domain_name     = lookup(local.regional_apis["domains"], data.aws_region.current.name, "")
+  certificate_arn = lookup(local.regional_apis["acm_arns"], data.aws_region.current.name, "")
 }
 
 resource "aws_appsync_domain_name_api_association" "echostream_appsync" {
@@ -69,7 +69,7 @@ resource "aws_appsync_domain_name_api_association" "echostream_appsync" {
 
 module "appsync_domain" {
   domain_name = aws_appsync_domain_name.echostream_appsync.appsync_domain_name
-  name        = lookup(local.regional_apis["domains"], var.region, "")
+  name        = lookup(local.regional_apis["domains"], data.aws_region.current.name, "")
   zone_id     = data.aws_route53_zone.root_domain.zone_id
 
   source  = "QuiNovas/cloudfront-r53-alias-record/aws"
@@ -91,7 +91,7 @@ data "aws_iam_policy_document" "multi_region_invoke_appsync_lambda_datasource" {
       "lambda:InvokeFunction",
     ]
     resources = [
-      "arn:aws:lambda:*:${local.current_account_id}:function:${var.resource_prefix}-appsync-datasource",
+      "arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:${var.resource_prefix}-appsync-datasource",
     ]
     sid = "AllowInvokeOfLambdaDatasource"
   }
@@ -122,7 +122,7 @@ data "aws_iam_policy_document" "multi_region_appsync_datasource" {
       "logs:PutLogEvents",
     ]
     resources = [
-      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/lambda/${var.resource_prefix}-appsync-datasource*",
+      "arn:aws:logs:*:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.resource_prefix}-appsync-datasource*",
     ]
     sid = "AllowLogWriting"
   }

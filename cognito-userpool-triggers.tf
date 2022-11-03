@@ -1,6 +1,6 @@
 locals {
   app_api_cognito_pre_authentication_environment_variables = {
-    CONTROL_REGION = local.current_region
+    CONTROL_REGION = data.aws_region.current.name
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
     TENANT_REGIONS = jsonencode(var.tenant_regions)
@@ -48,7 +48,7 @@ module "ui_cognito_post_confirmation" {
   description = "Set attributes on UI user and validate invitation token post signup "
 
   environment_variables = {
-    CONTROL_REGION = local.current_region
+    CONTROL_REGION = data.aws_region.current.name
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
     TENANT_REGIONS = jsonencode(var.tenant_regions)
@@ -123,7 +123,7 @@ module "ui_cognito_pre_authentication" {
   description = "Check status and tenant membership pre authentication for UI users"
 
   environment_variables = {
-    CONTROL_REGION = local.current_region
+    CONTROL_REGION = data.aws_region.current.name
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
     TENANT_REGIONS = jsonencode(var.tenant_regions)
@@ -201,7 +201,7 @@ module "ui_cognito_pre_signup" {
   environment_variables = {
     AUTHORIZED_DOMAINS = jsonencode(var.authorized_domains)
     CHECK_DOMAINS      = var.check_domains
-    CONTROL_REGION     = local.current_region
+    CONTROL_REGION     = data.aws_region.current.name
     DYNAMODB_TABLE     = module.graph_table.name
     ENVIRONMENT        = var.resource_prefix
     TENANT_REGIONS     = jsonencode(var.tenant_regions)
@@ -245,8 +245,8 @@ data "aws_iam_policy_document" "api_cognito_pre_authentication" {
     ]
 
     resources = [
-      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-graph",
-      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-graph/*",
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-graph",
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-graph/*",
     ]
 
     sid = "TableAccess"

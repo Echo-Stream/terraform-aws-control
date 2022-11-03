@@ -26,8 +26,8 @@ locals {
     }
   )
 
-  appsync_custom_url = format("https://%s/graphql", lookup(local.regional_apis["domains"], var.region, ""))
-  artifacts_sns_arn  = "arn:aws:sns:${local.current_region}:${local.artifacts_account_id}:echostream-artifacts-${local.current_region}_${replace(var.echostream_version, ".", "-")}"
+  appsync_custom_url = format("https://%s/graphql", lookup(local.regional_apis["domains"], data.aws_region.current.name, ""))
+  artifacts_sns_arn  = "arn:aws:sns:${data.aws_region.current.name}:${local.artifacts_account_id}:echostream-artifacts-${data.aws_region.current.name}_${replace(var.echostream_version, ".", "-")}"
 
   artifacts = {
     appsync   = "${var.echostream_version}/appsync"
@@ -42,11 +42,9 @@ locals {
   }
 
   artifacts_account_id     = "226390263822"                                               # echostream-artifacts
-  artifacts_bucket         = "echostream-artifacts-${local.current_region}"               # artifacts bucket name with region
+  artifacts_bucket         = "echostream-artifacts-${data.aws_region.current.name}"               # artifacts bucket name with region
   artifacts_bucket_prefix  = "echostream-artifacts"                                       # artifacts bucket name without region
   audit_firehose_log_group = "/aws/kinesisfirehose/${var.resource_prefix}-audit-firehose" # log group name for audit-firehose
-  current_account_id       = data.aws_caller_identity.current.account_id                  # current or control account_id
-  current_region           = data.aws_region.current.name                                 # current region or control region
 
   # Common environment variables for lambdas that use echo-tools library
   common_lambda_environment_variables = {
@@ -69,7 +67,7 @@ locals {
     CI_CD_TOPIC_ARN                            = aws_sns_topic.ci_cd_errors.arn
     CLOUDFRONT_DISTRIBUTION_ID_DOCS            = aws_cloudfront_distribution.docs.id
     CLOUDFRONT_DISTRIBUTION_ID_WEBAPP          = aws_cloudfront_distribution.webapp.id
-    CONTROL_REGION                             = local.current_region
+    CONTROL_REGION                             = data.aws_region.current.name
     COST_AND_USAGE_BUCKET                      = aws_s3_bucket.cost_and_usage.id
     DYNAMODB_TABLE                             = module.graph_table.name
     ECHOSTREAM_VERSION                         = var.echostream_version
@@ -82,7 +80,7 @@ locals {
     MANAGED_APP_CLOUD_INIT_QUEUE               = aws_sqs_queue.managed_app_cloud_init.url
     NOTIFY_USER_SES_TEMPLATE                   = aws_ses_template.notify_user.name
     REBUILD_NOTIFICATION_QUEUE                 = aws_sqs_queue.rebuild_notifications.url
-    REGION                                     = var.region
+    REGION                                     = data.aws_region.current.name
     REGIONAL_APPSYNC_ENDPOINTS                 = local.regional_appsync_endpoints
     REMOTE_APP_ROLE                            = aws_iam_role.remote_app.arn
     REMOVE_USER_SES_TEMPLATE                   = aws_ses_template.remove_user.name
@@ -131,7 +129,7 @@ locals {
       us-west-2 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-west-2", ""))
     }
   )
-  regions = concat(var.tenant_regions, [var.region]) # Tenant + Control Regions
+  regions = setunion(var.tenant_regions, [data.aws_region.current.name]) # Tenant + Control Regions
 
   tags = merge({
     app         = "echostream"

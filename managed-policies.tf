@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "graph_ddb_read" {
     ]
 
     resources = [
-      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-graph",
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-graph",
     ]
 
     sid = "TableAccessRead"
@@ -22,8 +22,8 @@ data "aws_iam_policy_document" "graph_ddb_read" {
     ]
 
     resources = [
-      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-graph",
-      "arn:aws:dynamodb:*:${local.current_account_id}:table/${var.resource_prefix}-graph/index/*"
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-graph",
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-graph/index/*"
     ]
 
     sid = "TableAccessQuery"
@@ -113,7 +113,7 @@ data "aws_iam_policy_document" "tenant_table_read_write" {
     ]
 
     resources = [
-      "arn:aws:dynamodb:*:${local.current_account_id}:table/tenant-*"
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/tenant-*"
     ]
 
     sid = "TenantTableAccessReadWrite"
@@ -126,8 +126,8 @@ data "aws_iam_policy_document" "tenant_table_read_write" {
     ]
 
     resources = [
-      "arn:aws:dynamodb:*:${local.current_account_id}:table/tenant-*",
-      "arn:aws:dynamodb:*:${local.current_account_id}:table/tenant-*/index/*"
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/tenant-*",
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/tenant-*/index/*"
     ]
 
     sid = "TenantTableAccessQuery"
@@ -153,7 +153,7 @@ data "aws_iam_policy_document" "tenant_firehose_write" {
     ]
 
     resources = [
-      "arn:aws:firehose:*:${local.current_account_id}:deliverystream/tenant-*"
+      "arn:aws:firehose:*:${data.aws_caller_identity.current.account_id}:deliverystream/tenant-*"
     ]
 
     sid = "WriteAuditRecords"

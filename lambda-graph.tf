@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "graph_table_dynamodb_trigger" {
     ]
 
     resources = [
-      "arn:aws:sqs:*:${local.current_account_id}:db-stream*",
+      "arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:db-stream*",
       aws_sqs_queue.system_sqs_queue.arn
     ]
 
@@ -114,7 +114,7 @@ data "aws_iam_policy_document" "managed_app_customer_policy" {
     ]
 
     resources = [
-      "arn:aws:logs:*:${local.current_account_id}:log-group:/echostream/managed-app/*"
+      "arn:aws:logs:*:${data.aws_caller_identity.current.account_id}:log-group:/echostream/managed-app/*"
     ]
 
     sid = "Logs"

@@ -114,6 +114,6 @@ resource "aws_cur_report_definition" "cost_and_usage" {
   # better to include some prefix, to make it look cleaner (avoids leading slash)
   # for e.g if prefix is set to 'echo'. The s3 path would look like s3://<bucket-name>/echo/CostAndUsage/CostAndUsage/<reports>
   s3_bucket = aws_s3_bucket.cost_and_usage.id
-  s3_region = local.current_region
+  s3_region = data.aws_region.current.name
   time_unit = "DAILY"
 }

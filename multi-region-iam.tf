@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "app_cognito_pre_authentication_function_basic" {
       "logs:PutLogEvents",
     ]
     resources = [
-      "arn:aws:logs:*:${local.current_account_id}:log-group:/aws/lambda/${var.resource_prefix}-app-cognito-pre-authentication:*",
+      "arn:aws:logs:*:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.resource_prefix}-app-cognito-pre-authentication:*",
     ]
     sid = "AllowLogWriting"
   }
