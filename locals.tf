@@ -42,7 +42,7 @@ locals {
   }
 
   artifacts_account_id     = "226390263822"                                               # echostream-artifacts
-  artifacts_bucket         = "echostream-artifacts-${data.aws_region.current.name}"               # artifacts bucket name with region
+  artifacts_bucket         = "echostream-artifacts-${data.aws_region.current.name}"       # artifacts bucket name with region
   artifacts_bucket_prefix  = "echostream-artifacts"                                       # artifacts bucket name without region
   audit_firehose_log_group = "/aws/kinesisfirehose/${var.resource_prefix}-audit-firehose" # log group name for audit-firehose
 
