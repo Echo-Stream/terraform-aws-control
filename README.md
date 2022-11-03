@@ -15,6 +15,10 @@ module "control" {
   tags                                      = local.tags
   tenant_regions                            = var.tenant_regions
 
+  providers = {
+    aws.route-53 = aws.route-53
+  }
+
   source = "app.terraform.io/EchoStream/control/aws"
 }
 
