@@ -1,5 +1,4 @@
 ## Environment KMS Keys ##
-/*
 ## US-EAST-1
 resource "aws_kms_key" "kms_us_east_1" {
   count               = contains(local.regions, "us-east-1") == true ? 1 : 0
@@ -337,4 +336,3 @@ resource "aws_kms_alias" "kms_us_west_2" {
 #   target_key_id = aws_kms_key.kms_sa_east_1.0.key_id
 #   provider      = aws.sao-paulo
 # }
-*/
