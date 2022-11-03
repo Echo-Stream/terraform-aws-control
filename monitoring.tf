@@ -26,24 +26,24 @@ locals {
 resource "aws_cloudwatch_metric_alarm" "sqs" {
   for_each = toset(local.sqs_names)
 
-  alarm_name          = "sqs:${each.key}"
   alarm_actions       = [aws_sns_topic.alarms.arn]
+  alarm_description   = "Age of oldest message >= 120 for ${each.key}"
+  alarm_name          = "sqs:${each.key}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
 
   dimensions = {
     QueueName = each.key
   }
 
-  evaluation_periods        = "1"
-  metric_name               = "ApproximateAgeOfOldestMessage"
-  namespace                 = "AWS/SQS"
-  period                    = "60"
-  statistic                 = "Maximum"
-  threshold                 = "120"
-  alarm_description         = "Age of oldest message >= 120 for ${each.key}"
-  insufficient_data_actions = [aws_sns_topic.alarms.arn]
-  treat_missing_data        = "notBreaching"
-  unit                      = "Seconds"
+  evaluation_periods = "1"
+  metric_name        = "ApproximateAgeOfOldestMessage"
+  namespace          = "AWS/SQS"
+  ok_actions         = [aws_sns_topic.alarms.arn]
+  period             = "60"
+  statistic          = "Maximum"
+  threshold          = "120"
+  treat_missing_data = "notBreaching"
+  unit               = "Seconds"
 
   tags = local.tags
 }
@@ -51,31 +51,32 @@ resource "aws_cloudwatch_metric_alarm" "sqs" {
 resource "aws_cloudwatch_metric_alarm" "lambda" {
   for_each = toset(local.lambda_names)
 
-  alarm_name          = "lambda:${each.key}"
   alarm_actions       = [aws_sns_topic.alarms.arn]
+  alarm_description   = "Errors > 1 for ${each.key}"
+  alarm_name          = "lambda:${each.key}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
 
   dimensions = {
     FunctionName = each.key
   }
 
-  evaluation_periods        = "1"
-  metric_name               = "Errors"
-  namespace                 = "AWS/Lambda"
-  period                    = "60"
-  statistic                 = "Sum"
-  threshold                 = "1"
-  alarm_description         = "Errors > 1 for ${each.key}"
-  insufficient_data_actions = [aws_sns_topic.alarms.arn]
-  treat_missing_data        = "notBreaching"
-  unit                      = "Count"
+  evaluation_periods = "1"
+  metric_name        = "Errors"
+  namespace          = "AWS/Lambda"
+  ok_actions         = [aws_sns_topic.alarms.arn]
+  period             = "60"
+  statistic          = "Sum"
+  threshold          = "1"
+  treat_missing_data = "notBreaching"
+  unit               = "Count"
 
   tags = local.tags
 }
 
 resource "aws_cloudwatch_metric_alarm" "stepfunction" {
-  alarm_name          = "state-machine:${aws_sfn_state_machine.rebuild_notifications.name}"
   alarm_actions       = [aws_sns_topic.alarms.arn]
+  alarm_description   = "ExecutionsFailed > 1 for ${aws_sfn_state_machine.rebuild_notifications.name} state machine"
+  alarm_name          = "state-machine:${aws_sfn_state_machine.rebuild_notifications.name}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
 
   dimensions = {
@@ -85,11 +86,10 @@ resource "aws_cloudwatch_metric_alarm" "stepfunction" {
   evaluation_periods = "1"
   metric_name        = "ExecutionsFailed"
   namespace          = "AWS/States"
+  ok_actions         = [aws_sns_topic.alarms.arn]
   period             = "60"
   statistic          = "Sum"
   threshold          = "1"
-  alarm_description  = "ExecutionsFailed > 1 for ${aws_sfn_state_machine.rebuild_notifications.name} state machine"
-  ok_actions         = [aws_sns_topic.alarms.arn]
   treat_missing_data = "notBreaching"
   unit               = "Count"
 
@@ -99,25 +99,25 @@ resource "aws_cloudwatch_metric_alarm" "stepfunction" {
 resource "aws_cloudwatch_metric_alarm" "replication" {
   for_each = setsubtract(var.tenant_regions, [local.current_region])
 
-  alarm_name          = "replication:${each.key}"
   alarm_actions       = [aws_sns_topic.alarms.arn]
+  alarm_description   = "Replication >= 2000ms for ${each.key}"
+  alarm_name          = "replication:${each.key}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
 
   dimensions = {
     ReceivingRegion = each.key
-    TableName = module.graph_table.name
+    TableName       = module.graph_table.name
   }
 
-  evaluation_periods        = "1"
-  metric_name               = "ReplicationLatency"
-  namespace                 = "AWS/DynamoDB"
-  period                    = "60"
-  statistic                 = "Maximum"
-  threshold                 = "2000"
-  alarm_description         = "Replication >= 2000ms for ${each.key}"
-  insufficient_data_actions = [aws_sns_topic.alarms.arn]
-  treat_missing_data        = "notBreaching"
-  unit                      = "Milliseconds"
+  evaluation_periods = "1"
+  metric_name        = "ReplicationLatency"
+  namespace          = "AWS/DynamoDB"
+  ok_actions         = [aws_sns_topic.alarms.arn]
+  period             = "60"
+  statistic          = "Maximum"
+  threshold          = "2000"
+  treat_missing_data = "notBreaching"
+  unit               = "Milliseconds"
 
   tags = local.tags
 }
