@@ -134,7 +134,7 @@ resource "aws_cloudwatch_log_group" "appsync_datasource" {
 }
 
 module "appsync_domain" {
-  domain_name = module.appsync.appsync_domain_name
+  domain_name = aws_appsync_domain_name.echostream_appsync.appsync_domain_name
   name        = lookup(var.regional_domain_names, data.aws_region.current.name, "")
   zone_id     = var.zone_id
 
@@ -147,8 +147,8 @@ module "appsync_domain" {
 }
 
 module "appsync_resolvers" {
-  api_id          = module.appsync.api_id
-  datasource_name = module.appsync.datasource_name
+  api_id          = aws_appsync_graphql_api.echostream.id
+  datasource_name = aws_appsync_datasource.appsync_datasource.name
 
   source = "../appsync-resolvers"
 }
