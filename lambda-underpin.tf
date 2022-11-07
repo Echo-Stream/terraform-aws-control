@@ -2,19 +2,19 @@ locals {
   regional_kms_key_arns = compact(
     [
       module.lambda_underpin_control.kms_key_arn,
-      one(module.lambda_underpin_us_east_1).kms_key_arn,
-      one(module.lambda_underpin_us_east_2).kms_key_arn,
-      one(module.lambda_underpin_us_west_1).kms_key_arn,
-      one(module.lambda_underpin_us_west_2).kms_key_arn,
+      one(module.lambda_underpin_us_east_1[*].kms_key_arn),
+      one(module.lambda_underpin_us_east_2[*].kms_key_arn),
+      one(module.lambda_underpin_us_west_1[*].kms_key_arn),
+      one(module.lambda_underpin_us_west_2[*].kms_key_arn),
     ]
   )
   regional_dead_letter_arns = compact(
     [
       module.lambda_underpin_control.dead_letter_arn,
-      one(module.lambda_underpin_us_east_1).dead_letter_arn,
-      one(module.lambda_underpin_us_east_2).dead_letter_arn,
-      one(module.lambda_underpin_us_west_1).dead_letter_arn,
-      one(module.lambda_underpin_us_west_2).dead_letter_arn,
+      one(module.lambda_underpin_us_east_1[*].dead_letter_arn),
+      one(module.lambda_underpin_us_east_2[*].dead_letter_arn),
+      one(module.lambda_underpin_us_west_1[*].dead_letter_arn),
+      one(module.lambda_underpin_us_west_2[*].dead_letter_arn),
     ]
   )
 }
