@@ -80,9 +80,7 @@ resource "aws_acm_certificate" "regional_api" {
   tags              = var.tags
   validation_method = "DNS"
 
-  provider = {
-    aws = aws.north-virginia
-  }
+  provider = aws.north-virginia
 }
 
 resource "aws_route53_record" "regional_api" {
@@ -104,7 +102,5 @@ resource "aws_acm_certificate_validation" "regional_api" {
   certificate_arn         = each.value.arn
   validation_record_fqdns = [for record in aws_route53_record.regional_api : record.fqdn]
 
-  provider = {
-    aws = aws.north-virginia
-  }
+  provider = aws.north-virginia
 }
