@@ -8,7 +8,7 @@ resource "aws_kms_key" "kms_control" {
 
 resource "aws_kms_alias" "kms_control" {
   name          = "alias/${var.resource_prefix}"
-  target_key_id = aws_kms_key.control.key_id
+  target_key_id = aws_kms_key.kms_control.key_id
 }
 
 ## US-EAST-1

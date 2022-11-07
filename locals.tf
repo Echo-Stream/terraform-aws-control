@@ -28,7 +28,7 @@ locals {
       local.region_keys,
       concat(
         [aws_appsync_graphql_api.echostream.id],
-        local.region_api_ids,
+        local.regional_appsync_api_ids,
       )
     )
   )
