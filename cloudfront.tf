@@ -74,7 +74,7 @@ resource "aws_cloudfront_distribution" "webapp" {
   }
 
   logging_config {
-    bucket          = data.aws_s3_bucket.log_bucket.bucket_domain_name
+    bucket          = data.aws_s3_bucket.log_bucket_control.bucket_domain_name
     include_cookies = false
     prefix          = "cloudfront/${var.resource_prefix}-webapp/"
   }
@@ -221,7 +221,7 @@ resource "aws_cloudfront_distribution" "docs" {
   }
 
   logging_config {
-    bucket          = data.aws_s3_bucket.log_bucket.bucket_domain_name
+    bucket          = data.aws_s3_bucket.log_bucket_control.bucket_domain_name
     include_cookies = false
     prefix          = "cloudfront/${var.resource_prefix}-api-docs/"
   }

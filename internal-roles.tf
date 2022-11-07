@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "remote_app_assume_role" {
     ]
     principals {
       identifiers = [
-        module.appsync_datasource.role_arn
+        module.appsync_datasource_lambda.role_arn
       ]
       type = "AWS"
     }

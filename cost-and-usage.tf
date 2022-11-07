@@ -11,7 +11,7 @@ resource "aws_s3_bucket" "cost_and_usage" {
 resource "aws_s3_bucket_logging" "cost_and_usage" {
   bucket = aws_s3_bucket.cost_and_usage.id
 
-  target_bucket = local.log_bucket
+  target_bucket = local.log_bucket_control
   target_prefix = "${var.resource_prefix}-cost-and-usage/"
 }
 

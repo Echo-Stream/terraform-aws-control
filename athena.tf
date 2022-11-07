@@ -10,7 +10,7 @@ resource "aws_s3_bucket" "athena_query_results" {
 
 resource "aws_s3_bucket_logging" "athena_query_results" {
   bucket        = aws_s3_bucket.athena_query_results.id
-  target_bucket = local.log_bucket
+  target_bucket = local.log_bucket_control
   target_prefix = "${var.resource_prefix}-athena-query-results/"
 }
 

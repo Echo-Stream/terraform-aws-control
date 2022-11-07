@@ -53,7 +53,7 @@ output "cloudfront_oai_id_webapp" {
 
 output "log_bucket_id" {
   description = "The ID of the control region bucket"
-  value       = module.log_bucket.id
+  value       = module.log_bucket_control.id
 }
 
 output "regional_app_user_pool_client_ids" {

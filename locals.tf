@@ -1,29 +1,36 @@
 locals {
+  region_keys = concat(
+    [data.aws_region.current.name],
+    local.regions
+  )
   app_user_pool_ids = jsonencode(
-    {
-      us-east-1 = module.app_cognito_pool_us_east_1.0.userpool_id
-      us-east-2 = module.app_cognito_pool_us_east_2.0.userpool_id
-      us-west-1 = module.app_cognito_pool_us_west_1.0.userpool_id
-      us-west-2 = module.app_cognito_pool_us_west_2.0.userpool_id
-    }
+    zipmap(
+      local.region_keys,
+      concat(
+        [module.app_cognito_pool.userpool_id],
+        local.region_userpool_ids,
+      )
+    )
   )
 
   app_user_pool_client_ids = jsonencode(
-    {
-      us-east-1 = module.app_cognito_pool_us_east_1.0.client_id
-      us-east-2 = module.app_cognito_pool_us_east_2.0.client_id
-      us-west-1 = module.app_cognito_pool_us_west_1.0.client_id
-      us-west-2 = module.app_cognito_pool_us_west_2.0.client_id
-    }
+    zipmap(
+      local.region_keys,
+      concat(
+        [module.app_cognito_pool.userpool_id],
+        local.region_client_ids,
+      )
+    )
   )
 
   appsync_api_ids = jsonencode(
-    {
-      us-east-1 = aws_appsync_graphql_api.echostream.id
-      us-east-2 = module.appsync_us_east_2.0.api_id
-      us-west-1 = module.appsync_us_west_1.0.api_id
-      us-west-2 = module.appsync_us_west_2.0.api_id
-    }
+    zipmap(
+      local.region_keys,
+      concat(
+        [aws_appsync_graphql_api.echostream.id],
+        local.region_api_ids,
+      )
+    )
   )
 
   appsync_custom_url = format("https://%s/graphql", lookup(local.regional_apis["domains"], data.aws_region.current.name, ""))
@@ -120,7 +127,7 @@ locals {
     managed_app_cloud_init = "${local.artifacts["lambda"]}/managed-app-cloud-init.zip"
   }
 
-  log_bucket = module.log_bucket.id
+  log_bucket_control = module.log_bucket_control.id
   regional_appsync_endpoints = jsonencode(
     {
       us-east-1 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-east-1", ""))
@@ -129,7 +136,6 @@ locals {
       us-west-2 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-west-2", ""))
     }
   )
-  regions = setunion(var.tenant_regions, [data.aws_region.current.name]) # Tenant + Control Regions
 
   tags = merge({
     app         = "echostream"

@@ -66,41 +66,8 @@ resource "aws_iam_role_policy" "audit_firehose" {
   role   = aws_iam_role.audit_firehose.id
 }
 
-####################################
-# Create log groups in each region #
-####################################
-
-resource "aws_cloudwatch_log_group" "audit_firehose_us_east_1" {
+resource "aws_cloudwatch_log_group" "audit_firehose" {
   name              = local.audit_firehose_log_group
   retention_in_days = 7
   tags              = var.tags
-  provider          = aws.north-virginia
 }
-
-resource "aws_cloudwatch_log_group" "audit_firehose_us_east_2" {
-  name              = local.audit_firehose_log_group
-  retention_in_days = 7
-  tags              = var.tags
-  provider          = aws.ohio
-}
-
-resource "aws_cloudwatch_log_group" "audit_firehose_us_west_1" {
-  name              = local.audit_firehose_log_group
-  retention_in_days = 7
-  tags              = var.tags
-  provider          = aws.north-california
-}
-
-resource "aws_cloudwatch_log_group" "audit_firehose_us_west_2" {
-  name              = local.audit_firehose_log_group
-  retention_in_days = 7
-  tags              = var.tags
-  provider          = aws.oregon
-}
-
-# resource "aws_cloudwatch_log_group" "audit_firehose_eu_west_1" {
-#   name              = local.audit_firehose_log_group
-#   retention_in_days = 7
-#   tags              = var.tags
-#   provider          = aws.ireland
-# }

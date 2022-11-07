@@ -21,12 +21,10 @@ data "aws_iam_policy_document" "app_cognito_pre_authentication_function_basic" {
       "kms:Encrypt",
       "kms:GenerateDataKey*",
     ]
-    resources = [
-      aws_kms_key.lambda_environment_variables.arn,
-      module.lambda_underpin_us_east_2.kms_key_arn,
-      module.lambda_underpin_us_west_1.kms_key_arn,
-      module.lambda_underpin_us_west_2.kms_key_arn,
-    ]
+    resources = concat(
+      local.region_kms_key_arns,
+      [aws_kms_key.lambda_environment_variables.arn]
+    )
     sid = "AllowEcryptDecryptEnvVars"
   }
   statement {
@@ -34,12 +32,10 @@ data "aws_iam_policy_document" "app_cognito_pre_authentication_function_basic" {
       "sns:Publish",
       "sqs:SendMessage",
     ]
-    resources = [
-      aws_sns_topic.lambda_dead_letter.arn,
-      module.lambda_underpin_us_east_2.dead_letter_arn,
-      module.lambda_underpin_us_west_1.dead_letter_arn,
-      module.lambda_underpin_us_west_2.dead_letter_arn
-    ]
+    resources = concat(
+      local.region_dead_letter_arns,
+      [aws_sns_topic.lambda_dead_letter.arn]
+    )
     sid = "AllowDeadLetterWriting"
   }
   statement {

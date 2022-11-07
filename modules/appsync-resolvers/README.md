@@ -1,1 +1,0 @@
-- This module is outside of appsync-api module for a reason. As control region API and its datasource are stand alone and sitting in the top level, it only uses this module for its resolvers.
