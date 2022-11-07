@@ -1,3 +1,12 @@
+locals {
+  regional_appsync_endpoints = jsonencode(
+    {
+      for k in toset(var.tenant_regions) :
+        k => format("https://%s/graphql", aws_acm_certificate_validation.regional_api[k])
+    }
+  )
+}
+
 ## Control Region
 
 ####################
@@ -57,9 +66,8 @@ resource "aws_iam_role_policy_attachment" "echostream_appsync" {
 }
 
 resource "aws_appsync_domain_name" "echostream_appsync" {
-  depends_on      = [aws_acm_certificate_validation.regional_api]
-  domain_name     = lookup(local.regional_apis["domains"], data.aws_region.current.name, "")
-  certificate_arn = lookup(local.regional_apis["acm_arns"], data.aws_region.current.name, "")
+  domain_name     = aws_acm_certificate_validation.regional_api[data.aws_region.current.name].domain_name
+  certificate_arn = aws_acm_certificate_validation.regional_api[data.aws_region.current.name].arn
 }
 
 resource "aws_appsync_domain_name_api_association" "echostream_appsync" {
@@ -69,7 +77,7 @@ resource "aws_appsync_domain_name_api_association" "echostream_appsync" {
 
 module "appsync_domain" {
   domain_name = aws_appsync_domain_name.echostream_appsync.appsync_domain_name
-  name        = lookup(local.regional_apis["domains"], data.aws_region.current.name, "")
+  name        = aws_acm_certificate_validation.regional_api[data.aws_region.current.name].domain_name
   zone_id     = data.aws_route53_zone.root_domain.zone_id
 
   source  = "QuiNovas/cloudfront-r53-alias-record/aws"
@@ -187,11 +195,10 @@ locals {
 ## Appsync us-east-1 ##
 #######################
 module "appsync_us_east_1" {
-  depends_on = [aws_acm_certificate_validation.regional_api]
   count      = contains(local.regions, "us-east-1") == true ? 1 : 0
 
-  api_acm_arn                        = lookup(local.regional_apis["acm_arns"], "us-east-1", "")
-  api_domain_name                    = lookup(local.regional_apis["domains"], "us-east-1", "")
+  api_acm_arn                        = aws_acm_certificate_validation.regional_api["us-east-1"].arn
+  api_domain_name                    = aws_acm_certificate_validation.regional_api["us-east-1"].domain_name
   appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
   appsync_service_role_arn           = module.appsync_datasource_.role_arn
   artifacts_bucket                   = "${local.artifacts_bucket_prefix}-us-east-1"
@@ -215,7 +222,7 @@ module "appsync_domain_us_east_1" {
   count = contains(local.regions, "us-east-1") == true ? 1 : 0
 
   domain_name = one(module.appsync_us_east_1[*].appsync_domain_name)
-  name        = lookup(local.regional_apis["domains"], "us-east-1", "")
+  name        = aws_acm_certificate_validation.regional_api["us-east-1"].domain_name
   zone_id     = data.aws_route53_zone.root_domain.zone_id
 
   source  = "QuiNovas/cloudfront-r53-alias-record/aws"
@@ -247,11 +254,10 @@ module "appsync_resolvers_us_east_1" {
 ## Appsync us-east-2 ##
 #######################
 module "appsync_us_east_2" {
-  depends_on = [aws_acm_certificate_validation.regional_api]
   count      = contains(local.regions, "us-east-2") == true ? 1 : 0
 
-  api_acm_arn                        = lookup(local.regional_apis["acm_arns"], "us-east-2", "")
-  api_domain_name                    = lookup(local.regional_apis["domains"], "us-east-2", "")
+  api_acm_arn                        = aws_acm_certificate_validation.regional_api["us-east-2"].arn
+  api_domain_name                    = aws_acm_certificate_validation.regional_api["us-east-2"].domain_name
   appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
   appsync_service_role_arn           = module.appsync_datasource_.role_arn
   artifacts_bucket                   = "${local.artifacts_bucket_prefix}-us-east-2"
@@ -275,7 +281,7 @@ module "appsync_domain_us_east_2" {
   count = contains(local.regions, "us-east-2") == true ? 1 : 0
 
   domain_name = one(module.appsync_us_east_2[*].appsync_domain_name)
-  name        = lookup(local.regional_apis["domains"], "us-east-2", "")
+  name        = aws_acm_certificate_validation.regional_api["us-east-2"].domain_name
   zone_id     = data.aws_route53_zone.root_domain.zone_id
 
   source  = "QuiNovas/cloudfront-r53-alias-record/aws"
@@ -307,11 +313,10 @@ module "appsync_resolvers_us_east_2" {
 ## Appsync us-west-1 ##
 #######################
 module "appsync_us_west_1" {
-  depends_on = [aws_acm_certificate_validation.regional_api]
   count      = contains(local.regions, "us-west-1") == true ? 1 : 0
 
-  api_acm_arn                        = lookup(local.regional_apis["acm_arns"], "us-west-1", "")
-  api_domain_name                    = lookup(local.regional_apis["domains"], "us-west-1", "")
+  api_acm_arn                        = aws_acm_certificate_validation.regional_api["us-west-1"].arn
+  api_domain_name                    = aws_acm_certificate_validation.regional_api["us-west-1"].domain_name
   appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
   appsync_service_role_arn           = module.appsync_datasource_.role_arn
   artifacts_bucket                   = "${local.artifacts_bucket_prefix}-us-west-1"
@@ -335,7 +340,7 @@ module "appsync_domain_us_west_1" {
   count = contains(local.regions, "us-west-1") == true ? 1 : 0
 
   domain_name = one(module.appsync_us_west_1[*].appsync_domain_name)
-  name        = lookup(local.regional_apis["domains"], "us-west-1", "")
+  name        = aws_acm_certificate_validation.regional_api["us-west-1"].domain_name
   zone_id     = data.aws_route53_zone.root_domain.zone_id
 
   source  = "QuiNovas/cloudfront-r53-alias-record/aws"
@@ -370,8 +375,8 @@ module "appsync_us_west_2" {
 
   count = contains(local.regions, "us-west-2") == true ? 1 : 0
 
-  api_acm_arn                        = lookup(local.regional_apis["acm_arns"], "us-west-2", "")
-  api_domain_name                    = lookup(local.regional_apis["domains"], "us-west-2", "")
+  api_acm_arn                        = aws_acm_certificate_validation.regional_api["us-west-2"].arn
+  api_domain_name                    = aws_acm_certificate_validation.regional_api["us-west-2"].domain_name
   appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
   appsync_service_role_arn           = module.appsync_datasource_.role_arn
   artifacts_bucket                   = "${local.artifacts_bucket_prefix}-us-west-2"
@@ -395,7 +400,7 @@ module "appsync_domain_us_west_2" {
   count = contains(local.regions, "us-west-2") == true ? 1 : 0
 
   domain_name = one(module.appsync_us_west_2[*].appsync_domain_name)
-  name        = lookup(local.regional_apis["domains"], "us-west-2", "")
+  name        = aws_acm_certificate_validation.regional_api["us-west-2"].domain_name
   zone_id     = data.aws_route53_zone.root_domain.zone_id
 
   source  = "QuiNovas/cloudfront-r53-alias-record/aws"

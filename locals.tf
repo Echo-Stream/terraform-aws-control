@@ -32,8 +32,9 @@ locals {
       )
     )
   )
+  name        = aws_acm_certificate_validation.regional_api["us-west-1"].domain_name
 
-  appsync_custom_url = format("https://%s/graphql", lookup(local.regional_apis["domains"], data.aws_region.current.name, ""))
+  appsync_custom_url = format("https://%s/graphql", aws_acm_certificate_validation.regional_api[data.aws_region.current.name].domain_name)
   artifacts_sns_arn  = "arn:aws:sns:${data.aws_region.current.name}:${local.artifacts_account_id}:echostream-artifacts-${data.aws_region.current.name}_${replace(var.echostream_version, ".", "-")}"
 
   artifacts = {
@@ -127,14 +128,6 @@ locals {
   }
 
   log_bucket = module.log_bucket.id
-  regional_appsync_endpoints = jsonencode(
-    {
-      us-east-1 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-east-1", ""))
-      us-east-2 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-east-2", ""))
-      us-west-1 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-west-1", ""))
-      us-west-2 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-west-2", ""))
-    }
-  )
   regions = sort(setsubtract(var.tenant_regions, [data.aws_region.current.name]))
 
   tags = merge({

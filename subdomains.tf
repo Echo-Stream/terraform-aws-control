@@ -1,21 +1,6 @@
 locals {
   app_sub_domain      = var.environment == "prod" ? "app.${var.domain_name}" : "app-${var.environment}.${var.domain_name}"
   docs_api_sub_domain = var.environment == "prod" ? "docs.api.${var.domain_name}" : "docs.api-${var.environment}.${var.domain_name}"
-
-  regional_api_acm_arns = {
-    for k, v in aws_acm_certificate.regional_api :
-    k => v.arn
-  }
-
-  regional_domain_names = {
-    for k, v in aws_acm_certificate.regional_api :
-    k => v.domain_name
-  }
-
-  regional_apis = {
-    acm_arns = local.regional_api_acm_arns
-    domains  = local.regional_domain_names
-  }
 }
 
 #########
@@ -94,6 +79,10 @@ resource "aws_acm_certificate" "regional_api" {
   domain_name       = "api-${var.environment}.${each.key}.${var.domain_name}"
   tags              = var.tags
   validation_method = "DNS"
+
+  provider = {
+    aws = aws.north-virginia
+  }
 }
 
 resource "aws_route53_record" "regional_api" {
@@ -114,4 +103,8 @@ resource "aws_acm_certificate_validation" "regional_api" {
 
   certificate_arn         = each.value.arn
   validation_record_fqdns = [for record in aws_route53_record.regional_api : record.fqdn]
+
+  provider = {
+    aws = aws.north-virginia
+  }
 }
