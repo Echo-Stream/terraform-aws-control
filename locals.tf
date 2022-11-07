@@ -32,9 +32,8 @@ locals {
       )
     )
   )
-  name        = aws_acm_certificate_validation.regional_api["us-west-1"].domain_name
 
-  appsync_custom_url = format("https://%s/graphql", aws_acm_certificate_validation.regional_api[data.aws_region.current.name].domain_name)
+  appsync_custom_url = format("https://%s/graphql", aws_acm_certificate.regional_api[data.aws_region.current.name].domain_name)
   artifacts_sns_arn  = "arn:aws:sns:${data.aws_region.current.name}:${local.artifacts_account_id}:echostream-artifacts-${data.aws_region.current.name}_${replace(var.echostream_version, ".", "-")}"
 
   artifacts = {
