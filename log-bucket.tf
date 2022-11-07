@@ -6,10 +6,6 @@ module "log_bucket_control" {
 
   source  = "QuiNovas/log-bucket/aws"
   version = "4.0.0"
-
-  providers = {
-    aws = aws.north-virginia
-  }
 }
 
 module "log_bucket_us_east_1" {
