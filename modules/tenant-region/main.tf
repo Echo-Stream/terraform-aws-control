@@ -80,7 +80,7 @@ resource "aws_appsync_datasource" "appsync_datasource" {
   description = "Main Lambda datasource for the regional echo-stream API "
 
   lambda_config {
-    function_arn = aws_lambda_function.appsync_datasource_lambda.arn
+    function_arn = aws_lambda_function.appsync_datasource.arn
   }
 
   name             = replace("${var.resource_prefix}_appsync_datasource", "-", "_")
@@ -98,8 +98,8 @@ resource "aws_appsync_domain_name_api_association" "echostream_appsync" {
   domain_name = aws_appsync_domain_name.echostream_appsync.domain_name
 }
 
-resource "aws_lambda_function" "appsync_datasource_function" {
-  description = "Function that gets triggered when app cognito user to be authenticated"
+resource "aws_lambda_function" "appsync_datasource" {
+  description = "The main datasource for the echo-stream API"
   dead_letter_config {
     target_arn = aws_sns_topic.lambda_dead_letter.arn
   }
