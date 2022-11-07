@@ -1,7 +1,7 @@
 resource "aws_sns_topic" "lambda_dead_letter" {
-  display_name    = "${var.resource_prefix}-lambda-dead-letter"
-  resource_prefix = "${var.resource_prefix}-lambda-dead-letter"
-  tags            = var.tags
+  display_name = "${var.resource_prefix}-lambda-dead-letter"
+  name         = "${var.resource_prefix}-lambda-dead-letter"
+  tags         = var.tags
 }
 
 resource "aws_kms_key" "lambda_environment_variables" {
@@ -11,8 +11,8 @@ resource "aws_kms_key" "lambda_environment_variables" {
 }
 
 resource "aws_kms_alias" "lambda_environment_variables" {
-  resource_prefix = "alias/${var.resource_prefix}-lambda-environment-variables"
-  target_key_id   = aws_kms_key.lambda_environment_variables.key_id
+  name          = "alias/${var.resource_prefix}-lambda-environment-variables"
+  target_key_id = aws_kms_key.lambda_environment_variables.key_id
 }
 
 module "log_bucket" {
