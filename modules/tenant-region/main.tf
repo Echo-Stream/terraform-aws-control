@@ -52,7 +52,7 @@ module "app_cognito_pool" {
   runtime                                        = var.lambda_runtime
   tags                                           = var.tags
 
-  source = "./modules/app-user-pool"
+  source = "../app-user-pool"
 }
 
 resource "aws_appsync_graphql_api" "echostream" {
