@@ -1,29 +1,36 @@
 locals {
-  app_user_pool_ids = jsonencode(
-    {
-      us-east-1 = module.app_cognito_pool_us_east_1.0.userpool_id
-      us-east-2 = module.app_cognito_pool_us_east_2.0.userpool_id
-      us-west-1 = module.app_cognito_pool_us_west_1.0.userpool_id
-      us-west-2 = module.app_cognito_pool_us_west_2.0.userpool_id
-    }
+  region_keys = concat(
+    [data.aws_region.current.name],
+    local.regions
+  )
+  app_userpool_ids = jsonencode(
+    zipmap(
+      local.region_keys,
+      concat(
+        [module.app_cognito_pool_control.userpool_id],
+        local.regional_app_userpool_ids,
+      )
+    )
   )
 
-  app_user_pool_client_ids = jsonencode(
-    {
-      us-east-1 = module.app_cognito_pool_us_east_1.0.client_id
-      us-east-2 = module.app_cognito_pool_us_east_2.0.client_id
-      us-west-1 = module.app_cognito_pool_us_west_1.0.client_id
-      us-west-2 = module.app_cognito_pool_us_west_2.0.client_id
-    }
+  app_userpool_client_ids = jsonencode(
+    zipmap(
+      local.region_keys,
+      concat(
+        [module.app_cognito_pool_control.userpool_id],
+        local.regional_app_userpool_client_ids,
+      )
+    )
   )
 
   appsync_api_ids = jsonencode(
-    {
-      us-east-1 = aws_appsync_graphql_api.echostream.id
-      us-east-2 = module.appsync_us_east_2.0.api_id
-      us-west-1 = module.appsync_us_west_1.0.api_id
-      us-west-2 = module.appsync_us_west_2.0.api_id
-    }
+    zipmap(
+      local.region_keys,
+      concat(
+        [aws_appsync_graphql_api.echostream.id],
+        local.region_api_ids,
+      )
+    )
   )
 
   appsync_custom_url = format("https://%s/graphql", lookup(local.regional_apis["domains"], data.aws_region.current.name, ""))
@@ -52,8 +59,8 @@ locals {
     API_ID                                     = aws_appsync_graphql_api.echostream.id
     API_USER_POOL_CLIENT_ID                    = aws_cognito_user_pool_client.echostream_api_userpool_client.id
     API_USER_POOL_ID                           = aws_cognito_user_pool.echostream_api.id
-    APP_USER_POOL_IDS                          = local.app_user_pool_ids
-    APP_USER_POOL_CLIENT_IDS                   = local.app_user_pool_client_ids
+    APP_USER_POOL_IDS                          = local.app_userpool_ids
+    APP_USER_POOL_CLIENT_IDS                   = local.app_userpool_client_ids
     APPSYNC_API_IDS                            = local.appsync_api_ids
     APPSYNC_ENDPOINT                           = local.appsync_custom_url
     ARTIFACTS_BUCKET                           = local.artifacts_bucket_prefix
@@ -99,8 +106,8 @@ locals {
     VALIDATOR_ROLE                             = aws_iam_role.validator.arn
   }
 
-  lambda_dead_letter_arn      = aws_sns_topic.lambda_dead_letter.arn
-  lambda_env_vars_kms_key_arn = aws_kms_key.lambda_environment_variables.arn
+  lambda_dead_letter_arn      = module.lambda_underpin_control.dead_letter_arn
+  lambda_env_vars_kms_key_arn = module.lambda_underpin_control.kms_key_arn
   lambda_runtime              = "python3.9"
 
   lambda_functions_keys = {
@@ -129,7 +136,7 @@ locals {
       us-west-2 = format("https://%s/graphql", lookup(local.regional_apis["domains"], "us-west-2", ""))
     }
   )
-  regions = setunion(var.tenant_regions, [data.aws_region.current.name]) # Tenant + Control Regions
+  regions = sort(setsubtract(var.tenant_regions, [data.aws_region.current.name]))
 
   tags = merge({
     app         = "echostream"

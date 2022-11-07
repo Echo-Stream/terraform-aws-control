@@ -56,14 +56,14 @@ output "log_bucket_id" {
   value       = module.log_bucket.id
 }
 
-output "regional_app_user_pool_client_ids" {
+output "regional_app_userpool_client_ids" {
   description = "A map of all regional App userpool client ids"
-  value       = local.app_user_pool_client_ids
+  value       = local.app_userpool_client_ids
 }
 
-output "regional_app_user_pool_ids" {
+output "regional_app_userpool_ids" {
   description = "A map of all regional App userpool endpoints"
-  value       = local.app_user_pool_ids
+  value       = local.app_userpool_ids
 }
 
 output "regional_appsync_endpoints" {
