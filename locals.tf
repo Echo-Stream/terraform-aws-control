@@ -61,7 +61,6 @@ locals {
     API_USER_POOL_ID                           = aws_cognito_user_pool.echostream_api.id
     APP_USER_POOL_IDS                          = local.app_userpool_ids
     APP_USER_POOL_CLIENT_IDS                   = local.app_userpool_client_ids
-    APPSYNC_API_IDS                            = local.appsync_api_ids
     APPSYNC_ENDPOINT                           = local.appsync_custom_url
     ARTIFACTS_BUCKET                           = local.artifacts_bucket_prefix
     AUDITOR_CODE                               = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/auditor.zip\"}"

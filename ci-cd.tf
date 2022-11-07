@@ -122,7 +122,12 @@ resource "aws_iam_policy" "deployment_handler" {
 
 module "deployment_handler" {
   description           = "Does appropriate deployments by getting notified from Artifacts bucket"
-  environment_variables = local.common_lambda_environment_variables
+  environment_variables = merge(
+    local.common_lambda_environment_variables,
+    {
+      APPSYNC_API_IDS = local.appsync_api_ids
+    },
+  )
   dead_letter_arn       = local.lambda_dead_letter_arn
   handler               = "function.handler"
   kms_key_arn           = local.lambda_env_vars_kms_key_arn
