@@ -161,7 +161,7 @@ module "appsync_datasource_" {
   version                  = "3.0.4"
 }
 
-module "appsync_resolvers_us_east_1" {
+module "appsync_resolvers" {
   depends_on = [
     module.appsync_datasource_
   ]
