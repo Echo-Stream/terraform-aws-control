@@ -84,6 +84,9 @@ locals {
       one(module.us_west_2).userpool_id,
     ]
   )
+}
+
+locals {
   regions = sort(setsubtract(var.tenant_regions, [data.aws_region.current.name])) # Tenant + Control Regions
 }
 
