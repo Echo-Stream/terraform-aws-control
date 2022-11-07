@@ -44,7 +44,6 @@ variable "app_cognito_pre_authentication_lambda_role_arn" {
 }
 
 variable "runtime" {
-  default     = "python3.9"
-  description = "Runtime for the lambda, defaults to Python 3.9"
+  description = "Runtime for the lambda"
   type        = string
 }

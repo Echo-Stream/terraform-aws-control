@@ -35,7 +35,8 @@ variable "common_lambda_environment_variables" {
 }
 
 variable "lambda_runtime" {
-  type = string
+  description = "Runtime for the lambda"
+  type        = string
 }
 
 variable "regional_api_acm_arns" {

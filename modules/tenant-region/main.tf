@@ -120,7 +120,7 @@ resource "aws_lambda_function" "appsync_datasource_function" {
 
   memory_size = 1536
   role        = var.appsync_datasource_lambda_role_arn
-  runtime     = var.runtime
+  runtime     = var.lambda_runtime
   s3_bucket   = data.aws_s3_object.function_package.bucket
   s3_key      = data.aws_s3_object.function_package.key
   timeout     = 30
