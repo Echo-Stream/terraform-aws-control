@@ -78,7 +78,6 @@ locals {
     DYNAMODB_TABLE                             = module.graph_table.name
     ECHOSTREAM_VERSION                         = var.echostream_version
     ENVIRONMENT                                = var.resource_prefix
-    HIGH_THROUGHPUT_QUEUE_REGIONS              = "[\"us-east-1\", \"us-east-2\", \"us-west-2\", \"eu-west-1\"]"
     INTERNAL_NODE_CODE                         = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
     INTERNAL_NODE_ROLE                         = aws_iam_role.internal_node.arn
     INVITE_USER_SES_TEMPLATE                   = aws_ses_template.invite_user.name
