@@ -129,6 +129,11 @@ resource "aws_iam_role" "edge_config" {
   tags               = local.tags
 }
 
+resource "aws_iam_role_policy_attachment" "edge_config" {
+  role       = aws_iam_role.edge_config.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
 resource "aws_lambda_function" "edge_config" {
   depends_on = [
     data.archive_file.edge_config
