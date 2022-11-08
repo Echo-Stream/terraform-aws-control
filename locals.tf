@@ -126,9 +126,9 @@ locals {
   }
 
   log_bucket = module.log_bucket.id
-  non_control_regions = sort(setsubtract(local.tenant_regions, [data.aws_region.current.name]))
+  non_control_regions = sort(setsubtract(var.tenant_regions, [data.aws_region.current.name]))
   # Ensure that tenant_regions include the control region
-  tenant_regions = sort(setunion(local.tenant_regions, [data.aws_region.current.name]))
+  tenant_regions = sort(setunion(var.tenant_regions, [data.aws_region.current.name]))
 
   tags = merge({
     app         = "echostream"
