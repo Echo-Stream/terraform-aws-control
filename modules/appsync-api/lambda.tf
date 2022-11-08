@@ -12,7 +12,7 @@ resource "aws_lambda_function" "appsync_datasource" {
     variables = var.environment_variables
   }
 
-  function_name = "${var.name}-appsync-datasource"
+  function_name = "${var.resource_prefix}-appsync-datasource"
   handler       = "function.handler"
   kms_key_arn   = var.kms_key_arn
   lifecycle {
@@ -33,7 +33,7 @@ resource "aws_lambda_function" "appsync_datasource" {
 }
 
 resource "aws_cloudwatch_log_group" "appsync_datasource" {
-  name              = "/aws/lambda/${var.name}-appsync-datasource"
+  name              = "/aws/lambda/${var.resource_prefix}-appsync-datasource"
   retention_in_days = 7
   tags              = var.tags
 }

@@ -13,7 +13,7 @@ resource "aws_appsync_graphql_api" "echostream" {
 
   schema       = var.schema
   xray_enabled = false
-  name         = "${var.name}-api"
+  name         = "${var.resource_prefix}-api"
 
   tags = var.tags
 }
@@ -26,7 +26,7 @@ resource "aws_appsync_datasource" "appsync_datasource_" {
     function_arn = aws_lambda_function.appsync_datasource.arn
   }
 
-  name             = replace("${var.name}_appsync_datasource", "-", "_")
+  name             = replace("${var.resource_prefix}_appsync_datasource", "-", "_")
   service_role_arn = var.appsync_service_role_arn
   type             = "AWS_LAMBDA"
 }

@@ -46,13 +46,12 @@ variable "kms_key_arn" {
   type        = string
 }
 
-variable "name" {
+variable "resource_prefix" {
   description = "Name that will be prefixed to the resource name"
   type        = string
 }
 
 variable "runtime" {
-  default     = "python3.9"
   description = "Runtime for the lambda, defaults to Python 3.9"
   type        = string
 }
