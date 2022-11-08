@@ -21,8 +21,9 @@ locals {
 
 
 module "lambda_underpin_control" {
-  name = var.resource_prefix
-  tags = local.tags
+  name          = var.resource_prefix
+  support_email = data.aws_ses_email_identity.support.email
+  tags          = local.tags
 
   source = "./modules/lambda-underpin"
 }
@@ -30,8 +31,9 @@ module "lambda_underpin_control" {
 module "lambda_underpin_us_east_1" {
   count = contains(local.non_control_regions, "us-east-1") == true ? 1 : 0
 
-  name = var.resource_prefix
-  tags = local.tags
+  name          = var.resource_prefix
+  support_email = data.aws_ses_email_identity.support.email
+  tags          = local.tags
 
   source = "./modules/lambda-underpin"
 
@@ -43,8 +45,9 @@ module "lambda_underpin_us_east_1" {
 module "lambda_underpin_us_east_2" {
   count = contains(local.non_control_regions, "us-east-2") == true ? 1 : 0
 
-  name = var.resource_prefix
-  tags = local.tags
+  name          = var.resource_prefix
+  support_email = data.aws_ses_email_identity.support.email
+  tags          = local.tags
 
   source = "./modules/lambda-underpin"
 

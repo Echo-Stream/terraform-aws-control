@@ -4,18 +4,22 @@ resource "aws_sns_topic" "alarms" {
   tags         = local.tags
 }
 
+resource "aws_sns_topic_subscription" "alarms" {
+  endpoint  = data.aws_ses_email_identity.support.email
+  protocol  = "email"
+  topic_arn = aws_sns_topic.alarms.arn
+}
+
 resource "aws_sns_topic" "ci_cd_errors" {
   name         = "${var.resource_prefix}-ci-cd-errors"
   display_name = "${var.resource_prefix} CI/CD Notifications"
   tags         = local.tags
 }
 
-module "ci_cd_errors_subscription" {
-  install_aws_cli = false
-  topic_arn       = aws_sns_topic.ci_cd_errors.arn
-  email_address   = data.aws_ses_email_identity.support.email
-  source          = "QuiNovas/sns-email-subscription/aws"
-  version         = "0.0.2"
+resource "aws_sns_topic_subscription" "ci_cd_errors" {
+  endpoint  = data.aws_ses_email_identity.support.email
+  protocol  = "email"
+  topic_arn = aws_sns_topic.ci_cd_errors.arn
 }
 
 resource "aws_sns_topic_policy" "ci_cd_errors" {

@@ -4,6 +4,12 @@ resource "aws_sns_topic" "lambda_dead_letter" {
   tags         = var.tags
 }
 
+resource "aws_sns_topic_subscription" "lambda_dead_letter" {
+  endpoint  = var.support_email
+  protocol  = "email"
+  topic_arn = aws_sns_topic.lambda_dead_letter.arn
+}
+
 resource "aws_kms_key" "lambda_environment_variables" {
   description         = "Key for lambda environment variables ${var.name}"
   enable_key_rotation = true

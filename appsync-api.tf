@@ -208,6 +208,7 @@ module "appsync_us_east_1" {
   kms_key_arn                        = one(module.lambda_underpin_us_east_1[*].kms_key_arn)
   name                               = var.resource_prefix
   schema                             = data.aws_s3_object.graphql_schema.body
+  support_email                      = data.aws_ses_email_identity.support.email
   tags                               = local.tags
   userpool_id                        = one(module.app_cognito_pool_us_east_1[*].userpool_id)
 
@@ -267,6 +268,7 @@ module "appsync_us_east_2" {
   kms_key_arn                        = one(module.lambda_underpin_us_east_2[*].kms_key_arn)
   name                               = var.resource_prefix
   schema                             = data.aws_s3_object.graphql_schema.body
+  support_email                      = data.aws_ses_email_identity.support.email
   tags                               = local.tags
   userpool_id                        = one(module.app_cognito_pool_us_east_2[*].userpool_id)
 
@@ -326,6 +328,7 @@ module "appsync_us_west_1" {
   kms_key_arn                        = one(module.lambda_underpin_us_west_1[*].kms_key_arn)
   name                               = var.resource_prefix
   schema                             = data.aws_s3_object.graphql_schema.body
+  support_email                      = data.aws_ses_email_identity.support.email
   tags                               = local.tags
   userpool_id                        = one(module.app_cognito_pool_us_west_1[*].userpool_id)
 
@@ -384,6 +387,7 @@ module "appsync_us_west_2" {
   kms_key_arn                        = one(module.lambda_underpin_us_west_2[*].kms_key_arn)
   name                               = var.resource_prefix
   schema                             = data.aws_s3_object.graphql_schema.body
+  support_email                      = data.aws_ses_email_identity.support.email
   tags                               = local.tags
   userpool_id                        = one(module.app_cognito_pool_us_west_2[*].userpool_id)
 

@@ -62,6 +62,10 @@ variable "schema" {
   type        = string
 }
 
+variable "support_email" {
+  type = string
+}
+
 variable "tags" {
   default     = {}
   description = "Key-value map of tags"

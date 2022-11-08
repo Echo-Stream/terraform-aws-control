@@ -40,6 +40,12 @@ resource "aws_sns_topic" "email_error_events" {
   tags         = local.tags
 }
 
+resource "aws_sns_topic_subscription" "email_error_events" {
+  endpoint  = data.aws_ses_email_identity.support.email
+  protocol  = "email"
+  topic_arn = aws_sns_topic.email_error_events.arn
+}
+
 resource "aws_ses_template" "invite_user" {
   name    = "${var.resource_prefix}-invite-user"
   subject = "Welcome to EchoStream!"
