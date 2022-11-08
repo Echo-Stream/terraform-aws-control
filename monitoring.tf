@@ -97,7 +97,7 @@ resource "aws_cloudwatch_metric_alarm" "stepfunction" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "replication" {
-  for_each = local.non_control_regions
+  for_each = toset(local.non_control_regions)
 
   alarm_actions       = [aws_sns_topic.alarms.arn]
   alarm_description   = "Replication >= 2000ms for ${each.key}"
