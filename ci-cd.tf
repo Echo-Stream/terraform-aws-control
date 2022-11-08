@@ -125,8 +125,10 @@ module "deployment_handler" {
   environment_variables = merge(
     local.common_lambda_environment_variables,
     {
-      APPSYNC_API_IDS = local.appsync_api_ids
-      CI_CD_TOPIC_ARN = aws_sns_topic.ci_cd_errors.arn
+      APPSYNC_API_IDS                   = local.appsync_api_ids
+      CI_CD_TOPIC_ARN                   = aws_sns_topic.ci_cd_errors.arn
+      CLOUDFRONT_DISTRIBUTION_ID_DOCS   = aws_cloudfront_distribution.docs.id
+      CLOUDFRONT_DISTRIBUTION_ID_WEBAPP = aws_cloudfront_distribution.webapp.id
     },
   )
   dead_letter_arn = local.lambda_dead_letter_arn

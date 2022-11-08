@@ -70,8 +70,6 @@ locals {
     BULK_DATA_AWS_ACCESS_KEY_ID                = aws_iam_access_key.presign_bulk_data.id
     BULK_DATA_AWS_SECRET_ACCESS_KEY            = aws_iam_access_key.presign_bulk_data.secret
     BULK_DATA_IAM_USER                         = aws_iam_user.presign_bulk_data.arn
-    CLOUDFRONT_DISTRIBUTION_ID_DOCS            = aws_cloudfront_distribution.docs.id
-    CLOUDFRONT_DISTRIBUTION_ID_WEBAPP          = aws_cloudfront_distribution.webapp.id
     CONTROL_REGION                             = data.aws_region.current.name
     COST_AND_USAGE_BUCKET                      = aws_s3_bucket.cost_and_usage.id
     DYNAMODB_TABLE                             = module.graph_table.name
