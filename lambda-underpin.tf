@@ -28,7 +28,7 @@ module "lambda_underpin_control" {
 }
 
 module "lambda_underpin_us_east_1" {
-  count      = contains(local.regions, "us-east-1") == true ? 1 : 0
+  count      = contains(local.non_control_regions, "us-east-1") == true ? 1 : 0
 
   name = var.resource_prefix
   tags = local.tags
@@ -41,7 +41,7 @@ module "lambda_underpin_us_east_1" {
 }
 
 module "lambda_underpin_us_east_2" {
-  count      = contains(local.regions, "us-east-2") == true ? 1 : 0
+  count      = contains(local.non_control_regions, "us-east-2") == true ? 1 : 0
 
   name = var.resource_prefix
   tags = local.tags
@@ -54,7 +54,7 @@ module "lambda_underpin_us_east_2" {
 }
 
 module "lambda_underpin_us_west_1" {
-  count      = contains(local.regions, "us-west-1") == true ? 1 : 0
+  count      = contains(local.non_control_regions, "us-west-1") == true ? 1 : 0
 
   name = var.resource_prefix
   tags = local.tags
@@ -67,7 +67,7 @@ module "lambda_underpin_us_west_1" {
 }
 
 module "lambda_underpin_us_west_2" {
-  count      = contains(local.regions, "us-west-2") == true ? 1 : 0
+  count      = contains(local.non_control_regions, "us-west-2") == true ? 1 : 0
 
   name = var.resource_prefix
   tags = local.tags

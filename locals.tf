@@ -1,7 +1,7 @@
 locals {
   region_keys = concat(
     [data.aws_region.current.name],
-    local.regions
+    local.non_control_regions
   )
   app_userpool_ids = jsonencode(
     zipmap(
@@ -97,7 +97,7 @@ locals {
     TENANT_DB_STREAM_HANDLER_ROLE              = module.graph_table_tenant_stream_handler.role_arn
     TENANT_DELETED_SES_TEMPLATE                = aws_ses_template.tenant_deleted.name
     TENANT_ERRORED_SES_TEMPLATE                = aws_ses_template.tenant_errored.name
-    TENANT_REGIONS                             = jsonencode(var.tenant_regions)
+    TENANT_REGIONS                             = jsonencode(local.tenant_regions)
     UI_USER_POOL_ID                            = aws_cognito_user_pool.echostream_ui.id
     UPDATE_CODE_ROLE                           = aws_iam_role.update_code.arn
     VALIDATOR_CODE                             = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
@@ -126,7 +126,9 @@ locals {
   }
 
   log_bucket = module.log_bucket.id
-  regions = sort(setsubtract(var.tenant_regions, [data.aws_region.current.name]))
+  non_control_regions = sort(setsubtract(local.tenant_regions, [data.aws_region.current.name]))
+  # Ensure that tenant_regions include the control region
+  tenant_regions = sort(setunion(local.tenant_regions, [data.aws_region.current.name]))
 
   tags = merge({
     app         = "echostream"

@@ -3,7 +3,7 @@ locals {
     CONTROL_REGION = data.aws_region.current.name
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
-    TENANT_REGIONS = jsonencode(var.tenant_regions)
+    TENANT_REGIONS = jsonencode(local.tenant_regions)
   }
 }
 
@@ -51,7 +51,7 @@ module "ui_cognito_post_confirmation" {
     CONTROL_REGION = data.aws_region.current.name
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
-    TENANT_REGIONS = jsonencode(var.tenant_regions)
+    TENANT_REGIONS = jsonencode(local.tenant_regions)
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -126,7 +126,7 @@ module "ui_cognito_pre_authentication" {
     CONTROL_REGION = data.aws_region.current.name
     DYNAMODB_TABLE = module.graph_table.name
     ENVIRONMENT    = var.resource_prefix
-    TENANT_REGIONS = jsonencode(var.tenant_regions)
+    TENANT_REGIONS = jsonencode(local.tenant_regions)
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn
@@ -204,7 +204,7 @@ module "ui_cognito_pre_signup" {
     CONTROL_REGION     = data.aws_region.current.name
     DYNAMODB_TABLE     = module.graph_table.name
     ENVIRONMENT        = var.resource_prefix
-    TENANT_REGIONS     = jsonencode(var.tenant_regions)
+    TENANT_REGIONS     = jsonencode(local.tenant_regions)
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn

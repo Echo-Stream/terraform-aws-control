@@ -74,7 +74,7 @@ resource "aws_acm_certificate_validation" "docs_api" {
 # Certifcates used for appsync domain must be always in us-east-1
 
 resource "aws_acm_certificate" "regional_api" {
-  for_each = toset(var.tenant_regions)
+  for_each = toset(local.tenant_regions)
 
   domain_name       = "api-${var.environment}.${each.key}.${var.domain_name}"
   tags              = var.tags

@@ -113,7 +113,7 @@ module "graph_table" {
 
   replica = [
     # do not create a replica if control-region and tenant-region are same
-    for region in setsubtract(var.tenant_regions, [data.aws_region.current.name]) :
+    for region in local.non_control_regions :
     {
       region_name = region
     }
