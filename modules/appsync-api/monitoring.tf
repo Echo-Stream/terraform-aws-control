@@ -1,7 +1,7 @@
 resource "aws_sns_topic" "alarms" {
   name         = "${var.resource_prefix}-alarms"
   display_name = "${var.resource_prefix} Alarms"
-  tags         = local.tags
+  tags         = var.tags
 }
 
 resource "aws_sns_topic_subscription" "alarms" {
