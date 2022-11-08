@@ -121,18 +121,19 @@ resource "aws_iam_policy" "deployment_handler" {
 }
 
 module "deployment_handler" {
-  description           = "Does appropriate deployments by getting notified from Artifacts bucket"
+  description = "Does appropriate deployments by getting notified from Artifacts bucket"
   environment_variables = merge(
     local.common_lambda_environment_variables,
     {
       APPSYNC_API_IDS = local.appsync_api_ids
+      CI_CD_TOPIC_ARN = aws_sns_topic.ci_cd_errors.arn
     },
   )
-  dead_letter_arn       = local.lambda_dead_letter_arn
-  handler               = "function.handler"
-  kms_key_arn           = local.lambda_env_vars_kms_key_arn
-  memory_size           = 1536
-  name                  = "${var.resource_prefix}-deployment-handler"
+  dead_letter_arn = local.lambda_dead_letter_arn
+  handler         = "function.handler"
+  kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  memory_size     = 1536
+  name            = "${var.resource_prefix}-deployment-handler"
 
   policy_arns = [
     aws_iam_policy.artifacts_bucket_read.arn,

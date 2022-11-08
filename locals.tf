@@ -70,7 +70,6 @@ locals {
     BULK_DATA_AWS_ACCESS_KEY_ID                = aws_iam_access_key.presign_bulk_data.id
     BULK_DATA_AWS_SECRET_ACCESS_KEY            = aws_iam_access_key.presign_bulk_data.secret
     BULK_DATA_IAM_USER                         = aws_iam_user.presign_bulk_data.arn
-    CI_CD_TOPIC_ARN                            = aws_sns_topic.ci_cd_errors.arn
     CLOUDFRONT_DISTRIBUTION_ID_DOCS            = aws_cloudfront_distribution.docs.id
     CLOUDFRONT_DISTRIBUTION_ID_WEBAPP          = aws_cloudfront_distribution.webapp.id
     CONTROL_REGION                             = data.aws_region.current.name
@@ -125,7 +124,7 @@ locals {
     managed_app_cloud_init = "${local.artifacts["lambda"]}/managed-app-cloud-init.zip"
   }
 
-  log_bucket = module.log_bucket.id
+  log_bucket          = module.log_bucket.id
   non_control_regions = sort(setsubtract(var.tenant_regions, [data.aws_region.current.name]))
   # Ensure that tenant_regions include the control region
   tenant_regions = sort(setunion(var.tenant_regions, [data.aws_region.current.name]))
