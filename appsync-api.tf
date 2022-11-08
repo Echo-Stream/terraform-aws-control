@@ -2,7 +2,7 @@ locals {
   regional_appsync_endpoints = jsonencode(
     {
       for k, v in aws_acm_certificate.regional_api :
-        k => format("https://%s/graphql", v.domain_name)
+      k => format("https://%s/graphql", v.domain_name)
     }
   )
 }
@@ -141,7 +141,7 @@ data "aws_iam_policy_document" "multi_region_appsync_datasource" {
       "kms:GenerateDataKey*",
     ]
     resources = local.regional_kms_key_arns
-    sid = "AllowEcryptDecryptEnvVars"
+    sid       = "AllowEcryptDecryptEnvVars"
   }
   statement {
     actions = [
@@ -149,7 +149,7 @@ data "aws_iam_policy_document" "multi_region_appsync_datasource" {
       "sqs:SendMessage",
     ]
     resources = local.regional_dead_letter_arns
-    sid = "AllowDeadLetterWriting"
+    sid       = "AllowDeadLetterWriting"
   }
 }
 
@@ -195,7 +195,7 @@ locals {
 ## Appsync us-east-1 ##
 #######################
 module "appsync_us_east_1" {
-  count      = contains(local.non_control_regions, "us-east-1") == true ? 1 : 0
+  count = contains(local.non_control_regions, "us-east-1") == true ? 1 : 0
 
   api_acm_arn                        = aws_acm_certificate.regional_api["us-east-1"].arn
   api_domain_name                    = aws_acm_certificate.regional_api["us-east-1"].domain_name
@@ -254,7 +254,7 @@ module "appsync_resolvers_us_east_1" {
 ## Appsync us-east-2 ##
 #######################
 module "appsync_us_east_2" {
-  count      = contains(local.non_control_regions, "us-east-2") == true ? 1 : 0
+  count = contains(local.non_control_regions, "us-east-2") == true ? 1 : 0
 
   api_acm_arn                        = aws_acm_certificate.regional_api["us-east-2"].arn
   api_domain_name                    = aws_acm_certificate.regional_api["us-east-2"].domain_name
@@ -313,7 +313,7 @@ module "appsync_resolvers_us_east_2" {
 ## Appsync us-west-1 ##
 #######################
 module "appsync_us_west_1" {
-  count      = contains(local.non_control_regions, "us-west-1") == true ? 1 : 0
+  count = contains(local.non_control_regions, "us-west-1") == true ? 1 : 0
 
   api_acm_arn                        = aws_acm_certificate.regional_api["us-west-1"].arn
   api_domain_name                    = aws_acm_certificate.regional_api["us-west-1"].domain_name

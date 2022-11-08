@@ -77,7 +77,7 @@ resource "aws_cloudwatch_log_group" "audit_firehose_control" {
 }
 
 resource "aws_cloudwatch_log_group" "audit_firehose_us_east_1" {
-  count      = contains(local.non_control_regions, "us-east-1") == true ? 1 : 0
+  count = contains(local.non_control_regions, "us-east-1") == true ? 1 : 0
 
   name              = local.audit_firehose_log_group
   retention_in_days = 7
@@ -86,7 +86,7 @@ resource "aws_cloudwatch_log_group" "audit_firehose_us_east_1" {
 }
 
 resource "aws_cloudwatch_log_group" "audit_firehose_us_east_2" {
-  count      = contains(local.non_control_regions, "us-east-2") == true ? 1 : 0
+  count = contains(local.non_control_regions, "us-east-2") == true ? 1 : 0
 
   name              = local.audit_firehose_log_group
   retention_in_days = 7
@@ -95,7 +95,7 @@ resource "aws_cloudwatch_log_group" "audit_firehose_us_east_2" {
 }
 
 resource "aws_cloudwatch_log_group" "audit_firehose_us_west_1" {
-  count      = contains(local.non_control_regions, "us-west-1") == true ? 1 : 0
+  count = contains(local.non_control_regions, "us-west-1") == true ? 1 : 0
 
   name              = local.audit_firehose_log_group
   retention_in_days = 7
@@ -104,7 +104,7 @@ resource "aws_cloudwatch_log_group" "audit_firehose_us_west_1" {
 }
 
 resource "aws_cloudwatch_log_group" "audit_firehose_us_west_2" {
-  count      = contains(local.non_control_regions, "us-west-2") == true ? 1 : 0
+  count = contains(local.non_control_regions, "us-west-2") == true ? 1 : 0
 
   name              = local.audit_firehose_log_group
   retention_in_days = 7

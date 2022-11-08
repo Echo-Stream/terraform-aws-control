@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "app_cognito_pre_authentication_function_basic" {
       "kms:GenerateDataKey*",
     ]
     resources = local.regional_kms_key_arns
-    sid = "AllowEcryptDecryptEnvVars"
+    sid       = "AllowEcryptDecryptEnvVars"
   }
   statement {
     actions = [
@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "app_cognito_pre_authentication_function_basic" {
       "sqs:SendMessage",
     ]
     resources = local.regional_dead_letter_arns
-    sid = "AllowDeadLetterWriting"
+    sid       = "AllowDeadLetterWriting"
   }
   statement {
     actions = [
