@@ -63,12 +63,13 @@ resource "aws_cloudwatch_event_rule" "log_retention" {
   name                = "${var.resource_prefix}-log-retention"
   description         = "Set log group retention to 7 days daily"
   schedule_expression = "cron(0 10 * * ? *)"
+  tags                = local.tags
 }
 
 resource "aws_cloudwatch_event_target" "log_retention" {
+  arn       = module.log_retention.arn
   rule      = aws_cloudwatch_event_rule.log_retention.name
   target_id = "${var.resource_prefix}-log-retention"
-  arn       = module.log_retention.arn
 }
 
 resource "aws_lambda_permission" "log_retention" {
