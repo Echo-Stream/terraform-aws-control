@@ -1,8 +1,4 @@
 resource "aws_cloudfront_distribution" "webapp" {
-  depends_on = [
-    aws_acm_certificate_validation.app,
-  ]
-
   aliases = [
     local.app_sub_domain
   ]
@@ -88,7 +84,7 @@ resource "aws_cloudfront_distribution" "webapp" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate.app.arn
+    acm_certificate_arn      = aws_acm_certificate_validation.app.certificate_arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
@@ -176,10 +172,6 @@ module "webapp" {
 ### Documentation Cloudfront ###
 ################################
 resource "aws_cloudfront_distribution" "docs" {
-  depends_on = [
-    aws_acm_certificate_validation.docs_api,
-  ]
-
   aliases = [
     local.docs_api_sub_domain
   ]
@@ -240,7 +232,7 @@ resource "aws_cloudfront_distribution" "docs" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate.docs_api.arn
+    acm_certificate_arn      = aws_acm_certificate_validation.docs_api.certificate_arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }

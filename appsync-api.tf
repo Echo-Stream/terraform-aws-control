@@ -67,7 +67,7 @@ resource "aws_iam_role_policy_attachment" "echostream_appsync" {
 
 resource "aws_appsync_domain_name" "echostream_appsync" {
   domain_name     = aws_acm_certificate.regional_api[data.aws_region.current.name].domain_name
-  certificate_arn = aws_acm_certificate.regional_api[data.aws_region.current.name].arn
+  certificate_arn = aws_acm_certificate_validation.regional_api[data.aws_region.current.name].certificate_arn
 }
 
 resource "aws_appsync_domain_name_api_association" "echostream_appsync" {
@@ -197,7 +197,7 @@ locals {
 module "appsync_us_east_1" {
   count = contains(local.non_control_regions, "us-east-1") == true ? 1 : 0
 
-  api_acm_arn                        = aws_acm_certificate.regional_api["us-east-1"].arn
+  api_acm_arn                        = aws_acm_certificate_validation.regional_api["us-east-1"].certificate_arn
   api_domain_name                    = aws_acm_certificate.regional_api["us-east-1"].domain_name
   appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
   appsync_service_role_arn           = module.appsync_datasource_.role_arn
@@ -258,7 +258,7 @@ module "appsync_resolvers_us_east_1" {
 module "appsync_us_east_2" {
   count = contains(local.non_control_regions, "us-east-2") == true ? 1 : 0
 
-  api_acm_arn                        = aws_acm_certificate.regional_api["us-east-2"].arn
+  api_acm_arn                        = aws_acm_certificate_validation.regional_api["us-east-2"].certificate_arn
   api_domain_name                    = aws_acm_certificate.regional_api["us-east-2"].domain_name
   appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
   appsync_service_role_arn           = module.appsync_datasource_.role_arn
@@ -319,7 +319,7 @@ module "appsync_resolvers_us_east_2" {
 module "appsync_us_west_1" {
   count = contains(local.non_control_regions, "us-west-1") == true ? 1 : 0
 
-  api_acm_arn                        = aws_acm_certificate.regional_api["us-west-1"].arn
+  api_acm_arn                        = aws_acm_certificate_validation.regional_api["us-west-1"].certificate_arn
   api_domain_name                    = aws_acm_certificate.regional_api["us-west-1"].domain_name
   appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
   appsync_service_role_arn           = module.appsync_datasource_.role_arn
@@ -379,7 +379,7 @@ module "appsync_resolvers_us_west_1" {
 module "appsync_us_west_2" {
   count = contains(local.non_control_regions, "us-west-2") == true ? 1 : 0
 
-  api_acm_arn                        = aws_acm_certificate.regional_api["us-west-2"].arn
+  api_acm_arn                        = aws_acm_certificate_validation.regional_api["us-west-2"].certificate_arn
   api_domain_name                    = aws_acm_certificate.regional_api["us-west-2"].domain_name
   appsync_datasource_lambda_role_arn = module.appsync_datasource.role_arn
   appsync_service_role_arn           = module.appsync_datasource_.role_arn
