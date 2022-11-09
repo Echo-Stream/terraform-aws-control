@@ -55,7 +55,7 @@ resource "aws_sns_topic_policy" "warming" {
 
 resource "aws_cloudwatch_event_target" "warming" {
   arn       = aws_sns_topic.warming.arn
-  input     = "warmup"
+  input     = "\"warmup\""
   rule      = aws_cloudwatch_event_rule.warming.name
   target_id = "${var.resource_prefix}-warming"
 }
