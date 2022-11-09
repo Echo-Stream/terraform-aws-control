@@ -75,13 +75,25 @@ resource "aws_lambda_permission" "warming" {
 }
 
 resource "aws_sns_topic_subscription" "warming" {
-  for_each = toset([
-    module.appsync_datasource.arn,
-    module.graph_table_dynamodb_trigger.arn,
-    module.graph_table_system_stream_handler.arn,
-    module.graph_table_tenant_stream_handler.arn
-  ])
   topic_arn = aws_sns_topic.warming.arn
   protocol  = "lambda"
-  endpoint  = each.key
+  endpoint  = module.appsync_datasource.arn
+}
+
+resource "aws_sns_topic_subscription" "warming" {
+  topic_arn = aws_sns_topic.warming.arn
+  protocol  = "lambda"
+  endpoint  = module.graph_table_dynamodb_trigger.arn
+}
+
+resource "aws_sns_topic_subscription" "warming" {
+  topic_arn = aws_sns_topic.warming.arn
+  protocol  = "lambda"
+  endpoint  = module.graph_table_system_stream_handler.arn
+}
+
+resource "aws_sns_topic_subscription" "warming" {
+  topic_arn = aws_sns_topic.warming.arn
+  protocol  = "lambda"
+  endpoint  = module.graph_table_tenant_stream_handler.arn
 }
