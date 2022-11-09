@@ -1,11 +1,7 @@
 resource "aws_iam_role" "audit_firehose" {
+  name               = "${var.resource_prefix}-audit-firehose"
   assume_role_policy = data.aws_iam_policy_document.firehose_assume_role.json
-  inline_policy {
-    name   = "${var.resource_prefix}-audit-firehose"
-    policy = data.aws_iam_policy_document.audit_firehose.json
-  }
-  name = "${var.resource_prefix}-audit-firehose"
-  tags = local.tags
+  tags               = local.tags
 }
 
 data "aws_iam_policy_document" "audit_firehose" {
@@ -62,6 +58,12 @@ data "aws_iam_policy_document" "audit_firehose" {
 
     sid = "AllowWritingErrorEvents"
   }
+}
+
+resource "aws_iam_role_policy" "audit_firehose" {
+  name   = "${var.resource_prefix}-audit-firehose"
+  policy = data.aws_iam_policy_document.audit_firehose.json
+  role   = aws_iam_role.audit_firehose.id
 }
 
 ####################################

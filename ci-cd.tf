@@ -266,12 +266,8 @@ resource "aws_sqs_queue" "rebuild_notifications" {
 ##########################################
 resource "aws_iam_role" "rebuild_notifications_state_machine" {
   assume_role_policy = data.aws_iam_policy_document.state_machine_assume_role.json
-  inline_policy {
-    name   = "${var.resource_prefix}-rebuild-notifications-state-machine"
-    policy = data.aws_iam_policy_document.rebuild_notifications_state_machine.json
-  }
-  name = "${var.resource_prefix}-rebuild-notifications-state-machine"
-  tags = local.tags
+  name               = "${var.resource_prefix}-rebuild-notifications-state-machine"
+  tags               = local.tags
 }
 
 data "template_file" "rebuild_notifications_state_machine" {
@@ -326,6 +322,11 @@ data "aws_iam_policy_document" "rebuild_notifications_state_machine" {
 
     sid = "AllowWritingErrorEvents"
   }
+}
+
+resource "aws_iam_role_policy" "rebuild_notifications_state_machine" {
+  policy = data.aws_iam_policy_document.rebuild_notifications_state_machine.json
+  role   = aws_iam_role.rebuild_notifications_state_machine.id
 }
 
 resource "aws_cloudwatch_log_group" "rebuild_notifications_state_machine" {

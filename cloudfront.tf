@@ -124,10 +124,14 @@ data "archive_file" "edge_config" {
 }
 
 resource "aws_iam_role" "edge_config" {
-  assume_role_policy  = data.aws_iam_policy_document.edge_lambda_assume_role.json
-  managed_policy_arns = [data.aws_iam_policy.aws_lambda_basic_execution_role.arn]
-  name                = "${var.resource_prefix}-edge-config"
-  tags                = local.tags
+  assume_role_policy = data.aws_iam_policy_document.edge_lambda_assume_role.json
+  name               = "${var.resource_prefix}-edge-config"
+  tags               = local.tags
+}
+
+resource "aws_iam_role_policy_attachment" "edge_config" {
+  role       = aws_iam_role.edge_config.name
+  policy_arn = data.aws_iam_policy.aws_lambda_basic_execution_role.arn
 }
 
 resource "aws_lambda_function" "edge_config" {
