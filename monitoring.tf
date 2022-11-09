@@ -73,29 +73,6 @@ resource "aws_cloudwatch_metric_alarm" "lambda" {
   tags = local.tags
 }
 
-resource "aws_cloudwatch_metric_alarm" "stepfunction" {
-  alarm_actions       = [aws_sns_topic.alarms.arn]
-  alarm_description   = "ExecutionsFailed > 1 for ${aws_sfn_state_machine.rebuild_notifications.name} state machine"
-  alarm_name          = "state-machine:${aws_sfn_state_machine.rebuild_notifications.name}"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-
-  dimensions = {
-    StateMachineArn = aws_sfn_state_machine.rebuild_notifications.arn
-  }
-
-  evaluation_periods = "1"
-  metric_name        = "ExecutionsFailed"
-  namespace          = "AWS/States"
-  ok_actions         = [aws_sns_topic.alarms.arn]
-  period             = "60"
-  statistic          = "Sum"
-  threshold          = "1"
-  treat_missing_data = "notBreaching"
-  unit               = "Count"
-
-  tags = local.tags
-}
-
 resource "aws_cloudwatch_metric_alarm" "replication" {
   for_each = toset(local.non_control_regions)
 
@@ -118,6 +95,29 @@ resource "aws_cloudwatch_metric_alarm" "replication" {
   threshold          = "2000"
   treat_missing_data = "notBreaching"
   unit               = "Milliseconds"
+
+  tags = local.tags
+}
+
+resource "aws_cloudwatch_metric_alarm" "stepfunction" {
+  alarm_actions       = [aws_sns_topic.alarms.arn, aws_sns_topic.rebuild_notification_failures.arn]
+  alarm_description   = "ExecutionsFailed > 1 for ${aws_sfn_state_machine.rebuild_notifications.name} state machine"
+  alarm_name          = "state-machine:${aws_sfn_state_machine.rebuild_notifications.name}"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+
+  dimensions = {
+    StateMachineArn = aws_sfn_state_machine.rebuild_notifications.arn
+  }
+
+  evaluation_periods = "1"
+  metric_name        = "ExecutionsFailed"
+  namespace          = "AWS/States"
+  ok_actions         = [aws_sns_topic.alarms.arn]
+  period             = "60"
+  statistic          = "Sum"
+  threshold          = "1"
+  treat_missing_data = "notBreaching"
+  unit               = "Count"
 
   tags = local.tags
 }

@@ -28,19 +28,6 @@ resource "aws_sns_topic_policy" "ci_cd_errors" {
 }
 
 data "aws_iam_policy_document" "ci_cd_errors" {
-  # statement {
-  #   sid     = "AWSEvents_stepfunctionFail"
-  #   effect  = "Allow"
-  #   actions = ["SNS:Publish"]
-
-  #   principals {
-  #     type        = "Service"
-  #     identifiers = ["events.amazonaws.com"]
-  #   }
-
-  #   resources = [aws_sns_topic.ci_cd_errors.arn]
-  # }
-
   statement {
     sid     = "__default_statement_ID"
     effect  = "Allow"
@@ -61,4 +48,10 @@ data "aws_iam_policy_document" "ci_cd_errors" {
       variable = "AWS:SourceOwner"
     }
   }
+}
+
+resource "aws_sns_topic" "rebuild_notification_failures" {
+  name         = "${var.resource_prefix}-rebuild-notification-failures"
+  display_name = "${var.resource_prefix} Rebuild Notification Failures"
+  tags         = local.tags
 }
