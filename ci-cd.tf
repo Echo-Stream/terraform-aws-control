@@ -346,9 +346,78 @@ resource "aws_sfn_state_machine" "rebuild_notifications" {
   tags = local.tags
 }
 
-resource "null_resource" "start_rebuild_notifications_step_function" {
-
-  provisioner "local-exec" {
-    command = "aws stepfunctions start-execution --state-machine-arn ${aws_sfn_state_machine.rebuild_notifications.arn}"
+data "template_file" "start_rebuild_notifications_state_machine" {
+  template = file("${path.module}/scripts/start-rebuild-notifications-state-machine.py")
+  vars = {
+    state_machine_arn = aws_sfn_state_machine.rebuild_notifications.arn
   }
+}
+
+data "archive_file" "start_rebuild_notifications_state_machine" {
+  type        = "zip"
+  output_path = "${path.module}/start-rebuild-notifications-state-machine.zip"
+
+  source {
+    content  = data.template_file.start_rebuild_notifications_state_machine.rendered
+    filename = "function.py"
+  }
+}
+
+data "aws_iam_policy_document" "start_rebuild_notifications_state_machine" {
+  statement {
+    actions = [
+      "states:ListExecutions",
+      "states:StartExecution",
+    ]
+    resources = [
+      aws_sfn_state_machine.rebuild_notifications.arn,
+    ]
+    sid = "sfn-access"
+  }
+}
+
+resource "aws_iam_role" "start_rebuild_notifications_state_machine" {
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  inline_policy {
+    name   = "sfn-access"
+    policy = data.aws_iam_policy_document.start_rebuild_notifications_state_machine.json
+  }
+  managed_policy_arns = [data.aws_iam_policy.aws_lambda_basic_execution_role.arn]
+  name                = "${var.resource_prefix}-start-rebuild-notifications-state-machine"
+  tags                = local.tags
+}
+
+resource "aws_lambda_function" "start_rebuild_notifications_state_machine" {
+  depends_on = [
+    data.archive_file.start_rebuild_notifications_state_machine
+  ]
+
+  description      = "Edge Lambda that returns an environment specific config for reactjs application"
+  filename         = "${path.module}/start-rebuild-notifications-state-machine.zip"
+  function_name    = "${var.resource_prefix}-start-rebuild-notifications-state-machine"
+  handler          = "function.lambda_handler"
+  publish          = true
+  role             = aws_iam_role.start_rebuild_notifications_state_machine.arn
+  runtime          = local.lambda_runtime
+  source_code_hash = data.archive_file.start_rebuild_notifications_state_machine.output_base64sha256
+  tags             = local.tags
+}
+
+resource "aws_lambda_permission" "start_rebuild_notifications_state_machine" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.start_rebuild_notifications_state_machine.function_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.rebuild_notification_failures.arn
+}
+
+resource "aws_sns_topic_subscription" "rebuild_notification_failures" {
+  topic_arn = aws_sns_topic.rebuild_notification_failures.arn
+  protocol  = "lambda"
+  endpoint  = aws_sns_topic.rebuild_notification_failures.arn
+}
+
+resource "aws_lambda_invocation" "start_rebuild_notifications_state_machine" {
+  function_name = aws_lambda_function.start_rebuild_notifications_state_machine.function_name
+  input         = "{}"
 }
