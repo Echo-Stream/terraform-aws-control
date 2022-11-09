@@ -1,7 +1,12 @@
 resource "aws_iam_role" "app_cognito_pre_authentication_function" {
-  name               = "${var.resource_prefix}-app-cognito-pre-authentication"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
-  tags               = var.tags
+  inline_policy {
+    name   = "basic-access"
+    policy = data.aws_iam_policy_document.app_cognito_pre_authentication_function_basic.json
+  }
+  managed_policy_arns = [aws_iam_policy.graph_ddb_read.arn]
+  name                = "${var.resource_prefix}-app-cognito-pre-authentication"
+  tags                = var.tags
 }
 
 data "aws_iam_policy_document" "app_cognito_pre_authentication_function_basic" {
@@ -42,15 +47,4 @@ data "aws_iam_policy_document" "app_cognito_pre_authentication_function_basic" {
     ]
     sid = "AllowWritingXRay"
   }
-}
-
-resource "aws_iam_role_policy" "app_cognito_pre_authentication_function_basic" {
-  name   = "basic-access"
-  policy = data.aws_iam_policy_document.app_cognito_pre_authentication_function_basic.json
-  role   = aws_iam_role.app_cognito_pre_authentication_function.id
-}
-
-resource "aws_iam_role_policy_attachment" "graph_ddb_read" {
-  policy_arn = aws_iam_policy.graph_ddb_read.arn
-  role       = aws_iam_role.app_cognito_pre_authentication_function.name
 }

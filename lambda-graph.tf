@@ -70,7 +70,13 @@ resource "aws_lambda_event_source_mapping" "graph_table_dynamodb_trigger" {
 }
 
 resource "aws_iam_role" "managed_app" {
-  description        = "Enable AWS Systems Manager service core functionality"
+  description = "Enable AWS Systems Manager service core functionality"
+  managed_policy_arns = [
+    aws_iam_policy.ecr_read.arn,
+    "arn:aws:iam::aws:policy/AmazonSSMDirectoryServiceAccess",
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+    aws_iam_policy.managed_app_customer_policy.arn,
+  ]
   name               = "${var.resource_prefix}-managed-app"
   assume_role_policy = data.aws_iam_policy_document.managed_app.json
   tags               = local.tags
@@ -124,31 +130,6 @@ data "aws_iam_policy_document" "managed_app_customer_policy" {
 resource "aws_iam_policy" "managed_app_customer_policy" {
   description = "IAM permissions required for manage apps ssm"
   policy      = data.aws_iam_policy_document.managed_app_customer_policy.json
-}
-
-resource "aws_iam_role_policy_attachment" "manage_apps_ecr_read_access" {
-  policy_arn = aws_iam_policy.ecr_read.arn
-  role       = aws_iam_role.managed_app.name
-}
-
-resource "aws_iam_role_policy_attachment" "manage_apps_ssm_directory_role" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMDirectoryServiceAccess"
-  role       = aws_iam_role.managed_app.name
-}
-
-resource "aws_iam_role_policy_attachment" "managed_app" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-  role       = aws_iam_role.managed_app.name
-}
-
-resource "aws_iam_role_policy_attachment" "managed_app_customer_policy" {
-  policy_arn = aws_iam_policy.managed_app_customer_policy.arn
-  role       = aws_iam_role.managed_app.name
-}
-
-resource "aws_iam_role_policy_attachment" "managed_app_ecr_read" {
-  policy_arn = aws_iam_policy.ecr_read.arn
-  role       = aws_iam_role.managed_app.name
 }
 
 module "graph_table_tenant_stream_handler" {

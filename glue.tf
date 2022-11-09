@@ -85,13 +85,13 @@ resource "aws_glue_crawler" "cost_and_usage_crawler" {
 
 resource "aws_iam_role" "cost_and_usage_crawler" {
   assume_role_policy = data.aws_iam_policy_document.glue_assume_role.json
-  name               = "${var.resource_prefix}-cost-and-usage-crawler"
-  tags               = local.tags
-}
-
-resource "aws_iam_role_policy_attachment" "cost_and_usage_crawler" {
-  role       = aws_iam_role.cost_and_usage_crawler.id
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+  inline_policy {
+    name   = "${var.resource_prefix}-cost-and-usage-crawler"
+    policy = data.aws_iam_policy_document.cost_and_usage_crawler.json
+  }
+  managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"]
+  name                = "${var.resource_prefix}-cost-and-usage-crawler"
+  tags                = local.tags
 }
 
 data "aws_iam_policy_document" "cost_and_usage_crawler" {
@@ -107,10 +107,4 @@ data "aws_iam_policy_document" "cost_and_usage_crawler" {
 
     sid = "MinimumPermissionsToCrawl"
   }
-}
-
-resource "aws_iam_role_policy" "cost_and_usage_crawler" {
-  name   = "${var.resource_prefix}-cost-and-usage-crawler"
-  policy = data.aws_iam_policy_document.cost_and_usage_crawler.json
-  role   = aws_iam_role.cost_and_usage_crawler.id
 }

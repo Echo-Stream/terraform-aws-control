@@ -55,14 +55,10 @@ resource "aws_appsync_graphql_api" "echostream" {
 }
 
 resource "aws_iam_role" "echostream_appsync" {
-  name               = "${var.resource_prefix}-appsync"
-  assume_role_policy = data.aws_iam_policy_document.appsync_assume_role.json
-  tags               = local.tags
-}
-
-resource "aws_iam_role_policy_attachment" "echostream_appsync" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs"
-  role       = aws_iam_role.echostream_appsync.name
+  assume_role_policy  = data.aws_iam_policy_document.appsync_assume_role.json
+  managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs"]
+  name                = "${var.resource_prefix}-appsync"
+  tags                = local.tags
 }
 
 resource "aws_appsync_domain_name" "echostream_appsync" {
