@@ -39,7 +39,7 @@ resource "aws_iam_role" "internal_node" {
 
 resource "aws_iam_role_policy_attachment" "internal_node_basic" {
   role       = aws_iam_role.internal_node.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  policy_arn = data.aws_iam_policy.aws_lambda_basic_execution_role.arn
 }
 
 data "aws_iam_policy_document" "internal_node" {
@@ -98,7 +98,7 @@ resource "aws_iam_role" "auditor" {
 
 resource "aws_iam_role_policy_attachment" "auditor_basic" {
   role       = aws_iam_role.auditor.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  policy_arn = data.aws_iam_policy.aws_lambda_basic_execution_role.arn
 }
 
 resource "aws_iam_role_policy_attachment" "auditor_sts_assume" {
@@ -127,7 +127,7 @@ resource "aws_iam_role" "validator" {
 
 resource "aws_iam_role_policy_attachment" "validator_basic" {
   role       = aws_iam_role.validator.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  policy_arn = data.aws_iam_policy.aws_lambda_basic_execution_role.arn
 }
 
 resource "aws_iam_role_policy_attachment" "validator_db" {
@@ -177,7 +177,7 @@ resource "aws_iam_role" "update_code" {
 }
 
 resource "aws_iam_role_policy_attachment" "update_code_basic" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  policy_arn = data.aws_iam_policy.aws_lambda_basic_execution_role.arn
   role       = aws_iam_role.update_code.name
 }
 

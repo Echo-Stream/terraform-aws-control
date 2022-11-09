@@ -16,6 +16,10 @@ data "aws_iam_policy" "administrator_access" {
   arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
+data "aws_iam_policy" "aws_lambda_basic_execution_role" {
+  arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
 data "aws_iam_policy_document" "appsync_assume_role" {
   statement {
     actions = [
