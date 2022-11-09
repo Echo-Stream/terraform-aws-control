@@ -379,7 +379,7 @@ data "aws_iam_policy_document" "start_rebuild_notifications_state_machine" {
 resource "aws_iam_role" "start_rebuild_notifications_state_machine" {
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
   inline_policy {
-    name   = "sfn-access"
+    name   = "SfnAccess"
     policy = data.aws_iam_policy_document.start_rebuild_notifications_state_machine.json
   }
   managed_policy_arns = [data.aws_iam_policy.aws_lambda_basic_execution_role.arn]
@@ -414,7 +414,7 @@ resource "aws_lambda_permission" "start_rebuild_notifications_state_machine" {
 resource "aws_sns_topic_subscription" "rebuild_notification_failures" {
   topic_arn = aws_sns_topic.rebuild_notification_failures.arn
   protocol  = "lambda"
-  endpoint  = aws_sns_topic.rebuild_notification_failures.arn
+  endpoint  = aws_lambda_function.start_rebuild_notifications_state_machine.arn
 }
 
 resource "aws_lambda_invocation" "start_rebuild_notifications_state_machine" {
