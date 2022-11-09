@@ -372,14 +372,14 @@ data "aws_iam_policy_document" "start_rebuild_notifications_state_machine" {
     resources = [
       aws_sfn_state_machine.rebuild_notifications.arn,
     ]
-    sid = "sfn-access"
+    sid = "SfnAccess"
   }
 }
 
 resource "aws_iam_role" "start_rebuild_notifications_state_machine" {
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
   inline_policy {
-    name   = "SfnAccess"
+    name   = "${var.resource_prefix}-start-rebuild-notifications-state-machine"
     policy = data.aws_iam_policy_document.start_rebuild_notifications_state_machine.json
   }
   managed_policy_arns = [data.aws_iam_policy.aws_lambda_basic_execution_role.arn]
