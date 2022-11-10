@@ -38,7 +38,7 @@ module "lambda_underpin_us_east_1" {
   source = "./modules/lambda-underpin"
 
   providers = {
-    aws = aws.north-virginia
+    aws = aws.us-east-1
   }
 }
 
@@ -52,7 +52,7 @@ module "lambda_underpin_us_east_2" {
   source = "./modules/lambda-underpin"
 
   providers = {
-    aws = aws.ohio
+    aws = aws.us-east-2
   }
 }
 
@@ -66,7 +66,7 @@ module "lambda_underpin_us_west_1" {
   source = "./modules/lambda-underpin"
 
   providers = {
-    aws = aws.north-california
+    aws = aws.us-west-1
   }
 }
 
@@ -80,6 +80,6 @@ module "lambda_underpin_us_west_2" {
   source = "./modules/lambda-underpin"
 
   providers = {
-    aws = aws.oregon
+    aws = aws.us-west-2
   }
 }

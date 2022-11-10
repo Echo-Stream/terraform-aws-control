@@ -53,7 +53,7 @@ module "app_cognito_pool_us_east_1" {
   source = "./modules/app-user-pool"
 
   providers = {
-    aws = aws.north-virginia
+    aws = aws.us-east-1
   }
 }
 
@@ -76,7 +76,7 @@ module "app_cognito_pool_us_east_2" {
   source = "./modules/app-user-pool"
 
   providers = {
-    aws = aws.ohio
+    aws = aws.us-east-2
   }
 }
 
@@ -101,7 +101,7 @@ module "app_cognito_pool_us_west_1" {
   source = "./modules/app-user-pool"
 
   providers = {
-    aws = aws.north-california
+    aws = aws.us-west-1
   }
 }
 
@@ -125,6 +125,6 @@ module "app_cognito_pool_us_west_2" {
   source = "./modules/app-user-pool"
 
   providers = {
-    aws = aws.oregon
+    aws = aws.us-west-2
   }
 }

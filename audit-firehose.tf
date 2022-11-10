@@ -82,7 +82,7 @@ resource "aws_cloudwatch_log_group" "audit_firehose_us_east_1" {
   name              = local.audit_firehose_log_group
   retention_in_days = 7
   tags              = var.tags
-  provider          = aws.north-virginia
+  provider          = aws.us-east-1
 }
 
 resource "aws_cloudwatch_log_group" "audit_firehose_us_east_2" {
@@ -91,7 +91,7 @@ resource "aws_cloudwatch_log_group" "audit_firehose_us_east_2" {
   name              = local.audit_firehose_log_group
   retention_in_days = 7
   tags              = var.tags
-  provider          = aws.ohio
+  provider          = aws.us-east-2
 }
 
 resource "aws_cloudwatch_log_group" "audit_firehose_us_west_1" {
@@ -100,7 +100,7 @@ resource "aws_cloudwatch_log_group" "audit_firehose_us_west_1" {
   name              = local.audit_firehose_log_group
   retention_in_days = 7
   tags              = var.tags
-  provider          = aws.north-california
+  provider          = aws.us-west-1
 }
 
 resource "aws_cloudwatch_log_group" "audit_firehose_us_west_2" {
@@ -109,5 +109,5 @@ resource "aws_cloudwatch_log_group" "audit_firehose_us_west_2" {
   name              = local.audit_firehose_log_group
   retention_in_days = 7
   tags              = var.tags
-  provider          = aws.oregon
+  provider          = aws.us-west-2
 }

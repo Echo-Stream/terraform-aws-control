@@ -216,7 +216,7 @@ module "appsync_us_east_1" {
   source = "./modules/appsync-api"
 
   providers = {
-    aws = aws.north-virginia
+    aws = aws.us-east-1
   }
 }
 
@@ -248,7 +248,7 @@ module "appsync_resolvers_us_east_1" {
   source = "./modules/appsync-resolvers"
 
   providers = {
-    aws = aws.north-virginia
+    aws = aws.us-east-1
   }
 }
 
@@ -277,7 +277,7 @@ module "appsync_us_east_2" {
   source = "./modules/appsync-api"
 
   providers = {
-    aws = aws.ohio
+    aws = aws.us-east-2
   }
 }
 
@@ -309,7 +309,7 @@ module "appsync_resolvers_us_east_2" {
   source = "./modules/appsync-resolvers"
 
   providers = {
-    aws = aws.ohio
+    aws = aws.us-east-2
   }
 }
 
@@ -338,7 +338,7 @@ module "appsync_us_west_1" {
   source = "./modules/appsync-api"
 
   providers = {
-    aws = aws.north-california
+    aws = aws.us-west-1
   }
 }
 
@@ -369,7 +369,7 @@ module "appsync_resolvers_us_west_1" {
   source = "./modules/appsync-resolvers"
 
   providers = {
-    aws = aws.north-california
+    aws = aws.us-west-1
   }
 }
 
@@ -398,7 +398,7 @@ module "appsync_us_west_2" {
   source = "./modules/appsync-api"
 
   providers = {
-    aws = aws.oregon
+    aws = aws.us-west-2
   }
 }
 
@@ -429,6 +429,6 @@ module "appsync_resolvers_us_west_2" {
   source = "./modules/appsync-resolvers"
 
   providers = {
-    aws = aws.oregon
+    aws = aws.us-west-2
   }
 }

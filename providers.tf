@@ -5,28 +5,28 @@
 provider "aws" {
   allowed_account_ids = [data.aws_caller_identity.current.account_id]
   region              = "us-east-1"
-  alias               = "north-virginia"
+  alias               = "us-east-1"
 }
 
 # us-east-2 aws provider
 provider "aws" {
   allowed_account_ids = [data.aws_caller_identity.current.account_id]
   region              = "us-east-2"
-  alias               = "ohio"
+  alias               = "us-east-2"
 }
 
 # us-west-1 aws provider
 provider "aws" {
   allowed_account_ids = [data.aws_caller_identity.current.account_id]
   region              = "us-west-1"
-  alias               = "north-california"
+  alias               = "us-west-1"
 }
 
 # us-west-2 aws provider
 provider "aws" {
   allowed_account_ids = [data.aws_caller_identity.current.account_id]
   region              = "us-west-2"
-  alias               = "oregon"
+  alias               = "us-west-2"
 }
 
 # ########################### Africa ######################################

@@ -18,7 +18,7 @@ module "log_bucket_us_east_1" {
   version = "4.0.0"
 
   providers = {
-    aws = aws.north-virginia
+    aws = aws.us-east-1
   }
 }
 
@@ -32,7 +32,7 @@ module "log_bucket_us_east_2" {
   version = "4.0.0"
 
   providers = {
-    aws = aws.ohio
+    aws = aws.us-east-2
   }
 }
 
@@ -46,7 +46,7 @@ module "log_bucket_us_west_1" {
   version = "4.0.0"
 
   providers = {
-    aws = aws.north-california
+    aws = aws.us-west-1
   }
 }
 
@@ -60,6 +60,6 @@ module "log_bucket_us_west_2" {
   version = "4.0.0"
 
   providers = {
-    aws = aws.oregon
+    aws = aws.us-west-2
   }
 }

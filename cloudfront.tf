@@ -144,11 +144,11 @@ resource "aws_lambda_function" "edge_config" {
   runtime          = local.lambda_runtime
   source_code_hash = data.archive_file.edge_config.output_base64sha256
   tags             = local.tags
-  provider         = aws.north-virginia ## currently Edge functions are supported in us-east-1 only
+  provider         = aws.us-east-1 ## currently Edge functions are supported in us-east-1 only
 }
 
 resource "aws_lambda_permission" "edge_config" {
-  provider      = aws.north-virginia
+  provider      = aws.us-east-1
   action        = "lambda:GetFunction"
   function_name = aws_lambda_function.edge_config.function_name
   principal     = "edgelambda.amazonaws.com"
