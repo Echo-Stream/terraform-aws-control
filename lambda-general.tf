@@ -168,7 +168,7 @@ module "managed_app_cloud_init" {
   environment_variables = local.common_lambda_environment_variables
   handler               = "function.handler"
   kms_key_arn           = local.lambda_env_vars_kms_key_arn
-  layers                = ["arn:aws:lambda:${data.aws_region.current.name}:336392948345:layer:AWSDataWrangler-Python39:9"]
+  layers                = ["arn:aws:lambda:${data.aws_region.current.name}:336392948345:layer:AWSSDKPandas-Python39:1"]
   memory_size           = 1536
   name                  = "${var.resource_prefix}-managed-app-cloud-init"
 
