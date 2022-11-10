@@ -12,6 +12,8 @@ resource "aws_acm_certificate" "app" {
   domain_name       = local.app_sub_domain
   validation_method = "DNS"
   tags              = var.tags
+
+  provder = aws.us-east-1
 }
 
 resource "aws_route53_record" "app" {
@@ -36,6 +38,8 @@ resource "aws_route53_record" "app" {
 resource "aws_acm_certificate_validation" "app" {
   certificate_arn         = aws_acm_certificate.app.arn
   validation_record_fqdns = [for record in aws_route53_record.app : record.fqdn]
+
+  provder = aws.us-east-1
 }
 
 
@@ -44,6 +48,8 @@ resource "aws_acm_certificate" "docs_api" {
   domain_name       = local.docs_api_sub_domain
   validation_method = "DNS"
   tags              = var.tags
+
+  provider = aws.us-east-1
 }
 
 resource "aws_route53_record" "docs_api" {
@@ -68,6 +74,8 @@ resource "aws_route53_record" "docs_api" {
 resource "aws_acm_certificate_validation" "docs_api" {
   certificate_arn         = aws_acm_certificate.docs_api.arn
   validation_record_fqdns = [for record in aws_route53_record.docs_api : record.fqdn]
+
+  provder = aws.us-east-1
 }
 
 ######### appsync custom domain ##########
@@ -80,7 +88,7 @@ resource "aws_acm_certificate" "regional_api" {
   tags              = var.tags
   validation_method = "DNS"
 
-  provider = aws.north-virginia
+  provider = aws.us-east-1
 }
 
 resource "aws_route53_record" "regional_api" {
@@ -102,5 +110,5 @@ resource "aws_acm_certificate_validation" "regional_api" {
   certificate_arn         = each.value.arn
   validation_record_fqdns = [for record in aws_route53_record.regional_api : record.fqdn]
 
-  provider = aws.north-virginia
+  provider = aws.us-east-1
 }
