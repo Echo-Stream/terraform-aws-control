@@ -116,4 +116,6 @@ resource "aws_cur_report_definition" "cost_and_usage" {
   s3_bucket = aws_s3_bucket.cost_and_usage.id
   s3_region = data.aws_region.current.name
   time_unit = "DAILY"
+
+  provider = aws.us-east-1
 }
