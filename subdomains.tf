@@ -13,7 +13,7 @@ resource "aws_acm_certificate" "app" {
   validation_method = "DNS"
   tags              = var.tags
 
-  provider =aws.us-east-1
+  provider = aws.us-east-1
 }
 
 resource "aws_route53_record" "app" {
@@ -39,7 +39,7 @@ resource "aws_acm_certificate_validation" "app" {
   certificate_arn         = aws_acm_certificate.app.arn
   validation_record_fqdns = [for record in aws_route53_record.app : record.fqdn]
 
-  provider =aws.us-east-1
+  provider = aws.us-east-1
 }
 
 
@@ -75,7 +75,7 @@ resource "aws_acm_certificate_validation" "docs_api" {
   certificate_arn         = aws_acm_certificate.docs_api.arn
   validation_record_fqdns = [for record in aws_route53_record.docs_api : record.fqdn]
 
-  provider =aws.us-east-1
+  provider = aws.us-east-1
 }
 
 ######### appsync custom domain ##########
