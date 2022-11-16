@@ -57,6 +57,7 @@ module "ui_cognito_post_confirmation" {
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  layers          = [local.echocore_layer_version_arns[data.aws_region.current.name]]
   memory_size     = 1536
   name            = "${var.resource_prefix}-ui-cognito-post-confirmation"
 
@@ -132,6 +133,7 @@ module "ui_cognito_pre_authentication" {
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  layers          = [local.echocore_layer_version_arns[data.aws_region.current.name]]
   memory_size     = 1536
   name            = "${var.resource_prefix}-ui-cognito-pre-authentication"
 
@@ -210,6 +212,7 @@ module "ui_cognito_pre_signup" {
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  layers          = [local.echocore_layer_version_arns[data.aws_region.current.name]]
   memory_size     = 1536
   name            = "${var.resource_prefix}-ui-cognito-pre-signup"
 
@@ -278,6 +281,7 @@ module "api_cognito_pre_authentication" {
   dead_letter_arn       = local.lambda_dead_letter_arn
   handler               = "function.handler"
   kms_key_arn           = local.lambda_env_vars_kms_key_arn
+  layers                = [local.echocore_layer_version_arns[data.aws_region.current.name]]
   memory_size           = 1536
   name                  = "${var.resource_prefix}-api-cognito-pre-authentication"
 

@@ -204,6 +204,7 @@ module "appsync_us_east_1" {
   artifacts_bucket                   = "${local.artifacts_bucket_prefix}-us-east-1"
   dead_letter_arn                    = one(module.lambda_underpin_us_east_1[*].dead_letter_arn)
   environment_variables              = local.common_lambda_environment_variables
+  function_layers                    = [local.echocore_layer_version_arns["us-east-1"]]
   function_s3_object_key             = local.lambda_functions_keys["appsync_datasource"]
   kms_key_arn                        = one(module.lambda_underpin_us_east_1[*].kms_key_arn)
   resource_prefix                    = var.resource_prefix
@@ -265,6 +266,7 @@ module "appsync_us_east_2" {
   artifacts_bucket                   = "${local.artifacts_bucket_prefix}-us-east-2"
   dead_letter_arn                    = one(module.lambda_underpin_us_east_2[*].dead_letter_arn)
   environment_variables              = local.common_lambda_environment_variables
+  function_layers                    = [local.echocore_layer_version_arns["us-east-2"]]
   function_s3_object_key             = local.lambda_functions_keys["appsync_datasource"]
   kms_key_arn                        = one(module.lambda_underpin_us_east_2[*].kms_key_arn)
   resource_prefix                    = var.resource_prefix
@@ -326,6 +328,7 @@ module "appsync_us_west_1" {
   artifacts_bucket                   = "${local.artifacts_bucket_prefix}-us-west-1"
   dead_letter_arn                    = one(module.lambda_underpin_us_west_1[*].dead_letter_arn)
   environment_variables              = local.common_lambda_environment_variables
+  function_layers                    = [local.echocore_layer_version_arns["us-west-1"]]
   function_s3_object_key             = local.lambda_functions_keys["appsync_datasource"]
   kms_key_arn                        = one(module.lambda_underpin_us_west_1[*].kms_key_arn)
   resource_prefix                    = var.resource_prefix
@@ -386,6 +389,7 @@ module "appsync_us_west_2" {
   artifacts_bucket                   = "${local.artifacts_bucket_prefix}-us-west-2"
   dead_letter_arn                    = one(module.lambda_underpin_us_west_2[*].dead_letter_arn)
   environment_variables              = local.common_lambda_environment_variables
+  function_layers                    = [local.echocore_layer_version_arns["us-west-2"]]
   function_s3_object_key             = local.lambda_functions_keys["appsync_datasource"]
   kms_key_arn                        = one(module.lambda_underpin_us_west_2[*].kms_key_arn)
   resource_prefix                    = var.resource_prefix

@@ -25,6 +25,7 @@ module "app_cognito_pool_control" {
   artifacts_bucket                               = "${local.artifacts_bucket_prefix}-${data.aws_region.current.name}"
   dead_letter_arn                                = module.lambda_underpin_control.dead_letter_arn
   environment_variables                          = local.app_api_cognito_pre_authentication_environment_variables
+  function_layers                                = [local.echocore_layer_version_arns[data.aws_region.current.name]]
   function_s3_object_key                         = local.lambda_functions_keys["app_api_cognito_pre_authentication"]
   kms_key_arn                                    = module.lambda_underpin_control.kms_key_arn
   name                                           = var.resource_prefix
@@ -44,6 +45,7 @@ module "app_cognito_pool_us_east_1" {
   artifacts_bucket                               = "${local.artifacts_bucket_prefix}-us-east-1"
   dead_letter_arn                                = one(module.lambda_underpin_us_east_1[*].dead_letter_arn)
   environment_variables                          = local.app_api_cognito_pre_authentication_environment_variables
+  function_layers                                = [local.echocore_layer_version_arns["us-east-1"]]
   function_s3_object_key                         = local.lambda_functions_keys["app_api_cognito_pre_authentication"]
   kms_key_arn                                    = one(module.lambda_underpin_us_east_1[*].kms_key_arn)
   name                                           = var.resource_prefix
@@ -67,6 +69,7 @@ module "app_cognito_pool_us_east_2" {
   artifacts_bucket                               = "${local.artifacts_bucket_prefix}-us-east-2"
   dead_letter_arn                                = one(module.lambda_underpin_us_east_2[*].dead_letter_arn)
   environment_variables                          = local.app_api_cognito_pre_authentication_environment_variables
+  function_layers                                = [local.echocore_layer_version_arns["us-east-2"]]
   function_s3_object_key                         = local.lambda_functions_keys["app_api_cognito_pre_authentication"]
   kms_key_arn                                    = one(module.lambda_underpin_us_east_2[*].kms_key_arn)
   name                                           = var.resource_prefix
@@ -92,6 +95,7 @@ module "app_cognito_pool_us_west_1" {
   artifacts_bucket                               = "${local.artifacts_bucket_prefix}-us-west-1"
   dead_letter_arn                                = one(module.lambda_underpin_us_west_1[*].dead_letter_arn)
   environment_variables                          = local.app_api_cognito_pre_authentication_environment_variables
+  function_layers                                = [local.echocore_layer_version_arns["us-west-1"]]
   function_s3_object_key                         = local.lambda_functions_keys["app_api_cognito_pre_authentication"]
   kms_key_arn                                    = one(module.lambda_underpin_us_west_1[*].kms_key_arn)
   name                                           = var.resource_prefix
@@ -116,6 +120,7 @@ module "app_cognito_pool_us_west_2" {
   artifacts_bucket                               = "${local.artifacts_bucket_prefix}-us-west-2"
   dead_letter_arn                                = one(module.lambda_underpin_us_west_2[*].dead_letter_arn)
   environment_variables                          = local.app_api_cognito_pre_authentication_environment_variables
+  function_layers                                = [local.echocore_layer_version_arns["us-west-2"]]
   function_s3_object_key                         = local.lambda_functions_keys["app_api_cognito_pre_authentication"]
   kms_key_arn                                    = one(module.lambda_underpin_us_west_2[*].kms_key_arn)
   name                                           = var.resource_prefix

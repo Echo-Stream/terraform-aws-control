@@ -1,8 +1,3 @@
-data "aws_s3_object" "function_package" {
-  bucket = var.artifacts_bucket
-  key    = var.function_s3_object_key
-}
-
 resource "aws_cloudwatch_log_group" "app_cognito_pre_authentication" {
   name              = "/aws/lambda/${var.name}-app-cognito-pre-authentication"
   retention_in_days = 7
@@ -21,6 +16,7 @@ resource "aws_lambda_function" "app_cognito_pre_authentication" {
   function_name = "${var.name}-app-cognito-pre-authentication"
   handler       = "function.handler"
   kms_key_arn   = var.kms_key_arn
+  layers        = var.function_layers
   lifecycle {
     ignore_changes = [
       last_modified,

@@ -36,6 +36,11 @@ variable "environment_variables" {
   type        = map(any)
 }
 
+variable "function_layers" {
+  description = "List of layer version arns"
+  type        = list(string)
+}
+
 variable "function_s3_object_key" {
   description = "S3 object key for the lambda function"
   type        = string
@@ -52,7 +57,7 @@ variable "resource_prefix" {
 }
 
 variable "runtime" {
-  description = "Runtime for the lambda, defaults to Python 3.9"
+  description = "Runtime for the lambda"
   type        = string
 }
 

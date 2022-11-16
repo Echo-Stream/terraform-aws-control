@@ -37,12 +37,14 @@ locals {
   artifacts_sns_arn  = "arn:aws:sns:${data.aws_region.current.name}:${local.artifacts_account_id}:echostream-artifacts-${data.aws_region.current.name}_${replace(var.echostream_version, ".", "-")}"
 
   artifacts = {
-    appsync   = "${var.echostream_version}/appsync"
-    functions = "${var.echostream_version}/functions"
+    appsync        = "${var.echostream_version}/appsync"
+    control_lambda = "${var.echostream_version}/lambda/control"
+    echocore       = "${var.echostream_version}/lambda/layer/echocore.zip"
+    functions      = "${var.echostream_version}/functions"
     glue = {
       audit_records_etl = "${var.echostream_version}/glue/audit-records-etl.py"
     }
-    lambda        = "${var.echostream_version}/lambda/control"
+    lambda_layer  = "${var.echostream_version}/lambda/layer"
     message_types = "${var.echostream_version}/message-types"
     reactjs       = "${var.echostream_version}/ui/app"
     tenant_lambda = "${var.echostream_version}/lambda/tenant"
@@ -106,20 +108,22 @@ locals {
   lambda_runtime              = "python3.9"
 
   lambda_functions_keys = {
-    app_api_cognito_pre_authentication = "${local.artifacts["lambda"]}/app-api-cognito-pre-authentication.zip"
-    appsync_datasource                 = "${local.artifacts["lambda"]}/appsync-datasource.zip"
-    deployment_handler                 = "${local.artifacts["lambda"]}/deployment-handler.zip"
-    graph_table_dynamodb_trigger       = "${local.artifacts["lambda"]}/graph-table-dynamodb-trigger.zip"
-    graph_table_system_stream_handler  = "${local.artifacts["lambda"]}/graph-table-system-stream-handler.zip"
-    graph_table_tenant_stream_handler  = "${local.artifacts["lambda"]}/graph-table-tenant-stream-handler.zip"
-    log_retention                      = "${local.artifacts["lambda"]}/log-retention.zip"
-    rebuild_notifications              = "${local.artifacts["lambda"]}/rebuild-notifications.zip"
-    ui_cognito_post_confirmation       = "${local.artifacts["lambda"]}/ui-cognito-post-confirmation.zip"
-    ui_cognito_pre_authentication      = "${local.artifacts["lambda"]}/ui-cognito-pre-authentication.zip"
-    ui_cognito_pre_signup              = "${local.artifacts["lambda"]}/ui-cognito-pre-signup.zip"
+    app_api_cognito_pre_authentication = "${local.artifacts["control_lambda"]}/app-api-cognito-pre-authentication.zip"
+    appsync_datasource                 = "${local.artifacts["control_lambda"]}/appsync-datasource.zip"
+    deployment_handler                 = "${local.artifacts["control_lambda"]}/deployment-handler.zip"
+    graph_table_dynamodb_trigger       = "${local.artifacts["control_lambda"]}/graph-table-dynamodb-trigger.zip"
+    graph_table_system_stream_handler  = "${local.artifacts["control_lambda"]}/graph-table-system-stream-handler.zip"
+    graph_table_tenant_stream_handler  = "${local.artifacts["control_lambda"]}/graph-table-tenant-stream-handler.zip"
+    log_retention                      = "${local.artifacts["control_lambda"]}/log-retention.zip"
+    managed_app_cloud_init             = "${local.artifacts["control_lambda"]}/managed-app-cloud-init.zip"
+    rebuild_notifications              = "${local.artifacts["control_lambda"]}/rebuild-notifications.zip"
+    ui_cognito_post_confirmation       = "${local.artifacts["control_lambda"]}/ui-cognito-post-confirmation.zip"
+    ui_cognito_pre_authentication      = "${local.artifacts["control_lambda"]}/ui-cognito-pre-authentication.zip"
+    ui_cognito_pre_signup              = "${local.artifacts["control_lambda"]}/ui-cognito-pre-signup.zip"
+  }
 
-    ## Billing
-    managed_app_cloud_init = "${local.artifacts["lambda"]}/managed-app-cloud-init.zip"
+  lambda_layer_keys = {
+    echocore = "${local.artifacts["lambda_layer"]}/echocore.json"
   }
 
   log_bucket          = module.log_bucket.id

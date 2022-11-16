@@ -1,8 +1,3 @@
-data "aws_s3_object" "function_package" {
-  bucket = var.artifacts_bucket
-  key    = var.function_s3_object_key
-}
-
 resource "aws_lambda_function" "appsync_datasource" {
   description = "Function that gets triggered when app cognito user to be authenticated"
   dead_letter_config {
@@ -15,6 +10,7 @@ resource "aws_lambda_function" "appsync_datasource" {
   function_name = "${var.resource_prefix}-appsync-datasource"
   handler       = "function.handler"
   kms_key_arn   = var.kms_key_arn
+  layers        = var.function_layers
   lifecycle {
     ignore_changes = [
       last_modified,

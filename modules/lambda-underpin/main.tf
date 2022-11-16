@@ -1,6 +1,6 @@
 resource "aws_sns_topic" "lambda_dead_letter" {
-  display_name = "${var.name}-lambda-dead-letter"
-  name         = "${var.name}-lambda-dead-letter"
+  display_name = "${var.resource_prefix}-lambda-dead-letter"
+  name         = "${var.resource_prefix}-lambda-dead-letter"
   tags         = var.tags
 }
 
@@ -11,12 +11,12 @@ resource "aws_sns_topic_subscription" "lambda_dead_letter" {
 }
 
 resource "aws_kms_key" "lambda_environment_variables" {
-  description         = "Key for lambda environment variables ${var.name}"
+  description         = "Key for lambda environment variables ${var.resource_prefix}"
   enable_key_rotation = true
   tags                = var.tags
 }
 
 resource "aws_kms_alias" "lambda_environment_variables" {
-  name          = "alias/${var.name}-lambda-environment-variables"
+  name          = "alias/${var.resource_prefix}-lambda-environment-variables"
   target_key_id = aws_kms_key.lambda_environment_variables.key_id
 }

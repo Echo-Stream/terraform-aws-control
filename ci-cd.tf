@@ -134,6 +134,7 @@ module "deployment_handler" {
   dead_letter_arn = local.lambda_dead_letter_arn
   handler         = "function.handler"
   kms_key_arn     = local.lambda_env_vars_kms_key_arn
+  layers          = [local.echocore_layer_version_arns[data.aws_region.current.name]]
   memory_size     = 1536
   name            = "${var.resource_prefix}-deployment-handler"
 
@@ -234,6 +235,7 @@ module "rebuild_notifications" {
   dead_letter_arn       = local.lambda_dead_letter_arn
   handler               = "function.handler"
   kms_key_arn           = local.lambda_env_vars_kms_key_arn
+  layers                = [local.echocore_layer_version_arns[data.aws_region.current.name]]
   memory_size           = 1536
   name                  = "${var.resource_prefix}-rebuild-notifications"
 

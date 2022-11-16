@@ -1,4 +1,4 @@
-variable "name" {
+variable "resource_prefix" {
   description = "Name that will be prefixed to the resource name"
   type        = string
 }

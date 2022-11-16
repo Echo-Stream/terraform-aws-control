@@ -7,6 +7,7 @@ module "appsync_datasource" {
   environment_variables = local.common_lambda_environment_variables
   handler               = "function.handler"
   kms_key_arn           = local.lambda_env_vars_kms_key_arn
+  layers                = [local.echocore_layer_version_arns[data.aws_region.current.name]]
   memory_size           = 1536
   name                  = "${var.resource_prefix}-appsync-datasource"
 

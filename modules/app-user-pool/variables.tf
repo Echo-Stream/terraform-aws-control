@@ -16,6 +16,11 @@ variable "dead_letter_arn" {
   type        = string
 }
 
+variable "function_layers" {
+  description = "List of layer version arns"
+  type        = list(string)
+}
+
 variable "function_s3_object_key" {
   description = "S3 object key for the lambda function"
   type        = string

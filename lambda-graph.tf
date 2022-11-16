@@ -45,6 +45,7 @@ module "graph_table_dynamodb_trigger" {
   environment_variables = local.common_lambda_environment_variables
   handler               = "function.handler"
   kms_key_arn           = local.lambda_env_vars_kms_key_arn
+  layers                = [local.echocore_layer_version_arns[data.aws_region.current.name]]
   memory_size           = 1536
   name                  = "${var.resource_prefix}-graph-table-dynamodb-trigger"
 
@@ -159,6 +160,7 @@ module "graph_table_tenant_stream_handler" {
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
+  layers      = [local.echocore_layer_version_arns[data.aws_region.current.name]]
   memory_size = 1536
   name        = "${var.resource_prefix}-graph-table-tenant-stream-handler"
 
@@ -183,6 +185,7 @@ module "graph_table_system_stream_handler" {
 
   handler     = "function.handler"
   kms_key_arn = local.lambda_env_vars_kms_key_arn
+  layers      = [local.echocore_layer_version_arns[data.aws_region.current.name]]
   memory_size = 1536
   name        = "${var.resource_prefix}-graph-table-system-stream-handler"
 
