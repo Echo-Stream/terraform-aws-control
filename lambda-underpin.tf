@@ -73,9 +73,9 @@ module "lambda_underpin_us_west_1" {
 module "lambda_underpin_us_west_2" {
   count = contains(local.non_control_regions, "us-west-2") == true ? 1 : 0
 
-  name          = var.resource_prefix
-  support_email = data.aws_ses_email_identity.support.email
-  tags          = local.tags
+  resource_prefix = var.resource_prefix
+  support_email   = data.aws_ses_email_identity.support.email
+  tags            = local.tags
 
   source = "./modules/lambda-underpin"
 
