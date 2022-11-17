@@ -131,12 +131,8 @@ resource "aws_iam_role_policy_attachment" "edge_config" {
 }
 
 resource "aws_lambda_function" "edge_config" {
-  depends_on = [
-    data.archive_file.edge_config
-  ]
-
   description      = "Edge Lambda that returns an environment specific config for reactjs application"
-  filename         = "${path.module}/edge-config.zip"
+  filename         = data.archive_file.edge_config.output_path
   function_name    = "${var.resource_prefix}-edge-config"
   handler          = "function.lambda_handler"
   publish          = true
@@ -144,7 +140,9 @@ resource "aws_lambda_function" "edge_config" {
   runtime          = local.lambda_runtime
   source_code_hash = data.archive_file.edge_config.output_base64sha256
   tags             = local.tags
-  provider         = aws.us-east-1 ## currently Edge functions are supported in us-east-1 only
+  timeout          = 30
+
+  provider = aws.us-east-1 ## currently Edge functions are supported in us-east-1 only
 }
 
 resource "aws_lambda_permission" "edge_config" {

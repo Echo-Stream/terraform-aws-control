@@ -390,12 +390,8 @@ resource "aws_iam_role" "start_rebuild_notifications_state_machine" {
 }
 
 resource "aws_lambda_function" "start_rebuild_notifications_state_machine" {
-  depends_on = [
-    data.archive_file.start_rebuild_notifications_state_machine
-  ]
-
   description      = "Edge Lambda that returns an environment specific config for reactjs application"
-  filename         = "${path.module}/start-rebuild-notifications-state-machine.zip"
+  filename         = data.archive_file.start_rebuild_notifications_state_machine.output_path
   function_name    = "${var.resource_prefix}-start-rebuild-notifications-state-machine"
   handler          = "function.lambda_handler"
   publish          = true
@@ -403,6 +399,7 @@ resource "aws_lambda_function" "start_rebuild_notifications_state_machine" {
   runtime          = local.lambda_runtime
   source_code_hash = data.archive_file.start_rebuild_notifications_state_machine.output_base64sha256
   tags             = local.tags
+  timeout          = 300
 }
 
 resource "aws_lambda_permission" "start_rebuild_notifications_state_machine" {
