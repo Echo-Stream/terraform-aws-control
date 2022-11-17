@@ -16,6 +16,7 @@ data "aws_iam_policy_document" "deployment_handler" {
     actions = [
       "lambda:CreateFunction",
       "lambda:GetFunction*",
+      "lambda:GetLayerVersion",
       "lambda:InvokeFunction",
       "lambda:ListFunctions",
       "lambda:PublishLayerVersion",
@@ -189,7 +190,8 @@ data "aws_iam_policy_document" "rebuild_notifications" {
   statement {
     actions = [
       "lambda:CreateFunction",
-      "lambda:GetFunction",
+      "lambda:GetFunction*",
+      "lambda:GetLayerVersion",
       "lambda:InvokeFunction",
       "lambda:ListFunctions",
       "lambda:PublishLayerVersion",
