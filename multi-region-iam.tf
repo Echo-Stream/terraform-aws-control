@@ -27,7 +27,6 @@ data "aws_iam_policy_document" "app_cognito_pre_authentication_function_basic" {
   statement {
     actions = [
       "sns:Publish",
-      "sqs:SendMessage",
     ]
     resources = local.regional_dead_letter_arns
     sid       = "AllowDeadLetterWriting"

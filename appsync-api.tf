@@ -146,7 +146,6 @@ data "aws_iam_policy_document" "multi_region_appsync_datasource" {
   statement {
     actions = [
       "sns:Publish",
-      "sqs:SendMessage",
     ]
     resources = local.regional_dead_letter_arns
     sid       = "AllowDeadLetterWriting"
