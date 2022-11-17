@@ -1,13 +1,12 @@
 """
-Dynamically send an environment specific config
+Send an environment specific config
 for reactjs webapp on /config/config.json
 """
 
 import json
 
-
-def lambda_handler(event, context):
-    content = {
+BODY = json.dumps(
+    {
         "debug": "true",
         "clientId": "${client_id}",
         "graphQL": {
@@ -19,14 +18,18 @@ def lambda_handler(event, context):
         "queryLimit": 300,
         "region": "${region}",
         "UserPoolId": "${user_pool_id}",
-    }
-    response = {
+    },
+    separators=(",", ":"),
+)
+
+
+def lambda_handler(event, context):
+    return {
         "status": "200",
         "statusDescription": "OK",
         "headers": {
             "cache-control": [{"key": "Cache-Control", "value": "max-age=100"}],
             "content-type": [{"key": "Content-Type", "value": "application/json"}],
         },
-        "body": json.dumps(content),
+        "body": BODY,
     }
-    return response
