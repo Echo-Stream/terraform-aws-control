@@ -35,6 +35,16 @@ data "aws_iam_policy_document" "log_retention" {
 
     sid = "SetRetention"
   }
+
+  statement {
+    actions = [
+      "sns:Publish",
+    ]
+
+    resources = [local.lambda_dead_letter_arn]
+
+    sid       = "AllowDeadLetterWriting"
+  }
 }
 
 resource "aws_iam_role" "log_retention" {
@@ -146,6 +156,16 @@ data "aws_iam_policy_document" "managed_app_cloud_init" {
     ]
 
     sid = "InvokeRegistrationLambda"
+  }
+
+  statement {
+    actions = [
+      "sns:Publish",
+    ]
+
+    resources = [local.lambda_dead_letter_arn]
+
+    sid       = "AllowDeadLetterWriting"
   }
 }
 
