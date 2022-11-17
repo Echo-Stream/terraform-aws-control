@@ -1,3 +1,5 @@
+provider "archive" {}
+
 ## This should be it until Terraform supports Dynamic provider configuration ##
 
 ############################# US Regions ######################################
