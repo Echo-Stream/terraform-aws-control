@@ -35,6 +35,8 @@ override.tf.json
 #vscode
 .vscode
 edge-config.zip
+log-retention.zip
+managed-app-cloud-init.zip
 start-rebuild-notifications-state-machine.zip
 
 # Byte-compiled / optimized / DLL files
