@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "log_retention" {
 
     resources = [local.lambda_dead_letter_arn]
 
-    sid       = "AllowDeadLetterWriting"
+    sid = "AllowDeadLetterWriting"
   }
 }
 
@@ -165,7 +165,7 @@ data "aws_iam_policy_document" "managed_app_cloud_init" {
 
     resources = [local.lambda_dead_letter_arn]
 
-    sid       = "AllowDeadLetterWriting"
+    sid = "AllowDeadLetterWriting"
   }
 }
 
