@@ -75,6 +75,7 @@ locals {
     CONTROL_REGION                             = data.aws_region.current.name
     COST_AND_USAGE_BUCKET                      = aws_s3_bucket.cost_and_usage.id
     DYNAMODB_TABLE                             = module.graph_table.name
+    ECHOCORE_LAYER_ARNS                        = jsonencode(local.echocore_layer_version_arns)
     ECHOSTREAM_VERSION                         = var.echostream_version
     ENVIRONMENT                                = var.resource_prefix
     INTERNAL_NODE_CODE                         = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
