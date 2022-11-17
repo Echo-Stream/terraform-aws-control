@@ -3,10 +3,10 @@
 ######################
 data "archive_file" "log_retention" {
   type        = "zip"
-  output_path = "${path.module}/log_retention.zip"
+  output_path = "${path.module}/log-retention.zip"
 
   source {
-    content  = file("${path.module}/scripts/log_retention.py")
+    content  = file("${path.module}/scripts/log-retention.py")
     filename = "function.py"
   }
 }
@@ -89,7 +89,7 @@ resource "aws_lambda_permission" "log_retention" {
 ##  managed-app-cloud-init   ##
 ###############################
 data "template_file" "managed_app_cloud_init" {
-  template = file("${path.module}/scripts/managed_app_cloud_init.py")
+  template = file("${path.module}/scripts/managed-app-cloud-init.py")
   vars = {
     cost_and_usage_bucket     = aws_s3_bucket.cost_and_usage.id
     registration_function_arn = module.managed_app_registration.arn
@@ -98,7 +98,7 @@ data "template_file" "managed_app_cloud_init" {
 
 data "archive_file" "managed_app_cloud_init" {
   type        = "zip"
-  output_path = "${path.module}/managed_app_cloud_init.zip"
+  output_path = "${path.module}/managed-app-cloud-init.zip"
 
   source {
     content  = data.template_file.managed_app_cloud_init.rendered
