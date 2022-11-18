@@ -187,6 +187,7 @@ data "aws_iam_policy_document" "update_code" {
 
     actions = [
       "lambda:GetFunction",
+      "lambda:GetLayerVersion",
       "lambda:ListFunctions",
       "lambda:UpdateFunctionCode",
       "lambda:UpdateFunctionConfiguration",
