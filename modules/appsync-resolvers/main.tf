@@ -1184,6 +1184,10 @@ locals {
       field = "configTemplate"
       type  = "ManagedNodeType"
     }
+    managed_node_type_image_uri = {
+      field = "imageUri"
+      type  = "ManagedNodeType"
+    }
     managed_node_type_in_use = {
       field = "inUse"
       type  = "ManagedNodeType"
