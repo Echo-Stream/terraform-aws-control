@@ -21,5 +21,5 @@ module "appsync_datasource" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 30
-  version       = "4.0.1"
+  version       = "4.0.2"
 }

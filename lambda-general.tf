@@ -276,5 +276,5 @@ module "managed_app_registration" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 300
-  version       = "4.0.1"
+  version       = "4.0.2"
 }

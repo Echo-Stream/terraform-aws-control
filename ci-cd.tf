@@ -153,7 +153,7 @@ module "deployment_handler" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 900
-  version       = "4.0.1"
+  version       = "4.0.2"
 }
 
 resource "aws_lambda_permission" "deployment_handler" {
@@ -253,7 +253,7 @@ module "rebuild_notifications" {
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
   timeout       = 600
-  version       = "4.0.1"
+  version       = "4.0.2"
 }
 
 resource "aws_sqs_queue" "rebuild_notifications" {
