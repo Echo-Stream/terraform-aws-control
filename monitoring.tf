@@ -30,12 +30,12 @@ resource "aws_cloudwatch_metric_alarm" "sqs" {
   for_each = toset(local.sqs_names)
 
   alarm_actions       = [aws_sns_topic.alarms.arn]
-  alarm_description   = "Age of oldest message >= 120 for ${each.key}"
-  alarm_name          = "sqs:${each.key}"
+  alarm_description   = "Age of oldest message >= 120 for ${each.value}"
+  alarm_name          = "sqs:${each.value}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
 
   dimensions = {
-    QueueName = each.key
+    QueueName = each.value
   }
 
   evaluation_periods = "1"
@@ -55,12 +55,12 @@ resource "aws_cloudwatch_metric_alarm" "lambda" {
   for_each = toset(local.lambda_names)
 
   alarm_actions       = [aws_sns_topic.alarms.arn]
-  alarm_description   = "Errors > 1 for ${each.key}"
-  alarm_name          = "lambda:${each.key}"
+  alarm_description   = "Errors > 1 for ${each.value}"
+  alarm_name          = "lambda:${each.value}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
 
   dimensions = {
-    FunctionName = each.key
+    FunctionName = each.value
   }
 
   evaluation_periods = "1"
@@ -80,12 +80,12 @@ resource "aws_cloudwatch_metric_alarm" "replication" {
   for_each = toset(local.non_control_regions)
 
   alarm_actions       = [aws_sns_topic.alarms.arn]
-  alarm_description   = "Replication >= 2000ms for ${each.key}"
-  alarm_name          = "replication:${each.key}"
+  alarm_description   = "Replication >= 2000ms for ${each.value}"
+  alarm_name          = "replication:${each.value}"
   comparison_operator = "GreaterThanOrEqualToThreshold"
 
   dimensions = {
-    ReceivingRegion = each.key
+    ReceivingRegion = each.value
     TableName       = module.graph_table.name
   }
 

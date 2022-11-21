@@ -69,7 +69,7 @@ resource "aws_lambda_permission" "warming" {
   ])
   statement_id  = "AllowExecutionFromSNS"
   action        = "lambda:InvokeFunction"
-  function_name = each.key
+  function_name = each.value
   principal     = "sns.amazonaws.com"
   source_arn    = aws_sns_topic.warming.arn
 }

@@ -84,7 +84,7 @@ resource "aws_acm_certificate_validation" "docs_api" {
 resource "aws_acm_certificate" "regional_api" {
   for_each = toset(local.tenant_regions)
 
-  domain_name       = "api-${var.environment}.${each.key}.${var.domain_name}"
+  domain_name       = "api-${var.environment}.${each.value}.${var.domain_name}"
   tags              = var.tags
   validation_method = "DNS"
 
