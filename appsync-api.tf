@@ -106,7 +106,8 @@ data "aws_iam_policy_document" "multi_region_invoke_appsync_lambda_datasource" {
 }
 
 resource "aws_iam_policy" "multi_region_invoke_appsync_lambda_datasource" {
-  name_prefix = "${var.resource_prefix}-multi-region-invoke-appsync-datasource"
+  description = "IAM permissions required invoke the appsync datasource for multiple regions"
+  name        = "${var.resource_prefix}-multi-region-invoke-appsync-datasource"
   policy      = data.aws_iam_policy_document.multi_region_invoke_appsync_lambda_datasource.json
 }
 
