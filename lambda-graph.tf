@@ -124,6 +124,7 @@ data "aws_iam_policy_document" "managed_app_customer_policy" {
 
 resource "aws_iam_policy" "managed_app_customer_policy" {
   description = "IAM permissions required for manage apps ssm"
+  name        = "${var.resource_prefix}-managed-app-customer"
   policy      = data.aws_iam_policy_document.managed_app_customer_policy.json
 }
 
