@@ -209,8 +209,6 @@ data "aws_iam_policy_document" "rebuild_notifications" {
   }
 
   statement {
-    effect = "Allow"
-
     actions = [
       "sqs:ReceiveMessage*",
       "sqs:DeleteMessage*",
@@ -220,6 +218,18 @@ data "aws_iam_policy_document" "rebuild_notifications" {
     resources = [aws_sqs_queue.rebuild_notifications.arn]
 
     sid = "EdgeQueuesAccess"
+  }
+
+  statement {
+    actions = [
+      "iam:PassRole"
+    ]
+
+    resources = [
+      aws_iam_role.auditor.arn,
+      aws_iam_role.internal_node.arn,
+      aws_iam_role.validator.arn,
+    ]
   }
 }
 
