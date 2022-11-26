@@ -357,6 +357,18 @@ locals {
       field = "Update"
       type  = "FilesDotComWebhookNode"
     }
+    kms_key_delete = {
+      field = "Delete"
+      type  = "KmsKey"
+    }
+    kms_key_list_changes = {
+      field = "ListChanges"
+      type  = "KmsKey"
+    }
+    kms_key_update = {
+      field = "Update"
+      type  = "KmsKey"
+    }
     get_api_user = {
       field = "GetApiUser"
       type  = "Query"
@@ -409,17 +421,9 @@ locals {
       field = "GetUser"
       type  = "Query"
     }
-    kms_key_delete = {
-      field = "Delete"
-      type  = "KmsKey"
-    }
-    kms_key_list_changes = {
-      field = "ListChanges"
-      type  = "KmsKey"
-    }
-    kms_key_update = {
-      field = "Update"
-      type  = "KmsKey"
+    get_version = {
+      field = "GetVersion"
+      type  = "Query"
     }
     list_api_users = {
       field = "ListApiUsers"
