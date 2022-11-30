@@ -233,10 +233,6 @@ locals {
       field = "Stop"
       type  = "CrossTenantReceivingNode"
     }
-    cross_tenant_receiving_node_update = {
-      field = "Update"
-      type  = "CrossTenantReceivingNode"
-    }
     cross_tenant_sending_app_delete = {
       field = "Delete"
       type  = "CrossTenantSendingApp"
