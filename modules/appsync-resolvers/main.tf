@@ -20,6 +20,10 @@ resource "aws_appsync_resolver" "batch_invoke_resolvers" {
 }
 
 locals {
+  #######################################################
+  ################## Invoke Resolvers ###################
+  #######################################################
+
   invoke_resolvers = {
     api_authenticator_function_delete = {
       field = "Delete"
@@ -188,6 +192,10 @@ locals {
     create_webhook_node = {
       field = "CreateWebhookNode"
       type  = "Mutation"
+    }
+    create_websubhub_node = {
+      field = "CreateWebSubHubNode"
+      type  = "Mutation" 
     }
     cross_account_app_delete = {
       field = "Delete"
@@ -692,6 +700,54 @@ locals {
     webhook_node_validate = {
       field = "Validate"
       type  = "WebhookNode"
+    }
+    websubhub_node_delete = {
+      field = "Delete"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_list_changes = {
+      field = "ListChanges"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_list_log_events = {
+      field = "ListLogEvents"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_list_subscriptions = {
+      field = "ListSubscriptions"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_start = {
+      field = "Start"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_stop = {
+      field = "Stop"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_update = {
+      field = "Update"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_validate = {
+      field = "Validate"
+      type  = "WebSubHubNode"
+    }
+    websubsubscription_node_delete = {
+      field = "Delete"
+      type  = "WebSubSubscriptionNode"
+    }
+    websubsubscription_node_list_changes = {
+      field = "ListChanges"
+      type  = "WebSubSubscriptionNode"
+    }
+    websubsubscription_node_start = {
+      field = "Start"
+      type  = "WebSubSubscriptionNode"
+    }
+    websubsubscription_node_stop = {
+      field = "Stop"
+      type  = "WebSubSubscriptionNode"
     }
   }
 
@@ -1335,6 +1391,62 @@ locals {
     webhook_node_tenant = {
       field = "tenant"
       type  = "WebhookNode"
+    }
+    websubhub_node_config = {
+      field = "config"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_endpoint = {
+      field = "endpoint"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_managed_api_authenticator = {
+      field = "managedApiAuthenticator"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_receive_edges = {
+      field = "receiveEdges"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_receive_message_type = {
+      field = "receiveMessageType"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_requirements = {
+      field = "requirements"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_send_edges = {
+      field = "sendEdges"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_send_message_type = {
+      field = "sendMessageType"
+      type  = "WebSubHubNode"
+    }
+    websubhub_node_tenant = {
+      field = "tenant"
+      type  = "WebSubHubNode"
+    }
+    websubsubscription_node_hub = {
+      field = "hub"
+      type  = "WebSubSubscriptionNode"
+    }
+    websubsubscription_node_receive_edge = {
+      field = "receiveEdge"
+      type  = "WebSubSubscriptionNode"
+    }
+    websubsubscription_node_receive_message_type = {
+      field = "receiveMessageType"
+      type  = "WebSubSubscriptionNode"
+    }
+    websubsubscription_node_secured = {
+      field = "secured"
+      type  = "WebSubSubscriptionNode"
+    }
+    websubsubscription_node_tenant = {
+      field = "tenant"
+      type  = "WebSubSubscriptionNode"
     }
   }
 }

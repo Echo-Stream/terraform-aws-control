@@ -44,8 +44,6 @@ resource "aws_iam_role_policy_attachment" "internal_node_basic" {
 
 data "aws_iam_policy_document" "internal_node" {
   statement {
-    effect = "Allow"
-
     actions = [
       "sqs:ReceiveMessage*",
       "sqs:DeleteMessage*",
@@ -67,9 +65,14 @@ resource "aws_iam_role_policy" "internal_node" {
   role   = aws_iam_role.internal_node.name
 }
 
-resource "aws_iam_role_policy_attachment" "internal_node_sts_assume" {
+resource "aws_iam_role_policy_attachment" "internal_node_update_code_sts_assume" {
   role       = aws_iam_role.internal_node.name
   policy_arn = aws_iam_policy.update_code_sts_assume.arn
+}
+
+resource "aws_iam_role_policy_attachment" "internal_node_websub_node_sts_assume" {
+  role       = aws_iam_role.internal_node.name
+  policy_arn = aws_iam_policy.websub_node_sts_assume.arn
 }
 
 resource "aws_iam_role_policy_attachment" "internal_node_graph_ddb_read" {
@@ -183,8 +186,6 @@ resource "aws_iam_role_policy_attachment" "update_code_basic" {
 
 data "aws_iam_policy_document" "update_code" {
   statement {
-    effect = "Allow"
-
     actions = [
       "lambda:GetFunction",
       "lambda:GetLayerVersion",
@@ -200,7 +201,7 @@ data "aws_iam_policy_document" "update_code" {
 }
 
 resource "aws_iam_role_policy" "update_code" {
-  name   = "update-code"
+  name   = "${var.resource_prefix}-update-code"
   policy = data.aws_iam_policy_document.update_code.json
   role   = aws_iam_role.update_code.name
 }
@@ -210,7 +211,6 @@ resource "aws_iam_role_policy_attachment" "update_code_artifacts_read" {
   policy_arn = aws_iam_policy.artifacts_bucket_read.arn
 }
 
-
 resource "aws_iam_role_policy_attachment" "update_code_graph_ddb_access" {
   role       = aws_iam_role.update_code.name
   policy_arn = aws_iam_policy.graph_ddb_read.arn
@@ -218,8 +218,6 @@ resource "aws_iam_role_policy_attachment" "update_code_graph_ddb_access" {
 
 data "aws_iam_policy_document" "update_code_sts_assume" {
   statement {
-    effect = "Allow"
-
     actions = [
       "sts:AssumeRole",
     ]
@@ -229,8 +227,6 @@ data "aws_iam_policy_document" "update_code_sts_assume" {
     sid = "AssumeRole"
   }
   statement {
-    effect = "Allow"
-
     actions = [
       "sts:SetSourceIdentity",
     ]
@@ -258,3 +254,83 @@ resource "aws_iam_policy" "update_code_sts_assume" {
   policy = data.aws_iam_policy_document.update_code_sts_assume.json
 }
 
+#####################
+## WebSub Node IAM ##
+#####################
+
+data "aws_iam_policy_document" "conditional_websub_assume_role" {
+  statement {
+    actions = [
+      "sts:AssumeRole",
+      "sts:SetSourceIdentity"
+    ]
+    principals {
+      identifiers = [
+        aws_iam_role.internal_node.arn,
+      ]
+      type = "AWS"
+    }
+
+    condition {
+      test = "StringEquals"
+      values = [
+        "572982510",
+        "1680410836"
+      ] # these values are encoded inside lambda code
+      variable = "sts:SourceIdentity"
+    }
+  }
+}
+
+resource "aws_iam_role" "websub_node" {
+  name               = "${var.resource_prefix}-websub-node"
+  assume_role_policy = data.aws_iam_policy_document.conditional_websub_assume_role.json
+  tags               = local.tags
+}
+
+resource "aws_iam_role_policy_attachment" "websub_node_basic" {
+  policy_arn = data.aws_iam_policy.aws_lambda_basic_execution_role.arn
+  role       = aws_iam_role.websub_node.name
+}
+
+resource "aws_iam_role_policy_attachment" "websub_node_administrator" {
+  policy_arn = data.aws_iam_policy.administrator_access.arn
+  role       = aws_iam_role.websub_node.name
+}
+
+data "aws_iam_policy_document" "websub_node_sts_assume" {
+  statement {
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    resources = [aws_iam_role.websub_node.arn]
+
+    sid = "AssumeRole"
+  }
+  statement {
+    actions = [
+      "sts:SetSourceIdentity",
+    ]
+
+    resources = [aws_iam_role.websub_node.arn]
+
+    sid = "SetSourceIdentity"
+
+    condition {
+      test = "StringLike"
+      values = [
+        "572982510",
+        "1680410836"
+      ]
+      variable = "sts:SourceIdentity"
+    }
+  }
+}
+
+resource "aws_iam_policy" "websub_node_sts_assume" {
+  description = "IAM permissions required for tenant functions to assume update code role"
+
+  name   = "${var.resource_prefix}-web-node-sts-assume"
+  policy = data.aws_iam_policy_document.websub_node_sts_assume.json
+}
