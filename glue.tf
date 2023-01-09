@@ -4,7 +4,7 @@ resource "aws_glue_catalog_database" "billing" {
 }
 
 resource "aws_glue_catalog_table" "managed_instances" {
-  name          = "${var.resource_prefix}-managed-instances"
+  name          = "managedinstances"
   database_name = aws_glue_catalog_database.billing.name
   description   = "Managed Instances"
 
