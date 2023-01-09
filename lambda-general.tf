@@ -1,3 +1,10 @@
+resource "aws_cloudwatch_event_rule" "every_day" {
+  name                = "${var.resource_prefix}-every-day"
+  description         = "Once a day"
+  schedule_expression = "rate(1 day)"
+  tags                = local.tags
+}
+
 ######################
 ##  log-retention   ##
 ######################
@@ -74,17 +81,10 @@ resource "aws_lambda_function" "log_retention" {
   timeout          = 900
 }
 
-resource "aws_cloudwatch_event_rule" "log_retention" {
-  name                = "${var.resource_prefix}-log-retention"
-  description         = "Set log group retention to 7 days daily"
-  schedule_expression = "cron(0 10 * * ? *)"
-  tags                = local.tags
-}
-
 resource "aws_cloudwatch_event_target" "log_retention" {
   arn       = aws_lambda_function.log_retention.arn
-  rule      = aws_cloudwatch_event_rule.log_retention.name
-  target_id = "${var.resource_prefix}-log-retention"
+  rule      = aws_cloudwatch_event_rule.every_day.name
+  target_id = aws_lambda_function.log_retention.function_name
 }
 
 resource "aws_lambda_permission" "log_retention" {
@@ -92,7 +92,86 @@ resource "aws_lambda_permission" "log_retention" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.log_retention.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.log_retention.arn
+  source_arn    = aws_cloudwatch_event_rule.every_day.arn
+}
+
+###################################
+##  delete-expired-activations   ##
+###################################
+data "archive_file" "delete_expired_activations" {
+  type        = "zip"
+  output_path = "${path.module}/delete-expired-activations.zip"
+
+  source {
+    content  = file("${path.module}/scripts/delete-expired-activations.py")
+    filename = "function.py"
+  }
+}
+
+data "aws_iam_policy_document" "delete_expired_activations" {
+  statement {
+    actions = [
+      "ssm:DeleteActivation",
+      "ssm:DescribeActivations"
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    sid = "DescribeAndDeleteActivations"
+  }
+
+  statement {
+    actions = [
+      "sns:Publish",
+    ]
+
+    resources = [local.lambda_dead_letter_arn]
+
+    sid = "AllowDeadLetterWriting"
+  }
+}
+
+resource "aws_iam_role" "delete_expired_activations" {
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  inline_policy {
+    name   = "${var.resource_prefix}-delete-expired-activations"
+    policy = data.aws_iam_policy_document.delete_expired_activations.json
+  }
+  managed_policy_arns = [data.aws_iam_policy.aws_lambda_basic_execution_role.arn]
+  name                = "${var.resource_prefix}-delete-expired-activations"
+  tags                = local.tags
+}
+
+resource "aws_lambda_function" "delete_expired_activations" {
+  dead_letter_config {
+    target_arn = local.lambda_dead_letter_arn
+  }
+  description      = "Delete all expired SSM activations"
+  filename         = data.archive_file.delete_expired_activations.output_path
+  function_name    = "${var.resource_prefix}-delete-expired-activations"
+  handler          = "function.lambda_handler"
+  publish          = true
+  role             = aws_iam_role.delete_expired_activations.arn
+  runtime          = local.lambda_runtime
+  source_code_hash = data.archive_file.delete_expired_activations.output_base64sha256
+  tags             = local.tags
+  timeout          = 900
+}
+
+resource "aws_cloudwatch_event_target" "delete_expired_activations" {
+  arn       = aws_lambda_function.delete_expired_activations.arn
+  rule      = aws_cloudwatch_event_rule.every_day.name
+  target_id = aws_lambda_function.delete_expired_activations.function_name
+}
+
+resource "aws_lambda_permission" "delete_expired_activations" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.delete_expired_activations.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.every_day.arn
 }
 
 ###############################
