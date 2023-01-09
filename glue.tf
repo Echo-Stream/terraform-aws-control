@@ -48,6 +48,12 @@ resource "aws_glue_catalog_table" "managed_instances" {
       comment = "Managed App ID"
     }
 
+    colums {
+      name    = "identity"
+      type    = "string"
+      comment = "Tenant identity"
+    }
+
     columns {
       name    = "tenant"
       type    = "string"
