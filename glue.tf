@@ -70,6 +70,7 @@ resource "aws_glue_crawler" "cost_and_usage_crawler" {
   description   = "Lambda invoked crawler that keeps cost and usage reports table up to date in Athena"
   name          = "${var.resource_prefix}-cost-and-usage-crawler"
   role          = aws_iam_role.cost_and_usage_crawler.arn
+  schedule      = "cron(0 3 1 * ? *)"
   tags          = local.tags
 
   s3_target {
