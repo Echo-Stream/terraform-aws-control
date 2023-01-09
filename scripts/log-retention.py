@@ -1,10 +1,16 @@
 from logging import INFO, getLogger
-from typing import Generator, Union
+from typing import TYPE_CHECKING, Generator
 
 import boto3
 
-client = boto3.client("logs")
 getLogger().setLevel(INFO)
+
+if TYPE_CHECKING:
+    from mypy_boto3_logs.type_defs import LogGroupTypeDef
+else:
+    LogGroupTypeDef = dict
+
+client = boto3.client("logs")
 
 
 def lambda_handler(event, context):
@@ -16,7 +22,7 @@ def lambda_handler(event, context):
     getLogger().info("Succesfully set retention to log groups for 7 days")
 
 
-def log_groups() -> Generator[dict[str, Union[str, int]], None, None]:
+def log_groups() -> Generator[LogGroupTypeDef, None, None]:
     response = client.describe_log_groups()
     for log_group in response.get("logGroups", []):
         yield log_group
