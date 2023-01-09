@@ -73,7 +73,7 @@ resource "aws_athena_workgroup" "echostream_athena" {
   name = "${var.resource_prefix}-athena"
 
   configuration {
-    enforce_workgroup_configuration    = true
+    enforce_workgroup_configuration = true
     engine_version {
       selected_engine_version = "Athena engine version 3"
     }
