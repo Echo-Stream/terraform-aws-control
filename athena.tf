@@ -89,6 +89,7 @@ resource "aws_athena_workgroup" "echostream_athena" {
   }
 }
 
+/* Create later when execution role is determined
 resource "aws_athena_workgroup" "echostream_pyspark" {
   name = "${var.resource_prefix}-pyspark"
 
@@ -108,3 +109,4 @@ resource "aws_athena_workgroup" "echostream_pyspark" {
     }
   }
 }
+*/
