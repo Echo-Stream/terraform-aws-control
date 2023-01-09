@@ -19,7 +19,7 @@ def lambda_handler(event, context):
     for activation in activations():
         if activation["Expired"]:
             client.delete_activation(ActivationId=activation["ActivationId"])
-            sleep(0.1)
+            sleep(0.05)
             expired_count += 1
     getLogger().info(f"Successfully deleted {expired_count} expired activation")
 
