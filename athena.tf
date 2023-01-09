@@ -69,11 +69,34 @@ resource "aws_s3_bucket_policy" "athena_query_results" {
   policy = data.aws_iam_policy_document.athena_query_results.json
 }
 
-resource "aws_athena_workgroup" "echostream" {
-  name = var.resource_prefix
+resource "aws_athena_workgroup" "echostream_athena" {
+  name = "${var.resource_prefix}-athena"
 
   configuration {
     enforce_workgroup_configuration    = true
+    engine_version {
+      selected_engine_version = "Athena engine version 3"
+    }
+    publish_cloudwatch_metrics_enabled = true
+
+    result_configuration {
+      output_location = "s3://${aws_s3_bucket.athena_query_results.bucket}/output/"
+
+      encryption_configuration {
+        encryption_option = "SSE_S3"
+      }
+    }
+  }
+}
+
+resource "aws_athena_workgroup" "echostream_pyspark" {
+  name = "${var.resource_prefix}-pyspark"
+
+  configuration {
+    enforce_workgroup_configuration    = true
+    engine_version {
+      selected_engine_version = "PySpark engine version 3"
+    }
     publish_cloudwatch_metrics_enabled = true
 
     result_configuration {
