@@ -1,12 +1,12 @@
-import datetime
 import json
-from logging import ERROR, getLogger
+from datetime import timezone
+from logging import ERROR, INFO, getLogger
 
 import awswrangler
 import boto3
 import pandas
 
-
+getLogger().setLevel(INFO)
 getLogger("boto3").setLevel(ERROR)
 getLogger("botocore").setLevel(ERROR)
 
@@ -25,17 +25,18 @@ def lambda_handler(event, _) -> None:
     messages: list[dict[str, str]] = list()
     for record in event["Records"]:
         message = json.loads(record["body"])
-        message["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        message["registration"] = pandas.Timestamp.now(tz=timezone.utc)
         messages.append(message)
         getLogger().debug(f"message {message}")
 
     awswrangler.s3.to_parquet(
-        df=pandas.concat(
-            objs=[dataframe, pandas.DataFrame.from_records(messages)],
-            ignore_index=True,
+        df=dataframe.merge(
+            pandas.DataFrame.from_records(messages),
+            how="outer",
+            on="id",
         )
-        .sort_values(by=["id", "timestamp"], ignore_index=True)
-        .drop_duplicates(subset="id", ignore_index=True),
+        .groupby(lambda x: x.split("_")[0], axis=1)
+        .first(),
         compression="snappy",
         path=S3_PARQUET_PATH,
     )
