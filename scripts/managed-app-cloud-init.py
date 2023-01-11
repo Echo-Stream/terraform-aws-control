@@ -31,7 +31,10 @@ def lambda_handler(event, _) -> None:
 
     awswrangler.s3.to_parquet(
         df=dataframe.merge(
-            pandas.DataFrame.from_records(messages),
+            pandas.DataFrame.from_records(messages).drop_duplicates(
+                ignore_index=True,
+                subset="id",
+            ),
             how="outer",
             on="id",
         )
