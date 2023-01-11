@@ -1,5 +1,4 @@
 import json
-from copy import deepcopy
 from datetime import timezone
 from logging import ERROR, INFO, getLogger
 
@@ -14,21 +13,25 @@ S3_PARQUET_PATH = "s3://${cost_and_usage_bucket}/tenants/tenants.snappy.parquet"
 
 
 def lambda_handler(event, _) -> None:
-    getLogger().info(f"Processing event:\n{json.dumps(event, indent=2)}")
-    if not (isinstance(event, dict) and "identity" in event):
-        return
-    tenant: dict[str, str] = deepcopy(event)
     dataframe: pandas.DataFrame = pandas.DataFrame()
     try:
         dataframe = awswrangler.s3.read_parquet(path=S3_PARQUET_PATH)
     except awswrangler.exceptions.NoFilesFound:
         getLogger().info("Initial file creation")
-    tenant["created"] = pandas.Timestamp(tenant["created"])
-    tenant["updated"] = pandas.Timestamp.now(tz=timezone.utc)
+
+    messages: list[dict[str, str]] = list()
+    for record in event["Records"]:
+        message = json.loads(record["body"])
+        message["created"] = pandas.Timestamp(message["created"])
+        message["updated"] = pandas.Timestamp.now(tz=timezone.utc)
+        messages.append(message)
+        getLogger().debug(f"Tenant:\n{json.dumps(message, indent=2)}")
 
     awswrangler.s3.to_parquet(
         df=dataframe.merge(
-            pandas.DataFrame.from_records([tenant]),
+            pandas.DataFrame.from_records(messages).drop_duplicates(
+                ignore_index=True, keep="last", subset="identity"
+            ),
             how="outer",
             on="identity",
         )
@@ -37,4 +40,4 @@ def lambda_handler(event, _) -> None:
         compression="snappy",
         path=S3_PARQUET_PATH,
     )
-    getLogger().info(f"Recorded Tenant:\n{json.dumps(tenant, indent=2)}")
+    getLogger().info(f"Recorded Tenants:\n{json.dumps(messages, indent=2)}")
