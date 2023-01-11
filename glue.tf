@@ -61,9 +61,68 @@ resource "aws_glue_catalog_table" "managed_instances" {
     }
 
     columns {
-      name    = "timestamp"
+      name    = "registration"
+      type    = "timestamp"
+      comment = "The timestamp when the registration occurred"
+    }
+  }
+}
+
+resource "aws_glue_catalog_database" "tenant" {
+  name          = "tenant"
+  database_name = aws_glue_catalog_database.billing.name
+  description   = "Tenants"
+
+  table_type = "EXTERNAL_TABLE"
+
+  parameters = {
+    "classification"      = "parquet"
+    "parquet.compression" = "SNAPPY"
+    EXTERNAL              = "TRUE"
+  }
+
+  storage_descriptor {
+    location      = "s3://${aws_s3_bucket.cost_and_usage.id}/tenants/"
+    input_format  = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
+    output_format = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
+
+    ser_de_info {
+      name                  = "my-stream"
+      serialization_library = "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
+
+      parameters = {
+        "serialization.format" = 1
+      }
+    }
+
+    columns {
+      name    = "created"
+      type    = "timestamp"
+      comment = "The timestamp when the tenant was created"
+    }
+
+    columns {
+      name    = "customer"
       type    = "string"
-      comment = "The timestamp when the record is written"
+      comment = "The ID of the Stripe customer for this Tenant"
+    }
+
+    columns {
+      name    = "identity"
+      type    = "string"
+      comment = "Tenant identity"
+    }
+
+    columns {
+      name    = "name"
+      type    = "string"
+      comment = "The name of the Tenant"
+    }
+
+    columns {
+      name    = "updated"
+      type    = "timestamp"
+      comment = "The timestamp when the tenant was updated"
     }
   }
 }
