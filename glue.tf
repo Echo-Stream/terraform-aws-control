@@ -31,12 +31,6 @@ resource "aws_glue_catalog_table" "managed_instances" {
     }
 
     columns {
-      name    = "id"
-      type    = "string"
-      comment = "Managed Instance ID"
-    }
-
-    columns {
       name    = "app"
       type    = "string"
       comment = "The name of the Managed App"
@@ -46,6 +40,12 @@ resource "aws_glue_catalog_table" "managed_instances" {
       name    = "appid"
       type    = "string"
       comment = "Managed App ID"
+    }
+
+    columns {
+      name    = "id"
+      type    = "string"
+      comment = "Managed Instance ID"
     }
 
     columns {
