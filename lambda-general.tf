@@ -222,7 +222,7 @@ data "aws_iam_policy_document" "managed_app_cloud_init" {
 
     resources = [aws_sqs_queue.managed_app_cloud_init.arn]
 
-    sid = "ManagedAppCloudInitQueuesAccess"
+    sid = "ManagedAppCloudInitQueueAccess"
   }
 
   statement {
@@ -268,7 +268,7 @@ resource "aws_lambda_function" "managed_app_cloud_init" {
   function_name    = "${var.resource_prefix}-managed-app-cloud-init"
   handler          = "function.lambda_handler"
   layers           = ["arn:aws:lambda:${data.aws_region.current.name}:336392948345:layer:AWSSDKPandas-Python39:1"]
-  memory_size      = 1536
+  memory_size      = 3072
   publish          = true
   role             = aws_iam_role.managed_app_cloud_init.arn
   runtime          = local.lambda_runtime
@@ -333,7 +333,6 @@ resource "aws_iam_policy" "managed_app_registration" {
   policy      = data.aws_iam_policy_document.managed_app_registration.json
 }
 
-
 module "managed_app_registration" {
   description           = "Notifies Tenant owners by an email when a ManagedApp registers"
   dead_letter_arn       = local.lambda_dead_letter_arn
@@ -356,4 +355,99 @@ module "managed_app_registration" {
   tags          = local.tags
   timeout       = 300
   version       = "4.0.2"
+}
+
+######################
+##  record-tenant   ##
+######################
+data "template_file" "record_tenant" {
+  template = file("${path.module}/scripts/record-tenant.py")
+  vars = {
+    cost_and_usage_bucket = aws_s3_bucket.cost_and_usage.id
+  }
+}
+
+data "archive_file" "record_tenant" {
+  type        = "zip"
+  output_path = "${path.module}/record-tenant.zip"
+
+  source {
+    content  = data.template_file.record_tenant.rendered
+    filename = "function.py"
+  }
+}
+
+data "aws_iam_policy_document" "record_tenant" {
+
+  statement {
+    actions = [
+      "s3:AbortMultipartUpload",
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:PutObject",
+    ]
+
+    resources = [
+      aws_s3_bucket.cost_and_usage.arn,
+      "${aws_s3_bucket.cost_and_usage.arn}/*"
+    ]
+
+    sid = "AllowReadAndWriteToCostAndUsageBucket"
+  }
+
+  statement {
+    actions = [
+      "sqs:ReceiveMessage*",
+      "sqs:DeleteMessage*",
+      "sqs:GetQueueAttributes"
+    ]
+
+    resources = [aws_sqs_queue.record_tenant.arn]
+
+    sid = "RecordTenantQueueAccess"
+  }
+
+  statement {
+    actions = [
+      "sns:Publish",
+    ]
+
+    resources = [local.lambda_dead_letter_arn]
+
+    sid = "AllowDeadLetterWriting"
+  }
+}
+
+resource "aws_iam_role" "record_tenant" {
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  inline_policy {
+    name   = "${var.resource_prefix}-record-tenant"
+    policy = data.aws_iam_policy_document.record_tenant.json
+  }
+  managed_policy_arns = [data.aws_iam_policy.aws_lambda_basic_execution_role.arn]
+  name                = "${var.resource_prefix}-record-tenant"
+  tags                = local.tags
+}
+
+resource "aws_lambda_function" "record_tenant" {
+  dead_letter_config {
+    target_arn = local.lambda_dead_letter_arn
+  }
+  description      = "Updates Glue db with tenant details"
+  filename         = data.archive_file.record_tenant.output_path
+  function_name    = "${var.resource_prefix}-record-tenant"
+  handler          = "function.lambda_handler"
+  layers           = ["arn:aws:lambda:${data.aws_region.current.name}:336392948345:layer:AWSSDKPandas-Python39:1"]
+  memory_size      = 3072
+  publish          = true
+  role             = aws_iam_role.record_tenant.arn
+  runtime          = local.lambda_runtime
+  source_code_hash = data.archive_file.record_tenant.output_base64sha256
+  tags             = local.tags
+  timeout          = 900
+}
+
+resource "aws_lambda_event_source_mapping" "record_tenant" {
+  event_source_arn = aws_sqs_queue.record_tenant.arn
+  function_name    = aws_lambda_function.record_tenant.function_name
 }
