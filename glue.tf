@@ -102,12 +102,6 @@ resource "aws_glue_catalog_database" "tenant" {
     }
 
     columns {
-      name    = "customer"
-      type    = "string"
-      comment = "The ID of the Stripe customer for this Tenant"
-    }
-
-    columns {
       name    = "identity"
       type    = "string"
       comment = "Tenant identity"
@@ -117,6 +111,12 @@ resource "aws_glue_catalog_database" "tenant" {
       name    = "name"
       type    = "string"
       comment = "The name of the Tenant"
+    }
+
+    columns {
+      name    = "subscription"
+      type    = "string"
+      comment = "The ID of the Stripe subscription for this Tenant"
     }
 
     columns {
