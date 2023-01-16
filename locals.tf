@@ -84,6 +84,7 @@ locals {
     MANAGED_APP_CLOUD_INIT_QUEUE               = aws_sqs_queue.managed_app_cloud_init.url
     NOTIFY_USER_SES_TEMPLATE                   = aws_ses_template.notify_user.name
     REBUILD_NOTIFICATION_QUEUE                 = aws_sqs_queue.rebuild_notifications.url
+    RECORD_TENANT_QUEUE                        = aws_sqs_queue.record_tenant.url
     REGION                                     = data.aws_region.current.name
     REGIONAL_APPSYNC_ENDPOINTS                 = local.regional_appsync_endpoints
     REMOTE_APP_ROLE                            = aws_iam_role.remote_app.arn

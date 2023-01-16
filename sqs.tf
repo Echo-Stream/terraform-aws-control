@@ -26,3 +26,13 @@ resource "aws_sqs_queue" "managed_app_cloud_init" {
 
   tags = local.tags
 }
+
+resource "aws_sqs_queue" "record_tenant" {
+  content_based_deduplication = "true"
+  fifo_queue                  = true
+  kms_master_key_id           = "alias/aws/sqs"
+  name                        = "${var.resource_prefix}-record-tenant.fifo"
+  visibility_timeout_seconds  = 900
+
+  tags = local.tags
+}
