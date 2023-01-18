@@ -48,10 +48,11 @@ module "ui_cognito_post_confirmation" {
   description = "Set attributes on UI user and validate invitation token post signup "
 
   environment_variables = {
-    CONTROL_REGION = data.aws_region.current.name
-    DYNAMODB_TABLE = module.graph_table.name
-    ENVIRONMENT    = var.resource_prefix
-    TENANT_REGIONS = jsonencode(local.tenant_regions)
+    CONTROL_REGION        = data.aws_region.current.name
+    DYNAMODB_TABLE        = module.graph_table.name
+    ENVIRONMENT           = var.resource_prefix
+    STRIPE_API_KEY_SECRET = local.stripe_api_key_secret_name
+    TENANT_REGIONS        = jsonencode(local.tenant_regions)
   }
 
   dead_letter_arn = local.lambda_dead_letter_arn

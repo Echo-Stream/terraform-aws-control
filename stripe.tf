@@ -1,6 +1,6 @@
 locals {
-  stripe_api_key_secret_name        = "${var.resource_prefix}-stripe-api-key"
-  stripe_webhook_secret_secret_name = "${var.resource_prefix}-stripe-webhook-secret"
+  stripe_api_key_secret_name        = "${var.resource_prefix}-stripe-api-key" ? var.stripe_api_key != "" : ""
+  stripe_webhook_secret_secret_name = "${var.resource_prefix}-stripe-webhook-secret" ? var.stripe_api_key != "" : ""
 }
 
 module "stripe" {

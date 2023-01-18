@@ -90,6 +90,7 @@ locals {
     REMOTE_APP_ROLE                            = aws_iam_role.remote_app.arn
     REMOVE_USER_SES_TEMPLATE                   = aws_ses_template.remove_user.name
     SSM_SERVICE_ROLE                           = aws_iam_role.managed_app.name
+    STRIPE_API_KEY_SECRET                      = local.stripe_api_key_secret_name
     SYSTEM_SES_EMAIL                           = data.aws_ses_email_identity.support.email
     SYSTEM_SQS_QUEUE                           = aws_sqs_queue.system_sqs_queue.id
     TENANT_CREATED_SES_TEMPLATE                = aws_ses_template.tenant_created.name
