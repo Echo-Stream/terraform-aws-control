@@ -130,7 +130,6 @@ module "deployment_handler" {
       CI_CD_TOPIC_ARN                   = aws_sns_topic.ci_cd_errors.arn
       CLOUDFRONT_DISTRIBUTION_ID_DOCS   = aws_cloudfront_distribution.docs.id
       CLOUDFRONT_DISTRIBUTION_ID_WEBAPP = aws_cloudfront_distribution.webapp.id
-      STRIPE_API_KEY_SECRET             = local.stripe_api_key_secret_name
     },
   )
   dead_letter_arn = local.lambda_dead_letter_arn
