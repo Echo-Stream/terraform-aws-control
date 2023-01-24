@@ -4,6 +4,16 @@ variable "api_key" {
   type        = string
 }
 
+variable "artifacts_bucket" {
+  description = "Artifacts bucket name"
+  type        = string
+}
+
+variable "function_s3_object_key" {
+  description = "S3 object key for the lambda function"
+  type        = string
+}
+
 variable "resource_prefix" {
   description = "Name that will be prefixed to the resource name"
   type        = string
@@ -23,9 +33,4 @@ variable "tags" {
   default     = {}
   description = "Tags to apply to resources created by this module"
   type        = map(string)
-}
-
-variable "webhook_url" {
-  description = "The URL of the Stripe Webhooks Receiver"
-  type        = string
 }
