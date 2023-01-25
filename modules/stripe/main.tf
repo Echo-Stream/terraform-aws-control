@@ -18,7 +18,7 @@ resource "aws_secretsmanager_secret_version" "api_key" {
 resource "stripe_webhook_endpoint" "echostream" {
   enabled_events = ["*"]
   description    = "Webhook endpoint for echostream"
-  url            = var.webhook_url
+  url            = ""
 }
 
 resource "aws_secretsmanager_secret" "webhook_secret" {
