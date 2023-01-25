@@ -493,6 +493,10 @@ locals {
       field = "Delete"
       type  = "LoginUser"
     }
+    login_user_update = {
+      field = "Update"
+      type  = "LoginUser"
+    }
     managed_app_delete = {
       field = "Delete"
       type  = "ManagedApp"
