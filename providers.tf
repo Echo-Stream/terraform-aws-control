@@ -1,3 +1,8 @@
+############################ Stripe ###############################
+provider "stripe" {
+  api_key = var.stripe_api_key
+}
+
 ## This should be it until Terraform supports Dynamic provider configuration ##
 
 ############################# US Regions ######################################
