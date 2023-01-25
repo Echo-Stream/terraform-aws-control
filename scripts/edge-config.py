@@ -7,17 +7,11 @@ import json
 
 BODY = json.dumps(
     {
-        "debug": "true",
+        "billingEnabled": ${billing_enabled},
         "clientId": "${client_id}",
-        "graphQL": {
-            "graphqlEndpoint": "${graphql_endpoint}",
-            "appsync_authenticationType": "AMAZON_COGNITO_USER_POOLS",
-            "aws_user_pools_web_client_id": "${api_id}",
-        },
-        "LogoutTimeout": 900000,
-        "queryLimit": 300,
+        "graphqlEndpoint": "${graphql_endpoint}",
         "region": "${region}",
-        "UserPoolId": "${user_pool_id}",
+        "userPoolId": "${user_pool_id}",
     },
     separators=(",", ":"),
 )
