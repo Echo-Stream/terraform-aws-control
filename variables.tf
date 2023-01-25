@@ -38,6 +38,13 @@ variable "ses_email_address" {
   type        = string
 }
 
+variable "stripe_api_key" {
+  default     = ""
+  description = "The API key for Stripe"
+  sensitive   = true
+  type        = string
+}
+
 variable "tags" {
   description = "(Optional) A mapping of tags to assign to the resources"
   type        = map(string)

@@ -195,7 +195,7 @@ locals {
     }
     create_websubhub_node = {
       field = "CreateWebSubHubNode"
-      type  = "Mutation" 
+      type  = "Mutation"
     }
     cross_account_app_delete = {
       field = "Delete"
