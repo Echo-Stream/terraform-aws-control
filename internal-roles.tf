@@ -57,6 +57,18 @@ data "aws_iam_policy_document" "internal_node" {
 
     sid = "EdgeQueuesAccess"
   }
+
+  statement {
+    actions = [
+      "sns:Publish"
+    ]
+
+    resources = [
+      aws_sns_topic.alarms.arn
+    ]
+
+    sid = "PublishToAlarmTopic"
+  }
 }
 
 resource "aws_iam_role_policy" "internal_node" {
