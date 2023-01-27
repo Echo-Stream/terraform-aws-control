@@ -17,6 +17,7 @@ locals {
     aws_lambda_function.managed_app_cloud_init.function_name,
     module.managed_app_registration.name,
     module.rebuild_notifications.name,
+    aws_lambda_function.record_tenant.function_name,
     aws_lambda_function.start_rebuild_notifications_state_machine.function_name,
     module.ui_cognito_post_confirmation.name,
     module.ui_cognito_pre_authentication.name,

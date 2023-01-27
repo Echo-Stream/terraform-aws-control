@@ -101,7 +101,7 @@ resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
 data "template_file" "edge_config" {
   template = file("${path.module}/scripts/edge-config.py")
   vars = {
-    billing_enabled  = var.stripe_api_key != "" ? "True" : "False"
+    billing_enabled  = local.billing_enabled != "" ? "True" : "False"
     client_id        = aws_cognito_user_pool_client.echostream_ui_userpool_client.id
     graphql_endpoint = local.appsync_custom_url
     region           = data.aws_region.current.name

@@ -4,7 +4,7 @@ locals {
 }
 
 module "stripe" {
-  count = var.stripe_api_key != "" ? 1 : 0
+  count = local.billing_enabled ? 1 : 0
 
   api_key                           = var.stripe_api_key
   artifacts_bucket                  = local.artifacts_bucket

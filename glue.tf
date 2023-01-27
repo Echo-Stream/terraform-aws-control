@@ -112,18 +112,6 @@ resource "aws_glue_catalog_table" "tenant" {
       type    = "string"
       comment = "The name of the Tenant"
     }
-
-    columns {
-      name    = "subscription"
-      type    = "string"
-      comment = "The ID of the Stripe subscription for this Tenant"
-    }
-
-    columns {
-      name    = "updated"
-      type    = "timestamp"
-      comment = "The timestamp when the tenant was updated"
-    }
   }
 }
 

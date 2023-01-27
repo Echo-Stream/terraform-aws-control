@@ -1,5 +1,4 @@
 import json
-from datetime import timezone
 from logging import ERROR, INFO, getLogger
 
 import awswrangler
@@ -22,10 +21,9 @@ def lambda_handler(event, _) -> None:
     messages: list[dict[str, str]] = list()
     for record in event["Records"]:
         message = json.loads(record["body"])
+        getLogger().info(f"Tenant:\n{json.dumps(message, indent=2)}")
         message["created"] = pandas.Timestamp(message["created"])
-        message["updated"] = pandas.Timestamp.now(tz=timezone.utc)
         messages.append(message)
-        getLogger().debug(f"Tenant:\n{json.dumps(message, indent=2)}")
 
     awswrangler.s3.to_parquet(
         df=dataframe.merge(

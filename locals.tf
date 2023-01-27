@@ -54,6 +54,7 @@ locals {
   artifacts_bucket         = "echostream-artifacts-${data.aws_region.current.name}"       # artifacts bucket name with region
   artifacts_bucket_prefix  = "echostream-artifacts"                                       # artifacts bucket name without region
   audit_firehose_log_group = "/aws/kinesisfirehose/${var.resource_prefix}-audit-firehose" # log group name for audit-firehose
+  billing_enabled          = var.stripe_api_key != ""
 
   # Common environment variables for lambdas that use echo-tools library
   common_lambda_environment_variables = {
@@ -69,6 +70,7 @@ locals {
     AUDIT_FIREHOSE_LOG_GROUP                   = local.audit_firehose_log_group
     AUDIT_FIREHOSE_ROLE                        = aws_iam_role.audit_firehose.arn
     AUDITOR_ROLE                               = aws_iam_role.auditor.arn
+    BILLING_ENABLED                            = local.billing_enabled != "" ? "1" : ""
     BULK_DATA_AWS_ACCESS_KEY_ID                = aws_iam_access_key.presign_bulk_data.id
     BULK_DATA_AWS_SECRET_ACCESS_KEY            = aws_iam_access_key.presign_bulk_data.secret
     BULK_DATA_IAM_USER                         = aws_iam_user.presign_bulk_data.arn
@@ -90,7 +92,6 @@ locals {
     REMOTE_APP_ROLE                            = aws_iam_role.remote_app.arn
     REMOVE_USER_SES_TEMPLATE                   = aws_ses_template.remove_user.name
     SSM_SERVICE_ROLE                           = aws_iam_role.managed_app.name
-    STRIPE_API_KEY_SECRET                      = local.stripe_api_key_secret_name
     SYSTEM_SES_EMAIL                           = data.aws_ses_email_identity.support.email
     SYSTEM_SQS_QUEUE                           = aws_sqs_queue.system_sqs_queue.id
     TENANT_CREATED_SES_TEMPLATE                = aws_ses_template.tenant_created.name
