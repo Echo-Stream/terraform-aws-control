@@ -70,7 +70,7 @@ locals {
     AUDIT_FIREHOSE_LOG_GROUP                   = local.audit_firehose_log_group
     AUDIT_FIREHOSE_ROLE                        = aws_iam_role.audit_firehose.arn
     AUDITOR_ROLE                               = aws_iam_role.auditor.arn
-    BILLING_ENABLED                            = local.billing_enabled != "" ? "1" : ""
+    BILLING_ENABLED                            = local.billing_enabled ? "1" : ""
     BULK_DATA_AWS_ACCESS_KEY_ID                = aws_iam_access_key.presign_bulk_data.id
     BULK_DATA_AWS_SECRET_ACCESS_KEY            = aws_iam_access_key.presign_bulk_data.secret
     BULK_DATA_IAM_USER                         = aws_iam_user.presign_bulk_data.arn
