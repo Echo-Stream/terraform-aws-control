@@ -1,5 +1,6 @@
 import json
 from logging import ERROR, INFO, getLogger
+from typing import Union
 
 import awswrangler
 import pandas
@@ -13,7 +14,7 @@ S3_PARQUET_PATH = "s3://${cost_and_usage_bucket}/tenants/tenants.snappy.parquet"
 
 def lambda_handler(event, _) -> None:
     getLogger().info(f"Processing event:\n{json.dumps(event, indent=2)}")
-    messages: list[dict[str, str]] = list()
+    messages: list[dict[str, Union[str, pandas.Timestamp]]] = list()
     for record in event["Records"]:
         message = json.loads(record["body"])
         getLogger().info(f"Tenant:\n{json.dumps(message, indent=2)}")

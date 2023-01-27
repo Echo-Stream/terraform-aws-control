@@ -1,6 +1,8 @@
 import json
+from copy import deepcopy
 from datetime import timezone
 from logging import ERROR, INFO, getLogger
+from typing import Union
 
 import awswrangler
 import boto3
@@ -16,41 +18,45 @@ S3_PARQUET_PATH = (
 
 
 def lambda_handler(event, _) -> None:
-    dataframe: pandas.DataFrame = pandas.DataFrame()
-    try:
-        dataframe = awswrangler.s3.read_parquet(path=S3_PARQUET_PATH)
-    except awswrangler.exceptions.NoFilesFound:
-        getLogger().info("Initial file creation")
-
+    getLogger().info(f"Processing event:\n{json.dumps(event, indent=2)}")
     messages: list[dict[str, str]] = list()
+    instances: list[dict[str, Union[str, pandas.Timestamp]]] = list()
     for record in event["Records"]:
         message = json.loads(record["body"])
-        message["registration"] = pandas.Timestamp.now(tz=timezone.utc)
+        getLogger().info(f"ManagedInstance:\n{json.dumps(message, indent=2)}")
         messages.append(message)
-        getLogger().debug(f"message {message}")
-
-    awswrangler.s3.to_parquet(
-        df=dataframe.merge(
-            pandas.DataFrame.from_records(messages).drop_duplicates(
-                ignore_index=True,
-                subset="id",
-            ),
-            how="outer",
-            on="id",
+        instance = deepcopy(message)
+        instance["registration"] = pandas.Timestamp.now(tz=timezone.utc)
+        instances.append(instance)
+    if instances:
+        managed_instances = pandas.DataFrame.from_records(instances).drop_duplicates(
+            ignore_index=True,
+            subset="id",
         )
-        .groupby(lambda x: x.split("_")[0], axis=1)
-        .first(),
-        compression="snappy",
-        path=S3_PARQUET_PATH,
-    )
-    getLogger().info(
-        f'Managed instances {[message["id"] for message in messages]} are successfully written into {S3_PARQUET_PATH}'
-    )
+        try:
+            managed_instances = (
+                awswrangler.s3.read_parquet(path=S3_PARQUET_PATH)
+                .merge(
+                    managed_instances,
+                    how="outer",
+                    on="identity",
+                )
+                .groupby(lambda x: x.split("_")[0], axis=1)
+                .last()
+            )
+        except awswrangler.exceptions.NoFilesFound:
+            getLogger().info("Initial file creation")
 
-    response = boto3.client("lambda").invoke(
-        FunctionName="${registration_function_arn}",
-        InvocationType="RequestResponse",
-        Payload=json.dumps(messages, separators=(",", ":")).encode(),
-    )
-    if response["StatusCode"] != 200:
-        raise Exception(response["FunctionError"])
+        awswrangler.s3.to_parquet(
+            df=managed_instances,
+            compression="snappy",
+            path=S3_PARQUET_PATH,
+        )
+    getLogger().info(f"Recorded {len(instances)} Managed Instances")
+
+    if messages:
+        boto3.client("lambda").invoke(
+            FunctionName="${registration_function_arn}",
+            InvocationType="Event",
+            Payload=json.dumps(messages, separators=(",", ":")).encode(),
+        )
