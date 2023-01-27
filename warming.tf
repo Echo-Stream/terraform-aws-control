@@ -75,24 +75,36 @@ resource "aws_lambda_permission" "warming" {
 }
 
 resource "aws_sns_topic_subscription" "warming_appsync_datasource" {
+  depends_on = [
+    aws_lambda_permission.warming[module.appsync_datasource.name]
+  ]
   topic_arn = aws_sns_topic.warming.arn
   protocol  = "lambda"
   endpoint  = module.appsync_datasource.arn
 }
 
 resource "aws_sns_topic_subscription" "warming_graph_table_dynamodb_trigger" {
+  depends_on = [
+    aws_lambda_permission.warming[module.graph_table_dynamodb_trigger.name]
+  ]
   topic_arn = aws_sns_topic.warming.arn
   protocol  = "lambda"
   endpoint  = module.graph_table_dynamodb_trigger.arn
 }
 
 resource "aws_sns_topic_subscription" "warming_graph_table_system_stream_handler" {
+  depends_on = [
+    aws_lambda_permission.warming[module.graph_table_system_stream_handler.name]
+  ]
   topic_arn = aws_sns_topic.warming.arn
   protocol  = "lambda"
   endpoint  = module.graph_table_system_stream_handler.arn
 }
 
 resource "aws_sns_topic_subscription" "warming_graph_table_tenant_stream_handler" {
+  depends_on = [
+    aws_lambda_permission.warming[module.graph_table_tenant_stream_handler.name]
+  ]
   topic_arn = aws_sns_topic.warming.arn
   protocol  = "lambda"
   endpoint  = module.graph_table_tenant_stream_handler.arn
