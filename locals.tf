@@ -17,7 +17,7 @@ locals {
     zipmap(
       local.region_keys,
       concat(
-        [module.app_cognito_pool_control.userpool_id],
+        [module.app_cognito_pool_control.client_id],
         local.regional_app_userpool_client_ids,
       )
     )
