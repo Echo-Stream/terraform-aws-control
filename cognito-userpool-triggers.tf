@@ -13,19 +13,6 @@ locals {
 data "aws_iam_policy_document" "ui_cognito_post_confirmation" {
   statement {
     actions = [
-      "dynamodb:UpdateItem",
-      "dynamodb:Query",
-    ]
-
-    resources = [
-      module.graph_table.arn,
-      "${module.graph_table.arn}/*",
-    ]
-
-    sid = "TableAccess"
-  }
-  statement {
-    actions = [
       "cloudwatch:PutMetricData",
     ]
 
@@ -64,7 +51,8 @@ module "ui_cognito_post_confirmation" {
 
   policy_arns = [
     aws_iam_policy.ui_cognito_post_confirmation.arn,
-    aws_iam_policy.graph_ddb_read.arn
+    aws_iam_policy.graph_ddb_read.arn,
+    aws_iam_policy.graph_ddb_write.arn
   ]
 
   runtime       = local.lambda_runtime
@@ -88,19 +76,6 @@ resource "aws_lambda_permission" "ui_cognito_post_confirmation" {
 ##  ui-cognito-pre-authentication  ##
 #####################################
 data "aws_iam_policy_document" "ui_cognito_pre_authentication" {
-  statement {
-    actions = [
-      "dynamodb:DescribeTable",
-      "dynamodb:GetItem"
-
-    ]
-
-    resources = [
-      module.graph_table.arn,
-    ]
-
-    sid = "TableAccess"
-  }
   statement {
     actions = [
       "cloudwatch:PutMetricData",
@@ -166,20 +141,6 @@ resource "aws_lambda_permission" "ui_cognito_pre_authentication" {
 data "aws_iam_policy_document" "ui_cognito_pre_signup" {
   statement {
     actions = [
-      "dynamodb:DeleteItem",
-      "dynamodb:GetItem",
-      "dynamodb:PutItem",
-      "dynamodb:UpdateItem",
-    ]
-
-    resources = [
-      module.graph_table.arn,
-    ]
-
-    sid = "TableAccess"
-  }
-  statement {
-    actions = [
       "cloudwatch:PutMetricData",
     ]
 
@@ -243,19 +204,6 @@ resource "aws_lambda_permission" "ui_cognito_pre_signup" {
 ##  api-cognito-pre-authentication  ##
 ######################################
 data "aws_iam_policy_document" "api_cognito_pre_authentication" {
-  statement {
-    actions = [
-      "dynamodb:Query",
-    ]
-
-    resources = [
-      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-graph",
-      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.resource_prefix}-graph/*",
-    ]
-
-    sid = "TableAccess"
-  }
-
   statement {
     actions = [
       "cloudwatch:PutMetricData",
