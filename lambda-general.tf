@@ -267,8 +267,8 @@ resource "aws_lambda_function" "managed_app_cloud_init" {
   filename         = data.archive_file.managed_app_cloud_init.output_path
   function_name    = "${var.resource_prefix}-managed-app-cloud-init"
   handler          = "function.lambda_handler"
-  layers           = ["arn:aws:lambda:${data.aws_region.current.name}:336392948345:layer:AWSSDKPandas-Python39:5"]
-  memory_size      = 3072
+  layers           = [local.awssdkpandas_layer]
+  memory_size      = 1536
   publish          = true
   role             = aws_iam_role.managed_app_cloud_init.arn
   runtime          = local.lambda_runtime
@@ -437,8 +437,8 @@ resource "aws_lambda_function" "record_tenant" {
   filename         = data.archive_file.record_tenant.output_path
   function_name    = "${var.resource_prefix}-record-tenant"
   handler          = "function.lambda_handler"
-  layers           = ["arn:aws:lambda:${data.aws_region.current.name}:336392948345:layer:AWSSDKPandas-Python39:5"]
-  memory_size      = 3072
+  layers           = [local.awssdkpandas_layer]
+  memory_size      = 1536
   publish          = true
   role             = aws_iam_role.record_tenant.arn
   runtime          = local.lambda_runtime
