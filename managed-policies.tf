@@ -106,10 +106,11 @@ data "aws_iam_policy_document" "tenant_table_read_write" {
     effect = "Allow"
 
     actions = [
-      "dynamodb:DeleteItem",
-      "dynamodb:GetItem",
-      "dynamodb:PutItem",
-      "dynamodb:UpdateItem",
+      "dynamodb:*Item",
+      "dynamodb:DescribeTable",
+      "dynamodb:Query",
+      "dynamodb:PartiQL*",
+      "dynamodb:Scan",
     ]
 
     resources = [
@@ -122,15 +123,15 @@ data "aws_iam_policy_document" "tenant_table_read_write" {
   statement {
     actions = [
       "dynamodb:Query",
+      "dynamodb:PartiQLSelect",
       "dynamodb:Scan",
     ]
 
     resources = [
-      "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/tenant-*",
       "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/tenant-*/index/*"
     ]
 
-    sid = "TenantTableAccessQuery"
+    sid = "TenantTableIndexAccessRead"
   }
 }
 
