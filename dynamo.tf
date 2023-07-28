@@ -52,6 +52,8 @@ module "graph_table" {
 
   billing_mode = "PAY_PER_REQUEST"
 
+  deletion_protection_enabled = true
+
   global_secondary_index = [
     {
       hash_key        = "gsi0_pk"
@@ -121,5 +123,5 @@ module "graph_table" {
 
 
   source  = "QuiNovas/dynamodb-table/aws"
-  version = "3.0.8"
+  version = "3.0.9"
 }
