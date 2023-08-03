@@ -98,23 +98,21 @@ resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
 
 ## Origin Request Lambda, listening on path /config/config.json
 
-data "template_file" "edge_config" {
-  template = file("${path.module}/scripts/edge-config.py")
-  vars = {
-    billing_enabled  = local.billing_enabled ? "True" : "False"
-    client_id        = aws_cognito_user_pool_client.echostream_ui_userpool_client.id
-    graphql_endpoint = local.appsync_custom_url
-    region           = data.aws_region.current.name
-    user_pool_id     = aws_cognito_user_pool.echostream_ui.id
-  }
-}
-
 data "archive_file" "edge_config" {
   type        = "zip"
   output_path = "${path.module}/edge-config.zip"
 
   source {
-    content  = data.template_file.edge_config.rendered
+    content = templatefile(
+      "${path.module}/scripts/edge-config.py",
+      {
+        billing_enabled  = local.billing_enabled ? "True" : "False"
+        client_id        = aws_cognito_user_pool_client.echostream_ui_userpool_client.id
+        graphql_endpoint = local.appsync_custom_url
+        region           = data.aws_region.current.name
+        user_pool_id     = aws_cognito_user_pool.echostream_ui.id
+      }
+    )
     filename = "function.py"
   }
 }

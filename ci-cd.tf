@@ -286,16 +286,6 @@ resource "aws_iam_role" "rebuild_notifications_state_machine" {
   tags               = local.tags
 }
 
-data "template_file" "rebuild_notifications_state_machine" {
-  template = file("${path.module}/templates/rebuild-notifications-state-machine.json")
-
-  vars = {
-    function_arn          = module.rebuild_notifications.arn
-    sleep_time_in_seconds = 60
-    my_arn                = "arn:aws:states:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"
-  }
-}
-
 data "aws_iam_policy_document" "rebuild_notifications_state_machine" {
   statement {
 
@@ -352,9 +342,16 @@ resource "aws_cloudwatch_log_group" "rebuild_notifications_state_machine" {
 }
 
 resource "aws_sfn_state_machine" "rebuild_notifications" {
-  definition = data.template_file.rebuild_notifications_state_machine.rendered
-  name       = "${var.resource_prefix}-rebuild-notifications"
-  role_arn   = aws_iam_role.rebuild_notifications_state_machine.arn
+  definition = templatefile(
+    "${path.module}/templates/rebuild-notifications-state-machine.json",
+    {
+      function_arn          = module.rebuild_notifications.arn
+      sleep_time_in_seconds = 60
+      my_arn                = "arn:aws:states:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:stateMachine:${var.resource_prefix}-rebuild-notifications"
+    }
+  )
+  name     = "${var.resource_prefix}-rebuild-notifications"
+  role_arn = aws_iam_role.rebuild_notifications_state_machine.arn
   logging_configuration {
     level           = "ERROR"
     log_destination = "${aws_cloudwatch_log_group.rebuild_notifications_state_machine.arn}:*"
@@ -362,19 +359,17 @@ resource "aws_sfn_state_machine" "rebuild_notifications" {
   tags = local.tags
 }
 
-data "template_file" "start_rebuild_notifications_state_machine" {
-  template = file("${path.module}/scripts/start-rebuild-notifications-state-machine.py")
-  vars = {
-    state_machine_arn = aws_sfn_state_machine.rebuild_notifications.arn
-  }
-}
-
 data "archive_file" "start_rebuild_notifications_state_machine" {
   type        = "zip"
   output_path = "${path.module}/start-rebuild-notifications-state-machine.zip"
 
   source {
-    content  = data.template_file.start_rebuild_notifications_state_machine.rendered
+    content = templatefile(
+      "${path.module}/scripts/start-rebuild-notifications-state-machine.py",
+      {
+        state_machine_arn = aws_sfn_state_machine.rebuild_notifications.arn
+      }
+    )
     filename = "function.py"
   }
 }

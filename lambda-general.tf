@@ -177,20 +177,18 @@ resource "aws_lambda_permission" "delete_expired_activations" {
 ###############################
 ##  managed-app-cloud-init   ##
 ###############################
-data "template_file" "managed_app_cloud_init" {
-  template = file("${path.module}/scripts/managed-app-cloud-init.py")
-  vars = {
-    cost_and_usage_bucket     = aws_s3_bucket.cost_and_usage.id
-    registration_function_arn = module.managed_app_registration.arn
-  }
-}
-
 data "archive_file" "managed_app_cloud_init" {
   type        = "zip"
   output_path = "${path.module}/managed-app-cloud-init.zip"
 
   source {
-    content  = data.template_file.managed_app_cloud_init.rendered
+    content = templatefile(
+      "${path.module}/scripts/managed-app-cloud-init.py",
+      {
+        cost_and_usage_bucket     = aws_s3_bucket.cost_and_usage.id
+        registration_function_arn = module.managed_app_registration.arn
+      }
+    )
     filename = "function.py"
   }
 }
@@ -360,19 +358,17 @@ module "managed_app_registration" {
 ######################
 ##  record-tenant   ##
 ######################
-data "template_file" "record_tenant" {
-  template = file("${path.module}/scripts/record-tenant.py")
-  vars = {
-    cost_and_usage_bucket = aws_s3_bucket.cost_and_usage.id
-  }
-}
-
 data "archive_file" "record_tenant" {
   type        = "zip"
   output_path = "${path.module}/record-tenant.zip"
 
   source {
-    content  = data.template_file.record_tenant.rendered
+    content = templatefile(
+      "${path.module}/scripts/record-tenant.py",
+      {
+        cost_and_usage_bucket = aws_s3_bucket.cost_and_usage.id
+      }
+    )
     filename = "function.py"
   }
 }
