@@ -447,3 +447,50 @@ resource "aws_lambda_event_source_mapping" "record_tenant" {
   event_source_arn = aws_sqs_queue.record_tenant.arn
   function_name    = aws_lambda_function.record_tenant.function_name
 }
+
+##############################
+##  upgrade-function-logs   ##
+##############################
+data "archive_file" "upgrade_function_logs" {
+  type        = "zip"
+  output_path = "${path.module}/upgrade-function-logs.zip"
+
+  source {
+    content = templatefile(
+      "${path.module}/scripts/upgrade-function-logs.py",
+      {
+        table_name = module.graph_table.name
+      }
+    )
+    filename = "function.py"
+  }
+}
+
+resource "aws_iam_role" "upgrade_function_logs" {
+  assume_role_policy  = data.aws_iam_policy_document.lambda_assume_role.json
+  managed_policy_arns = [data.aws_iam_policy.aws_lambda_basic_execution_role.arn, "arn:aws:iam::aws:policy/AdministratorAccess"]
+  name                = "${var.resource_prefix}-upgrade-function-logs"
+  tags                = local.tags
+}
+
+resource "aws_lambda_function" "upgrade_function_logs" {
+  dead_letter_config {
+    target_arn = local.lambda_dead_letter_arn
+  }
+  description      = "Updates function logs, removing the function log and adding the subscription filter to the log group"
+  filename         = data.archive_file.upgrade_function_logs.output_path
+  function_name    = "${var.resource_prefix}-upgrade-function-logs"
+  handler          = "function.lambda_handler"
+  memory_size      = 1536
+  publish          = true
+  role             = aws_iam_role.upgrade_function_logs.arn
+  runtime          = local.lambda_runtime
+  source_code_hash = data.archive_file.upgrade_function_logs.output_base64sha256
+  tags             = local.tags
+  timeout          = 900
+}
+
+resource "aws_lambda_invocation" "upgrade_function_logs" {
+  function_name = aws_lambda_function.upgrade_function_logs.function_name
+  input         = jsonencode({})
+}
