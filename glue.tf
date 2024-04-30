@@ -120,15 +120,14 @@ resource "aws_glue_catalog_table" "tenant" {
 ###################################################
 resource "aws_glue_crawler" "cost_and_usage_crawler" {
   database_name = aws_glue_catalog_database.billing.name
-  description   = "Lambda invoked crawler that keeps cost and usage reports table up to date in Athena"
+  description   = "Keeps costandusage reports table up to date in Athena"
   name          = "${var.resource_prefix}-cost-and-usage-crawler"
   role          = aws_iam_role.cost_and_usage_crawler.arn
-  schedule      = "cron(0 3 1 * ? *)"
+  schedule      = "cron(0 3 * * ? *)"
   tags          = local.tags
 
   s3_target {
-    path       = "s3://${aws_s3_bucket.cost_and_usage.id}/reports/CostAndUsage/CostAndUsage"
-    exclusions = ["**.json", "**.yml", "**.sql", "**.csv", "**.zip", "**.gz"]
+    path = "s3://${aws_s3_bucket.cost_and_usage.id}/exports/${aws_bcmdataexports_export.cost_and_usage.name}/data"
   }
 
   schema_change_policy {
