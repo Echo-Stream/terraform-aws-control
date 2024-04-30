@@ -88,15 +88,15 @@ data "aws_iam_policy_document" "cost_and_usage" {
     condition {
       test = "StringLike"
       values = [
-        aws_caller_identity.current.account_id,
+        data.aws_caller_identity.current.account_id,
       ]
       variable = "aws:SourceAccount"
     }
     condition {
       test = "StringLike"
       values = [
-        "arn:aws:bcm-data-exports:us-east-1:${aws_caller_identity.current.account_id}:export/*",
-        "arn:aws:cur:us-east-1:${aws_caller_identity.current.account_id}:definition/*",
+        "arn:aws:bcm-data-exports:us-east-1:${data.aws_caller_identity.current.account_id}:export/*",
+        "arn:aws:cur:us-east-1:${data.aws_caller_identity.current.account_id}:definition/*",
       ]
       variable = "aws:SourceArn"
     }
