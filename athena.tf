@@ -8,6 +8,23 @@ resource "aws_s3_bucket" "athena_query_results" {
   tags = local.tags
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "athena_query_results" {
+  bucket = aws_s3_bucket.athena_query_results.id
+
+  rule {
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 1
+    }
+
+    expiration {
+      days = 7
+    }
+
+    id     = "remove-old-output"
+    status = "Enabled"
+  }
+}
+
 resource "aws_s3_bucket_logging" "athena_query_results" {
   bucket        = aws_s3_bucket.athena_query_results.id
   target_bucket = local.log_bucket
