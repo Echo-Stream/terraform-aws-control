@@ -1,6 +1,5 @@
 resource "aws_bcmdataexports_export" "cost_and_usage" {
   depends_on  = [aws_s3_bucket_policy.cost_and_usage]
-  description = "EchoStream Billing Exports"
 
   export {
     data_query {
@@ -14,6 +13,8 @@ resource "aws_bcmdataexports_export" "cost_and_usage" {
         }
       }
     }
+
+    description = "EchoStream Billing Exports"
 
     destination_configurations {
       s3_destination {
