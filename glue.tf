@@ -127,7 +127,7 @@ resource "aws_glue_crawler" "cost_and_usage_crawler" {
   tags          = local.tags
 
   s3_target {
-    path = "s3://${aws_s3_bucket.cost_and_usage.id}/exports/${aws_bcmdataexports_export.cost_and_usage.name}/data"
+    path = "s3://${aws_s3_bucket.cost_and_usage.id}/exports/${local.cost_and_usage_export_name}/data"
   }
 
   schema_change_policy {

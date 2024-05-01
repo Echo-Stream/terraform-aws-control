@@ -1,5 +1,5 @@
 resource "aws_bcmdataexports_export" "cost_and_usage" {
-  depends_on  = [aws_s3_bucket_policy.cost_and_usage]
+  depends_on = [aws_s3_bucket_policy.cost_and_usage]
 
   export {
     data_query {
@@ -32,7 +32,7 @@ resource "aws_bcmdataexports_export" "cost_and_usage" {
       }
     }
 
-    name = "CostAndUsage"
+    name = local.cost_and_usage_export_name
 
     refresh_cadence {
       frequency = "SYNCHRONOUS"

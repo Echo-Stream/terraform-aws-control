@@ -108,6 +108,7 @@ locals {
     WEBSUB_NODE_ROLE                           = aws_iam_role.websub_node.arn
   }
 
+  cost_and_usage_export_name  = "CostAndUsage"
   lambda_dead_letter_arn      = module.lambda_underpin_control.dead_letter_arn
   lambda_env_vars_kms_key_arn = module.lambda_underpin_control.kms_key_arn
   lambda_runtime              = "python3.9"
