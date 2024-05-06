@@ -55,7 +55,6 @@ locals {
   artifacts_bucket_prefix  = "echostream-artifacts"                                       # artifacts bucket name without region
   audit_firehose_log_group = "/aws/kinesisfirehose/${var.resource_prefix}-audit-firehose" # log group name for audit-firehose
   awssdkpandas_layer       = "arn:aws:lambda:${data.aws_region.current.name}:336392948345:layer:AWSSDKPandas-Python39:5"
-  billing_enabled          = var.stripe_api_key != ""
 
   # Common environment variables for lambdas that use echo-tools library
   common_lambda_environment_variables = {
@@ -71,7 +70,6 @@ locals {
     AUDIT_FIREHOSE_LOG_GROUP                   = local.audit_firehose_log_group
     AUDIT_FIREHOSE_ROLE                        = aws_iam_role.audit_firehose.arn
     AUDITOR_ROLE                               = aws_iam_role.auditor.arn
-    BILLING_ENABLED                            = local.billing_enabled ? "1" : ""
     BULK_DATA_AWS_ACCESS_KEY_ID                = aws_iam_access_key.presign_bulk_data.id
     BULK_DATA_AWS_SECRET_ACCESS_KEY            = aws_iam_access_key.presign_bulk_data.secret
     BULK_DATA_IAM_USER                         = aws_iam_user.presign_bulk_data.arn
@@ -122,7 +120,6 @@ locals {
     graph_table_tenant_stream_handler  = "${local.artifacts["control_lambda"]}/graph-table-tenant-stream-handler.zip"
     managed_app_registration           = "${local.artifacts["control_lambda"]}/managed-app-registration.zip"
     rebuild_notifications              = "${local.artifacts["control_lambda"]}/rebuild-notifications.zip"
-    stripe                             = "${local.artifacts["control_lambda"]}/stripe.zip"
     ui_cognito_post_confirmation       = "${local.artifacts["control_lambda"]}/ui-cognito-post-confirmation.zip"
     ui_cognito_pre_authentication      = "${local.artifacts["control_lambda"]}/ui-cognito-pre-authentication.zip"
     ui_cognito_pre_signup              = "${local.artifacts["control_lambda"]}/ui-cognito-pre-signup.zip"

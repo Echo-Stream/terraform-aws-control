@@ -9,10 +9,6 @@ terraform {
       source                = "hashicorp/aws"
       version               = ">=4.0.0"
     }
-    stripe = {
-      source  = "lukasaron/stripe"
-      version = ">=1.6.0"
-    }
   }
   required_version = ">= 1.3"
 }

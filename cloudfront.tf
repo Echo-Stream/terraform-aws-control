@@ -106,7 +106,7 @@ data "archive_file" "edge_config" {
     content = templatefile(
       "${path.module}/scripts/edge-config.py",
       {
-        billing_enabled  = local.billing_enabled ? "True" : "False"
+        billing_enabled  = "False"
         client_id        = aws_cognito_user_pool_client.echostream_ui_userpool_client.id
         graphql_endpoint = local.appsync_custom_url
         region           = data.aws_region.current.name
