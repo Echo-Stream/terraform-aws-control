@@ -169,28 +169,3 @@ resource "aws_s3_bucket_versioning" "cost_and_usage" {
     status = "Enabled"
   }
 }
-
-## CUR Report Definition ##
-/*
-resource "aws_cur_report_definition" "cost_and_usage" {
-  depends_on                 = [aws_s3_bucket_policy.cost_and_usage]
-  additional_schema_elements = ["RESOURCES"]
-  compression                = "Parquet"
-  format                     = "Parquet"
-  refresh_closed_reports     = true
-  report_name                = "CostAndUsage"
-  report_versioning          = "OVERWRITE_REPORT"
-  s3_prefix                  = "reports"
-  # Can't leave S3 prefix empty if Definition is integrated with Athena
-  # If s3_prefix is empty, AWS is making ReportPathPrefix = /<report_name>
-  # so final reports are put under /<report_name>/<report_name>
-  # Example, lets say our report-name = "CostAndUsage". The S3 path would be s3://<bucket-name>//CostAndUsage/CostAndUsage/<reports>
-  # better to include some prefix, to make it look cleaner (avoids leading slash)
-  # for e.g if prefix is set to 'echo'. The s3 path would look like s3://<bucket-name>/echo/CostAndUsage/CostAndUsage/<reports>
-  s3_bucket = aws_s3_bucket.cost_and_usage.id
-  s3_region = data.aws_region.current.name
-  time_unit = "DAILY"
-
-  provider = aws.us-east-1
-}
-*/
