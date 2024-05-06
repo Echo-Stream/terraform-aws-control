@@ -25,7 +25,7 @@ resource "aws_bcmdataexports_export" "cost_and_usage" {
         savings_plan_net_recurring_commitment_for_billing_period, savings_plan_net_savings_plan_effective_cost, savings_plan_offering_type, savings_plan_payment_option, savings_plan_purchase_term,
         savings_plan_recurring_commitment_for_billing_period, savings_plan_region, savings_plan_savings_plan_a_r_n, savings_plan_savings_plan_effective_cost, savings_plan_savings_plan_rate,
         savings_plan_start_time, savings_plan_total_commitment_to_date, savings_plan_used_commitment
-      FROM COST_AND_USAGE_REPORT"
+      FROM COST_AND_USAGE_REPORT
       QUERY
       table_configurations = {
         COST_AND_USAGE_REPORT = {
