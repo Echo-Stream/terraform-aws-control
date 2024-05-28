@@ -629,6 +629,10 @@ locals {
       field = "GetAwsCredentials"
       type  = "Tenant"
     }
+    tenant_get_update_payment_transaction_id = {
+      field = "GetUpdatePaymentTransactionId"
+      type  = "Tenant"
+    }
     tenant_list_changes = {
       field = "ListChanges"
       type  = "Tenant"
