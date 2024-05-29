@@ -557,7 +557,7 @@ resource "aws_lambda_function" "paddle_webhooks" {
   handler          = "function.lambda_handler"
   layers           = [local.echocore_layer_version_arns[data.aws_region.current.name]]
   memory_size      = 1536
-  role             = aws_iam_role.paddle_webhooks.arn
+  role             = aws_iam_role.paddle_webhooks[0].arn
   runtime          = local.lambda_runtime
   source_code_hash = data.archive_file.paddle_webhooks.output_base64sha256
   tags             = local.tags
@@ -567,5 +567,5 @@ resource "aws_lambda_function" "paddle_webhooks" {
 resource "aws_lambda_function_url" "paddle_webhooks" {
   authorization_type = "NONE"
   count              = var.billing_enabled ? 1 : 0
-  function_name      = aws_lambda_function.paddle_webhooks.function_name
+  function_name      = aws_lambda_function.paddle_webhooks[0].function_name
 }
