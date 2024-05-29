@@ -56,6 +56,11 @@ output "log_bucket_id" {
   value       = module.log_bucket.id
 }
 
+output "paddle_webhooks_url" {
+  description = "The URL for the Paddle Webhooks"
+  value       = var.billing_enabled ? aws_lambda_function_url.paddle_webhooks.function_url : ""
+}
+
 output "regional_app_userpool_client_ids" {
   description = "A map of all regional App userpool client ids"
   value       = local.app_userpool_client_ids

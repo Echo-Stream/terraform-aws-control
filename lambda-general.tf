@@ -494,3 +494,78 @@ resource "aws_lambda_invocation" "upgrade_function_logs" {
   function_name = aws_lambda_function.upgrade_function_logs.function_name
   input         = jsonencode({})
 }
+
+
+##############################
+##      paddle-webhooks     ##
+##############################
+
+data "archive_file" "paddle_webhooks" {
+  type        = "zip"
+  output_path = "${path.module}/paddle-webhooks.zip"
+
+  source {
+    content = templatefile(
+      "${path.module}/scripts/paddle-webhooks.py",
+      {
+        paddle_webhooks_secret_arn = aws_secretsmanager_secret.paddle_webhooks_secret.arn
+      }
+    )
+    filename = "function.py"
+  }
+}
+
+data "aws_iam_policy_document" "paddle_webhooks" {
+
+  statement {
+    actions = [
+      "secretsmanager:GetSecretValue"
+    ]
+
+    resources = [
+      aws_secretsmanager_secret.paddle_webhooks_secret.arn
+    ]
+
+    sid = "AllowSecretsManagerAccess"
+  }
+}
+
+resource "aws_iam_role" "paddle_webhooks" {
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  count              = var.billing_enabled ? 1 : 0
+  inline_policy {
+    name   = "${var.resource_prefix}-paddle-webhooks"
+    policy = data.aws_iam_policy_document.paddle_webhooks.json
+  }
+  managed_policy_arns = [
+    data.aws_iam_policy.aws_lambda_basic_execution_role.arn,
+    aws_iam_policy.graph_ddb_read.arn,
+    aws_iam_policy.graph_ddb_write.arn
+  ]
+  name = "${var.resource_prefix}-paddle-webhooks"
+  tags = local.tags
+}
+
+resource "aws_lambda_function" "paddle_webhooks" {
+  count = var.billing_enabled ? 1 : 0
+  dead_letter_config {
+    target_arn = local.lambda_dead_letter_arn
+  }
+  description      = "Handles Paddle webhooks"
+  filename         = data.archive_file.paddle_webhooks.output_path
+  function_name    = "${var.resource_prefix}-paddle-webhooks"
+  handler          = "function.lambda_handler"
+  layers           = [local.echocore_layer_version_arns[data.aws_region.current.name]]
+  memory_size      = 1536
+  role             = aws_iam_role.paddle_webhooks.arn
+  runtime          = local.lambda_runtime
+  source_code_hash = data.archive_file.paddle_webhooks.output_base64sha256
+  tags             = local.tags
+  timeout          = 30
+}
+
+resource "aws_lambda_function_url" "paddle_webhooks" {
+  authorization_type = "NONE"
+  count              = var.billing_enabled ? 1 : 0
+  function_name      = aws_lambda_function.paddle_webhooks.function_name
+}

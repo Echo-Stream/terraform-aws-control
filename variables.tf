@@ -58,6 +58,13 @@ variable "paddle_product_ids" {
   type        = map(string)
 }
 
+variable "paddle_webhooks_secret" {
+  default     = ""
+  description = "Paddle Webhooks Secret"
+  sensitive   = true
+  type        = string
+}
+
 variable "resource_prefix" {
   description = "Prefix for naming resources. Lower case only, No periods"
   type        = string
