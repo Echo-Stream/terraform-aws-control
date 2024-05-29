@@ -38,22 +38,26 @@ variable "environment" {
 }
 
 variable "paddle_api_key" {
+  default     = ""
   description = "Paddle API Key"
   sensitive   = true
   type        = string
 }
 
 variable "paddle_client_side_token" {
+  default     = ""
   description = "Paddle Client-side Token"
   type        = string
 }
 
 variable "paddle_price_ids" {
+  default     = {}
   description = "Paddle Price IDs"
   type        = map(string)
 }
 
 variable "paddle_product_ids" {
+  default     = {}
   description = "Paddle Product IDs"
   type        = map(string)
 }
