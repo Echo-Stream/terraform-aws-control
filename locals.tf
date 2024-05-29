@@ -70,6 +70,7 @@ locals {
     AUDIT_FIREHOSE_LOG_GROUP                   = local.audit_firehose_log_group
     AUDIT_FIREHOSE_ROLE                        = aws_iam_role.audit_firehose.arn
     AUDITOR_ROLE                               = aws_iam_role.auditor.arn
+    BILLING_ENABLED                            = var.billing_enabled ? "True" : "False"
     BULK_DATA_AWS_ACCESS_KEY_ID                = aws_iam_access_key.presign_bulk_data.id
     BULK_DATA_AWS_SECRET_ACCESS_KEY            = aws_iam_access_key.presign_bulk_data.secret
     BULK_DATA_IAM_USER                         = aws_iam_user.presign_bulk_data.arn
@@ -84,6 +85,10 @@ locals {
     MANAGED_APP_CLOUD_INIT_NOTIFY_SES_TEMPLATE = aws_ses_template.managed_app_cloud_init_notify.name
     MANAGED_APP_CLOUD_INIT_QUEUE               = aws_sqs_queue.managed_app_cloud_init.url
     NOTIFY_USER_SES_TEMPLATE                   = aws_ses_template.notify_user.name
+    PADDLE_API_KEY_SECRET_ARN                  = aws_secretsmanager_secret.paddle_api_key.arn
+    PADDLE_BASE_URL                            = var.environment == "prod" ? "https://api.paddle.com" : "https://sandbox-api.paddle.com"
+    PADDLE_PRICE_IDS                           = jsonencode(var.paddle_price_ids)
+    PADDLE_PRODUCT_IDS                         = jsonencode(var.paddle_product_ids)
     REBUILD_NOTIFICATION_QUEUE                 = aws_sqs_queue.rebuild_notifications.url
     RECORD_TENANT_QUEUE                        = aws_sqs_queue.record_tenant.url
     REGION                                     = data.aws_region.current.name
