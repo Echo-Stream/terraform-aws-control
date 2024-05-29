@@ -106,11 +106,13 @@ data "archive_file" "edge_config" {
     content = templatefile(
       "${path.module}/scripts/edge-config.py",
       {
-        billing_enabled  = "False"
-        client_id        = aws_cognito_user_pool_client.echostream_ui_userpool_client.id
-        graphql_endpoint = local.appsync_custom_url
-        region           = data.aws_region.current.name
-        user_pool_id     = aws_cognito_user_pool.echostream_ui.id
+        billing_enabled          = var.billing_enabled ? "True" : "False"
+        client_id                = aws_cognito_user_pool_client.echostream_ui_userpool_client.id
+        graphql_endpoint         = local.appsync_custom_url
+        paddle_client_side_token = var.paddle_client_side_token
+        paddle_environment       = var.environment == "prod" ? "production" : "sandbox"
+        region                   = data.aws_region.current.name
+        user_pool_id             = aws_cognito_user_pool.echostream_ui.id
       }
     )
     filename = "function.py"

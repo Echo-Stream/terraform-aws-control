@@ -10,6 +10,8 @@ BODY = json.dumps(
         "billingEnabled": ${billing_enabled},
         "clientId": "${client_id}",
         "graphqlEndpoint": "${graphql_endpoint}",
+        "paddleClientSideToken": "${paddle_client_side_token}",
+        "paddleEnvironment": "${paddle_environment}",
         "region": "${region}",
         "userPoolId": "${user_pool_id}",
     },
