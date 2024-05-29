@@ -38,14 +38,14 @@ variable "environment" {
 }
 
 variable "paddle_api_key" {
-  default     = ""
+  default     = "unknown"
   description = "Paddle API Key"
   sensitive   = true
   type        = string
 }
 
 variable "paddle_client_side_token" {
-  default     = ""
+  default     = "unknown"
   description = "Paddle Client-side Token"
   type        = string
 }
@@ -63,7 +63,7 @@ variable "paddle_product_ids" {
 }
 
 variable "paddle_webhooks_secret" {
-  default     = ""
+  default     = "unknown"
   description = "Paddle Webhooks Secret"
   sensitive   = true
   type        = string
