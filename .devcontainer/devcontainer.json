@@ -19,9 +19,7 @@
 		"codespaces": {
 			"repositories": {
 				"Echo-Stream/echo-tools": {
-					"permissions": {
-						"contents": "read"
-					}
+					"permissions": "read-all"
 				}
 			}
 		}
