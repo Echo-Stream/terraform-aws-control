@@ -5,8 +5,7 @@ variable "authorized_domains" {
 }
 
 variable "billing_enabled" {
-  default     = false
-  description = "True is billing is enabled via Paddle."
+  description = "True if billing is enabled via Paddle."
   type        = bool
 }
 
