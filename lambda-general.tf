@@ -508,7 +508,7 @@ data "archive_file" "paddle_webhooks" {
     content = templatefile(
       "${path.module}/scripts/paddle-webhooks.py",
       {
-        paddle_webhooks_secret_arn = aws_secretsmanager_secret.paddle_webhooks_secret.arn
+        paddle_webhooks_secret_arn = var.billing_enabled ? aws_secretsmanager_secret.paddle_webhooks_secret[0].arn : ""
       }
     )
     filename = "function.py"
@@ -523,7 +523,7 @@ data "aws_iam_policy_document" "paddle_webhooks" {
     ]
 
     resources = [
-      aws_secretsmanager_secret.paddle_webhooks_secret.arn
+      var.billing_enabled ? aws_secretsmanager_secret.paddle_webhooks_secret[0].arn : ""
     ]
 
     sid = "AllowSecretsManagerAccess"
