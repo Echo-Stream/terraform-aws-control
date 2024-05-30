@@ -37,11 +37,6 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "lambda_environmen
   }
 }
 
-resource "aws_s3_bucket_acl" "lambda_environment" {
-  bucket = aws_s3_bucket.lambda_environment.id
-  acl    = "private"
-}
-
 resource "aws_s3_bucket_public_access_block" "lambda_environment" {
   bucket                  = aws_s3_bucket.lambda_environment.id
   block_public_acls       = true
