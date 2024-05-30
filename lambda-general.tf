@@ -551,7 +551,10 @@ resource "aws_lambda_function" "paddle_webhooks" {
   dead_letter_config {
     target_arn = local.lambda_dead_letter_arn
   }
-  description      = "Handles Paddle webhooks"
+  description = "Handles Paddle webhooks"
+  environment {
+    variables = locals.common_lambda_environment_variables
+  }
   filename         = data.archive_file.paddle_webhooks.output_path
   function_name    = "${var.resource_prefix}-paddle-webhooks"
   handler          = "function.lambda_handler"
