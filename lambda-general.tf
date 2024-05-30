@@ -323,6 +323,7 @@ data "aws_iam_policy_document" "managed_app_registration" {
 
     sid = "SESSendTemplatedEmail"
   }
+
 }
 
 resource "aws_iam_policy" "managed_app_registration" {
@@ -528,6 +529,16 @@ data "aws_iam_policy_document" "paddle_webhooks" {
     ]
 
     sid = "AllowSecretsManagerAccess"
+  }
+
+  statement {
+    actions = [
+      "sns:Publish",
+    ]
+
+    resources = [local.lambda_dead_letter_arn]
+
+    sid = "AllowDeadLetterWriting"
   }
 }
 
