@@ -147,7 +147,7 @@ locals {
   common_lambda_environment_variables = {
     CONTROL_REGION     = data.aws_region.current.name
     ENVIRONMENT_BUCKET = aws_s3_bucket.lambda_environment.bucket
-    ENVRIONMENT_KEY    = aws_s3_object.lambda_environment.key
+    ENVIRONMENT_KEY    = aws_s3_object.lambda_environment.key
   }
 }
 
