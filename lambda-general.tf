@@ -344,6 +344,7 @@ module "managed_app_registration" {
   policy_arns = [
     aws_iam_policy.graph_ddb_read.arn,
     aws_iam_policy.managed_app_registration.arn,
+    aws_iam_policy.read_lambda_environment.arn,
   ]
 
   runtime       = local.lambda_runtime
@@ -540,7 +541,8 @@ resource "aws_iam_role" "paddle_webhooks" {
   managed_policy_arns = [
     data.aws_iam_policy.aws_lambda_basic_execution_role.arn,
     aws_iam_policy.graph_ddb_read.arn,
-    aws_iam_policy.graph_ddb_write.arn
+    aws_iam_policy.graph_ddb_write.arn,
+    aws_iam_policy.read_lambda_environment.arn,
   ]
   name = "${var.resource_prefix}-paddle-webhooks"
   tags = local.tags

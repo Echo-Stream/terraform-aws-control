@@ -145,6 +145,7 @@ module "deployment_handler" {
     aws_iam_policy.ecr_read.arn,
     aws_iam_policy.graph_ddb_read.arn,
     aws_iam_policy.graph_ddb_write.arn,
+    aws_iam_policy.read_lambda_environment.arn,
   ]
 
   runtime       = local.lambda_runtime
@@ -256,6 +257,7 @@ module "rebuild_notifications" {
   policy_arns = [
     aws_iam_policy.artifacts_bucket_read.arn,
     aws_iam_policy.graph_ddb_read.arn,
+    aws_iam_policy.read_lambda_environment.arn,
     aws_iam_policy.rebuild_notifications.arn,
   ]
 

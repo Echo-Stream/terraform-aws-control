@@ -52,6 +52,7 @@ module "graph_table_dynamodb_trigger" {
   policy_arns = [
     aws_iam_policy.graph_ddb_read.arn,
     aws_iam_policy.graph_table_dynamodb_trigger.arn,
+    aws_iam_policy.read_lambda_environment.arn,
   ]
 
   runtime       = local.lambda_runtime
