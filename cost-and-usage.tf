@@ -73,11 +73,6 @@ resource "aws_s3_bucket" "cost_and_usage" {
   tags = local.tags
 }
 
-resource "aws_s3_bucket_acl" "cost_and_usage" {
-  bucket = aws_s3_bucket.cost_and_usage.id
-  acl    = "private"
-}
-
 resource "aws_s3_bucket_lifecycle_configuration" "cost_and_usage" {
   bucket = aws_s3_bucket.cost_and_usage.id
 

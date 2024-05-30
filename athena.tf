@@ -41,11 +41,6 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "athena_query_resu
   }
 }
 
-resource "aws_s3_bucket_acl" "athena_query_results" {
-  bucket = aws_s3_bucket.athena_query_results.id
-  acl    = "private"
-}
-
 resource "aws_s3_bucket_public_access_block" "athena_query_results" {
   bucket                  = aws_s3_bucket.athena_query_results.id
   block_public_acls       = true
