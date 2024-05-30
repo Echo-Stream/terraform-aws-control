@@ -553,7 +553,7 @@ resource "aws_lambda_function" "paddle_webhooks" {
   }
   description = "Handles Paddle webhooks"
   environment {
-    variables = locals.common_lambda_environment_variables
+    variables = local.common_lambda_environment_variables
   }
   filename         = data.archive_file.paddle_webhooks.output_path
   function_name    = "${var.resource_prefix}-paddle-webhooks"
