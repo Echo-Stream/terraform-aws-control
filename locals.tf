@@ -69,6 +69,7 @@ locals {
     graph_table_system_stream_handler  = "${local.artifacts["control_lambda"]}/graph-table-system-stream-handler.zip"
     graph_table_tenant_stream_handler  = "${local.artifacts["control_lambda"]}/graph-table-tenant-stream-handler.zip"
     managed_app_registration           = "${local.artifacts["control_lambda"]}/managed-app-registration.zip"
+    paddle_webhooks                    = "${local.artifacts["control_lambda"]}/paddle-webhooks.zip"
     rebuild_notifications              = "${local.artifacts["control_lambda"]}/rebuild-notifications.zip"
     ui_cognito_post_confirmation       = "${local.artifacts["control_lambda"]}/ui-cognito-post-confirmation.zip"
     ui_cognito_pre_authentication      = "${local.artifacts["control_lambda"]}/ui-cognito-pre-authentication.zip"

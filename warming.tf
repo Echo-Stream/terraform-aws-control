@@ -65,11 +65,20 @@ resource "aws_lambda_permission" "warming" {
     module.appsync_datasource.name,
     module.graph_table_dynamodb_trigger.name,
     module.graph_table_system_stream_handler.name,
-    module.graph_table_tenant_stream_handler.name
+    module.graph_table_tenant_stream_handler.name,
   ])
   statement_id  = "AllowExecutionFromSNS"
   action        = "lambda:InvokeFunction"
   function_name = each.value
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.warming.arn
+}
+
+resource "aws_lambda_permission" "warmin_paddle_webhooks" {
+  count         = var.billing_enabled ? 1 : 0
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = module.paddle_webhooks[0].name
   principal     = "sns.amazonaws.com"
   source_arn    = aws_sns_topic.warming.arn
 }
@@ -96,4 +105,11 @@ resource "aws_sns_topic_subscription" "warming_graph_table_tenant_stream_handler
   topic_arn = aws_sns_topic.warming.arn
   protocol  = "lambda"
   endpoint  = module.graph_table_tenant_stream_handler.arn
+}
+
+resource "aws_sns_topic_subscription" "warming_paddle_webhooks" {
+  count     = var.billing_enabled ? 1 : 0
+  topic_arn = aws_sns_topic.warming.arn
+  protocol  = "lambda"
+  endpoint  = module.paddle_webhooks[0].arn
 }

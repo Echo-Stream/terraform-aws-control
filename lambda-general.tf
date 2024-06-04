@@ -502,21 +502,6 @@ resource "aws_lambda_invocation" "upgrade_function_logs" {
 ##      paddle-webhooks     ##
 ##############################
 
-data "archive_file" "paddle_webhooks" {
-  type        = "zip"
-  output_path = "${path.module}/paddle-webhooks.zip"
-
-  source {
-    content = templatefile(
-      "${path.module}/scripts/paddle-webhooks.py",
-      {
-        paddle_webhooks_secret_arn = var.billing_enabled ? aws_secretsmanager_secret.paddle_webhooks_secret[0].arn : ""
-      }
-    )
-    filename = "function.py"
-  }
-}
-
 data "aws_iam_policy_document" "paddle_webhooks" {
 
   statement {
@@ -542,46 +527,43 @@ data "aws_iam_policy_document" "paddle_webhooks" {
   }
 }
 
-resource "aws_iam_role" "paddle_webhooks" {
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
-  count              = var.billing_enabled ? 1 : 0
-  inline_policy {
-    name   = "${var.resource_prefix}-paddle-webhooks"
-    policy = data.aws_iam_policy_document.paddle_webhooks.json
-  }
-  managed_policy_arns = [
-    data.aws_iam_policy.aws_lambda_basic_execution_role.arn,
-    aws_iam_policy.graph_ddb_read.arn,
-    aws_iam_policy.graph_ddb_write.arn,
-    aws_iam_policy.read_lambda_environment.arn,
-  ]
-  name = "${var.resource_prefix}-paddle-webhooks"
-  tags = local.tags
+resource "aws_iam_policy" "paddle_webhooks" {
+  count       = var.billing_enabled ? 1 : 0
+  description = "IAM permissions for paddle-webhooks lambda"
+  name        = "${var.resource_prefix}-paddle-webhooks"
+  policy      = data.aws_iam_policy_document.paddle_webhooks.json
 }
 
-resource "aws_lambda_function" "paddle_webhooks" {
-  count = var.billing_enabled ? 1 : 0
-  dead_letter_config {
-    target_arn = local.lambda_dead_letter_arn
-  }
-  description = "Handles Paddle webhooks"
-  environment {
-    variables = local.common_lambda_environment_variables
-  }
-  filename         = data.archive_file.paddle_webhooks.output_path
-  function_name    = "${var.resource_prefix}-paddle-webhooks"
-  handler          = "function.lambda_handler"
-  layers           = [local.echocore_layer_version_arns[data.aws_region.current.name]]
-  memory_size      = 1536
-  role             = aws_iam_role.paddle_webhooks[0].arn
-  runtime          = local.lambda_runtime
-  source_code_hash = data.archive_file.paddle_webhooks.output_base64sha256
-  tags             = local.tags
-  timeout          = 30
+module "paddle_webhooks" {
+  count                 = var.billing_enabled ? 1 : 0
+  description           = "Receives and processes Paddle Webhooks"
+  dead_letter_arn       = local.lambda_dead_letter_arn
+  environment_variables = merge(local.common_lambda_environment_variables, { PADDLE_WEBHOOKS_SECRET_ARN = aws_secretsmanager_secret.paddle_webhooks_secret[0].arn })
+  handler               = "function.handler"
+  kms_key_arn           = local.lambda_env_vars_kms_key_arn
+  layers                = [local.echocore_layer_version_arns[data.aws_region.current.name]]
+  memory_size           = 1536
+  name                  = "${var.resource_prefix}-paddle-webhooks"
+
+  policy_arns = [
+    aws_iam_policy.graph_ddb_read.arn,
+    aws_iam_policy.graph_ddb_write.arn,
+    aws_iam_policy.paddle_webhooks[0].arn,
+    aws_iam_policy.read_lambda_environment.arn,
+  ]
+
+  runtime       = local.lambda_runtime
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["paddle_webhooks"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "4.0.2"
+
 }
 
 resource "aws_lambda_function_url" "paddle_webhooks" {
   authorization_type = "NONE"
   count              = var.billing_enabled ? 1 : 0
-  function_name      = aws_lambda_function.paddle_webhooks[0].function_name
+  function_name      = module.paddle_webhooks[0].name
 }
