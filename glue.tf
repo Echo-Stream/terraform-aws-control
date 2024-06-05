@@ -112,6 +112,12 @@ resource "aws_glue_catalog_table" "tenant" {
       type    = "string"
       comment = "The name of the Tenant"
     }
+
+    columns {
+      name    = "subscriptionId"
+      type    = "string"
+      comment = "The subscription ID for the Tenant"
+    }
   }
 }
 
