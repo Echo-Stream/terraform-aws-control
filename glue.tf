@@ -133,13 +133,15 @@ resource "aws_glue_crawler" "cost_and_usage_crawler" {
   tags          = local.tags
 
   s3_target {
-    path = "s3://${aws_s3_bucket.cost_and_usage.id}/exports/${local.cost_and_usage_export_name}/data"
+    path = "s3://${aws_s3_bucket.cost_and_usage.id}/exports/${local.cost_and_usage_export_name}/data/"
   }
 
   schema_change_policy {
     delete_behavior = "DELETE_FROM_DATABASE"
     update_behavior = "UPDATE_IN_DATABASE"
   }
+
+  table_prefix = "costandusage"
 }
 
 resource "aws_iam_role" "cost_and_usage_crawler" {
@@ -161,7 +163,7 @@ data "aws_iam_policy_document" "cost_and_usage_crawler" {
     ]
 
     resources = [
-      "${aws_s3_bucket.cost_and_usage.arn}/reports/CostAndUsage/CostAndUsage/*",
+      "${aws_s3_bucket.cost_and_usage.arn}/exports/${local.cost_and_usage_export_name}/*",
     ]
 
     sid = "MinimumPermissionsToCrawl"
