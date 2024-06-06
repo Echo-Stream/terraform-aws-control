@@ -474,7 +474,7 @@ data "aws_iam_policy_document" "record_cloudwatch_alarm" {
 
     resources = [aws_sqs_queue.record_cloudwatch_alarm.arn]
 
-    sid = "RecordTenantQueueAccess"
+    sid = "RecordCloudwatchAlarmQueueAccess"
   }
 
   statement {
