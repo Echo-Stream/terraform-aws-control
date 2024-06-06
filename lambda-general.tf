@@ -523,6 +523,18 @@ data "aws_iam_policy_document" "paddle_webhooks" {
 
     sid = "AllowDeadLetterWriting"
   }
+
+  statement {
+    actions = [
+      "sqs:SendMessage*",
+      "sqs:GetQueueAttributes"
+    ]
+
+    resources = [aws_sqs_queue.record_tenant.arn]
+
+    sid = "RecordTenantQueueAccess"
+  }
+
 }
 
 resource "aws_iam_policy" "paddle_webhooks" {
