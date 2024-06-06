@@ -509,9 +509,7 @@ data "aws_iam_policy_document" "paddle_webhooks" {
       "secretsmanager:GetSecretValue"
     ]
 
-    resources = [
-      var.billing_enabled ? aws_secretsmanager_secret.paddle_webhooks_secret[0].arn : ""
-    ]
+    resources = var.billing_enabled ? [aws_secretsmanager_secret.paddle_api_key[0].arn, aws_secretsmanager_secret.paddle_webhooks_secret[0].arn] : []
 
     sid = "AllowSecretsManagerAccess"
   }
