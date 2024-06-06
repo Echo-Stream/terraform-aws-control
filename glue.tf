@@ -122,12 +122,65 @@ resource "aws_glue_catalog_table" "tenant" {
 }
 
 ###################################################
+################### ALARMS ########################
+###################################################
+resource "aws_glue_crawler" "alarms" {
+  database_name = aws_glue_catalog_database.billing.name
+  description   = "Keeps alarms table up to date in Athena"
+  name          = "${var.resource_prefix}-alarms"
+  role          = aws_iam_role.alarms_crawler.arn
+  schedule      = "cron(0 3 * * ? *)"
+  tags          = local.tags
+
+  s3_target {
+    path = "s3://${aws_s3_bucket.cost_and_usage.id}/alarms/"
+  }
+
+  schema_change_policy {
+    delete_behavior = "DELETE_FROM_DATABASE"
+    update_behavior = "UPDATE_IN_DATABASE"
+  }
+}
+
+resource "aws_iam_role" "alarms_crawler" {
+  assume_role_policy = data.aws_iam_policy_document.glue_assume_role.json
+  name               = "${var.resource_prefix}-alarms-crawler"
+  tags               = local.tags
+}
+
+resource "aws_iam_role_policy_attachment" "alarms_crawler" {
+  role       = aws_iam_role.alarms_crawler.id
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+}
+
+data "aws_iam_policy_document" "alarms_crawler" {
+  statement {
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+    ]
+
+    resources = [
+      "${aws_s3_bucket.cost_and_usage.arn}/alarms/*",
+    ]
+
+    sid = "MinimumPermissionsToCrawl"
+  }
+}
+
+resource "aws_iam_role_policy" "alarms_crawler" {
+  name   = "${var.resource_prefix}-alarms-crawler"
+  policy = data.aws_iam_policy_document.alarms_crawler.json
+  role   = aws_iam_role.alarms_crawler.id
+}
+
+###################################################
 ################ COST AND USAGE ###################
 ###################################################
-resource "aws_glue_crawler" "cost_and_usage_crawler" {
+resource "aws_glue_crawler" "cost_and_usage" {
   database_name = aws_glue_catalog_database.billing.name
   description   = "Keeps costandusage reports table up to date in Athena"
-  name          = "${var.resource_prefix}-cost-and-usage-crawler"
+  name          = "${var.resource_prefix}-cost-and-usage"
   role          = aws_iam_role.cost_and_usage_crawler.arn
   schedule      = "cron(0 3 * * ? *)"
   tags          = local.tags
