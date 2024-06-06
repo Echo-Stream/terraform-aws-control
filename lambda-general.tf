@@ -518,6 +518,7 @@ resource "aws_lambda_function" "record_cloudwatch_alarm" {
 }
 
 resource "aws_lambda_event_source_mapping" "record_cloudwatch_alarm" {
+  depends_on       = [aws_iam_role.record_cloudwatch_alarm]
   event_source_arn = aws_sqs_queue.record_cloudwatch_alarm.arn
   function_name    = aws_lambda_function.record_cloudwatch_alarm.function_name
 }
@@ -611,6 +612,7 @@ resource "aws_lambda_function" "record_tenant" {
 }
 
 resource "aws_lambda_event_source_mapping" "record_tenant" {
+  depends_on       = [aws_iam_role.record_tenant]
   event_source_arn = aws_sqs_queue.record_tenant.arn
   function_name    = aws_lambda_function.record_tenant.function_name
 }
