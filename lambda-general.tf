@@ -280,6 +280,10 @@ resource "aws_lambda_event_source_mapping" "managed_app_cloud_init" {
   function_name    = aws_lambda_function.managed_app_cloud_init.function_name
 }
 
+#################################
+##  managed-app-registration   ##
+#################################
+
 
 data "aws_iam_policy_document" "managed_app_registration" {
 
@@ -355,6 +359,167 @@ module "managed_app_registration" {
   tags          = local.tags
   timeout       = 300
   version       = "4.0.2"
+}
+
+##############################
+##      paddle-webhooks     ##
+##############################
+
+data "aws_iam_policy_document" "paddle_webhooks" {
+
+  statement {
+    actions = [
+      "secretsmanager:GetSecretValue"
+    ]
+
+    resources = var.billing_enabled ? [aws_secretsmanager_secret.paddle_api_key[0].arn, aws_secretsmanager_secret.paddle_webhooks_secret[0].arn] : []
+
+    sid = "AllowSecretsManagerAccess"
+  }
+
+  statement {
+    actions = [
+      "sns:Publish",
+    ]
+
+    resources = [local.lambda_dead_letter_arn]
+
+    sid = "AllowDeadLetterWriting"
+  }
+}
+
+resource "aws_iam_policy" "paddle_webhooks" {
+  count       = var.billing_enabled ? 1 : 0
+  description = "IAM permissions for paddle-webhooks lambda"
+  name        = "${var.resource_prefix}-paddle-webhooks"
+  policy      = data.aws_iam_policy_document.paddle_webhooks.json
+}
+
+module "paddle_webhooks" {
+  count                 = var.billing_enabled ? 1 : 0
+  description           = "Receives and processes Paddle Webhooks"
+  dead_letter_arn       = local.lambda_dead_letter_arn
+  environment_variables = merge(local.common_lambda_environment_variables, { PADDLE_WEBHOOKS_SECRET_ARN = aws_secretsmanager_secret.paddle_webhooks_secret[0].arn })
+  handler               = "function.handler"
+  kms_key_arn           = local.lambda_env_vars_kms_key_arn
+  layers                = [local.echocore_layer_version_arns[data.aws_region.current.name]]
+  memory_size           = 1536
+  name                  = "${var.resource_prefix}-paddle-webhooks"
+
+  policy_arns = [
+    aws_iam_policy.graph_ddb_read.arn,
+    aws_iam_policy.graph_ddb_write.arn,
+    aws_iam_policy.paddle_webhooks[0].arn,
+    aws_iam_policy.read_lambda_environment.arn,
+  ]
+
+  runtime       = local.lambda_runtime
+  s3_bucket     = local.artifacts_bucket
+  s3_object_key = local.lambda_functions_keys["paddle_webhooks"]
+  source        = "QuiNovas/lambda/aws"
+  tags          = local.tags
+  timeout       = 30
+  version       = "4.0.2"
+
+}
+
+resource "aws_lambda_function_url" "paddle_webhooks" {
+  authorization_type = "NONE"
+  count              = var.billing_enabled ? 1 : 0
+  function_name      = module.paddle_webhooks[0].name
+}
+
+################################
+##  record-cloudwatch-alarm   ##
+################################
+data "archive_file" "record_cloudwatch_alarm" {
+  type        = "zip"
+  output_path = "${path.module}/record-cloudwatch-alarm.zip"
+
+  source {
+    content = templatefile(
+      "${path.module}/scripts/record-cloudwatch-alarm.py",
+      {
+        cost_and_usage_bucket = aws_s3_bucket.cost_and_usage.id
+      }
+    )
+    filename = "function.py"
+  }
+}
+
+data "aws_iam_policy_document" "record_cloudwatch_alarm" {
+
+  statement {
+    actions = [
+      "s3:AbortMultipartUpload",
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:PutObject",
+    ]
+
+    resources = [
+      aws_s3_bucket.cost_and_usage.arn,
+      "${aws_s3_bucket.cost_and_usage.arn}/*"
+    ]
+
+    sid = "AllowReadAndWriteToCostAndUsageBucket"
+  }
+
+  statement {
+    actions = [
+      "sqs:ReceiveMessage*",
+      "sqs:DeleteMessage*",
+      "sqs:GetQueueAttributes"
+    ]
+
+    resources = [aws_sqs_queue.record_cloudwatch_alarm.arn]
+
+    sid = "RecordTenantQueueAccess"
+  }
+
+  statement {
+    actions = [
+      "sns:Publish",
+    ]
+
+    resources = [local.lambda_dead_letter_arn]
+
+    sid = "AllowDeadLetterWriting"
+  }
+}
+
+resource "aws_iam_role" "record_cloudwatch_alarm" {
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  inline_policy {
+    name   = "${var.resource_prefix}-record-cloudwatch-alarm"
+    policy = data.aws_iam_policy_document.record_cloudwatch_alarm.json
+  }
+  managed_policy_arns = [data.aws_iam_policy.aws_lambda_basic_execution_role.arn]
+  name                = "${var.resource_prefix}-record-cloudwatch-alarm"
+  tags                = local.tags
+}
+
+resource "aws_lambda_function" "record_cloudwatch_alarm" {
+  dead_letter_config {
+    target_arn = local.lambda_dead_letter_arn
+  }
+  description      = "Updates Glue db with tenant cloudwatch alarm counts"
+  filename         = data.archive_file.record_cloudwatch_alarm.output_path
+  function_name    = "${var.resource_prefix}-record-cloudwatch-alarm"
+  handler          = "function.lambda_handler"
+  layers           = [local.awssdkpandas_layer]
+  memory_size      = 1536
+  publish          = true
+  role             = aws_iam_role.record_cloudwatch_alarm.arn
+  runtime          = local.lambda_runtime
+  source_code_hash = data.archive_file.record_cloudwatch_alarm.output_base64sha256
+  tags             = local.tags
+  timeout          = 900
+}
+
+resource "aws_lambda_event_source_mapping" "record_cloudwatch_alarm" {
+  event_source_arn = aws_sqs_queue.record_cloudwatch_alarm.arn
+  function_name    = aws_lambda_function.record_cloudwatch_alarm.function_name
 }
 
 ######################
@@ -495,73 +660,4 @@ resource "aws_lambda_function" "upgrade_function_logs" {
 resource "aws_lambda_invocation" "upgrade_function_logs" {
   function_name = aws_lambda_function.upgrade_function_logs.function_name
   input         = jsonencode({})
-}
-
-
-##############################
-##      paddle-webhooks     ##
-##############################
-
-data "aws_iam_policy_document" "paddle_webhooks" {
-
-  statement {
-    actions = [
-      "secretsmanager:GetSecretValue"
-    ]
-
-    resources = var.billing_enabled ? [aws_secretsmanager_secret.paddle_api_key[0].arn, aws_secretsmanager_secret.paddle_webhooks_secret[0].arn] : []
-
-    sid = "AllowSecretsManagerAccess"
-  }
-
-  statement {
-    actions = [
-      "sns:Publish",
-    ]
-
-    resources = [local.lambda_dead_letter_arn]
-
-    sid = "AllowDeadLetterWriting"
-  }
-}
-
-resource "aws_iam_policy" "paddle_webhooks" {
-  count       = var.billing_enabled ? 1 : 0
-  description = "IAM permissions for paddle-webhooks lambda"
-  name        = "${var.resource_prefix}-paddle-webhooks"
-  policy      = data.aws_iam_policy_document.paddle_webhooks.json
-}
-
-module "paddle_webhooks" {
-  count                 = var.billing_enabled ? 1 : 0
-  description           = "Receives and processes Paddle Webhooks"
-  dead_letter_arn       = local.lambda_dead_letter_arn
-  environment_variables = merge(local.common_lambda_environment_variables, { PADDLE_WEBHOOKS_SECRET_ARN = aws_secretsmanager_secret.paddle_webhooks_secret[0].arn })
-  handler               = "function.handler"
-  kms_key_arn           = local.lambda_env_vars_kms_key_arn
-  layers                = [local.echocore_layer_version_arns[data.aws_region.current.name]]
-  memory_size           = 1536
-  name                  = "${var.resource_prefix}-paddle-webhooks"
-
-  policy_arns = [
-    aws_iam_policy.graph_ddb_read.arn,
-    aws_iam_policy.graph_ddb_write.arn,
-    aws_iam_policy.paddle_webhooks[0].arn,
-    aws_iam_policy.read_lambda_environment.arn,
-  ]
-
-  runtime       = local.lambda_runtime
-  s3_bucket     = local.artifacts_bucket
-  s3_object_key = local.lambda_functions_keys["paddle_webhooks"]
-  source        = "QuiNovas/lambda/aws"
-  tags          = local.tags
-  timeout       = 30
-  version       = "4.0.2"
-
-}
-
-resource "aws_lambda_function_url" "paddle_webhooks" {
-  authorization_type = "NONE"
-  count              = var.billing_enabled ? 1 : 0
-  function_name      = module.paddle_webhooks[0].name
 }

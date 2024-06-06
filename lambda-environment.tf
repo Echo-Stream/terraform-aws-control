@@ -112,6 +112,7 @@ resource "aws_s3_object" "lambda_environment" {
       PADDLE_PRICE_IDS                           = jsonencode(var.paddle_price_ids)
       PADDLE_PRODUCT_IDS                         = jsonencode(var.paddle_product_ids)
       REBUILD_NOTIFICATION_QUEUE                 = aws_sqs_queue.rebuild_notifications.url
+      RECORD_CLOUDWATCH_ALARM_QUEUE              = aws_sqs_queue.record_cloudwatch_alarm.url
       RECORD_TENANT_QUEUE                        = aws_sqs_queue.record_tenant.url
       REGION                                     = data.aws_region.current.name
       REGIONAL_APPSYNC_ENDPOINTS                 = local.regional_appsync_endpoints
