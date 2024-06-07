@@ -386,6 +386,20 @@ data "aws_iam_policy_document" "paddle_webhooks" {
 
     sid = "AllowDeadLetterWriting"
   }
+
+  statement {
+    actions = [
+      "lambda:InvokeFunction"
+    ]
+
+    effect = "Allow"
+
+    resources = [
+      "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.resource_prefix}-paddle-webhooks",
+    ]
+
+    sid = "AllowSelfInvoke"
+  }
 }
 
 resource "aws_iam_policy" "paddle_webhooks" {
@@ -418,7 +432,7 @@ module "paddle_webhooks" {
   s3_object_key = local.lambda_functions_keys["paddle_webhooks"]
   source        = "QuiNovas/lambda/aws"
   tags          = local.tags
-  timeout       = 30
+  timeout       = 900
   version       = "4.0.2"
 
 }
