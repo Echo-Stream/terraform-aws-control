@@ -629,8 +629,16 @@ locals {
       field = "GetAwsCredentials"
       type  = "Tenant"
     }
+    tenant_get_bill = {
+      field = "GetBill"
+      type  = "Tenant"
+    }
     tenant_get_update_payment_transaction_id = {
       field = "GetUpdatePaymentTransactionId"
+      type  = "Tenant"
+    }
+    tenant_list_bills = {
+      field = "ListBills"
       type  = "Tenant"
     }
     tenant_list_changes = {
@@ -847,6 +855,10 @@ locals {
     audit_emitter_node_tenant = {
       field = "tenant"
       type  = "AuditEmitterNode"
+    }
+    bill_status = {
+      field = "status"
+      type  = "Bill"
     }
     bitmap_router_node_config = {
       field = "config"
