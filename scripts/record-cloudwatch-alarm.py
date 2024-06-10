@@ -22,7 +22,7 @@ def lambda_handler(event, _) -> None:
         getLogger().info(f"Alarm update:\n{json.dumps(message, indent=2)}")
         start = pandas.Timestamp(datetime.fromisoformat(message["datetime"]))
         count = 0
-        if not (alarms := tenant_alarms.get(identity)):
+        if (alarms := tenant_alarms.get(identity)) is None:
             try:
                 alarms = awswrangler.s3.read_parquet(
                     path=f"{S3_PARQUET_BASE_PATH}/IDENTITY={identity}/alarms.snappy.parquet"
