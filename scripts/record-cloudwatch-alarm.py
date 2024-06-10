@@ -29,7 +29,7 @@ def lambda_handler(event, _) -> None:
                 )
                 index = cast(
                     pandas.DataFrame,
-                    alarms[(alarms["identity"] == identity) & (alarms["end"].isna())],
+                    alarms[alarms["end"].isna()],
                 ).index
                 if index.size == 1:
                     alarms.at[index[0], "end"] = start
@@ -40,7 +40,6 @@ def lambda_handler(event, _) -> None:
             except awswrangler.exceptions.NoFilesFound:
                 getLogger().info("Initial file creation")
                 alarms = pandas.DataFrame()
-            tenant_alarms[identity] = alarms
         if (count := count + message["increment"]) > 0:
             alarms = pandas.concat(
                 [
@@ -49,7 +48,7 @@ def lambda_handler(event, _) -> None:
                         [
                             dict(
                                 count=count,
-                                end=None,
+                                end=pandas.Timestamp(None),
                                 start=start,
                             )
                         ]
@@ -57,12 +56,13 @@ def lambda_handler(event, _) -> None:
                 ],
                 ignore_index=True,
             )
+        tenant_alarms[identity] = alarms
 
     for identity, alarms in tenant_alarms.items():
         if not alarms.empty:
             awswrangler.s3.to_parquet(
                 df=alarms,
                 compression="snappy",
-                path=f"{S3_PARQUET_BASE_PATH}/IDENTITY={identity}/alarms",
+                path=f"{S3_PARQUET_BASE_PATH}/IDENTITY={identity}/alarms.snappy.parquet",
             )
     getLogger().info(f'Recorded {len(event["Records"])} Alarms')
