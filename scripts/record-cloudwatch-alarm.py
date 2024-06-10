@@ -20,27 +20,27 @@ def lambda_handler(event, _) -> None:
         message = json.loads(record["body"])
         identity = message["identity"]
         getLogger().info(f"Alarm update:\n{json.dumps(message, indent=2)}")
+        start = pandas.Timestamp(datetime.fromisoformat(message["datetime"]))
+        count = 0
         if not (alarms := tenant_alarms.get(identity)):
             try:
                 alarms = awswrangler.s3.read_parquet(
                     path=f"{S3_PARQUET_BASE_PATH}/IDENTITY={identity}/alarms.snappy.parquet"
                 )
+                index = cast(
+                    pandas.DataFrame,
+                    alarms[(alarms["identity"] == identity) & (alarms["end"].isna())],
+                ).index
+                if index.size == 1:
+                    alarms.at[index[0], "end"] = start
+                    count = alarms.at[index[0], "count"]
+                elif not index.empty:
+                    getLogger().error(f"Multiple active alarm records for {identity}")
+                    continue
             except awswrangler.exceptions.NoFilesFound:
                 getLogger().info("Initial file creation")
                 alarms = pandas.DataFrame()
             tenant_alarms[identity] = alarms
-        start = pandas.Timestamp(datetime.fromisoformat(message["datetime"]))
-        count = 0
-        index = cast(
-            pandas.DataFrame,
-            alarms[(alarms["identity"] == identity) & (alarms["end"].isna())],
-        ).index
-        if index.size == 1:
-            alarms.at[index[0], "end"] = start
-            count = alarms.at[index[0], "count"]
-        elif not index.empty:
-            getLogger().error(f"Multiple active alarm records for {identity}")
-            continue
         if (count := count + message["increment"]) > 0:
             alarms = pandas.concat(
                 [
