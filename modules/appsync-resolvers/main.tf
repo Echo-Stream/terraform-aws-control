@@ -629,20 +629,20 @@ locals {
       field = "GetAwsCredentials"
       type  = "Tenant"
     }
-    tenant_get_bill = {
-      field = "GetBill"
-      type  = "Tenant"
-    }
     tenant_get_update_payment_transaction_id = {
       field = "GetUpdatePaymentTransactionId"
       type  = "Tenant"
     }
-    tenant_list_bills = {
-      field = "ListBills"
+    tenant_get_usage = {
+      field = "GetUsage"
       type  = "Tenant"
     }
     tenant_list_changes = {
       field = "ListChanges"
+      type  = "Tenant"
+    }
+    tenant_list_usages = {
+      field = "ListUsages"
       type  = "Tenant"
     }
     tenant_update = {
@@ -855,10 +855,6 @@ locals {
     audit_emitter_node_tenant = {
       field = "tenant"
       type  = "AuditEmitterNode"
-    }
-    bill_status = {
-      field = "status"
-      type  = "Bill"
     }
     bitmap_router_node_config = {
       field = "config"
@@ -1383,6 +1379,10 @@ locals {
     timer_node_tenant = {
       field = "tenant"
       type  = "TimerNode"
+    }
+    usage_line_items = {
+      field = "lineItems"
+      type  = "Usage"
     }
     webhook_node_config = {
       field = "config"
