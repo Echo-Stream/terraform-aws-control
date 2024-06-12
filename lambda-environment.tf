@@ -89,10 +89,12 @@ resource "aws_s3_object" "lambda_environment" {
       APP_USER_POOL_CLIENT_IDS                   = local.app_userpool_client_ids
       APPSYNC_ENDPOINT                           = local.appsync_custom_url
       ARTIFACTS_BUCKET                           = local.artifacts_bucket_prefix
+      ATHENA_WORKGROUP                           = aws_athena_workgroup.echostream_athena.name
       AUDITOR_CODE                               = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/auditor.zip\"}"
       AUDIT_FIREHOSE_LOG_GROUP                   = local.audit_firehose_log_group
       AUDIT_FIREHOSE_ROLE                        = aws_iam_role.audit_firehose.arn
       AUDITOR_ROLE                               = aws_iam_role.auditor.arn
+      BILLING_DATABASE                           = aws_glue_catalog_database.billing.name
       BILLING_ENABLED                            = var.billing_enabled ? "True" : "False"
       BULK_DATA_AWS_ACCESS_KEY_ID                = aws_iam_access_key.presign_bulk_data.id
       BULK_DATA_AWS_SECRET_ACCESS_KEY            = aws_iam_access_key.presign_bulk_data.secret
