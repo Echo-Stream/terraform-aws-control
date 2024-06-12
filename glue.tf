@@ -3,6 +3,67 @@ resource "aws_glue_catalog_database" "billing" {
   name        = "${var.resource_prefix}-billing"
 }
 
+###################################################
+################### ALARMS ########################
+###################################################
+
+resource "aws_glue_catalog_table" "alarms" {
+  name          = "alarms"
+  database_name = aws_glue_catalog_database.billing.name
+  description   = "Alarms"
+
+  table_type = "EXTERNAL_TABLE"
+
+  parameters = {
+    "classification"      = "parquet"
+    "parquet.compression" = "SNAPPY"
+    EXTERNAL              = "TRUE"
+  }
+
+  storage_descriptor {
+    location      = "s3://${aws_s3_bucket.cost_and_usage.id}/alarms/"
+    input_format  = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
+    output_format = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
+
+    ser_de_info {
+      name                  = "my-stream"
+      serialization_library = "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
+
+      parameters = {
+        "serialization.format" = 1
+      }
+    }
+
+    columns {
+      name    = "count"
+      type    = "bigint"
+      comment = "The alarm count"
+    }
+
+    columns {
+      name    = "end"
+      type    = "timestamp"
+      comment = "The timestamp when alarm count ends, exclusive"
+    }
+
+    columns {
+      name    = "identity"
+      type    = "string"
+      comment = "Tenant identity"
+    }
+
+    columns {
+      name    = "start"
+      type    = "timestamp"
+      comment = "The timestamp when alarm count starts, inclusive"
+    }
+  }
+}
+
+###################################################
+############## MANAGED INSTANCES ##################
+###################################################
+
 resource "aws_glue_catalog_table" "managed_instances" {
   name          = "managedinstances"
   database_name = aws_glue_catalog_database.billing.name
@@ -68,6 +129,10 @@ resource "aws_glue_catalog_table" "managed_instances" {
   }
 }
 
+###################################################
+#################### TENANTS ######################
+###################################################
+
 resource "aws_glue_catalog_table" "tenant" {
   name          = "tenant"
   database_name = aws_glue_catalog_database.billing.name
@@ -119,59 +184,6 @@ resource "aws_glue_catalog_table" "tenant" {
       comment = "The subscription ID for the Tenant"
     }
   }
-}
-
-###################################################
-################### ALARMS ########################
-###################################################
-resource "aws_glue_crawler" "alarms" {
-  database_name = aws_glue_catalog_database.billing.name
-  description   = "Keeps alarms table up to date in Athena"
-  name          = "${var.resource_prefix}-alarms"
-  role          = aws_iam_role.alarms_crawler.arn
-  schedule      = "cron(0 3 * * ? *)"
-  tags          = local.tags
-
-  s3_target {
-    path = "s3://${aws_s3_bucket.cost_and_usage.id}/alarms/"
-  }
-
-  schema_change_policy {
-    delete_behavior = "DELETE_FROM_DATABASE"
-    update_behavior = "UPDATE_IN_DATABASE"
-  }
-}
-
-resource "aws_iam_role" "alarms_crawler" {
-  assume_role_policy = data.aws_iam_policy_document.glue_assume_role.json
-  name               = "${var.resource_prefix}-alarms-crawler"
-  tags               = local.tags
-}
-
-resource "aws_iam_role_policy_attachment" "alarms_crawler" {
-  role       = aws_iam_role.alarms_crawler.id
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
-}
-
-data "aws_iam_policy_document" "alarms_crawler" {
-  statement {
-    actions = [
-      "s3:GetObject",
-      "s3:PutObject",
-    ]
-
-    resources = [
-      "${aws_s3_bucket.cost_and_usage.arn}/alarms/*",
-    ]
-
-    sid = "MinimumPermissionsToCrawl"
-  }
-}
-
-resource "aws_iam_role_policy" "alarms_crawler" {
-  name   = "${var.resource_prefix}-alarms-crawler"
-  policy = data.aws_iam_policy_document.alarms_crawler.json
-  role   = aws_iam_role.alarms_crawler.id
 }
 
 ###################################################
