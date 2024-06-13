@@ -29,7 +29,6 @@ resource "aws_sqs_queue" "managed_app_cloud_init" {
 
 resource "aws_sqs_queue" "record_cloudwatch_alarm" {
   content_based_deduplication = "true"
-  delay_seconds               = 300
   fifo_queue                  = true
   kms_master_key_id           = "alias/aws/sqs"
   name                        = "${var.resource_prefix}-record-cloudwatch-alarm.fifo"
