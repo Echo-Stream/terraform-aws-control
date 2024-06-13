@@ -133,8 +133,8 @@ resource "aws_glue_catalog_table" "managed_instances" {
 #################### TENANTS ######################
 ###################################################
 
-resource "aws_glue_catalog_table" "tenant" {
-  name          = "tenant"
+resource "aws_glue_catalog_table" "tenants" {
+  name          = "tenants"
   database_name = aws_glue_catalog_database.billing.name
   description   = "Tenants"
 
