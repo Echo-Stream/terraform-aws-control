@@ -3,7 +3,8 @@ locals {
   sqs_names = [
     aws_sqs_queue.system_sqs_queue.name,
     aws_sqs_queue.managed_app_cloud_init.name,
-    aws_sqs_queue.rebuild_notifications.name
+    aws_sqs_queue.rebuild_notifications.name,
+    aws_sqs_queue.record_cloudwatch_alarm.name,
   ]
 
   lambda_names = [
@@ -16,7 +17,9 @@ locals {
     aws_lambda_function.log_retention.function_name,
     aws_lambda_function.managed_app_cloud_init.function_name,
     module.managed_app_registration.name,
+    module.paddle_webhooks.name,
     module.rebuild_notifications.name,
+    aws_lambda_function.record_cloudwatch_alarm.function_name,
     aws_lambda_function.record_tenant.function_name,
     aws_lambda_function.start_rebuild_notifications_state_machine.function_name,
     module.ui_cognito_post_confirmation.name,
