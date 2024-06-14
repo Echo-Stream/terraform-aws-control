@@ -1,3 +1,7 @@
+data "aws_iam_policy" "athena_full_access" {
+  arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
+}
+
 resource "aws_s3_bucket" "athena_query_results" {
   bucket = "${var.resource_prefix}-athena-query-results"
 
@@ -101,24 +105,31 @@ resource "aws_athena_workgroup" "echostream_athena" {
   }
 }
 
-/* Create later when execution role is determined
-resource "aws_athena_workgroup" "echostream_pyspark" {
-  name = "${var.resource_prefix}-pyspark"
+data "aws_iam_policy_document" "athena_query_results_access" {
+  statement {
+    actions = [
+      "s3:AbortMultipartUpload",
+      "s3:GetBucketLocation",
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:ListBucketMultipartUploads",
+      "s3:ListMultipartUploadParts",
+      "s3:PutObject",
+    ]
 
-  configuration {
-    enforce_workgroup_configuration    = true
-    engine_version {
-      selected_engine_version = "PySpark engine version 3"
-    }
-    publish_cloudwatch_metrics_enabled = true
+    effect = "Allow"
 
-    result_configuration {
-      output_location = "s3://${aws_s3_bucket.athena_query_results.bucket}/output/"
+    resources = [
+      aws_s3_bucket.athena_query_results.arn,
+      "${aws_s3_bucket.athena_query_results.arn}/*",
+    ]
 
-      encryption_configuration {
-        encryption_option = "SSE_S3"
-      }
-    }
+    sid = "AthenaQueryResultsAccess"
   }
 }
-*/
+
+resource "aws_iam_policy" "athena_query_results_access" {
+  name        = "${var.resource_prefix}-athena-query-results-access"
+  description = "Policy for Athena to access query results"
+  policy      = data.aws_iam_policy_document.athena_query_results_access.json
+}
