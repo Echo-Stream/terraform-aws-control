@@ -5,6 +5,8 @@ from datetime import datetime, timezone
 from io import BytesIO, TextIOWrapper
 from logging import ERROR, INFO, getLogger
 from os import environ
+from random import randint
+from time import sleep
 from typing import Any, Dict, Generator
 
 import boto3
@@ -26,6 +28,7 @@ COMPUTE_USAGE_TOPIC_ARN = "${compute_usage_topic_arn}"
 
 
 def execute_query(query: str) -> Generator[dict[str, str], None, None]:
+    sleep(randint(1, 5))
     query_execution_id = ATHENA_CLIENT.start_query_execution(
         QueryExecutionContext=dict(Database=BILLING_DATABASE),
         QueryString=query,
@@ -35,26 +38,38 @@ def execute_query(query: str) -> Generator[dict[str, str], None, None]:
         status = ATHENA_CLIENT.get_query_execution(QueryExecutionId=query_execution_id)[
             "QueryExecution"
         ]["Status"]
-        if status["State"] in ("FAILED", "CANCELLED"):
+        if status["State"] == "SUCCEEDED":
+            break
+        elif status["State"] in ("FAILED", "CANCELLED"):
             getLogger().error(
                 f'Athena error:\n{json.dumps(status.get("AthenaError"), indent=2)}'
             )
             raise RuntimeError(
                 f'Athena error: {status.get("AthenaError", dict()).get("ErrorMessage")}'
             )
-        if status["State"] == "SUCCEEDED":
-            break
+        else:
+            sleep_time = randint(1, 10)
+            getLogger().info(
+                f"Athena query status: {status['State']}, sleeping {sleep_time} seconds"
+            )
+            sleep(sleep_time)
+    sleep(randint(1, 5))
     query_results_params = dict(QueryExecutionId=query_execution_id)
     while True:
         results = ATHENA_CLIENT.get_query_results(**query_results_params)
         column_info = results["ResultSet"]["ResultSetMetadata"]["ColumnInfo"]
+        first_row = True
         for row in results["ResultSet"]["Rows"]:
+            if first_row:
+                first_row = False
+                continue
             yield {
                 column["Name"]: row["Data"][i]["VarCharValue"]
                 for i, column in enumerate(column_info)
             }
         if "NextToken" in results:
             query_results_params["NextToken"] = results["NextToken"]
+            sleep(randint(1, 3))
         else:
             break
 
@@ -166,7 +181,7 @@ def compute_usage(identity: str, month: int, year: int) -> None:
 
     total = 0.0
     with BytesIO() as body:
-        with TextIOWrapper(body) as text_body:
+        with TextIOWrapper(body, write_through=True) as text_body:
             with ThreadPoolExecutor() as executor:
                 writer: DictWriter = None
                 for future in as_completed(
@@ -182,16 +197,17 @@ def compute_usage(identity: str, month: int, year: int) -> None:
                             writer = DictWriter(text_body, fieldnames=line_item.keys())
                             writer.writeheader()
                         writer.writerow(line_item)
-    body.seek(0)
-
-    boto3.client(
-        "s3", config=Config(retries=dict(mode="standard")), region_name=AWS_REGION
-    ).put_object(
-        Body=body,
-        Bucket=COST_AND_USAGE_BUCKET,
-        Key=f"usages/IDENTITY={identity}/YEAR={year}/MONTH={month}/usage.csv",
-        Metadata=dict(total=str(total)),
-    )
+            body.seek(0)
+            boto3.client(
+                "s3",
+                config=Config(retries=dict(mode="standard")),
+                region_name=AWS_REGION,
+            ).put_object(
+                Body=body,
+                Bucket=COST_AND_USAGE_BUCKET,
+                Key=f"usages/IDENTITY={identity}/YEAR={year}/MONTH={month}/usage.csv",
+                Metadata=dict(total=str(total)),
+            )
 
 
 def notify_for_tenants() -> None:
