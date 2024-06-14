@@ -17,10 +17,10 @@ data "archive_file" "compute_usage" {
     content = templatefile(
       "${path.module}/scripts/compute-usage.py",
       {
-        athena_workgroup      = aws_athena_workgroup.echostream_athena.name
-        billing_database      = aws_glue_catalog_database.billing.name
-        cost_and_usage_bucket = aws_s3_bucket.cost_and_usage.id,
-        compute_usage_topic_arn   = aws_sns_topic.compute_usage.arn
+        athena_workgroup        = aws_athena_workgroup.echostream_athena.name
+        billing_database        = aws_glue_catalog_database.billing.name
+        cost_and_usage_bucket   = aws_s3_bucket.cost_and_usage.id,
+        compute_usage_topic_arn = aws_sns_topic.compute_usage.arn
       }
     )
     filename = "function.py"
@@ -35,9 +35,10 @@ resource "aws_cloudwatch_event_rule" "compute_usage" {
 }
 
 resource "aws_cloudwatch_event_target" "compute_usage" {
-  arn       = aws_lambda_function.compute_usage.arn
-  rule      = aws_cloudwatch_event_rule.compute_usage.name
-  target_id = aws_lambda_function.compute_usage.function_name
+  arn        = aws_lambda_function.compute_usage.arn
+  depends_on = [aws_lambda_permission.cloudwatch_compute_usage]
+  rule       = aws_cloudwatch_event_rule.compute_usage.name
+  target_id  = aws_lambda_function.compute_usage.function_name
 }
 
 data "aws_iam_policy_document" "compute_usage" {
@@ -116,6 +117,13 @@ resource "aws_lambda_permission" "sns_compute_usage" {
 resource "aws_sns_topic" "compute_usage" {
   name = "${var.resource_prefix}-compute-usage"
   tags = local.tags
+}
+
+resource "aws_sns_topic_subscription" "compute_usage" {
+  depends_on = [aws_lambda_permission.sns_compute_usage]
+  endpoint   = aws_lambda_function.compute_usage.arn
+  topic_arn  = aws_sns_topic.compute_usage.arn
+  protocol   = "lambda"
 }
 
 ######################
