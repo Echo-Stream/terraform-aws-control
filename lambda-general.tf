@@ -5,6 +5,119 @@ resource "aws_cloudwatch_event_rule" "every_day" {
   tags                = local.tags
 }
 
+#####################
+##  compute-usage  ##
+#####################
+
+data "archive_file" "compute_usage" {
+  type        = "zip"
+  output_path = "${path.module}/compute-usage.zip"
+
+  source {
+    content = templatefile(
+      "${path.module}/scripts/compute-usage.py",
+      {
+        athena_workgroup      = aws_athena_workgroup.echostream_athena.name
+        billing_database      = aws_glue_catalog_database.billing.name
+        cost_and_usage_bucket = aws_s3_bucket.cost_and_usage.id,
+        compute_usage_topic_arn   = aws_sns_topic.compute_usage.arn
+      }
+    )
+    filename = "function.py"
+  }
+}
+
+resource "aws_cloudwatch_event_rule" "compute_usage" {
+  name                = "${var.resource_prefix}-compute-usage"
+  description         = "Compute tenant usage once per day"
+  schedule_expression = "cron(0 2 * * ? *)" # 2am UTC
+  tags                = local.tags
+}
+
+resource "aws_cloudwatch_event_target" "compute_usage" {
+  arn       = aws_lambda_function.compute_usage.arn
+  rule      = aws_cloudwatch_event_rule.compute_usage.name
+  target_id = aws_lambda_function.compute_usage.function_name
+}
+
+data "aws_iam_policy_document" "compute_usage" {
+  statement {
+    actions = [
+      "athena:*",
+      "s3:GetObject*",
+      "s3:ListBucket",
+      "s3:PutObject*",
+    ]
+
+    resources = ["*"]
+
+    sid = "AccessAthenaAndS3"
+  }
+
+  statement {
+    actions = [
+      "sns:Publish",
+    ]
+
+    resources = [
+      local.lambda_dead_letter_arn,
+      aws_sns_topic.compute_usage.arn,
+    ]
+
+    sid = "AllowSNSWriting"
+  }
+}
+
+resource "aws_iam_role" "compute_usage" {
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  inline_policy {
+    name   = "${var.resource_prefix}-compute-usage"
+    policy = data.aws_iam_policy_document.compute_usage.json
+  }
+  managed_policy_arns = [data.aws_iam_policy.aws_lambda_basic_execution_role.arn]
+  name                = "${var.resource_prefix}-compute-usage"
+  tags                = local.tags
+}
+
+resource "aws_lambda_function" "compute_usage" {
+  dead_letter_config {
+    target_arn = local.lambda_dead_letter_arn
+  }
+  description      = "Compute usage for all tenants and store in S3 bucket"
+  filename         = data.archive_file.compute_usage.output_path
+  function_name    = "${var.resource_prefix}-compute-usage"
+  handler          = "function.lambda_handler"
+  layers           = [local.echocore_layer_version_arns[data.aws_region.current.name]]
+  memory_size      = 1536
+  publish          = true
+  role             = aws_iam_role.compute_usage.arn
+  runtime          = local.lambda_runtime
+  source_code_hash = data.archive_file.compute_usage.output_base64sha256
+  tags             = local.tags
+  timeout          = 900
+}
+
+resource "aws_lambda_permission" "cloudwatch_compute_usage" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.compute_usage.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.compute_usage.arn
+}
+
+resource "aws_lambda_permission" "sns_compute_usage" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.compute_usage.function_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.compute_usage.arn
+}
+
+resource "aws_sns_topic" "compute_usage" {
+  name = "${var.resource_prefix}-compute-usage"
+  tags = local.tags
+}
+
 ######################
 ##  log-retention   ##
 ######################
