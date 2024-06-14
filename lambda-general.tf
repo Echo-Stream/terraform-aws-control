@@ -44,15 +44,17 @@ resource "aws_cloudwatch_event_target" "compute_usage" {
 data "aws_iam_policy_document" "compute_usage" {
   statement {
     actions = [
-      "athena:*",
       "s3:GetObject*",
       "s3:ListBucket",
       "s3:PutObject*",
     ]
 
-    resources = ["*"]
+    resources = [
+      aws_s3_bucket.cost_and_usage.arn,
+      "${aws_s3_bucket.cost_and_usage.arn}/*",
+    ]
 
-    sid = "AccessAthenaAndS3"
+    sid = "AccessCostAndUsageBucket"
   }
 
   statement {
@@ -75,9 +77,13 @@ resource "aws_iam_role" "compute_usage" {
     name   = "${var.resource_prefix}-compute-usage"
     policy = data.aws_iam_policy_document.compute_usage.json
   }
-  managed_policy_arns = [data.aws_iam_policy.aws_lambda_basic_execution_role.arn]
-  name                = "${var.resource_prefix}-compute-usage"
-  tags                = local.tags
+  managed_policy_arns = [
+    data.aws_iam_policy.athena_full_access.arn,
+    aws_iam_policy.athena_query_results_access.arn,
+    data.aws_iam_policy.aws_lambda_basic_execution_role.arn,
+  ]
+  name = "${var.resource_prefix}-compute-usage"
+  tags = local.tags
 }
 
 resource "aws_lambda_function" "compute_usage" {
