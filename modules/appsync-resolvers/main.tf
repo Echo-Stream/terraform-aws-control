@@ -641,10 +641,6 @@ locals {
       field = "ListChanges"
       type  = "Tenant"
     }
-    tenant_list_usages = {
-      field = "ListUsages"
-      type  = "Tenant"
-    }
     tenant_update = {
       field = "Update"
       type  = "Tenant"
@@ -1348,6 +1344,10 @@ locals {
       field = "config"
       type  = "Tenant"
     }
+    tenant_usages = {
+      field = "usages"
+      type  = "Tenant"
+    }
     tenant_users = {
       field = "users"
       type  = "Tenant"
@@ -1382,6 +1382,10 @@ locals {
     }
     usage_line_items = {
       field = "lineItems"
+      type  = "Usage"
+    }
+    usage_total = {
+      field = "total"
       type  = "Usage"
     }
     webhook_node_config = {
