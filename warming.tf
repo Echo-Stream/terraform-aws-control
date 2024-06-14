@@ -61,24 +61,20 @@ resource "aws_cloudwatch_event_target" "warming" {
 }
 
 resource "aws_lambda_permission" "warming" {
-  for_each = toset([
-    module.appsync_datasource.name,
-    module.graph_table_dynamodb_trigger.name,
-    module.graph_table_system_stream_handler.name,
-    module.graph_table_tenant_stream_handler.name,
-  ])
+  for_each = toset(
+    concat(
+      [
+        module.appsync_datasource.name,
+        module.graph_table_dynamodb_trigger.name,
+        module.graph_table_system_stream_handler.name,
+        module.graph_table_tenant_stream_handler.name,
+      ],
+      var.billing_enabled ? [module.paddle_webhooks[0].name] : []
+    )
+  )
   statement_id  = "AllowExecutionFromSNS"
   action        = "lambda:InvokeFunction"
   function_name = each.value
-  principal     = "sns.amazonaws.com"
-  source_arn    = aws_sns_topic.warming.arn
-}
-
-resource "aws_lambda_permission" "warmin_paddle_webhooks" {
-  count         = var.billing_enabled ? 1 : 0
-  statement_id  = "AllowExecutionFromSNS"
-  action        = "lambda:InvokeFunction"
-  function_name = module.paddle_webhooks[0].name
   principal     = "sns.amazonaws.com"
   source_arn    = aws_sns_topic.warming.arn
 }
