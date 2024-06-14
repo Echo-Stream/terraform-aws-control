@@ -2,7 +2,6 @@ import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from csv import DictWriter
 from datetime import datetime, timezone
-from hashlib import sha256
 from io import BytesIO, TextIOWrapper
 from logging import ERROR, INFO, getLogger
 from os import environ
@@ -28,7 +27,6 @@ COMPUTE_USAGE_TOPIC_ARN = "${compute_usage_topic_arn}"
 
 def execute_query(query: str) -> Generator[dict[str, str], None, None]:
     query_execution_id = ATHENA_CLIENT.start_query_execution(
-        ClientRequestToken=sha256(query.encode()).hexdigest(),
         QueryExecutionContext=dict(Database=BILLING_DATABASE),
         QueryString=query,
         WorkGroup=ATHENA_WORKGROUP,
@@ -215,7 +213,8 @@ def notify_for_tenants() -> None:
         ):
             sns_client.publish(
                 Message=json.dumps(
-                    dict(identity=record["identity"], month=month, year=year)
+                    dict(identity=record["identity"], month=month, year=year),
+                    separators=(",", ":"),
                 ),
                 TopicArn=COMPUTE_USAGE_TOPIC_ARN,
             )
@@ -226,10 +225,10 @@ def lambda_handler(event: Dict[str, Any], _) -> None:
     if (
         isinstance(event, dict)
         and (records := event.get("Records"))
-        and records[0].get["EventSource"] == "aws:sns"
+        and records[0].get("EventSource") == "aws:sns"
     ):
         for record in records:
-            message = json.loads(record["body"])
+            message = json.loads(record["Sns"]["Message"])
             getLogger().info(f"Compute usage:\n{json.dumps(message, indent=2)}")
             compute_usage(**message)
     else:
