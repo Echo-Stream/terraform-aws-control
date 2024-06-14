@@ -7,25 +7,27 @@ locals {
     aws_sqs_queue.record_cloudwatch_alarm.name,
   ]
 
-  lambda_names = [
-    module.api_cognito_pre_authentication.name,
-    module.appsync_datasource.name,
-    module.deployment_handler.name,
-    module.graph_table_dynamodb_trigger.name,
-    module.graph_table_system_stream_handler.name,
-    module.graph_table_tenant_stream_handler.name,
-    aws_lambda_function.log_retention.function_name,
-    aws_lambda_function.managed_app_cloud_init.function_name,
-    module.managed_app_registration.name,
-    module.paddle_webhooks.name,
-    module.rebuild_notifications.name,
-    aws_lambda_function.record_cloudwatch_alarm.function_name,
-    aws_lambda_function.record_tenant.function_name,
-    aws_lambda_function.start_rebuild_notifications_state_machine.function_name,
-    module.ui_cognito_post_confirmation.name,
-    module.ui_cognito_pre_authentication.name,
-    module.ui_cognito_pre_signup.name,
-  ]
+  lambda_names = concat(
+    [
+      module.api_cognito_pre_authentication.name,
+      module.appsync_datasource.name,
+      module.deployment_handler.name,
+      module.graph_table_dynamodb_trigger.name,
+      module.graph_table_system_stream_handler.name,
+      module.graph_table_tenant_stream_handler.name,
+      aws_lambda_function.log_retention.function_name,
+      aws_lambda_function.managed_app_cloud_init.function_name,
+      module.managed_app_registration.name,
+      module.rebuild_notifications.name,
+      aws_lambda_function.record_cloudwatch_alarm.function_name,
+      aws_lambda_function.record_tenant.function_name,
+      aws_lambda_function.start_rebuild_notifications_state_machine.function_name,
+      module.ui_cognito_post_confirmation.name,
+      module.ui_cognito_pre_authentication.name,
+      module.ui_cognito_pre_signup.name,
+    ],
+    var.billing_enabled ? [module.paddle_webhooks[0].name] : []
+  )
 
 }
 
