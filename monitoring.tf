@@ -11,7 +11,7 @@ locals {
     [
       module.api_cognito_pre_authentication.name,
       module.appsync_datasource.name,
-      aws_lambda_function.compute_usage.name,
+      aws_lambda_function.compute_usage.function_name,
       module.deployment_handler.name,
       module.graph_table_dynamodb_trigger.name,
       module.graph_table_system_stream_handler.name,
