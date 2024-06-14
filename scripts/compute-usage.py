@@ -213,7 +213,7 @@ def compute_usage(identity: str, month: int, year: int) -> None:
 def notify_for_tenants() -> None:
     now = datetime.now(tz=timezone.utc)
     billing_periods: list[tuple[int, int]] = [(now.year, now.month)]
-    if now.day <= 3 and now.hour < 12:
+    if now.day <= 3 and now.hour < 11:
         now -= relativedelta(months=1)
         billing_periods.append((now.year, now.month))
     sns_client = boto3.client(
