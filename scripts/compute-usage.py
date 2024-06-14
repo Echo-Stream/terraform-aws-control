@@ -231,6 +231,6 @@ def lambda_handler(event: Dict[str, Any], _) -> None:
         for record in records:
             message = json.loads(record["body"])
             getLogger().info(f"Compute usage:\n{json.dumps(message, indent=2)}")
-            compute_usage(message["identity"], message["month"], message["year"])
+            compute_usage(**message)
     else:
         notify_for_tenants()
