@@ -5,6 +5,117 @@ resource "aws_cloudwatch_event_rule" "every_day" {
   tags                = local.tags
 }
 
+#########################
+##  bill-subscriptions ##
+#########################
+
+data "archive_file" "bill_subscriptions" {
+  type        = "zip"
+  output_path = "${path.module}/bill-subscriptions.zip"
+
+  source {
+    content = templatefile(
+      "${path.module}/scripts/bill-subscriptions.py",
+      {
+        athena_workgroup      = aws_athena_workgroup.echostream_athena.name
+        billing_database      = aws_glue_catalog_database.billing.name
+        cost_and_usage_bucket = aws_s3_bucket.cost_and_usage.id,
+        paddle_base_url       = var.environment == "prod" ? "https://api.paddle.com" : "https://sandbox-api.paddle.com"
+        paddle_price_ids      = jsonencode(var.paddle_price_ids)
+      }
+    )
+    filename = "function.py"
+  }
+}
+
+resource "aws_cloudwatch_event_rule" "bill_subscriptions" {
+  count               = var.billing_enabled ? 1 : 0
+  description         = "Compute tenant usage once per day"
+  name                = "${var.resource_prefix}-bill-subscriptions"
+  schedule_expression = "cron(0 9 3 * ? *)" # 9am UTC on the 3rd of every month
+  tags                = local.tags
+}
+
+resource "aws_cloudwatch_event_target" "bill_subscriptions" {
+  arn        = aws_lambda_function.bill_subscriptions[0].arn
+  count      = var.billing_enabled ? 1 : 0
+  depends_on = [aws_lambda_permission.cloudwatch_bill_subscriptions[0]]
+  rule       = aws_cloudwatch_event_rule.bill_subscriptions[0].name
+  target_id  = aws_lambda_function.bill_subscriptions[0].function_name
+}
+
+data "aws_iam_policy_document" "bill_subscriptions" {
+  statement {
+    actions = [
+      "s3:GetObject*",
+      "s3:ListBucket",
+    ]
+
+    resources = [
+      aws_s3_bucket.cost_and_usage.arn,
+      "${aws_s3_bucket.cost_and_usage.arn}/*",
+    ]
+
+    sid = "AccessCostAndUsageBucket"
+  }
+
+  statement {
+    actions = [
+      "secretsmanager:GetSecretValue"
+    ]
+
+    resources = var.billing_enabled ? [aws_secretsmanager_secret.paddle_api_key[0].arn, aws_secretsmanager_secret.paddle_webhooks_secret[0].arn] : []
+
+    sid = "AllowSecretsManagerAccess"
+  }
+
+}
+
+resource "aws_iam_role" "bill_subscriptions" {
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  count              = var.billing_enabled ? 1 : 0
+  inline_policy {
+    name   = "${var.resource_prefix}-bill-subscriptions"
+    policy = data.aws_iam_policy_document.bill_subscriptions.json
+  }
+  managed_policy_arns = [
+    data.aws_iam_policy.athena_full_access.arn,
+    aws_iam_policy.athena_query_results_access.arn,
+    data.aws_iam_policy.aws_lambda_basic_execution_role.arn,
+  ]
+  name = "${var.resource_prefix}-bill-subscriptions"
+  tags = local.tags
+}
+
+resource "aws_lambda_function" "bill_subscriptions" {
+  count = var.billing_enabled ? 1 : 0
+  dead_letter_config {
+    target_arn = local.lambda_dead_letter_arn
+  }
+  description      = "Bill all tenant subscriptions for the previous month"
+  filename         = data.archive_file.bill_subscriptions.output_path
+  function_name    = "${var.resource_prefix}-bill-subscriptions"
+  handler          = "function.lambda_handler"
+  layers           = [local.echocore_layer_version_arns[data.aws_region.current.name]]
+  memory_size      = 1536
+  publish          = true
+  role             = aws_iam_role.bill_subscriptions[0].arn
+  runtime          = local.lambda_runtime
+  source_code_hash = data.archive_file.bill_subscriptions.output_base64sha256
+  tags             = local.tags
+  timeout          = 900
+}
+
+resource "aws_lambda_permission" "bill_subscriptions" {
+  action        = "lambda:InvokeFunction"
+  count         = var.billing_enabled ? 1 : 0
+  function_name = aws_lambda_function.bill_subscriptions[0].function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.bill_subscriptions[0].arn
+  statement_id  = "AllowExecutionFromCloudWatch"
+}
+
+
 #####################
 ##  compute-usage  ##
 #####################

@@ -27,7 +27,10 @@ locals {
       module.ui_cognito_pre_authentication.name,
       module.ui_cognito_pre_signup.name,
     ],
-    var.billing_enabled ? [module.paddle_webhooks[0].name] : []
+    var.billing_enabled ? [
+      module.paddle_webhooks[0].name,
+      aws_lambda_function.bill_subscriptions[0].function_name
+    ] : []
   )
 
 }
