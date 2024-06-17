@@ -19,7 +19,7 @@ data "archive_file" "bill_subscriptions" {
       {
         athena_workgroup      = aws_athena_workgroup.echostream_athena.name
         billing_database      = aws_glue_catalog_database.billing.name
-        cost_and_usage_bucket = aws_s3_bucket.cost_and_usage.id,
+        cost_and_usage_bucket = aws_s3_bucket.cost_and_usage.id
         paddle_base_url       = var.environment == "prod" ? "https://api.paddle.com" : "https://sandbox-api.paddle.com"
         paddle_price_ids      = jsonencode(var.paddle_price_ids)
       }
@@ -130,7 +130,7 @@ data "archive_file" "compute_usage" {
       {
         athena_workgroup        = aws_athena_workgroup.echostream_athena.name
         billing_database        = aws_glue_catalog_database.billing.name
-        cost_and_usage_bucket   = aws_s3_bucket.cost_and_usage.id,
+        cost_and_usage_bucket   = aws_s3_bucket.cost_and_usage.id
         compute_usage_topic_arn = aws_sns_topic.compute_usage.arn
       }
     )
