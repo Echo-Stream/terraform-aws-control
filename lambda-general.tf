@@ -30,7 +30,7 @@ data "archive_file" "compute_usage" {
 resource "aws_cloudwatch_event_rule" "compute_usage" {
   name                = "${var.resource_prefix}-compute-usage"
   description         = "Compute tenant usage once per day"
-  schedule_expression = "cron(0 2 * * ? *)" # 2am UTC
+  schedule_expression = "cron(0 6 * * ? *)" # 6am UTC
   tags                = local.tags
 }
 
