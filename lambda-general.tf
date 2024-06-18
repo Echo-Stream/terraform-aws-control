@@ -40,7 +40,7 @@ resource "aws_cloudwatch_event_rule" "bill_subscriptions" {
 resource "aws_cloudwatch_event_target" "bill_subscriptions" {
   arn        = aws_lambda_function.bill_subscriptions[0].arn
   count      = var.billing_enabled ? 1 : 0
-  depends_on = [aws_lambda_permission.cloudwatch_bill_subscriptions[0]]
+  depends_on = [aws_lambda_permission.bill_subscriptions[0]]
   rule       = aws_cloudwatch_event_rule.bill_subscriptions[0].name
   target_id  = aws_lambda_function.bill_subscriptions[0].function_name
 }
