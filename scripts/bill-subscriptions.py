@@ -89,6 +89,23 @@ def execute_query(query: str) -> Generator[dict[str, str], None, None]:
 def bill_subscription(
     identity: str, month: int, subscriptionid: str, year: int
 ) -> None:
+    total = math.ceil(
+        float(
+            boto3.client(
+                "s3",
+                config=Config(retries=dict(mode="standard")),
+                region_name=AWS_REGION,
+            ).head_object(
+                Bucket=COST_AND_USAGE_BUCKET,
+                Key=f"usages/IDENTITY={identity}/YEAR={year}/MONTH={month}/usage.csv",
+            )[
+                "Metadata"
+            ][
+                "total"
+            ]
+        )
+        * USAGE_MULTIPLE
+    )
     with requests.post(
         f"{PADDLE_BASE_URL}/subscriptions/{subscriptionid}/charge",
         headers=dict(
@@ -99,23 +116,7 @@ def bill_subscription(
             effective_from="next_billing_period",
             items=[
                 dict(
-                    quantity=math.ceil(
-                        float(
-                            boto3.client(
-                                "s3",
-                                config=Config(retries=dict(mode="standard")),
-                                region_name=AWS_REGION,
-                            ).head_object(
-                                Bucket=COST_AND_USAGE_BUCKET,
-                                Key=f"usages/IDENTITY={identity}/YEAR={year}/MONTH={month}/usage.csv",
-                            )[
-                                "Metadata"
-                            ][
-                                "total"
-                            ]
-                        )
-                        * USAGE_MULTIPLE
-                    ),
+                    quantity=total,
                     price=USAGE_PRICE_ID,
                 )
             ],
