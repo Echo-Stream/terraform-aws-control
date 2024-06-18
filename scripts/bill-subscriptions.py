@@ -6,7 +6,7 @@ from logging import ERROR, INFO, getLogger
 from os import environ
 from random import randint
 from time import sleep
-from typing import Any, Dict, Generator, List, Tuple
+from typing import Any, Dict, Generator, List, Union
 
 import boto3
 import requests
@@ -129,14 +129,14 @@ def bill_subscription(
 
 
 def bill_subscriptions(
-    subscriptions: List[Tuple[str, int, str, int]], count: int = 0
+    subscriptions: List[Dict[str, Union[str, int]]], count: int = 0
 ) -> None:
     with ThreadPoolExecutor(max_workers=20) as executor:
         futures: list[Future] = list()
         for subscription in subscriptions:
             future = executor.submit(
                 bill_subscription,
-                *subscription,
+                **subscription,
             )
             future.subscription = subscription
             futures.append(future)
@@ -144,7 +144,7 @@ def bill_subscriptions(
         for future in futures:
             if future.exception():
                 getLogger().error(
-                    f"Falied to bill subscription {future.subscription[2]}",
+                    f"Falied to bill subscription {future.subscription['subscriptionid']}",
                     exc_info=future.exception(),
                 )
                 subscriptions.append(future.subscription)
@@ -158,9 +158,9 @@ def lambda_handler(event: Dict[str, Any], _) -> None:
     now = datetime.now(tz=timezone.utc) - relativedelta(months=1)
     subscriptions = [
         dict(
-            identity=record["identity"],
+            identity=str(record["identity"]),
             month=now.month,
-            subscriptionid=record["subscriptionid"],
+            subscriptionid=str(record["subscriptionid"]),
             year=now.year,
         )
         for record in execute_query(
