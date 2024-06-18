@@ -1,8 +1,8 @@
+import json
+import math
 from concurrent.futures import Future, ThreadPoolExecutor
 from datetime import datetime, timezone
-import json
 from logging import ERROR, INFO, getLogger
-import math
 from os import environ
 from random import randint
 from time import sleep
@@ -12,7 +12,6 @@ import boto3
 import requests
 from botocore.config import Config
 from dateutil.relativedelta import relativedelta
-
 
 getLogger().setLevel(INFO)
 getLogger("boto3").setLevel(ERROR)
