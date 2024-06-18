@@ -1,6 +1,7 @@
 import json
 import math
 from concurrent.futures import Future, ThreadPoolExecutor
+from copy import deepcopy
 from datetime import datetime, timezone
 from logging import ERROR, INFO, getLogger
 from os import environ
@@ -117,12 +118,17 @@ def bill_subscription(
             items=[
                 dict(
                     quantity=total,
-                    price=USAGE_PRICE_ID,
+                    price_id=USAGE_PRICE_ID,
                 )
             ],
         ),
     ) as response:
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            raise Exception(
+                f"Paddle error:\n{json.dumps(response.json(), indent=2)}"
+            ) from e
     getLogger().info(
         f"Billed subscription {subscriptionid} for {total} usages for Tenant {identity}"
     )
@@ -174,5 +180,5 @@ def lambda_handler(event: Dict[str, Any], _) -> None:
         """
         )
     ]
-    bill_subscriptions(subscriptions)
+    bill_subscriptions(deepcopy(subscriptions))
     getLogger().info(f"Billed {len(subscriptions)} subscriptions")
