@@ -27,7 +27,7 @@ BILLING_DATABASE = "${billing_database}"
 COST_AND_USAGE_BUCKET = "${cost_and_usage_bucket}"
 PADDLE_API_KEY: str = None
 PADDLE_BASE_URL: str = "${paddle_base_url}"
-PADDLE_PRICE_IDS = json.loads("${paddle_price_ids}")
+USAGE_PRICE_ID = "${usage_price_id}"
 
 
 def paddle_api_key() -> str:
@@ -116,7 +116,7 @@ def bill_subscription(
             items=[
                 dict(
                     quantity=total,
-                    price=PADDLE_PRICE_IDS["usage"],
+                    price=USAGE_PRICE_ID,
                 )
             ],
         ),

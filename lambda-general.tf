@@ -17,11 +17,12 @@ data "archive_file" "bill_subscriptions" {
     content = templatefile(
       "${path.module}/scripts/bill-subscriptions.py",
       {
-        athena_workgroup      = aws_athena_workgroup.echostream_athena.name
-        billing_database      = aws_glue_catalog_database.billing.name
-        cost_and_usage_bucket = aws_s3_bucket.cost_and_usage.id
-        paddle_base_url       = var.environment == "prod" ? "https://api.paddle.com" : "https://sandbox-api.paddle.com"
-        paddle_price_ids      = jsonencode(var.paddle_price_ids)
+        athena_workgroup          = aws_athena_workgroup.echostream_athena.name
+        billing_database          = aws_glue_catalog_database.billing.name
+        cost_and_usage_bucket     = aws_s3_bucket.cost_and_usage.id
+        paddle_api_key_secret_arn = local.paddle_api_key_secret_arn
+        paddle_base_url           = local.paddle_base_url
+        usage_price_id            = can(var.paddle_price_ids.usage) ? var.paddle_price_ids.usage : "unknown"
       }
     )
     filename = "function.py"

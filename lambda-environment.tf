@@ -109,8 +109,8 @@ resource "aws_s3_object" "lambda_environment" {
       MANAGED_APP_CLOUD_INIT_NOTIFY_SES_TEMPLATE = aws_ses_template.managed_app_cloud_init_notify.name
       MANAGED_APP_CLOUD_INIT_QUEUE               = aws_sqs_queue.managed_app_cloud_init.url
       NOTIFY_USER_SES_TEMPLATE                   = aws_ses_template.notify_user.name
-      PADDLE_API_KEY_SECRET_ARN                  = var.billing_enabled ? aws_secretsmanager_secret.paddle_api_key[0].arn : ""
-      PADDLE_BASE_URL                            = var.environment == "prod" ? "https://api.paddle.com" : "https://sandbox-api.paddle.com"
+      PADDLE_API_KEY_SECRET_ARN                  = local.paddle_api_key_secret_arn
+      PADDLE_BASE_URL                            = local.paddle_base_url
       PADDLE_PRICE_IDS                           = jsonencode(var.paddle_price_ids)
       PADDLE_PRODUCT_IDS                         = jsonencode(var.paddle_product_ids)
       REBUILD_NOTIFICATION_QUEUE                 = aws_sqs_queue.rebuild_notifications.url

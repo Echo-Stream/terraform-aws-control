@@ -80,8 +80,10 @@ locals {
     echocore = "${local.artifacts["lambda_layer"]}/echocore.json"
   }
 
-  log_bucket          = module.log_bucket.id
-  non_control_regions = sort(setsubtract(var.tenant_regions, [data.aws_region.current.name]))
+  log_bucket                = module.log_bucket.id
+  non_control_regions       = sort(setsubtract(var.tenant_regions, [data.aws_region.current.name]))
+  paddle_api_key_secret_arn = var.billing_enabled ? aws_secretsmanager_secret.paddle_api_key[0].arn : ""
+  paddle_base_url           = var.environment == "prod" ? "https://api.paddle.com" : "https://sandbox-api.paddle.com"
   # Ensure that tenant_regions include the control region
   tenant_regions = sort(setunion(var.tenant_regions, [data.aws_region.current.name]))
 
