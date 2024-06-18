@@ -93,4 +93,6 @@ locals {
     terraform   = "true"
     version     = var.echostream_version
   }, var.tags)
+
+  usage_multiple = var.billing_enabled ? 10 : 1
 }

@@ -89,9 +89,3 @@ variable "tenant_regions" {
   description = "List of Tenant regions"
   type        = list(string)
 }
-
-variable "usage_multiple" {
-  default     = 1
-  description = "Usage multiple"
-  type        = number
-}

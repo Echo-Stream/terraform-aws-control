@@ -23,7 +23,7 @@ data "archive_file" "bill_subscriptions" {
         paddle_api_key_secret_arn = local.paddle_api_key_secret_arn
         paddle_base_url           = local.paddle_base_url
         usage_price_id            = can(var.paddle_price_ids.usage) ? var.paddle_price_ids.usage : "unknown"
-        usage_multiple            = var.usage_multiple
+        usage_multiple            = local.usage_multiple
       }
     )
     filename = "function.py"
