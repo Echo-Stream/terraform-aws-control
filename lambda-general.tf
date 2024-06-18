@@ -31,7 +31,7 @@ data "archive_file" "bill_subscriptions" {
 
 resource "aws_cloudwatch_event_rule" "bill_subscriptions" {
   count               = var.billing_enabled ? 1 : 0
-  description         = "Compute tenant usage once per day"
+  description         = "Bill tenant subscriptions once per month"
   name                = "${var.resource_prefix}-bill-subscriptions"
   schedule_expression = "cron(0 9 3 * ? *)" # 9am UTC on the 3rd of every month
   tags                = local.tags
