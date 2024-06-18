@@ -70,6 +70,17 @@ data "aws_iam_policy_document" "bill_subscriptions" {
     sid = "AllowSecretsManagerAccess"
   }
 
+  statement {
+    actions = [
+      "sns:Publish",
+    ]
+
+    resources = [
+      local.lambda_dead_letter_arn,
+    ]
+
+    sid = "AllowSNSWriting"
+  }
 }
 
 resource "aws_iam_role" "bill_subscriptions" {
