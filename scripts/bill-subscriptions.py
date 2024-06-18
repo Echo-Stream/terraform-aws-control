@@ -28,6 +28,7 @@ COST_AND_USAGE_BUCKET = "${cost_and_usage_bucket}"
 PADDLE_API_KEY: str = None
 PADDLE_BASE_URL: str = "${paddle_base_url}"
 USAGE_PRICE_ID = "${usage_price_id}"
+USAGE_MULTIPLE = float("${usage_multiple}")
 
 
 def paddle_api_key() -> str:
@@ -104,6 +105,7 @@ def bill_subscription(
                 "total"
             ]
         )
+        * USAGE_MULTIPLE
     )
     with requests.post(
         f"{PADDLE_BASE_URL}/subscriptions/{subscriptionid}/charge",
