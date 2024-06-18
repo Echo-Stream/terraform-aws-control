@@ -123,7 +123,7 @@ def bill_subscription(
     ) as response:
         response.raise_for_status()
     getLogger().info(
-        f"Billed subscription {subscriptionid} for ${total:.2f} for Tenant {identity}"
+        f"Billed subscription {subscriptionid} for {total} usages for Tenant {identity}"
     )
 
 
