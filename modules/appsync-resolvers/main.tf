@@ -904,14 +904,6 @@ locals {
       field = "tenant"
       type  = "BitmapperFunction"
     }
-    change_old = {
-      field = "old"
-      type  = "Change"
-    }
-    change_new = {
-      field = "new"
-      type  = "Change"
-    }
     change_emitter_node_sendedges = {
       field = "sendEdges"
       type  = "ChangeEmitterNode"
