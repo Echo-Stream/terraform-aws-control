@@ -3,6 +3,7 @@ import math
 from concurrent.futures import Future, ThreadPoolExecutor
 from copy import deepcopy
 from datetime import datetime, timezone
+from http import HTTPStatus
 from logging import ERROR, INFO, getLogger
 from os import environ
 from random import randint
@@ -24,6 +25,7 @@ ATHENA_CLIENT = boto3.client(
 )
 ATHENA_WORKGROUP = "${athena_workgroup}"
 BILLING_DATABASE = "${billing_database}"
+BILL_SUBSCRIPTION_TOPIC_ARN = "${bill_subscription_topic_arn}"
 COST_AND_USAGE_BUCKET = "${cost_and_usage_bucket}"
 PADDLE_API_KEY: str = None
 PADDLE_BASE_URL: str = "${paddle_base_url}"
@@ -114,7 +116,7 @@ def bill_subscription(
             Authorization=f"Bearer {paddle_api_key()}",
         ),
         json=dict(
-            effective_from="next_billing_period",
+            effective_from="immediately",
             items=[
                 dict(
                     quantity=total,
@@ -126,6 +128,8 @@ def bill_subscription(
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
+            if response.status_code == HTTPStatus.TOO_MANY_REQUESTS:
+                sleep(float(response.headers.get("Retry-After") or 60))
             raise Exception(
                 f"Paddle error:\n{json.dumps(response.json(), indent=2)}"
             ) from e
@@ -134,51 +138,48 @@ def bill_subscription(
     )
 
 
-def bill_subscriptions(
-    subscriptions: List[Dict[str, Union[str, int]]], count: int = 0
-) -> None:
-    with ThreadPoolExecutor(max_workers=20) as executor:
-        futures: list[Future] = list()
-        for subscription in subscriptions:
-            future = executor.submit(
-                bill_subscription,
-                **subscription,
-            )
-            future.subscription = subscription
-            futures.append(future)
-        subscriptions.clear()
-        for future in futures:
-            if future.exception():
-                getLogger().error(
-                    f"Falied to bill subscription {future.subscription['subscriptionid']}",
-                    exc_info=future.exception(),
-                )
-                subscriptions.append(future.subscription)
-        if subscriptions and count < 2:
-            sleep(randint(5, 10))
-            bill_subscriptions(subscriptions, count + 1)
+def bill_subscriptions() -> None:
+    now = datetime.now(tz=timezone.utc) - relativedelta(months=1)
+    count = 0
+    sns_client = boto3.client(
+        "sns", config=Config(retries=dict(mode="standard")), region_name=AWS_REGION
+    )
+    for record in execute_query(
+        f"""
+    SELECT DISTINCT tenants.identity, tenants.subscriptionid
+    FROM costandusagedata JOIN tenants 
+        ON costandusagedata.resource_tags['user_identity']=tenants.identity
+    WHERE costandusagedata.resource_tags['user_identity'] IS NOT NULL 
+        AND costandusagedata.billing_period='{now.year:04d}-{now.month:02d}' 
+        AND tenants.subscriptionid IS NOT NULL
+    """
+    ):
+        sns_client.publish(
+            Message=json.dumps(
+                dict(
+                    identity=str(record["identity"]),
+                    month=now.month,
+                    subscriptionid=str(record["subscriptionid"]),
+                    year=now.year,
+                ),
+                separators=(",", ":"),
+            ),
+            TopicArn=BILL_SUBSCRIPTION_TOPIC_ARN,
+        )
+        count += 1
+    getLogger().info(f"Initiated billing for {count} subscriptions")
 
 
 def lambda_handler(event: Dict[str, Any], _) -> None:
     getLogger().info(f"Processing event:\n{json.dumps(event, indent=2)}")
-    now = datetime.now(tz=timezone.utc) - relativedelta(months=1)
-    subscriptions = [
-        dict(
-            identity=str(record["identity"]),
-            month=now.month,
-            subscriptionid=str(record["subscriptionid"]),
-            year=now.year,
-        )
-        for record in execute_query(
-            f"""
-        SELECT DISTINCT tenants.identity, tenants.subscriptionid
-        FROM costandusagedata JOIN tenants 
-            ON costandusagedata.resource_tags['user_identity']=tenants.identity
-        WHERE costandusagedata.resource_tags['user_identity'] IS NOT NULL 
-            AND costandusagedata.billing_period='{now.year:04d}-{now.month:02d}' 
-            AND tenants.subscriptionid IS NOT NULL
-        """
-        )
-    ]
-    bill_subscriptions(deepcopy(subscriptions))
-    getLogger().info(f"Billed {len(subscriptions)} subscriptions")
+    if (
+        isinstance(event, dict)
+        and (records := event.get("Records"))
+        and records[0].get("EventSource") == "aws:sns"
+    ):
+        for record in records:
+            message = json.loads(record["Sns"]["Message"])
+            getLogger().info(f"Compute usage:\n{json.dumps(message, indent=2)}")
+            bill_subscription(**message)
+    else:
+        bill_subscriptions()
