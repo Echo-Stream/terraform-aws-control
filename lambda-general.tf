@@ -34,7 +34,7 @@ resource "aws_cloudwatch_event_rule" "bill_subscriptions" {
   count               = var.billing_enabled ? 1 : 0
   description         = "Bill tenant subscriptions once per month"
   name                = "${var.resource_prefix}-bill-subscriptions"
-  schedule_expression = "cron(0 9 3 * ? *)" # 9am UTC on the 3rd of every month
+  schedule_expression = "cron(0 6 3 * ? *)" # 6am UTC on the 3rd of every month
   tags                = local.tags
 }
 
@@ -78,6 +78,7 @@ data "aws_iam_policy_document" "bill_subscriptions" {
 
     resources = [
       local.lambda_dead_letter_arn,
+      var.billing_enabled ? aws_sns_topic.bill_subscriptions[0].arn : "",
     ]
 
     sid = "AllowSNSWriting"
@@ -119,13 +120,36 @@ resource "aws_lambda_function" "bill_subscriptions" {
   timeout          = 900
 }
 
-resource "aws_lambda_permission" "bill_subscriptions" {
+resource "aws_lambda_permission" "cloudwatch_bill_subscriptions" {
   action        = "lambda:InvokeFunction"
   count         = var.billing_enabled ? 1 : 0
   function_name = aws_lambda_function.bill_subscriptions[0].function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.bill_subscriptions[0].arn
   statement_id  = "AllowExecutionFromCloudWatch"
+}
+
+resource "aws_lambda_permission" "sns_bill_subscriptions" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  count         = var.billing_enabled ? 1 : 0
+  function_name = aws_lambda_function.bill_subscriptions[0].function_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.bill_subscriptions[0].arn
+}
+
+resource "aws_sns_topic" "bill_subscriptions" {
+  count = var.billing_enabled ? 1 : 0
+  name  = "${var.resource_prefix}-bill-subscriptions"
+  tags  = local.tags
+}
+
+resource "aws_sns_topic_subscription" "bill_subscriptions" {
+  count      = var.billing_enabled ? 1 : 0
+  depends_on = [aws_lambda_permission.sns_bill_subscriptions]
+  endpoint   = aws_lambda_function.bill_subscriptions[0].arn
+  topic_arn  = aws_sns_topic.bill_subscriptions[0].arn
+  protocol   = "lambda"
 }
 
 
@@ -154,7 +178,7 @@ data "archive_file" "compute_usage" {
 resource "aws_cloudwatch_event_rule" "compute_usage" {
   name                = "${var.resource_prefix}-compute-usage"
   description         = "Compute tenant usage once per day"
-  schedule_expression = "cron(0 6 * * ? *)" # 6am UTC
+  schedule_expression = "cron(0 3 * * ? *)" # 3am UTC
   tags                = local.tags
 }
 
