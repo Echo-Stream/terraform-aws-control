@@ -123,6 +123,7 @@ def bill_subscription(
                     price_id=USAGE_PRICE_ID,
                 )
             ],
+            on_payment_failure="apply_change",
         ),
     ) as response:
         try:
