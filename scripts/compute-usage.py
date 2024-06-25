@@ -74,7 +74,7 @@ def execute_query(query: str) -> Generator[dict[str, str], None, None]:
             break
 
 
-def compute_usage(identity: str, month: int, year: int) -> None:
+def compute_tenant(identity: str, month: int, year: int) -> None:
 
     def get_alarm_line_items() -> Generator[dict[str, str], None, None]:
         period_start = datetime.now(tz=timezone.utc).replace(
@@ -210,7 +210,7 @@ def compute_usage(identity: str, month: int, year: int) -> None:
             )
 
 
-def notify_for_tenants() -> None:
+def compute_tenants() -> None:
     now = datetime.now(tz=timezone.utc)
     billing_periods: list[tuple[int, int]] = [(now.year, now.month)]
     if now.day <= 3 and now.hour < 11:
@@ -246,6 +246,6 @@ def lambda_handler(event: Dict[str, Any], _) -> None:
         for record in records:
             message = json.loads(record["Sns"]["Message"])
             getLogger().info(f"Compute usage:\n{json.dumps(message, indent=2)}")
-            compute_usage(**message)
+            compute_tenant(**message)
     else:
-        notify_for_tenants()
+        compute_tenants()
