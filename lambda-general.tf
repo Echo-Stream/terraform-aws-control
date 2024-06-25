@@ -19,7 +19,7 @@ data "archive_file" "bill_subscriptions" {
       {
         athena_workgroup            = aws_athena_workgroup.echostream_athena.name
         billing_database            = aws_glue_catalog_database.billing.name
-        bill_subscription_topic_arn = aws_sns_topic.bill_subscriptions.arn
+        bill_subscription_topic_arn = var.billing_enabled ? aws_sns_topic.bill_subscriptions[0].arn : ""
         cost_and_usage_bucket       = aws_s3_bucket.cost_and_usage.id
         paddle_api_key_secret_arn   = local.paddle_api_key_secret_arn
         paddle_base_url             = local.paddle_base_url
