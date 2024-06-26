@@ -24,7 +24,9 @@ def lambda_handler(event, _) -> None:
         message = json.loads(record["body"])
         identity = message["identity"]
         getLogger().info(f"Alarm update:\n{json.dumps(message, indent=2)}")
-        start = pandas.Timestamp(datetime.fromisoformat(message["datetime"]))
+        start = pandas.Timestamp(datetime.fromisoformat(message["datetime"])).replace(
+            tzinfo=None
+        )
         count = 0
         if not alarms.empty:
             index = cast(
@@ -57,8 +59,8 @@ def lambda_handler(event, _) -> None:
 
     if not alarms.empty:
         awswrangler.s3.to_parquet(
-            df=alarms,
             compression="snappy",
+            df=alarms,
             path=S3_PARQUET_PATH,
         )
     getLogger().info(f'Recorded {len(event["Records"])} Alarms')
