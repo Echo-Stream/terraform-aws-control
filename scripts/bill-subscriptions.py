@@ -129,10 +129,22 @@ def bill_subscription(
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
+            if (
+                response.status_code == HTTPStatus.BAD_REQUEST
+                and (error := response.json().get("error"))
+                and error.get("code") == "subscription_update_when_canceled"
+            ):
+                getLogger().critical(
+                    f"Subscription {subscriptionid} is cancelled, skipping billing"
+                )
+                return
             if response.status_code == HTTPStatus.TOO_MANY_REQUESTS:
                 sleep(float(response.headers.get("Retry-After") or 60))
+                raise Exception(
+                    f"Throttled for subscription {subscriptionid}, retrying"
+                ) from e
             raise Exception(
-                f"Paddle error:\n{json.dumps(response.json(), indent=2)}"
+                f"Paddle error for subscription {subscriptionid}, retrying:\n{json.dumps(response.json(), indent=2)}"
             ) from e
     getLogger().info(
         f"Billed subscription {subscriptionid} for {total} usages for Tenant {identity}"
