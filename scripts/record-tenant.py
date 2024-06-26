@@ -40,8 +40,8 @@ def lambda_handler(event, _) -> None:
             getLogger().info("Initial file creation")
 
         awswrangler.s3.to_parquet(
-            df=tenants,
             compression="snappy",
+            df=tenants,
             path=S3_PARQUET_PATH,
         )
     getLogger().info(f"Recorded {len(messages)} Tenants")

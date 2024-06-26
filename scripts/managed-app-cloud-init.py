@@ -48,8 +48,8 @@ def lambda_handler(event, _) -> None:
             getLogger().info("Initial file creation")
 
         awswrangler.s3.to_parquet(
-            df=managed_instances,
             compression="snappy",
+            df=managed_instances,
             path=S3_PARQUET_PATH,
         )
     getLogger().info(f"Recorded {len(instances)} Managed Instances")
