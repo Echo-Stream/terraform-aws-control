@@ -192,7 +192,7 @@ def lambda_handler(event: Dict[str, Any], _) -> None:
     ):
         for record in records:
             message = json.loads(record["Sns"]["Message"])
-            getLogger().info(f"Compute usage:\n{json.dumps(message, indent=2)}")
+            getLogger().info(f"Bill subscription:\n{json.dumps(message, indent=2)}")
             bill_subscription(**message)
     else:
         bill_subscriptions()
