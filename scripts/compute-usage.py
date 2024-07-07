@@ -87,14 +87,14 @@ def compute_tenant(identity: str, month: int, year: int) -> None:
         yield from execute_query(
             f"""
             WITH
-                alarms AS (
+                tenant_alarms AS (
                     SELECT 
-                        count,
+                        "count",
                         identity,
                         CASE
-                            WHEN start < timestamp '{start}' THEN timestamp '{start}'
-                            ELSE start
-                        END AS start,
+                            WHEN "start" < timestamp '{start}' THEN timestamp '{start}'
+                            ELSE "start"
+                        END AS "start",
                         CASE
                             WHEN "end" > timestamp '{end}' THEN timestamp '{end}'
                             WHEN "end" IS NULL THEN current_timestamp
@@ -102,19 +102,19 @@ def compute_tenant(identity: str, month: int, year: int) -> None:
                         END AS "end"
                     FROM alarms
                     WHERE 
-                        start < timestamp '{end}' 
+                        "start" < timestamp '{end}' 
                         AND ("end" > timestamp '{start}' OR "end" IS NULL)
                 ),
                 total_duration AS (
                     SELECT
-                        sum(count * date_diff('second', start, "end")) AS duration
-                    FROM alarms
+                        sum("count" * date_diff('second', "start", "end")) AS duration
+                    FROM tenant_alarms
                 ),
                 tenant_ratios AS (
                     SELECT
                         identity,
-                        cast(sum(count * date_diff('second', start, "end")) - 1234 AS double) / cast(duration AS double) AS ratio
-                    FROM alarms, total_duration
+                        cast(sum("count" * date_diff('second', "start", "end")) AS double) / cast(duration AS double) AS ratio
+                    FROM tenant_alarms, total_duration
                     GROUP BY identity, duration
                 ),
                 alarm_usage AS (
@@ -171,7 +171,8 @@ def compute_tenant(identity: str, month: int, year: int) -> None:
             FROM costandusagedata JOIN managedinstances
                 ON costandusagedata.line_item_resource_id=managedinstances.id
             WHERE
-                billing_period='{year:04d}-{month:02d}'
+                billing_period='{year:04d}-{month:02d}' AND
+                identity='{identity}'
             GROUP BY
                 line_item_blended_rate,
                 line_item_usage_type,
