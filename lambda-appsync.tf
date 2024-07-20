@@ -2,7 +2,7 @@
 ##  appsync-datasource  ##
 ###########################
 module "appsync_datasource" {
-  description           = "The main datasource for the echo-stream API "
+  description           = "The main datasource for the echo-stream API"
   dead_letter_arn       = local.lambda_dead_letter_arn
   environment_variables = local.common_lambda_environment_variables
   handler               = "function.handler"
