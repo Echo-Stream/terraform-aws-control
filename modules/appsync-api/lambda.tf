@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "appsync_datasource" {
-  description = "Function that gets triggered when app cognito user to be authenticated"
+  description = "The main datasource for the echo-stream API"
   dead_letter_config {
     target_arn = var.dead_letter_arn
   }
@@ -11,7 +11,7 @@ resource "aws_lambda_function" "appsync_datasource" {
   handler       = "function.handler"
   kms_key_arn   = var.kms_key_arn
   layers        = var.function_layers
-  memory_size   = 1536
+  memory_size   = 1769
   role          = var.appsync_datasource_lambda_role_arn
   runtime       = var.runtime
   s3_bucket     = data.aws_s3_object.function_package.bucket
