@@ -106,6 +106,7 @@ resource "aws_s3_object" "lambda_environment" {
       INTERNAL_NODE_CODE                         = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/internal-node.zip\"}"
       INTERNAL_NODE_ROLE                         = aws_iam_role.internal_node.arn
       INVITE_USER_SES_TEMPLATE                   = aws_ses_template.invite_user.name
+      LAMBDA_RUNTIME                             = local.lambda_runtime
       MANAGED_APP_CLOUD_INIT_NOTIFY_SES_TEMPLATE = aws_ses_template.managed_app_cloud_init_notify.name
       MANAGED_APP_CLOUD_INIT_QUEUE               = aws_sqs_queue.managed_app_cloud_init.url
       NOTIFY_USER_SES_TEMPLATE                   = aws_ses_template.notify_user.name

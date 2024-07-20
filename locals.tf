@@ -59,7 +59,7 @@ locals {
   cost_and_usage_export_name  = "CostAndUsage"
   lambda_dead_letter_arn      = module.lambda_underpin_control.dead_letter_arn
   lambda_env_vars_kms_key_arn = module.lambda_underpin_control.kms_key_arn
-  lambda_runtime              = "python3.9"
+  lambda_runtime              = "python3.12"
 
   lambda_functions_keys = {
     app_api_cognito_pre_authentication = "${local.artifacts["control_lambda"]}/app-api-cognito-pre-authentication.zip"
