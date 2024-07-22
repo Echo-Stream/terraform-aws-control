@@ -269,7 +269,7 @@ resource "aws_cloudfront_distribution" "os_images" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = "${var.resource_prefix} Echo Stream API docs"
+  comment             = "${var.resource_prefix} Echo Stream OS Images"
   default_root_object = "index.html"
 
   default_cache_behavior {
