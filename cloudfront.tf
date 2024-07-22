@@ -3,7 +3,7 @@ resource "aws_cloudfront_origin_access_control" "default" {
   name                              = "${var.resource_prefix}-default"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
-  signing_protocol                  = "sigV4"
+  signing_protocol                  = "sigv4"
 }
 
 #########################
