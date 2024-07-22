@@ -264,7 +264,7 @@ resource "aws_cloudfront_distribution" "os_images" {
     domain_name              = "${local.artifacts_bucket}.s3.amazonaws.com"
     origin_access_control_id = aws_cloudfront_origin_access_control.default.id
     origin_id                = "${var.resource_prefix}-os-images"
-    origin_path              = "/${var.echostream_version}/os_images"
+    origin_path              = "/${var.echostream_version}/os-images"
   }
 
   enabled             = true
