@@ -32,25 +32,6 @@ output "cloudfront_hosted_zone_id" {
   value       = aws_cloudfront_distribution.webapp.hosted_zone_id
 }
 
-output "cloudfront_oai_iam_arn_api_docs" {
-  description = "EchoStream API Docs Cloudfront origin access identity. Pre-generated ARN for use in S3 bucket policies"
-  value       = aws_cloudfront_origin_access_identity.docs_origin_access_identity.iam_arn
-}
-
-output "cloudfront_oai_iam_arn_webapp" {
-  description = "EchoStream Webapp Cloudfront origin access identity. Pre-generated ARN for use in S3 bucket policies"
-  value       = aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn
-}
-
-output "cloudfront_oai_id_api_docs" {
-  description = "The identifier for the EchoStream API Docs CloudFront distribution"
-  value       = aws_cloudfront_origin_access_identity.docs_origin_access_identity.id
-}
-output "cloudfront_oai_id_webapp" {
-  description = "The identifier for the EchoStream Webapp CloudFront distribution"
-  value       = aws_cloudfront_origin_access_identity.origin_access_identity.id
-}
-
 output "log_bucket_id" {
   description = "The ID of the control region bucket"
   value       = module.log_bucket.id
