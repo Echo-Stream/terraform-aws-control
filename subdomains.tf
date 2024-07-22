@@ -1,6 +1,7 @@
 locals {
-  app_sub_domain      = var.environment == "prod" ? "app.${var.domain_name}" : "app-${var.environment}.${var.domain_name}"
-  docs_api_sub_domain = var.environment == "prod" ? "docs.api.${var.domain_name}" : "docs.api-${var.environment}.${var.domain_name}"
+  app_sub_domain       = var.environment == "prod" ? "app.${var.domain_name}" : "app-${var.environment}.${var.domain_name}"
+  docs_api_sub_domain  = var.environment == "prod" ? "docs.api.${var.domain_name}" : "docs.api-${var.environment}.${var.domain_name}"
+  os_images_sub_domain = var.environment == "prod" ? "os-images.${var.domain_name}" : "os-images-${var.environment}.${var.domain_name}"
 }
 
 #########
@@ -74,6 +75,41 @@ resource "aws_route53_record" "docs_api" {
 resource "aws_acm_certificate_validation" "docs_api" {
   certificate_arn         = aws_acm_certificate.docs_api.arn
   validation_record_fqdns = [for record in aws_route53_record.docs_api : record.fqdn]
+
+  provider = aws.us-east-1
+}
+
+######### os-images API ##########
+resource "aws_acm_certificate" "os_images" {
+  domain_name       = local.os_images_sub_domain
+  validation_method = "DNS"
+  tags              = var.tags
+
+  provider = aws.us-east-1
+}
+
+resource "aws_route53_record" "os_images" {
+  for_each = {
+    for dvo in aws_acm_certificate.os_images.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+
+  allow_overwrite = true
+  name            = each.value.name
+  records         = [each.value.record]
+  ttl             = 60
+  type            = each.value.type
+  zone_id         = data.aws_route53_zone.root_domain.zone_id
+
+  provider = aws.route-53
+}
+
+resource "aws_acm_certificate_validation" "os_images" {
+  certificate_arn         = aws_acm_certificate.os_images.arn
+  validation_record_fqdns = [for record in aws_route53_record.os_images : record.fqdn]
 
   provider = aws.us-east-1
 }

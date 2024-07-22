@@ -1,16 +1,24 @@
+resource "aws_cloudfront_origin_access_control" "default" {
+  description                       = "${var.resource_prefix} Default origin access control"
+  name                              = "${var.resource_prefix}-default"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigV4"
+}
+
+#########################
+### WebApp Cloudfront ###
+#########################
 resource "aws_cloudfront_distribution" "webapp" {
   aliases = [
     local.app_sub_domain
   ]
 
   origin {
-    domain_name = "${local.artifacts_bucket}.s3.amazonaws.com"
-    origin_id   = "${var.resource_prefix}-webapp"
-    origin_path = "/${var.echostream_version}/ui/app"
-
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path
-    }
+    domain_name              = "${local.artifacts_bucket}.s3.amazonaws.com"
+    origin_access_control_id = aws_cloudfront_origin_access_control.default.id
+    origin_id                = "${var.resource_prefix}-webapp"
+    origin_path              = "/${var.echostream_version}/ui/app"
   }
 
   custom_error_response {
@@ -92,10 +100,6 @@ resource "aws_cloudfront_distribution" "webapp" {
   tags = local.tags
 }
 
-resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
-  comment = "${var.resource_prefix} Echo Stream ReactJS Webapp"
-}
-
 ## Origin Request Lambda, listening on path /config/config.json
 
 data "archive_file" "edge_config" {
@@ -175,13 +179,10 @@ resource "aws_cloudfront_distribution" "docs" {
   ]
 
   origin {
-    domain_name = "${local.artifacts_bucket}.s3.amazonaws.com"
-    origin_id   = "${var.resource_prefix}-api-docs"
-    origin_path = "/${var.echostream_version}/ui/docs"
-
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.docs_origin_access_identity.cloudfront_access_identity_path
-    }
+    domain_name              = "${local.artifacts_bucket}.s3.amazonaws.com"
+    origin_access_control_id = aws_cloudfront_origin_access_control.default.id
+    origin_id                = "${var.resource_prefix}-api-docs"
+    origin_path              = "/${var.echostream_version}/ui/docs"
   }
 
   custom_error_response {
@@ -238,13 +239,84 @@ resource "aws_cloudfront_distribution" "docs" {
   tags = local.tags
 }
 
-resource "aws_cloudfront_origin_access_identity" "docs_origin_access_identity" {
-  comment = "${var.resource_prefix} Echo Stream API docs"
-}
-
 module "docs" {
   domain_name = aws_cloudfront_distribution.docs.domain_name
   name        = local.docs_api_sub_domain
+  zone_id     = data.aws_route53_zone.root_domain.zone_id
+
+  source  = "QuiNovas/cloudfront-r53-alias-record/aws"
+  version = "0.0.2"
+
+  providers = {
+    aws = aws.route-53
+  }
+}
+
+############################
+### OS Images Cloudfront ###
+############################
+resource "aws_cloudfront_distribution" "os_images" {
+  aliases = [
+    local.os_images_sub_domain
+  ]
+
+  origin {
+    domain_name              = "${local.artifacts_bucket}.s3.amazonaws.com"
+    origin_access_control_id = aws_cloudfront_origin_access_control.default.id
+    origin_id                = "${var.resource_prefix}-os-images"
+    origin_path              = "/${var.echostream_version}/os_images"
+  }
+
+  enabled             = true
+  is_ipv6_enabled     = true
+  comment             = "${var.resource_prefix} Echo Stream API docs"
+  default_root_object = "index.html"
+
+  default_cache_behavior {
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "${var.resource_prefix}-os-images"
+
+    forwarded_values {
+      query_string = false
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+  }
+
+  logging_config {
+    bucket          = data.aws_s3_bucket.log_bucket.bucket_domain_name
+    include_cookies = false
+    prefix          = "cloudfront/${var.resource_prefix}-os-images/"
+  }
+
+  price_class = "PriceClass_100"
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  viewer_certificate {
+    acm_certificate_arn      = aws_acm_certificate_validation.os_images.certificate_arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
+  }
+
+  tags = local.tags
+}
+
+module "os_images" {
+  domain_name = aws_cloudfront_distribution.os_images.domain_name
+  name        = local.os_images_sub_domain
   zone_id     = data.aws_route53_zone.root_domain.zone_id
 
   source  = "QuiNovas/cloudfront-r53-alias-record/aws"
