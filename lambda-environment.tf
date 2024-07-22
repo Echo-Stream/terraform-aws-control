@@ -131,7 +131,6 @@ resource "aws_s3_object" "lambda_environment" {
       TENANT_ERRORED_SES_TEMPLATE                = aws_ses_template.tenant_errored.name
       TENANT_REGIONS                             = jsonencode(local.tenant_regions)
       UI_USER_POOL_ID                            = aws_cognito_user_pool.echostream_ui.id
-      UPDATE_CODE_ROLE                           = aws_iam_role.update_code.arn
       USAGE_MULTIPLE                             = local.usage_multiple
       VALIDATOR_CODE                             = "{\"S3Key\": \"${local.artifacts["tenant_lambda"]}/validator.zip\"}"
       VALIDATOR_ROLE                             = aws_iam_role.validator.arn
