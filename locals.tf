@@ -54,7 +54,7 @@ locals {
   artifacts_bucket         = "echostream-artifacts-${data.aws_region.current.name}"       # artifacts bucket name with region
   artifacts_bucket_prefix  = "echostream-artifacts"                                       # artifacts bucket name without region
   audit_firehose_log_group = "/aws/kinesisfirehose/${var.resource_prefix}-audit-firehose" # log group name for audit-firehose
-  awssdkpandas_layer       = "arn:aws:lambda:${data.aws_region.current.name}:336392948345:layer:AWSSDKPandas-Python39:5"
+  awssdkpandas_layer       = "arn:aws:lambda:${data.aws_region.current.name}:336392948345:layer:AWSSDKPandas-Python312:12"
 
   cost_and_usage_export_name  = "CostAndUsage"
   lambda_dead_letter_arn      = module.lambda_underpin_control.dead_letter_arn
