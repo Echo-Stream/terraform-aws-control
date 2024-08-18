@@ -25,6 +25,7 @@ ATHENA_WORKGROUP = "${athena_workgroup}"
 BILLING_DATABASE = "${billing_database}"
 COST_AND_USAGE_BUCKET = "${cost_and_usage_bucket}"
 COMPUTE_USAGE_TOPIC_ARN = "${compute_usage_topic_arn}"
+SYSTEM_ALARM_COUNT = "${system_alarm_count}"
 
 
 def execute_query(query: str) -> Generator[dict[str, str], None, None]:
@@ -104,6 +105,12 @@ def compute_tenant(identity: str, month: int, year: int) -> None:
                     WHERE 
                         "start" < timestamp '{end}' 
                         AND ("end" > timestamp '{start}' OR "end" IS NULL)
+                    UNION ALL
+                    SELECT
+                        {SYSTEM_ALARM_COUNT} as "count",
+                        'SYSTEM' AS identity,
+                        timestamp '{start}' AS "start",
+                        current_timestamp AS "end"
                 ),
                 total_duration AS (
                     SELECT
