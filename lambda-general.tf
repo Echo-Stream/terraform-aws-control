@@ -23,7 +23,8 @@ data "archive_file" "bill_subscriptions" {
         cost_and_usage_bucket       = aws_s3_bucket.cost_and_usage.id
         paddle_api_key_secret_arn   = local.paddle_api_key_secret_arn
         paddle_base_url             = local.paddle_base_url
-        usage_price_id              = can(var.paddle_price_ids.usage) ? var.paddle_price_ids.usage : "unknown"
+        paddle_usage_price_amount   = var.paddle_usage_price_amount
+        usage_product_id            = can(var.paddle_product_ids.usage) ? var.paddle_product_ids.usage : "unknown"
         usage_multiple              = local.usage_multiple
       }
     )

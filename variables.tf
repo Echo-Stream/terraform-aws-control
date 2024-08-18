@@ -50,12 +50,6 @@ variable "paddle_client_side_token" {
   type        = string
 }
 
-variable "paddle_minimum_billing_amount" {
-  default     = 0
-  description = "The minimum amount, in cents, to bill each tenant"
-  type        = number
-}
-
 variable "paddle_price_ids" {
   default     = {}
   description = "Paddle Price IDs"
@@ -66,6 +60,18 @@ variable "paddle_product_ids" {
   default     = {}
   description = "Paddle Product IDs"
   type        = map(string)
+}
+
+variable "paddle_tenant_price_amount" {
+  default     = 0
+  description = "The amount, in cents, to bill each tenant"
+  type        = number
+}
+
+variable "paddle_usage_price_amount" {
+  default     = 0
+  description = "The amount, in cents, to bill each tenant for usage"
+  type        = number
 }
 
 variable "paddle_webhooks_secret" {

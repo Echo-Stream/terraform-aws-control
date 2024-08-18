@@ -1,14 +1,12 @@
 import json
 import math
-from concurrent.futures import Future, ThreadPoolExecutor
-from copy import deepcopy
 from datetime import datetime, timezone
 from http import HTTPStatus
 from logging import ERROR, INFO, getLogger
 from os import environ
 from random import randint
 from time import sleep
-from typing import Any, Dict, Generator, List, Union
+from typing import Any, Dict, Generator
 
 import boto3
 import requests
@@ -28,8 +26,9 @@ BILLING_DATABASE = "${billing_database}"
 BILL_SUBSCRIPTION_TOPIC_ARN = "${bill_subscription_topic_arn}"
 COST_AND_USAGE_BUCKET = "${cost_and_usage_bucket}"
 PADDLE_API_KEY: str = None
-PADDLE_BASE_URL: str = "${paddle_base_url}"
-USAGE_PRICE_ID = "${usage_price_id}"
+PADDLE_BASE_URL = "${paddle_base_url}"
+PADDLE_USAGE_PRICE_AMOUNT = int("${paddle_usage_price_amount}")
+USAGE_PRODUCT_ID = "${usage_product_id}"
 USAGE_MULTIPLE = float("${usage_multiple}")
 
 
@@ -90,7 +89,7 @@ def execute_query(query: str) -> Generator[dict[str, str], None, None]:
 
 
 def bill_subscription(
-    identity: str, month: int, subscriptionid: str, year: int
+    identity: str, month: int, subscriptionid: str, tenant: str, year: int
 ) -> None:
     total = math.ceil(
         float(
@@ -119,8 +118,14 @@ def bill_subscription(
             effective_from="immediately",
             items=[
                 dict(
+                    description=f"Additional usage for Tenant {tenant}",
+                    name=f"Additional usage for Tenant {tenant} (period {year}-{month:02d})",
                     quantity=total,
-                    price_id=USAGE_PRICE_ID,
+                    product_id=USAGE_PRODUCT_ID,
+                    unit_price=dict(
+                        amount=str(PADDLE_USAGE_PRICE_AMOUNT),
+                        currency_code="USD",
+                    ),
                 )
             ],
             on_payment_failure="apply_change",
@@ -159,7 +164,7 @@ def bill_subscriptions() -> None:
     )
     for record in execute_query(
         f"""
-    SELECT DISTINCT tenants.identity, tenants.subscriptionid
+    SELECT DISTINCT tenants.identity, tenants.name, tenants.subscriptionid
     FROM costandusagedata JOIN tenants 
         ON costandusagedata.resource_tags['user_identity']=tenants.identity
     WHERE costandusagedata.resource_tags['user_identity'] IS NOT NULL 
@@ -173,6 +178,7 @@ def bill_subscriptions() -> None:
                     identity=str(record["identity"]),
                     month=now.month,
                     subscriptionid=str(record["subscriptionid"]),
+                    tenant=str(record["name"]),
                     year=now.year,
                 ),
                 separators=(",", ":"),
