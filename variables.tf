@@ -50,6 +50,12 @@ variable "paddle_client_side_token" {
   type        = string
 }
 
+variable "paddle_minimum_billing_amount" {
+  default     = 0
+  description = "The minimum amount, in cents, to bill each tenant"
+  type        = number
+}
+
 variable "paddle_price_ids" {
   default     = {}
   description = "Paddle Price IDs"
