@@ -170,7 +170,7 @@ data "archive_file" "compute_usage" {
         billing_database        = aws_glue_catalog_database.billing.name
         cost_and_usage_bucket   = aws_s3_bucket.cost_and_usage.id
         compute_usage_topic_arn = aws_sns_topic.compute_usage.arn
-        system_alarm_count      = (length(local.non_control_regions) * 2) + length(local.lambda_names) + length(local.sqs_names) + 1
+        system_alarm_count      = (length(local.non_control_regions) * 2) + length(local.lambda_names) + length(local.sqs_names) + 2
       }
     )
     filename = "function.py"

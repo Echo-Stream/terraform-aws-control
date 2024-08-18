@@ -11,7 +11,6 @@ locals {
     [
       module.api_cognito_pre_authentication.name,
       module.appsync_datasource.name,
-      aws_lambda_function.compute_usage.function_name,
       module.deployment_handler.name,
       module.graph_table_dynamodb_trigger.name,
       module.graph_table_system_stream_handler.name,
@@ -62,7 +61,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda" {
-  for_each = toset(local.lambda_names)
+  for_each = toset(concat(local.lambda_names, [aws_lambda_function.compute_usage.function_name]))
 
   alarm_actions       = [aws_sns_topic.alarms.arn]
   alarm_description   = "Errors > 1 for ${each.value}"
