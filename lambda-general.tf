@@ -5,6 +5,163 @@ resource "aws_cloudwatch_event_rule" "every_day" {
   tags                = local.tags
 }
 
+########################
+## audit-consolidator ##
+########################
+
+data "archive_file" "audit_consolidator" {
+  type        = "zip"
+  output_path = "${path.module}/audit-consolidator.zip"
+
+  source {
+    content = templatefile(
+      "${path.module}/scripts/audit-consolidator.py",
+      {
+        audit_consolidator_topic_arn = aws_sns_topic.audit_consolidator.arn
+        tenant_regions               = jsonencode(var.tenant_regions)
+      }
+    )
+    filename = "function.py"
+  }
+}
+
+resource "aws_cloudwatch_event_rule" "audit_consolidator" {
+  name                = "${var.resource_prefix}-audit-consolidator"
+  description         = "Consolidate audit logs from all tenants"
+  schedule_expression = "cron(0 3 * * ? *)" # 3am UTC
+  tags                = local.tags
+}
+
+resource "aws_cloudwatch_event_target" "audit_consolidator" {
+  arn        = aws_lambda_function.audit_consolidator.arn
+  depends_on = [aws_lambda_permission.cloudwatch_audit_consolidator]
+  rule       = aws_cloudwatch_event_rule.audit_consolidator.name
+  target_id  = aws_lambda_function.audit_consolidator.function_name
+}
+
+data "aws_iam_policy_document" "audit_consolidator" {
+  statement {
+    actions = [
+      "s3:ListBucket",
+    ]
+
+    resources = [
+      "arn:aws:s3:::tenant-*",
+    ]
+
+    sid = "ListTenantBuckets"
+  }
+
+  statement {
+    actions = [
+      "s3:DeleteObject",
+      "s3:GetObject*",
+    ]
+
+    resources = [
+      "arn:aws:s3:::tenant-*/audit-records/records/*",
+    ]
+
+    sid = "ReadAndDeleteAuditRecords"
+  }
+
+  statement {
+    actions = [
+      "s3:PutObject*",
+    ]
+
+    resources = [
+      "arn:aws:s3:::tenant-*/audit-records/archive/*",
+    ]
+
+    sid = "WriteArchiveAuditRecords"
+  }
+
+  statement {
+    actions = [
+      "kms:Decrypt",
+      "kms:Encrypt",
+      "kms:GenerateDataKey*",
+    ]
+
+    resources = ["*"]
+
+    sid = "KMSAccess"
+  }
+
+  statement {
+    actions = [
+      "sns:Publish",
+    ]
+
+    resources = [
+      local.lambda_dead_letter_arn,
+      aws_sns_topic.audit_consolidator.arn,
+    ]
+
+    sid = "AllowSNSWriting"
+  }
+}
+
+resource "aws_iam_role" "audit_consolidator" {
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  inline_policy {
+    name   = "${var.resource_prefix}-audit-consolidator"
+    policy = data.aws_iam_policy_document.audit_consolidator.json
+  }
+  managed_policy_arns = [
+    data.aws_iam_policy.aws_lambda_basic_execution_role.arn,
+  ]
+  name = "${var.resource_prefix}-audit-consolidator"
+  tags = local.tags
+}
+
+resource "aws_lambda_function" "audit_consolidator" {
+  dead_letter_config {
+    target_arn = local.lambda_dead_letter_arn
+  }
+  description      = "Consolidate audit logs from all tenants"
+  filename         = data.archive_file.audit_consolidator.output_path
+  function_name    = "${var.resource_prefix}-audit-consolidator"
+  handler          = "function.lambda_handler"
+  layers           = [local.awssdkpandas_layer]
+  memory_size      = 1536
+  publish          = true
+  role             = aws_iam_role.audit_consolidator.arn
+  runtime          = local.lambda_runtime
+  source_code_hash = data.archive_file.audit_consolidator.output_base64sha256
+  tags             = local.tags
+  timeout          = 900
+}
+
+resource "aws_lambda_permission" "cloudwatch_audit_consolidator" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.audit_consolidator.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.audit_consolidator.arn
+  statement_id  = "AllowExecutionFromCloudWatch"
+}
+
+resource "aws_lambda_permission" "sns_audit_consolidator" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.audit_consolidator.function_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.audit_consolidator.arn
+  statement_id  = "AllowExecutionFromSNS"
+}
+
+resource "aws_sns_topic" "audit_consolidator" {
+  name = "${var.resource_prefix}-audit-consolidator"
+  tags = local.tags
+}
+
+resource "aws_sns_topic_subscription" "audit_consolidator" {
+  endpoint   = aws_lambda_function.audit_consolidator.arn
+  depends_on = [aws_lambda_permission.sns_audit_consolidator]
+  topic_arn  = aws_sns_topic.audit_consolidator.arn
+  protocol   = "lambda"
+}
+
 #########################
 ##  bill-subscriptions ##
 #########################
