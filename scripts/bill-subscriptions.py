@@ -99,7 +99,7 @@ def bill_subscription(
                 region_name=AWS_REGION,
             ).head_object(
                 Bucket=COST_AND_USAGE_BUCKET,
-                Key=f"usages/IDENTITY={identity}/YEAR={year}/MONTH={month}/usage.csv",
+                Key=f"usages/IDENTITY={identity}/YEAR={year:04d}/MONTH={month:02d}/usage.csv",
             )[
                 "Metadata"
             ][

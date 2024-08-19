@@ -213,7 +213,7 @@ def compute_tenant(identity: str, month: int, year: int) -> None:
             ).put_object(
                 Body=body,
                 Bucket=COST_AND_USAGE_BUCKET,
-                Key=f"usages/IDENTITY={identity}/YEAR={year}/MONTH={month}/usage.csv",
+                Key=f"usages/IDENTITY={identity}/YEAR={year:04d}/MONTH={month:02d}/usage.csv",
                 Metadata=dict(total=str(total)),
             )
 
