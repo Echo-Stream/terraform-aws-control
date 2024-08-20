@@ -14,7 +14,7 @@ getLogger("botocore").setLevel(ERROR)
 
 AUDIT_COLSOLIDATOR_TOPIC_ARN = "${audit_consolidator_topic_arn}"
 AWS_REGION = environ.get("AWS_REGION") or environ["AWS_DEFAULT_REGION"]
-TENANT_REGIONS: list[str] = json.loads("${tenant_regions}")
+TENANT_REGIONS: list[str] = json.loads('${tenant_regions}')
 
 
 def consolidate_audits(bucket: str, region: str) -> None:
