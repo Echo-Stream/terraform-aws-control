@@ -46,10 +46,20 @@ data "aws_iam_policy_document" "audit_consolidator" {
     ]
 
     resources = [
-      "*",
+      "arn:aws:s3:::tenant-*",
     ]
 
     sid = "ListBuckets"
+  }
+
+  statement {
+    actions = [
+      "s3:ListAllMyBuckets",
+    ]
+
+    resources = ["*"]
+
+    sid = "ListAllBuckets"
   }
 
   statement {
