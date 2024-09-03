@@ -108,49 +108,57 @@ def bill_subscription(
         )
         * USAGE_MULTIPLE
     )
-    with requests.post(
-        f"{PADDLE_BASE_URL}/subscriptions/{subscriptionid}/charge",
-        headers=dict(
-            Accept="application/json",
-            Authorization=f"Bearer {paddle_api_key()}",
-        ),
-        json=dict(
-            effective_from="immediately",
-            items=[
-                dict(
-                    description=f"Additional usage for Tenant {tenant}",
-                    name=f"Additional usage for Tenant {tenant} (period {year}-{month:02d})",
-                    quantity=total,
-                    product_id=USAGE_PRODUCT_ID,
-                    unit_price=dict(
-                        amount=str(PADDLE_USAGE_PRICE_AMOUNT),
-                        currency_code="USD",
-                    ),
-                )
-            ],
-            on_payment_failure="apply_change",
-        ),
-    ) as response:
-        try:
-            response.raise_for_status()
-        except requests.exceptions.HTTPError as e:
-            if (
-                response.status_code == HTTPStatus.BAD_REQUEST
-                and (error := response.json().get("error"))
-                and error.get("code") == "subscription_update_when_canceled"
-            ):
-                getLogger().critical(
-                    f"Subscription {subscriptionid} is cancelled, skipping billing"
-                )
-                return
-            if response.status_code == HTTPStatus.TOO_MANY_REQUESTS:
-                sleep(float(response.headers.get("Retry-After") or 60))
+    if total > 0:
+        with requests.post(
+            f"{PADDLE_BASE_URL}/subscriptions/{subscriptionid}/charge",
+            headers=dict(
+                Accept="application/json",
+                Authorization=f"Bearer {paddle_api_key()}",
+            ),
+            json=dict(
+                effective_from="immediately",
+                items=[
+                    dict(
+                        price=dict(
+                            description=f"Additional usage for Tenant {tenant}",
+                            name=f"Additional usage for Tenant {tenant} (period {year}-{month:02d})",
+                            product_id=USAGE_PRODUCT_ID,
+                            quantity=dict(
+                                maximum=total,
+                                minimum=1,
+                            ),
+                            tax_mode="external",
+                            unit_price=dict(
+                                amount=str(PADDLE_USAGE_PRICE_AMOUNT),
+                                currency_code="USD",
+                            ),
+                        ),
+                        quantity=total,
+                    )
+                ],
+                on_payment_failure="apply_change",
+            ),
+        ) as response:
+            try:
+                response.raise_for_status()
+            except requests.exceptions.HTTPError as e:
+                if (
+                    response.status_code == HTTPStatus.BAD_REQUEST
+                    and (error := response.json().get("error"))
+                    and error.get("code") == "subscription_update_when_canceled"
+                ):
+                    getLogger().critical(
+                        f"Subscription {subscriptionid} is cancelled, skipping billing"
+                    )
+                    return
+                if response.status_code == HTTPStatus.TOO_MANY_REQUESTS:
+                    sleep(float(response.headers.get("Retry-After") or 60))
+                    raise Exception(
+                        f"Throttled for subscription {subscriptionid}, retrying"
+                    ) from e
                 raise Exception(
-                    f"Throttled for subscription {subscriptionid}, retrying"
+                    f"Paddle error for subscription {subscriptionid}, retrying:\n{json.dumps(response.json(), indent=2)}"
                 ) from e
-            raise Exception(
-                f"Paddle error for subscription {subscriptionid}, retrying:\n{json.dumps(response.json(), indent=2)}"
-            ) from e
     getLogger().info(
         f"Billed subscription {subscriptionid} for {total} usages for Tenant {identity}"
     )
@@ -165,10 +173,10 @@ def bill_subscriptions() -> None:
     for record in execute_query(
         f"""
     SELECT DISTINCT tenants.identity, tenants.name, tenants.subscriptionid
-    FROM costandusagedata JOIN tenants 
+    FROM costandusagedata JOIN tenants
         ON costandusagedata.resource_tags['user_identity']=tenants.identity
-    WHERE costandusagedata.resource_tags['user_identity'] IS NOT NULL 
-        AND costandusagedata.billing_period='{now.year:04d}-{now.month:02d}' 
+    WHERE costandusagedata.resource_tags['user_identity'] IS NOT NULL
+        AND costandusagedata.billing_period='{now.year:04d}-{now.month:02d}'
         AND tenants.subscriptionid IS NOT NULL
     """
     ):
