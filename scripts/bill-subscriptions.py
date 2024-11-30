@@ -107,7 +107,7 @@ def bill_subscription(
             ]
         )
         * USAGE_MULTIPLE
-    )
+    ) - int(3000 / PADDLE_USAGE_PRICE_AMOUNT)
     if total > 0:
         with requests.post(
             f"{PADDLE_BASE_URL}/subscriptions/{subscriptionid}/charge",
