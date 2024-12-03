@@ -121,7 +121,7 @@ def bill_subscription(
                     dict(
                         price=dict(
                             description=f"Additional usage for Tenant {tenant}",
-                            name=f"Additional usage for Tenant {tenant} (period {year}-{month:02d})",
+                            name=f"{tenant[:28]} add'l usage ({year}-{month:02d})",
                             product_id=USAGE_PRODUCT_ID,
                             quantity=dict(
                                 maximum=total,
