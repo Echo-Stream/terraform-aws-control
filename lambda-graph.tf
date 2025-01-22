@@ -65,10 +65,11 @@ module "graph_table_dynamodb_trigger" {
 }
 
 resource "aws_lambda_event_source_mapping" "graph_table_dynamodb_trigger" {
-  batch_size        = "1"
-  event_source_arn  = module.graph_table.stream_arn
-  function_name     = module.graph_table_dynamodb_trigger.name
-  starting_position = "LATEST"
+  batch_size              = "1"
+  event_source_arn        = module.graph_table.stream_arn
+  function_name           = module.graph_table_dynamodb_trigger.name
+  function_response_types = ["ReportBatchItemFailures"]
+  starting_position       = "LATEST"
 }
 
 resource "aws_iam_role" "managed_app" {
@@ -205,6 +206,7 @@ module "graph_table_system_stream_handler" {
 }
 
 resource "aws_lambda_event_source_mapping" "graph_table_system_stream_handler" {
-  function_name    = module.graph_table_system_stream_handler.arn
-  event_source_arn = aws_sqs_queue.system_sqs_queue.arn
+  event_source_arn        = aws_sqs_queue.system_sqs_queue.arn
+  function_name           = module.graph_table_system_stream_handler.arn
+  function_response_types = ["ReportBatchItemFailures"]
 }
