@@ -1,7 +1,7 @@
 resource "aws_cloudwatch_event_rule" "warming" {
   name                = "${var.resource_prefix}-warming"
-  description         = "Sends warming message every 12 minutes"
-  schedule_expression = "rate(12 minutes)"
+  description         = "Sends warming message every 4 minutes"
+  schedule_expression = "rate(4 minutes)"
   tags                = local.tags
 }
 
